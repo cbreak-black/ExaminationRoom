@@ -32,6 +32,7 @@
 %\usepackage{wrapfig}
 %\usepackage{subfigure}
 %\usepackage{listings}
+\usepackage[pdftex,rightbars,color]{changebar}
 
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper}
@@ -84,20 +85,38 @@
 
 %\tableofcontents
 
-\section{General research questions}
+\section{Research questions}
 \paragraph{}
-The general research questions in this area are:
+Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. This strains the eyes, and can lead to fatigue, which makes the consumption of stereoscopic information over longer periods of times hard. The general research questions that are asked in this area are:
 \begin{itemize}
 \item What are the physiological and psychological limits of stereoscopic viewing fatigue?
 \item How can stereo images be composed to reduce this fatigue?
 \end{itemize}
 
+\cbstart
+During this thesis, the specific question is: {\it How does continuous depth influence fatigue?} It is hoped that by constructing movies in a certain way, specifically by leading the eyes along paths, and offering a continuous scene, viewing fatigue can be reduced.
+\cbend
+
+\cbstart
+\section{Research steps}
+\paragraph{}
+To answer this question, experiments with users have to be conducted. The experiments will show, how much the viewing of stereoscopic information tires the eyes, and if adding continuous depth has any influence on this.
+
+%\pdfannot%width 5cm%height 0cm%depth 3cm%{%/Subtype /Text%/Contents%(This is a /Text Annotation that looks like a sticky note.)%} 
+
+\begin{itemize}
+\item With a first group of test subjects, test the fatigue when viewing stereoscopic pictures without continuous depth, with free standing objects.
+\item With a second group of test subjects, test the fatigue when viewing stereoscopic pictures with continuous depth, embedded in a scene.
+\end{itemize}
+
+In both tests, changing static pictures are shown. The time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller.
+
 \section{Example requirement}
 \paragraph{}
-One possible test is the following, but the tool should not be limited to this:
+The testing tool, that is the main focus of this thesis should automate those testing steps. This could work as following, but the tool should not be limited to this:
 
 \begin{enumerate}
-\item Encode information at a certain perceived stereoscopic depth. Measure the time it takes the test subject to addapt to this depth and extract the information.
+\item Encode information at a certain perceived stereoscopic depth, so that it can only be extracted when focusing with both eyes. Measure the time it takes the test subject to addapt to this depth and extract the information.
 \item Remove the information and place it at an other depth location, measuring reaction time.
 \item Repeat step 1 and 2 at a different depth locations.
 \item Repeat step 1 and 2 with the information being embedded in a scene.
@@ -125,6 +144,7 @@ The tool should have at least those baseline featuers:
 \begin{itemize}
 \item Rendering in 3D
 \item Import of 3D models and other data from other applications
+\item Rendering of depth maps in random-dot stereograms.
 \item Interactive modifications of scene in limited ways during the test
 \item Must support anaglyph and dual screen/mirrored viewfinder output
 \item Support of basic scene objects, individually enabled
@@ -164,6 +184,7 @@ My thoughts about the design:
 
 \url{http://lua-users.org/wiki/LunaWrapper}
 
+\url{http://en.wikipedia.org/wiki/Random_dot_stereogram}
 
 
 
