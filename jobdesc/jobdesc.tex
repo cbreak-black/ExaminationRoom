@@ -1,0 +1,172 @@
+\documentclass[11pt]{scrartcl}
+%\documentclass[12pt, a4paper]{article}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+\pdffalse % we are not running PDFLaTeX
+\else
+\pdfoutput=1 % we are running PDFLaTeX
+\pdftrue
+\fi
+
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\else
+\usepackage{graphicx}
+\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage{german}
+%\usepackage{longtable}
+%\usepackage{tocbibind}
+%\usepackage{makeidx}
+\usepackage[pdftex,pageanchor,colorlinks,pdfborder=0,breaklinks,urlcolor=blue]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%\usepackage{pdfsync}  % enable tex source and pdf output syncronicity
+%\usepackage[all]{xy}
+\usepackage{multicol}
+%\usepackage{rotating}
+%\usepackage{wrapfig}
+%\usepackage{subfigure}
+%\usepackage{listings}
+
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper}
+\geometry{textwidth=16.5cm,textheight=24.5cm}
+\geometry{left=2.5cm,twoside}
+\parskip=0 cm
+\parindent=0.0cm
+
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+
+\renewcommand{\labelitemi}{-}
+
+% Tiefe des Inhaltsverzeichnisses
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\hypersetup{
+    pdftitle={Master Thesis: Tool support for user testing of stereoscopic fatigue},
+%    pdfsubject={Subject of the document}, % Subject 
+    pdfauthor={Gerhard Roethlin},              % Author
+    pdfkeywords={master, fatigue testing software, job description},       % Keywords
+}
+
+\title{Master Thesis: Tool support for user testing of stereoscopic fatigue\\
+{\large Implementing a flexible and extensible testing framework}}
+\author{\normalsize Gerhard R\"othlin 
+{\tt  \href{mailto:gerhardr@student.ethz.ch}{gerhardr@student.ethz.ch}}}
+\date{}
+
+\ifpdf
+\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
+\else
+\DeclareGraphicsExtensions{.eps, .jpg}
+\fi
+
+\begin{document}
+
+\maketitle
+%\tableofcontents
+
+%\begin{center}
+%\includegraphics[width=16cm,clip,trim=0cm 0cm 0cm 0cm]{media/dollyCover.jpg}
+%\end{center}
+
+%\begin{abstract}
+%\end{abstract}
+
+\begin{multicols}{2}
+
+%\tableofcontents
+
+\section{General research questions}
+\paragraph{}
+The general research questions in this area are:
+\begin{itemize}
+\item What are the physiological and psychological limits of stereoscopic viewing fatigue?
+\item How can stereo images be composed to reduce this fatigue?
+\end{itemize}
+
+\section{Example requirement}
+\paragraph{}
+One possible test is the following, but the tool should not be limited to this:
+
+\begin{enumerate}
+\item Encode information at a certain perceived stereoscopic depth. Measure the time it takes the test subject to addapt to this depth and extract the information.
+\item Remove the information and place it at an other depth location, measuring reaction time.
+\item Repeat step 1 and 2 at a different depth locations.
+\item Repeat step 1 and 2 with the information being embedded in a scene.
+\item Measure fatigue over a longer period of time, over several test repetitions.
+\end{enumerate}
+
+\section{Challenges}
+\paragraph{}
+To perform those tests, a flexible and extensible tool is needed. Those are some of the callenges that have to be overcome:
+
+\begin{enumerate}
+\item Supporting stereogram encoding of information.
+\item Supporting of various scenes/depth clues
+\item Flexible and powerfull log format, that can be transformed to be analyzed by established software
+\item User input while looking at screen, such as blind typing, audio feedback
+\item Must support various scenes and scenes changing in various ways
+\end{enumerate}
+
+\section{Baseline features}
+\paragraph{}
+The software should be created for specific tests, and then later extended to other areas. During development, a pilot study will be conducted. Having immediate feedback will help to guide development.
+
+The tool should have at least those baseline featuers:
+
+\begin{itemize}
+\item Rendering in 3D
+\item Import of 3D models and other data from other applications
+\item Interactive modifications of scene in limited ways during the test
+\item Must support anaglyph and dual screen/mirrored viewfinder output
+\item Support of basic scene objects, individually enabled
+\item Scripting of tests, with randomized parameters
+\item Individual controll of depth cues, such as relative size, occlusion or stereoscopic seperation
+\item Support various input mechanisms such as keyboard, mouse.
+\item Record all events
+\item Support exprort of logs in various formats
+\end{itemize}
+
+\section{Shopping list}
+\paragraph{}
+
+My thoughts about the design:
+\begin{itemize}
+\item It should be cross platform, so that it works on Mac OS X (my primary development platform), Windows and Linux.
+\item It should support 3D rendering with HW acceleration, so OpenGL is the way to go
+\item I recommend QT as GUI/Backend toolkit. I've made good experiences with it in my last project, dolly, and it is cross platform and licensed under GPL v2.
+\item I recommend OpenMesh as mesh loader and storage library. (If we want mesh loading at all.) It is licensed under the GPL v2.
+\item I recommend LUA (which I know from World of Warcraft) or some other scripting language to do the interactive stuff. It leaves {\textit a lot} of freedom to the designer of the scene/test, since most of the functionality would run in script code. LUA is licensed under an MIT style attribution license, which allows use everywhere.
+\item Test files would contain media (pictures, models, textures), lua code (for building scenes out of the media, and animating, moving, randomizing) and a master file that binds it together.
+\item We could provide templates or even a test builder application to create those lua scripts in standard cases, but writing code would give us {\textit a lot} of flexibility.
+\end{itemize}
+
+\end{multicols}
+
+\appendix
+
+\section{Links}
+\url{http://graphics.cs.uiuc.edu/svn/wickbert/trunk/OpenMesh/LICENSE}
+
+\url{http://trolltech.com/products/qt/licenses/licensing/opensource}
+
+\url{http://www.lua.org/license.html#5}
+
+\url{http://www.rasterbar.com/products/luabind/docs.html}
+
+\url{http://lua-users.org/wiki/LunaWrapper}
+
+
+
+
+
+\end{document}
+\end
