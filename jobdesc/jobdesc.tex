@@ -88,33 +88,21 @@
 \section{Research questions}
 \paragraph{}
 Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. This strains the eyes, and can lead to fatigue, which makes the consumption of stereoscopic information over longer periods of times hard. The general research questions that are asked in this area are:
+
 \begin{itemize}
 \item What are the physiological and psychological limits of stereoscopic viewing fatigue?
-\item How can stereo images be composed to reduce this fatigue?
+\item How can stereo images be composed to reduce fatigue?
 \end{itemize}
 
-During this thesis, the specific question is: {\it How does continuous depth influence fatigue?} It is hoped that by constructing movies in a certain way, specifically by leading the eyes along paths, and offering a continuous scene, viewing fatigue can be reduced.
+During this thesis, the specific question is: {\it How does continuous depth influence fatigue?} It is hoped that by constructing movies in a certain way, specifically by leading the eyes along paths, and offering a continuous scene, viewing fatigue can be reduced. Alternative questions could consider the influence of motion and occlusion on viewers of stereoscopic material.
 
 \section{Research steps}
 \paragraph{}
 To answer this question, experiments with users have to be conducted. The experiments will show, how much the viewing of stereoscopic information tires the eyes, and if adding continuous depth has any influence on this.
 
-%\pdfannot
-%width 5cm
-%height 0cm
-%depth 3cm
-%{
-%/Subtype /Text
-%/Contents
-%(This is a /Text Annotation that looks like a sticky note.)
-%} 
+Fatigue when viewing stereoscopic pictures is tested by showing images without continuous depth, with free standing objects, and scenes with continuous depth, embedded in a scene.
 
-\begin{itemize}
-\item With a first group of test subjects, test the fatigue when viewing stereoscopic pictures without continuous depth, with free standing objects.
-\item With a second group of test subjects, test the fatigue when viewing stereoscopic pictures with continuous depth, embedded in a scene.
-\end{itemize}
-
-In both tests, changing static pictures are shown. The time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller.
+In both test cases, the time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller.
 
 \section{Example requirement}
 \paragraph{}
@@ -125,19 +113,19 @@ The testing tool, that is the main focus of this thesis should automate those te
 \item Remove the information and place it at an other depth location, measuring reaction time.
 \item Repeat step 1 and 2 at a different depth locations.
 \item Repeat step 1 and 2 with the information being embedded in a scene.
-\item Measure fatigue over a longer period of time, over several test repetitions.
+\item Measure fatigue over a longer period of time, over several test repetitions, with several test subjects.
 \end{enumerate}
 
 \section{Challenges}
 \paragraph{}
-To perform those tests, a flexible and extensible tool is needed. Those are some of the callenges that have to be overcome:
+To perform those tests, a flexible and extensible tool is needed. Those are some of the requirements that have to be satisfied:
 
 \begin{enumerate}
-\item Supporting stereogram encoding of information.
+\item Supporting stereogram encoding of information. Stereograms are used to confirm that the test subject can fuse a picture at a given location with a given separation.
 \item Supporting of various scenes/depth clues
-\item Flexible and powerfull log format, that can be transformed to be analyzed by established software
-\item User input while looking at screen, such as blind typing, audio feedback
-\item Must support various scenes and scenes changing in various ways
+\item Flexible and powerfull log format, that can be transformed to be analyzed by established software.
+\item User input while looking at screen, such as blind typing, audio feedback.
+\item Must support various scenes and scenes changing in various ways, such as camera and object movement.
 \end{enumerate}
 
 \section{Baseline features}
@@ -162,17 +150,27 @@ The tool should have at least those baseline featuers:
 
 \section{Shopping list}
 \paragraph{}
+Thoughts about the design:
 
-My thoughts about the design:
 \begin{itemize}
-\item It should be cross platform, so that it works on Mac OS X (my primary development platform), Windows and Linux.
+\item It should be cross platform, so that it works on Mac OS X, Windows and Linux.
 \item It should support 3D rendering with HW acceleration, so OpenGL is the way to go
-\item I recommend QT as GUI/Backend toolkit. I've made good experiences with it in my last project, dolly, and it is cross platform and licensed under GPL v2.
-\item I recommend OpenMesh as mesh loader and storage library. (If we want mesh loading at all.) It is licensed under the GPL v2.
-\item I recommend LUA (which I know from World of Warcraft) or some other scripting language to do the interactive stuff. It leaves {\textit a lot} of freedom to the designer of the scene/test, since most of the functionality would run in script code. LUA is licensed under an MIT style attribution license, which allows use everywhere.
+\item QT could serve as GUI/Backend toolkit. It is cross platform and licensed under GPL v2.
+\item OpenMesh can be used as mesh loader and storage library. It is licensed under the GPL v2.
+\item LUA or some other scripting language can be used to do the interactive stuff. It leaves a lot of freedom to the designer of the scene/test, since most of the functionality would run in script code. LUA is licensed under an MIT style attribution license, which allows use everywhere.
 \item Test files would contain media (pictures, models, textures), lua code (for building scenes out of the media, and animating, moving, randomizing) and a master file that binds it together.
-\item We could provide templates or even a test builder application to create those lua scripts in standard cases, but writing code would give us {\textit a lot} of flexibility.
+\item Templates could be provided or a test builder application could be built to create those lua scripts in standard cases, but writing code would give {\textit a lot} of flexibility to the test designer.
 \end{itemize}
+
+\section{Evaluation}
+\paragraph{}
+A first pilot study without the use of the finished tool is conducted to confirm if the test methodology is valid. This will also decide which data is logged in what way, and how it can be evaluated.
+
+The current proposition is that the gathered data is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. Statistical analysis tools will help derive a conclusion, and answer the question: ``Is fatigue influenced by continuous depth?''.
+
+\section{Timeline}
+\paragraph{}
+TODO
 
 \end{multicols}
 
