@@ -1,7 +1,10 @@
 CC		= gcc
 CFLAG	= -Wall -O
+CCSTD	= -I$(INCL) -L$(LIBS)
 MAKE	= make
 BUILD	= `pwd`/../../build
+INCL	= ./build/include/
+LIBS	= ./build/lib/
 SHELL	= /bin/sh
 
 .SUFFIXES:
@@ -9,14 +12,12 @@ SHELL	= /bin/sh
 
 all:	depth2stereo
 
-build:	libtga
+depth2stereo:	depth2stereo.c build/lib/libtga.a
+		$(CC) $(CFLAG) $(CCSTD) -ltga -o $@ $<
 
-depth2stereo:
-		
-
-libtga:
+build/lib/libtga.a:
 		cd ./lib/libtga && \
-		./configure --prefix=${BUILD} && \
+		./configure --prefix=$(BUILD) && \
 		$(MAKE) && \
 		$(MAKE) install
 
