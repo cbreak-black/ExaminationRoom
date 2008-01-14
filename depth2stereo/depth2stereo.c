@@ -1,6 +1,17 @@
 /*******************************************************************************
 depth2stereo reads a depth map and creates two random dot stereogram files
-Copyright (C) 2008 Gerhard RoethlinThis program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License.This program is distributed in the hope that it will be useful,but WITHOUT ANY WARRANTY; without even the implied warranty ofMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See theGNU General Public License for more details.*******************************************************************************/
+Copyright (C) 2008 Gerhard Roethlin
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+*******************************************************************************/
 
 #include <stdlib.h>
 #include <memory.h>
@@ -99,7 +110,8 @@ int write_tga(char * name, TGA * template, Image * img)
 
 	outTGA = TGAOpen(name, "w");
 	if (!outTGA || outTGA->last != TGA_OK)
-	{		printf("Error opening %s\n", name);
+	{
+		printf("Error opening %s\n", name);
 		return -1;
 	}
 	
@@ -111,7 +123,8 @@ int write_tga(char * name, TGA * template, Image * img)
 	outData.cmap = 0;
 	
 	if (TGAWriteImage(outTGA, &outData) != TGA_OK)
-	{		printf("Error writing %s\n", "left.tga");
+	{
+		printf("Error writing %s\n", "left.tga");
 		return -1;
 	}
 	
@@ -126,7 +139,7 @@ void stereogram(Image * in, Image * l, Image * r)
 	{
 		for (i = 0; i < in->width; i++)
 		{
-			int k = i-(image_getPixel(in, i, j) >> 4);
+			int k = i-(image_getPixel(in, i, j) >> 6);
 			if (k < 0)
 				image_setPixel(r, i, j, random()%2*0xff);
 			else
@@ -139,7 +152,8 @@ void stereogram(Image * in, Image * l, Image * r)
 
 int main (int argc, char** argv)
 {
-	TGA *	inTGA;	TGAData	inData;
+	TGA *	inTGA;
+	TGAData	inData;
 	
 	// 1. Load Image
 	if (argc != 2)
@@ -148,13 +162,17 @@ int main (int argc, char** argv)
 		return -1;
 	}
 	
-	inTGA = TGAOpen(argv[1], "r");	if (!inTGA || inTGA->last != TGA_OK)
-	{		printf("Error opening %s\n", argv[1]);
+	inTGA = TGAOpen(argv[1], "r");
+	if (!inTGA || inTGA->last != TGA_OK)
+	{
+		printf("Error opening %s\n", argv[1]);
 		return -1;
 	}
 	
-	inData.flags = TGA_IMAGE_DATA | TGA_IMAGE_ID | TGA_RGB;	if (TGAReadImage(inTGA, &inData) != TGA_OK)
-	{		printf("Error reading %s\n", argv[1]);
+	inData.flags = TGA_IMAGE_DATA | TGA_IMAGE_ID | TGA_RGB;
+	if (TGAReadImage(inTGA, &inData) != TGA_OK)
+	{
+		printf("Error reading %s\n", argv[1]);
 		return -1;
 	}
 
