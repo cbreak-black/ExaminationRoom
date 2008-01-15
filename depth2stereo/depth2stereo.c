@@ -15,7 +15,19 @@ GNU General Public License for more details.
 
 #include <stdlib.h>
 #include <memory.h>
+#include <libgen.h>
 #include <tga.h>
+
+static char * d2sErrorStrings [] =
+{
+	"OK\n",
+	"Error allocating output name string buffer\n",
+	"Error finding base name\n",
+	"Error opening %s\n",
+	"Error writing %s\n",
+	"Error reading %s\n",
+	"Error reading: Invalid bit depth\n"
+};
 
 typedef struct
 {
@@ -111,7 +123,7 @@ int write_tga(char * name, TGA * template, Image * img)
 	outTGA = TGAOpen(name, "w");
 	if (!outTGA || outTGA->last != TGA_OK)
 	{
-		printf("Error opening %s\n", name);
+		printf(d2sErrorStrings[3], name);
 		return -1;
 	}
 	
@@ -124,7 +136,7 @@ int write_tga(char * name, TGA * template, Image * img)
 	
 	if (TGAWriteImage(outTGA, &outData) != TGA_OK)
 	{
-		printf("Error writing %s\n", "left.tga");
+		printf(d2sErrorStrings[4], "left.tga");
 		return -1;
 	}
 	
@@ -140,10 +152,14 @@ void stereogram(Image * in, Image * l, Image * r)
 		for (i = 0; i < in->width; i++)
 		{
 			int k = i-(image_getPixel(in, i, j) >> 6);
-			if (k < 0)
+			if (k < 0 || k >= l->width)
+			{
 				image_setPixel(r, i, j, random()%2*0xff);
+			}
 			else
+			{
 				image_setPixel(r, i, j, image_getPixel(l, k, j));
+			}
 
 		}
 	}
@@ -165,14 +181,14 @@ int main (int argc, char** argv)
 	inTGA = TGAOpen(argv[1], "r");
 	if (!inTGA || inTGA->last != TGA_OK)
 	{
-		printf("Error opening %s\n", argv[1]);
+		printf(d2sErrorStrings[3], argv[1]);
 		return -1;
 	}
 	
 	inData.flags = TGA_IMAGE_DATA | TGA_IMAGE_ID | TGA_RGB;
 	if (TGAReadImage(inTGA, &inData) != TGA_OK)
 	{
-		printf("Error reading %s\n", argv[1]);
+		printf(d2sErrorStrings[5], argv[1]);
 		return -1;
 	}
 
@@ -180,7 +196,7 @@ int main (int argc, char** argv)
 		inTGA->hdr.alpha != 0 ||
 		inTGA->hdr.img_t != 3)
 	{
-		printf("Error reading: Invalid bit depth\n");
+		printf(d2sErrorStrings[6]);
 		printf("Depth: %i\n", inTGA->hdr.depth);
 		printf("Alpha: %i\n", inTGA->hdr.alpha);
 		printf("Type: %i\n", inTGA->hdr.img_t);
@@ -211,8 +227,28 @@ int main (int argc, char** argv)
 	stereogram(inImage, l, r);
 	
 	// 5. Write both images
-	write_tga("left.tga", inTGA, l);
-	write_tga("right.tga", inTGA, r);
+	char * b = basename(argv[1]);
+	if (!b)
+	{
+		printf(d2sErrorStrings[2]);
+		return -1;
+	}
+	char * leftName;
+	char * rightName;
+	if (asprintf(&leftName, "%s.left.tga", b) == -1)
+	{
+		printf(d2sErrorStrings[1]);
+		return -1;
+	}
+	if (asprintf(&rightName, "%s.right.tga", b) == -1)
+	{
+		printf(d2sErrorStrings[1]);
+		return -1;
+	}
+	write_tga(leftName, inTGA, l);
+	write_tga(rightName, inTGA, r);
+	free(leftName);
+	free(rightName);
 
 	TGAClose(inTGA);	
 	

@@ -1,5 +1,5 @@
 CC		= gcc
-CFLAG	= -Wall -O
+CFLAG	= -Wall -O0 -g
 CCSTD	= -I$(INCL) -L$(LIBS)
 MAKE	= make
 BUILD	= `pwd`/../../build
