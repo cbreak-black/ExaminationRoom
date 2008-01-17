@@ -185,7 +185,7 @@ int main (int argc, char** argv)
 		return -1;
 	}
 	
-	inData.flags = TGA_IMAGE_DATA | TGA_IMAGE_ID | TGA_RGB;
+	inData.flags = TGA_IMAGE_DATA | TGA_IMAGE_ID;
 	if (TGAReadImage(inTGA, &inData) != TGA_OK)
 	{
 		printf(d2sErrorStrings[5], argv[1]);
