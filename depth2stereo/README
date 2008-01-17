@@ -1,0 +1,4 @@
+This program is a fast hack. It reads a greyscale tga file, and creates two greyscale tga files representing a random dot stereogram of the input picture.
+
+BUGS
+LibTGA has problems handling some compressed input files
