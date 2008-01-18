@@ -15,16 +15,24 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "ui/mainwindow.h"
+#include <QWidget>
 
-int main (int argc, char** argv)
+class GLWidget;
+
+class MainWindow : public QWidget
 {
-    QApplication app(argc, argv);
-	
-	MainWindow mw;
-	mw.show();
-	
-    return app.exec();
-}
+    Q_OBJECT
+
+public:
+    MainWindow();
+
+private slots:
+
+private:
+    GLWidget *mainGlWidget;
+};
+
+#endif

@@ -15,16 +15,33 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#ifndef GLWIDGET_H
+#define GLWIDGET_H
 
-#include "ui/mainwindow.h"
+#include <QGLWidget>
 
-int main (int argc, char** argv)
+class GLWidget : public QGLWidget
 {
-    QApplication app(argc, argv);
-	
-	MainWindow mw;
-	mw.show();
-	
-    return app.exec();
-}
+    Q_OBJECT
+
+public:
+    GLWidget(QWidget *parent = 0, QGLWidget *shareWidget = 0);
+    virtual ~GLWidget();
+
+    QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+
+signals:
+
+protected:
+    void initializeGL();
+    void paintGL();
+    void resizeGL(int width, int height);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+
+private:
+};
+
+#endif

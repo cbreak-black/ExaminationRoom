@@ -25,18 +25,99 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>32</integer>
+				<integer>4</integer>
 			</dict>
 			<key>ID</key>
-			<integer>48</integer>
+			<integer>22</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
-			<real>53</real>
+			<real>-1</real>
 			<key>Points</key>
 			<array>
-				<string>{222.161, 82.6929}</string>
-				<string>{151.303, 212.598}</string>
+				<string>{144.213, 255.118}</string>
+				<string>{144.213, 181.905}</string>
+			</array>
+			<key>Style</key>
+			<dict>
+				<key>stroke</key>
+				<dict>
+					<key>HeadArrow</key>
+					<string>0</string>
+					<key>LineType</key>
+					<integer>2</integer>
+					<key>TailArrow</key>
+					<string>0</string>
+				</dict>
+			</dict>
+			<key>Tail</key>
+			<dict>
+				<key>ID</key>
+				<integer>21</integer>
+			</dict>
+		</dict>
+		<dict>
+			<key>Bounds</key>
+			<string>{{99.2126, 255.118}, {90, 26}}</string>
+			<key>Class</key>
+			<string>MultiTextGraphic</string>
+			<key>FitText</key>
+			<string>Vertical</string>
+			<key>Flow</key>
+			<string>Resize</string>
+			<key>ID</key>
+			<integer>21</integer>
+			<key>ListOrientation</key>
+			<string>Vertical</string>
+			<key>Style</key>
+			<dict>
+				<key>fill</key>
+				<dict>
+					<key>GradientAngle</key>
+					<real>304</real>
+					<key>GradientCenter</key>
+					<string>{-0.294118, -0.264706}</string>
+				</dict>
+			</dict>
+			<key>TextList</key>
+			<array>
+				<dict>
+					<key>Align</key>
+					<integer>0</integer>
+					<key>Text</key>
+					<string>{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf440
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
+
+\f0\b\fs24 \cf0 WorldFrame}</string>
+				</dict>
+				<dict>
+					<key>Align</key>
+					<integer>0</integer>
+				</dict>
+			</array>
+			<key>TextPlacement</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>Class</key>
+			<string>LineGraphic</string>
+			<key>Head</key>
+			<dict>
+				<key>ID</key>
+				<integer>4</integer>
+			</dict>
+			<key>ID</key>
+			<integer>20</integer>
+			<key>OrthogonalBarAutomatic</key>
+			<true/>
+			<key>OrthogonalBarPosition</key>
+			<real>24</real>
+			<key>Points</key>
+			<array>
+				<string>{218.109, 82.6929}</string>
+				<string>{155.356, 155.905}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -53,7 +134,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>46</integer>
+				<integer>18</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -62,10 +143,10 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>33</integer>
+				<integer>5</integer>
 			</dict>
 			<key>ID</key>
-			<integer>47</integer>
+			<integer>19</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
@@ -90,7 +171,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>46</integer>
+				<integer>18</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -103,7 +184,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>46</integer>
+			<integer>18</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -147,7 +228,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>45</integer>
+			<integer>17</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -191,7 +272,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>44</integer>
+			<integer>16</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -231,18 +312,18 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>33</integer>
+				<integer>5</integer>
 			</dict>
 			<key>ID</key>
-			<integer>43</integer>
+			<integer>15</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
-			<real>3</real>
+			<real>24</real>
 			<key>Points</key>
 			<array>
-				<string>{176.713, 212.598}</string>
-				<string>{253.445, 181.905}</string>
+				<string>{162.784, 255.118}</string>
+				<string>{267.374, 181.905}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -259,7 +340,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>32</integer>
+				<integer>21</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -272,7 +353,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>42</integer>
+			<integer>14</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -312,10 +393,10 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>30</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>41</integer>
+			<integer>13</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
@@ -340,7 +421,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>35</integer>
+				<integer>7</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -349,10 +430,10 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>30</integer>
+				<integer>2</integer>
 			</dict>
 			<key>ID</key>
-			<integer>40</integer>
+			<integer>12</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
@@ -377,7 +458,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>37</integer>
+				<integer>9</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -386,18 +467,18 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>34</integer>
+				<integer>6</integer>
 			</dict>
 			<key>ID</key>
-			<integer>39</integer>
+			<integer>11</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
 			<real>16</real>
 			<key>Points</key>
 			<array>
-				<string>{291.516, 181.906}</string>
-				<string>{322.893, 255.118}</string>
+				<string>{291.516, 181.905}</string>
+				<string>{322.894, 255.118}</string>
 			</array>
 			<key>Style</key>
 			<dict>
@@ -414,7 +495,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>33</integer>
+				<integer>5</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -423,10 +504,10 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>34</integer>
+				<integer>6</integer>
 			</dict>
 			<key>ID</key>
-			<integer>38</integer>
+			<integer>10</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
@@ -451,7 +532,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>37</integer>
+				<integer>9</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -464,7 +545,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>37</integer>
+			<integer>9</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -504,10 +585,10 @@
 			<key>Head</key>
 			<dict>
 				<key>ID</key>
-				<integer>34</integer>
+				<integer>6</integer>
 			</dict>
 			<key>ID</key>
-			<integer>36</integer>
+			<integer>8</integer>
 			<key>OrthogonalBarAutomatic</key>
 			<true/>
 			<key>OrthogonalBarPosition</key>
@@ -532,7 +613,7 @@
 			<key>Tail</key>
 			<dict>
 				<key>ID</key>
-				<integer>35</integer>
+				<integer>7</integer>
 			</dict>
 		</dict>
 		<dict>
@@ -545,7 +626,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>35</integer>
+			<integer>7</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -589,7 +670,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>34</integer>
+			<integer>6</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -633,7 +714,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>33</integer>
+			<integer>5</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -669,7 +750,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{99.2126, 212.598}, {90, 26}}</string>
+			<string>{{99.2126, 155.905}, {90, 26}}</string>
 			<key>Class</key>
 			<string>MultiTextGraphic</string>
 			<key>FitText</key>
@@ -677,7 +758,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>32</integer>
+			<integer>4</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -701,7 +782,7 @@
 {\colortbl;\red255\green255\blue255;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\qc
 
-\f0\b\fs24 \cf0 WorldFrame}</string>
+\f0\b\fs24 \cf0 MainWindow}</string>
 				</dict>
 				<dict>
 					<key>Align</key>
@@ -721,7 +802,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>31</integer>
+			<integer>3</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -765,7 +846,7 @@
 			<key>Flow</key>
 			<string>Resize</string>
 			<key>ID</key>
-			<integer>30</integer>
+			<integer>2</integer>
 			<key>ListOrientation</key>
 			<string>Vertical</string>
 			<key>Style</key>
@@ -844,7 +925,7 @@
 	<key>MagnetsVisible</key>
 	<string>NO</string>
 	<key>ModificationDate</key>
-	<string>2008-01-17 15:53:53 +0100</string>
+	<string>2008-01-18 09:12:16 +0100</string>
 	<key>Modifier</key>
 	<string>CBreak</string>
 	<key>Orientation</key>
@@ -932,7 +1013,7 @@
 	ZWFsPgoJCQkJCTwvYXJyYXk+CgkJCQkJPGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0
 	LmNsaWVudDwva2V5PgoJCQkJCTxzdHJpbmc+Y29tLmFwcGxlLnByaW50aW5nbWFuYWdl
 	cjwvc3RyaW5nPgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5tb2REYXRl
-	PC9rZXk+CgkJCQkJPGRhdGU+MjAwOC0wMS0xN1QxNDoxNDowOVo8L2RhdGU+CgkJCQkJ
+	PC9rZXk+CgkJCQkJPGRhdGU+MjAwOC0wMS0xOFQwODoxMDo1Nlo8L2RhdGU+CgkJCQkJ
 	PGtleT5jb20uYXBwbGUucHJpbnQudGlja2V0LnN0YXRlRmxhZzwva2V5PgoJCQkJCTxp
 	bnRlZ2VyPjA8L2ludGVnZXI+CgkJCQk8L2RpY3Q+CgkJCTwvYXJyYXk+CgkJPC9kaWN0
 	PgoJCTxrZXk+Y29tLmFwcGxlLnByaW50LlBhZ2VGb3JtYXQuUE1BZGp1c3RlZFBhcGVy
@@ -946,7 +1027,7 @@
 	cmF5PgoJCQkJCTxrZXk+Y29tLmFwcGxlLnByaW50LnRpY2tldC5jbGllbnQ8L2tleT4K
 	CQkJCQk8c3RyaW5nPmNvbS5hcHBsZS5wcmludGluZ21hbmFnZXI8L3N0cmluZz4KCQkJ
 	CQk8a2V5PmNvbS5hcHBsZS5wcmludC50aWNrZXQubW9kRGF0ZTwva2V5PgoJCQkJCTxk
-	YXRlPjIwMDgtMDEtMTdUMTQ6MTQ6MDlaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxl
+	YXRlPjIwMDgtMDEtMThUMDg6MTA6NTZaPC9kYXRlPgoJCQkJCTxrZXk+Y29tLmFwcGxl
 	LnByaW50LnRpY2tldC5zdGF0ZUZsYWc8L2tleT4KCQkJCQk8aW50ZWdlcj4wPC9pbnRl
 	Z2VyPgoJCQkJPC9kaWN0PgoJCQk8L2FycmF5PgoJCTwvZGljdD4KCQk8a2V5PmNvbS5h
 	cHBsZS5wcmludC5QYXBlckluZm8uUE1QYXBlck5hbWU8L2tleT4KCQk8ZGljdD4KCQkJ
@@ -1041,7 +1122,7 @@
 		<key>CurrentSheet</key>
 		<string>0</string>
 		<key>Frame</key>
-		<string>{{156, 3}, {574, 742}}</string>
+		<string>{{172, 4}, {574, 742}}</string>
 		<key>ShowRuler</key>
 		<false/>
 		<key>ShowStatusBar</key>

@@ -15,16 +15,20 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#include <QtGui>
 
-#include "ui/mainwindow.h"
+#include "glwidget.h"
+#include "mainwindow.h"
 
-int main (int argc, char** argv)
+MainWindow::MainWindow()
 {
-    QApplication app(argc, argv);
+    QGridLayout *mainLayout = new QGridLayout;
+	mainLayout->setContentsMargins(0,0,0,0);
+	mainLayout->setSpacing(0);
 	
-	MainWindow mw;
-	mw.show();
-	
-    return app.exec();
+	mainGlWidget = new GLWidget(this);
+	mainLayout->addWidget(mainGlWidget, 0, 0);
+
+    setLayout(mainLayout);
 }
+
