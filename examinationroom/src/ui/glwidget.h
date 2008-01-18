@@ -20,6 +20,12 @@ GNU General Public License for more details.
 
 #include <QGLWidget>
 
+/**
+The GLWidget is a view that is drawn with OpenGL. It has a reference to a scene,
+which is drawn into the view.
+ 
+ \author Gerhard Roethlin
+*/
 class GLWidget : public QGLWidget
 {
     Q_OBJECT

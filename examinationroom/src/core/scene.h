@@ -15,29 +15,28 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SCENE_H
+#define SCENE_H
 
-#include <QWidget>
-
-class GLWidget;
+typedef  enum {left = 1, right = 2} Side;
 
 /**
-The main window. It contains only the GLWidget.
- 
- \author Gerhard Roethlin
+This class represents the scene. It contains references to objects.
+
+\author Gerhard Roethlin
 */
-class MainWindow : public QWidget
+class Scene
 {
-    Q_OBJECT
 
 public:
-    MainWindow();
+	/**
+	Creator of scenes.
+	*/
+    Scene();
+	
+public:
+	drawScene(Side s);
 
-private slots:
-
-private:
-    GLWidget * mainGlWidget;
 };
 
 #endif

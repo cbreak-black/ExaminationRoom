@@ -15,29 +15,8 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "scene.h"
 
-#include <QWidget>
-
-class GLWidget;
-
-/**
-The main window. It contains only the GLWidget.
- 
- \author Gerhard Roethlin
-*/
-class MainWindow : public QWidget
+Scene::Scene()
 {
-    Q_OBJECT
-
-public:
-    MainWindow();
-
-private slots:
-
-private:
-    GLWidget * mainGlWidget;
-};
-
-#endif
+}
