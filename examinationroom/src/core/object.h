@@ -15,18 +15,55 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#ifndef OBJECT_H
+#define OBJECT_H
 
-#include "ui/mainwindow.h"
+#include "vec.h"
+#include "drawing.h"
 
-using namespace Examination;
-
-int main (int argc, char** argv)
+namespace Examination
 {
-    QApplication app(argc, argv);
+
+/**
+A generic object, which can be placed in a scene.
+
+\author Gerhard Roethlin
+*/
+class Object
+{
+
+public:
+	/**
+	Creator of Objects.
+	*/
+    Object();
+    
+	/**
+	Creator of Objects.
+	\param x	X Coordinate of the object
+	\param y	Y Coordinate of the object
+	\param z	Z Coordinate of the object
+	*/
+    Object(float x, float y, float z);
+
+	/**
+	Creator of Objects.
+	 \param o	Origin  of the object
+	 */
+    Object(tool::Point o);
 	
-	MainWindow mw;
-	mw.show();
+	/**
+	Destructor of Objects
+	*/
+	virtual ~Object();
 	
-    return app.exec();
+public: // Drawing
+	virtual void draw(Side s) = 0;
+
+private:
+	tool::Point origin_;
+};
+
 }
+
+#endif

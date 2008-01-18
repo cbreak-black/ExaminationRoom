@@ -22,6 +22,9 @@ GNU General Public License for more details.
 
 #include "glwidget.h"
 
+namespace Examination
+{
+
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 {
@@ -78,3 +81,4 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 {
 }
 
+}

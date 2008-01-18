@@ -15,18 +15,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#ifndef DRAWING_H
+#define DRAWING_H
 
-#include "ui/mainwindow.h"
-
-using namespace Examination;
-
-int main (int argc, char** argv)
+namespace Examination
 {
-    QApplication app(argc, argv);
-	
-	MainWindow mw;
-	mw.show();
-	
-    return app.exec();
+
+/**
+Indicates for which side the scene should be drawn.
+1 corresponds with the left eye
+2 corresponds with the right eye
+*/	
+typedef  enum {left = 1, right = 2} Side;
+
 }
+#endif

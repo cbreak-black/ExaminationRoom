@@ -15,18 +15,32 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#include "object.h"
 
-#include "ui/mainwindow.h"
-
-using namespace Examination;
-
-int main (int argc, char** argv)
+namespace Examination
 {
-    QApplication app(argc, argv);
-	
-	MainWindow mw;
-	mw.show();
-	
-    return app.exec();
+	using namespace tool;
+
+// Creation
+Object::Object()
+{
+}
+
+Object::Object(float x, float y, float z)
+{
+	origin_.x = x;
+	origin_.y = y;
+	origin_.z = z;
+}
+
+Object::Object(Point o)
+{
+	origin_ = o;
+}
+
+Object::~Object()
+{
+}
+
+
 }

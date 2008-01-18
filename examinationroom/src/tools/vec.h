@@ -15,18 +15,58 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 *******************************************************************************/
 
-#include <QApplication>
+#ifndef VEC_H
+#define VEC_H
 
-#include "ui/mainwindow.h"
-
-using namespace Examination;
-
-int main (int argc, char** argv)
+namespace tool
 {
-    QApplication app(argc, argv);
+
+typedef union
+{
+	struct
+	{
+		float x;
+		float y;
+		float z;
+	};
+
+	struct
+	{
+		float r;
+		float g;
+		float b;
+	};
 	
-	MainWindow mw;
-	mw.show();
+	float vec[3];
 	
-    return app.exec();
+} Vec3f;
+
+typedef union
+{
+	struct
+	{
+		float x;
+		float y;
+		float z;
+		float t;
+	};
+
+	struct
+	{
+		float r;
+		float g;
+		float b;
+		float a;
+	};
+	
+	float vec[4];
+	
+} Vec4f;
+
+typedef Vec3f Point;
+typedef Vec3f Vector;
+
+typedef Vec3f Point;
+
 }
+#endif

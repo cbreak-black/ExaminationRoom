@@ -20,15 +20,19 @@ GNU General Public License for more details.
 #include "glwidget.h"
 #include "mainwindow.h"
 
+namespace Examination
+{
+
 MainWindow::MainWindow()
 {
     QGridLayout *mainLayout = new QGridLayout;
 	mainLayout->setContentsMargins(0,0,0,0);
 	mainLayout->setSpacing(0);
 	
-	mainGlWidget = new GLWidget(this);
-	mainLayout->addWidget(mainGlWidget, 0, 0);
+	mainGlWidget_ = new GLWidget(this);
+	mainLayout->addWidget(mainGlWidget_, 0, 0);
 
     setLayout(mainLayout);
 }
 
+}

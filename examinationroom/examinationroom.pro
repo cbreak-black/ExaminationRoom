@@ -4,8 +4,8 @@
 
 TEMPLATE = app
 TARGET = ExaminationRoom
-DEPENDPATH += . src src/ui src/core src/lua
-INCLUDEPATH += . src/ui src/core src/lua
+DEPENDPATH += . src src/ui src/core src/lua src/tools
+INCLUDEPATH += . src/ui src/core src/lua src/tools
 
 QT           += opengl
 
@@ -13,9 +13,13 @@ QT           += opengl
 HEADERS += \
 	src/ui/glwidget.h \
 	src/ui/mainwindow.h \
-	src/core/scene.h
+	src/core/scene.h \
+	src/core/object.h \
+	src/core/drawing.h \
+	src/tools/vec.h
 SOURCES += \
 	src/main.cpp \
 	src/ui/glwidget.cpp \
 	src/ui/mainwindow.cpp \
-	src/core/scene.cpp
+	src/core/scene.cpp \
+	src/core/object.cpp

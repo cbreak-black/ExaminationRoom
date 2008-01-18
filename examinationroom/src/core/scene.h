@@ -18,7 +18,14 @@ GNU General Public License for more details.
 #ifndef SCENE_H
 #define SCENE_H
 
-typedef  enum {left = 1, right = 2} Side;
+#include <set>
+
+#include "drawing.h"
+
+namespace Examination
+{
+	
+class Object;
 
 /**
 This class represents the scene. It contains references to objects.
@@ -33,10 +40,33 @@ public:
 	Creator of scenes.
 	*/
     Scene();
+
+public: // Drawing
+	/**
+	Draw this object for the side s.
+	 \param s	the side to draw for.
+	*/
+	void drawScene(Side s);
 	
-public:
-	drawScene(Side s);
+public: // Scene management
+	/**
+	Adds an object to the scene. An object can only be added once.
+	 \param object	A pointer to an object
+	 \return	true if the object was inserted, false if it already was in the scene.
+	*/
+	bool addOject(Object * object);
+	
+	/**
+	Removes an object from the scene.
+	 \param object	A pointer to an object
+	*/
+	void removeOject(Object * object);
+		
+private:
+	std::set<Object*> objects_;
 
 };
+
+}
 
 #endif

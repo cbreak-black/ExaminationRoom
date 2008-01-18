@@ -22,8 +22,12 @@ GNU General Public License for more details.
 
 class GLWidget;
 
+namespace Examination
+{
+
 /**
-The main window. It contains only the GLWidget.
+The main window. It contains only the GLWidget. It also creates most of the other
+objects of the program. A seperate application class was found unnecessary. So far.
  
  \author Gerhard Roethlin
 */
@@ -37,7 +41,9 @@ public:
 private slots:
 
 private:
-    GLWidget * mainGlWidget;
+    GLWidget * mainGlWidget_;
 };
+
+}
 
 #endif

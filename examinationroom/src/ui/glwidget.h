@@ -20,6 +20,9 @@ GNU General Public License for more details.
 
 #include <QGLWidget>
 
+namespace Examination
+{
+
 /**
 The GLWidget is a view that is drawn with OpenGL. It has a reference to a scene,
 which is drawn into the view.
@@ -49,5 +52,7 @@ protected:
 
 private:
 };
+
+}
 
 #endif

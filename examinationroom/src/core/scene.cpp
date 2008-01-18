@@ -17,6 +17,21 @@ GNU General Public License for more details.
 
 #include "scene.h"
 
+namespace Examination
+{
+
 Scene::Scene()
 {
+}
+
+bool Scene::addOject(Object * object)
+{
+	return objects_.insert(object).second;
+}
+
+void Scene::removeOject(Object * object)
+{
+	objects_.erase(object);
+}
+
 }
