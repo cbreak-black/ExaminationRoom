@@ -17,8 +17,12 @@ GNU General Public License for more details.
 
 #include <QtGui>
 
-#include "glwidget.h"
 #include "mainwindow.h"
+
+#include "glwidget.h"
+#include "scene.h"
+
+#include "rectangle.h"
 
 namespace Examination
 {
@@ -33,6 +37,29 @@ MainWindow::MainWindow()
 	mainLayout->addWidget(mainGlWidget_, 0, 0);
 
     setLayout(mainLayout);
+	
+	scene_ = new Scene();
+	mainGlWidget_->setScene(scene_);
+	
+	// Floor
+	Rectangle * r = new Rectangle();
+	r->setDirA(Tool::Point(3,0,0));
+	r->setDirB(Tool::Point(0,0,6));
+	r->setPosition(Tool::Point(0, -2, -6));
+	scene_->addOject(r);
+	
+	// Ceil
+	r = new Rectangle();
+	r->setDirA(Tool::Point(3,0,0));
+	r->setDirB(Tool::Point(0,0,6));
+	r->setPosition(Tool::Point(0, 2, -6));
+	scene_->addOject(r);
+}
+
+
+MainWindow::~MainWindow()
+{
+	delete scene_;
 }
 
 }

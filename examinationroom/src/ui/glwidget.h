@@ -20,8 +20,11 @@ GNU General Public License for more details.
 
 #include <QGLWidget>
 
+#include "drawing.h"
+
 namespace Examination
 {
+	class Scene;
 
 /**
 The GLWidget is a view that is drawn with OpenGL. It has a reference to a scene,
@@ -31,8 +34,6 @@ which is drawn into the view.
 */
 class GLWidget : public QGLWidget
 {
-    Q_OBJECT
-
 public:
     GLWidget(QWidget *parent = 0, QGLWidget *shareWidget = 0);
     virtual ~GLWidget();
@@ -40,8 +41,13 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
-signals:
-
+public:
+	Scene * scene();
+	void setScene(Scene * s);
+	
+	Side side();
+	void setSide(Side s);
+	
 protected:
     void initializeGL();
     void paintGL();
@@ -51,6 +57,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
+	Scene * scene_;
+	Side side_;
 };
 
 }

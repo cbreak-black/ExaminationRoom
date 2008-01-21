@@ -41,6 +41,11 @@ public:
 	*/
     Scene();
 
+	/**
+	Destructor of scenes. Also deletes all contained objects.
+	*/
+	~Scene();
+
 public: // Drawing
 	/**
 	Draw this object for the side s.
@@ -50,14 +55,15 @@ public: // Drawing
 	
 public: // Scene management
 	/**
-	Adds an object to the scene. An object can only be added once.
+	Adds an object to the scene. An object can only be added once. The scene takes
+	responsibility to free the used memory once it is not used anymore.
 	 \param object	A pointer to an object
 	 \return	true if the object was inserted, false if it already was in the scene.
 	*/
 	bool addOject(Object * object);
 	
 	/**
-	Removes an object from the scene.
+	Removes an object from the scene and frees the memory it used. The object is deleted.
 	 \param object	A pointer to an object
 	*/
 	void removeOject(Object * object);

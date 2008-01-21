@@ -19,7 +19,7 @@ GNU General Public License for more details.
 
 namespace Examination
 {
-	using namespace tool;
+	using namespace Tool;
 
 // Creation
 Object::Object()
@@ -40,6 +40,16 @@ Object::Object(Point o)
 
 Object::~Object()
 {
+}
+
+Tool::Point Object::position()
+{
+	return origin_;
+}
+
+void Object::setPosition(Tool::Point p)
+{
+	origin_ = p;
 }
 
 

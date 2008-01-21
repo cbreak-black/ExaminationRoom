@@ -50,18 +50,31 @@ public:
 	Creator of Objects.
 	 \param o	Origin  of the object
 	 */
-    Object(tool::Point o);
-	
+    Object(Tool::Point o);
+
 	/**
 	Destructor of Objects
 	*/
 	virtual ~Object();
+
+public: // Accessors
+	/**
+	Returns the position of this object.
+	 \return the position of this object.
+	*/
+	Tool::Point position();
+
+	/**
+	Sets the position of the object.
+	 \param p	the new position of the object.
+	*/
+	void setPosition(Tool::Point p);
 	
 public: // Drawing
 	virtual void draw(Side s) = 0;
 
 private:
-	tool::Point origin_;
+	Tool::Point origin_;
 };
 
 }

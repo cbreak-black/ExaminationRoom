@@ -20,10 +20,11 @@ GNU General Public License for more details.
 
 #include <QWidget>
 
-class GLWidget;
 
 namespace Examination
 {
+	class Scene;
+	class GLWidget;
 
 /**
 The main window. It contains only the GLWidget. It also creates most of the other
@@ -36,12 +37,22 @@ class MainWindow : public QWidget
     Q_OBJECT
 
 public:
+	/**
+	Creates the MainWindow and the environment.
+	*/
     MainWindow();
+	
+	/**
+	Destroys the the MainWindow and the environment.
+	*/
+	~MainWindow();
 
 private slots:
 
 private:
     GLWidget * mainGlWidget_;
+	
+	Scene * scene_;
 };
 
 }

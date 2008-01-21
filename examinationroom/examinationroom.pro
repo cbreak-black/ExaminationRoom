@@ -15,6 +15,7 @@ HEADERS += \
 	src/ui/mainwindow.h \
 	src/core/scene.h \
 	src/core/object.h \
+	src/core/rectangle.h \
 	src/core/drawing.h \
 	src/tools/vec.h
 SOURCES += \
@@ -22,4 +23,5 @@ SOURCES += \
 	src/ui/glwidget.cpp \
 	src/ui/mainwindow.cpp \
 	src/core/scene.cpp \
-	src/core/object.cpp
+	src/core/object.cpp \
+	src/core/rectangle.cpp

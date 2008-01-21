@@ -17,11 +17,23 @@ GNU General Public License for more details.
 
 #include "scene.h"
 
+#include "object.h"
+
 namespace Examination
 {
 
 Scene::Scene()
 {
+}
+
+Scene::~Scene()
+{
+	std::set<Object*>::iterator i = objects_.begin();
+	for (; i != objects_.end(); i++)
+	{
+		delete (*i);
+	}
+	objects_.clear();
 }
 
 bool Scene::addOject(Object * object)
@@ -33,5 +45,15 @@ void Scene::removeOject(Object * object)
 {
 	objects_.erase(object);
 }
+
+void Scene::drawScene(Side s)
+{
+	std::set<Object*>::iterator i = objects_.begin();
+	for (; i != objects_.end(); i++)
+	{
+		(*i)->draw(s);
+	}
+}
+
 
 }
