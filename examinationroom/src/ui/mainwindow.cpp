@@ -45,14 +45,14 @@ MainWindow::MainWindow()
 	Rectangle * r = new Rectangle();
 	r->setDirA(Tool::Point(3,0,0));
 	r->setDirB(Tool::Point(0,0,6));
-	r->setPosition(Tool::Point(0, -2, -6));
+	r->setPosition(Tool::Point(0, -3, -3));
 	scene_->addOject(r);
 	
 	// Ceil
 	r = new Rectangle();
 	r->setDirA(Tool::Point(3,0,0));
 	r->setDirB(Tool::Point(0,0,6));
-	r->setPosition(Tool::Point(0, 2, -6));
+	r->setPosition(Tool::Point(0, 3, -3));
 	scene_->addOject(r);
 }
 

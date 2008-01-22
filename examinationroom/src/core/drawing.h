@@ -18,7 +18,7 @@ GNU General Public License for more details.
 #ifndef DRAWING_H
 #define DRAWING_H
 
-#include <OpenGL/gl.h>
+#include <qgl.h>
 
 namespace Examination
 {

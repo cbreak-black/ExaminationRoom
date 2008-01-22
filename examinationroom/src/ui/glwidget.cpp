@@ -101,7 +101,7 @@ void GLWidget::resizeGL(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 //    glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-	gluPerspective(30, width/height, 2, 20);
+	gluPerspective(50, width/height, 2, 20);
 	glTranslatef(0, 0, -10);
     glMatrixMode(GL_MODELVIEW);
 }
