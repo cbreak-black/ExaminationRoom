@@ -23,6 +23,7 @@ GNU General Public License for more details.
 
 namespace Examination
 {
+	class GLWidget;
 
 /**
 A generic object, which can be placed in a scene.
@@ -71,7 +72,7 @@ public: // Accessors
 	void setPosition(Tool::Point p);
 	
 public: // Drawing
-	virtual void draw(Side s) = 0;
+	virtual void draw(GLWidget * dest) = 0;
 
 private:
 	Tool::Point origin_;

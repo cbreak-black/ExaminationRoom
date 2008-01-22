@@ -23,6 +23,7 @@ GNU General Public License for more details.
 #include "scene.h"
 
 #include "rectangle.h"
+#include "texture.h"
 
 namespace Examination
 {
@@ -42,10 +43,12 @@ MainWindow::MainWindow()
 	mainGlWidget_->setScene(scene_);
 	
 	// Floor
+	std::string path = std::string("../../res/checkerboard.png");
 	Rectangle * r = new Rectangle();
 	r->setDirA(Tool::Point(3,0,0));
 	r->setDirB(Tool::Point(0,0,6));
 	r->setPosition(Tool::Point(0, -3, -3));
+	r->setTextures(new Texture(path), new Texture(path));
 	scene_->addOject(r);
 	
 	// Ceil

@@ -26,6 +26,7 @@ namespace Examination
 {
 	
 class Object;
+class GLWidget;
 
 /**
 This class represents the scene. It contains references to objects.
@@ -51,7 +52,7 @@ public: // Drawing
 	Draw this object for the side s.
 	 \param s	the side to draw for.
 	*/
-	void drawScene(Side s);
+	void drawScene(GLWidget * dest);
 	
 public: // Scene management
 	/**

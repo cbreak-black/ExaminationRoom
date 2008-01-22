@@ -89,7 +89,7 @@ void GLWidget::paintGL()
 	
 	// Scene
 	if (scene_)
-		scene_->drawScene(side_);
+		scene_->drawScene(this);
 }
 
 void GLWidget::resizeGL(int width, int height)

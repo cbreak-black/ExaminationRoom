@@ -17,6 +17,7 @@ HEADERS += \
 	src/core/object.h \
 	src/core/rectangle.h \
 	src/core/drawing.h \
+	src/core/texture.h \
 	src/tools/vec.h
 SOURCES += \
 	src/main.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
 	src/ui/mainwindow.cpp \
 	src/core/scene.cpp \
 	src/core/object.cpp \
-	src/core/rectangle.cpp
+	src/core/rectangle.cpp \
+	src/core/texture.cpp

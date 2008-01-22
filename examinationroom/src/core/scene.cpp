@@ -46,12 +46,12 @@ void Scene::removeOject(Object * object)
 	objects_.erase(object);
 }
 
-void Scene::drawScene(Side s)
+void Scene::drawScene(GLWidget * dest)
 {
 	std::set<Object*>::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
 	{
-		(*i)->draw(s);
+		(*i)->draw(dest);
 	}
 }
 
