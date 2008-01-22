@@ -14,7 +14,7 @@
 
 namespace Examination
 {
-	class Texture;
+	class AbstractTexture;
 	
 class Rectangle : public Object
 {
@@ -54,18 +54,16 @@ public:
 
 public: // Textures
 	/**
-	Sets the texture for left and right.
-	 \param left	Texture for left camera
-	 \param right	Texture for right camera
+	Sets the texture for this object.
+	 \param t	Texture for left camera
 	*/
-	void setTextures(Texture * left, Texture * right);
-	
+	void setTexture(AbstractTexture * t);
+
 private:
 	Tool::Vector directionA_;
 	Tool::Vector directionB_;
 
-	Texture * texLeft_;
-	Texture * texRight_;
+	AbstractTexture * tex_;
 };
 	
 }

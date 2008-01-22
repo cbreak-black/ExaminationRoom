@@ -35,6 +35,11 @@ Texture::~Texture()
 	delete image_;
 }
 
+void Texture::glBindTex(GLWidget * w)
+{
+	glBindTexture(GL_TEXTURE_2D, glTexID(w));
+}
+
 unsigned int Texture::glTexID(GLWidget * w)
 {
 	if (w != glWidget_)

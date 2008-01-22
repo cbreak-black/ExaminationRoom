@@ -10,6 +10,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "abstracttexture.h"
+
 #include <map>
 
 class QImage;
@@ -17,7 +19,6 @@ class QImage;
 namespace Examination
 {
 	class Texture;
-	class GLWidget;
 	
 	typedef std::map<std::string, Texture*> TextCache;
 	
@@ -25,7 +26,7 @@ namespace Examination
 This is a class for textures. It contains static factory methods to load image
 files from disc.
 */
-class Texture
+class Texture : public AbstractTexture
 {
 public: // Constructors and Destructor
 	Texture(std::string path);
@@ -34,11 +35,19 @@ public: // Constructors and Destructor
 
 public:
 	/**
+	Binds the suitable texture.
+	Can be called repeatedly.
+	 \param w	A GLWidget
+	*/
+	virtual void glBindTex(GLWidget * w);
+
+	/**
 	Binds the texture to the passed widget and returns the texture id. Can be
 	called repeatedly.
 	 \param w	A GLWidget
 	*/
 	unsigned int glTexID(GLWidget * w);
+
 private:
 	void deleteGlTexID();
 	

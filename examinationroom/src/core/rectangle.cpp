@@ -9,7 +9,7 @@
 
 #include "rectangle.h"
 
-#include "texture.h"
+#include "abstracttexture.h"
 #include "glwidget.h"
 
 namespace Examination
@@ -21,26 +21,20 @@ Rectangle::Rectangle()
 	directionA_.x = 1;
 	directionB_.y = 1;
 
-	texLeft_ = 0;
-	texRight_ = 0;
+	tex_ = 0;
 }
 
 Rectangle::~Rectangle()
 {
-	delete texLeft_;
-	delete texRight_;
+	delete tex_;
 }
 
 // Drawing
 void Rectangle::draw(GLWidget * dest)
 {
-	if (texRight_ && dest->side() == right)
+	if (tex_)
 	{
-		glBindTexture(GL_TEXTURE_2D, texRight_->glTexID(dest));
-	}
-	else if (texLeft_)
-	{
-		glBindTexture(GL_TEXTURE_2D, texLeft_->glTexID(dest));
+		tex_->glBindTex(dest);
 	}
 	
 	Point v1 = position() + dirA() + dirB();
@@ -82,10 +76,9 @@ void Rectangle::setDirB(Tool::Vector v)
 }
 
 // Textures
-void Rectangle::setTextures(Texture * left, Texture * right)
+void Rectangle::setTexture(AbstractTexture * t)
 {
-	texLeft_ = left;
-	texRight_ = right;
+	tex_ = t;
 }	
 	
 	
