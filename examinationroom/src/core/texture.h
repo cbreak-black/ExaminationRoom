@@ -53,6 +53,12 @@ private:
 	
 public:
 	/**
+	Returns the stored image that is used as texture.
+	 \return the stored image that is used as texture.
+	*/
+	QImage * image();
+
+	/**
 	Returns true if the image is valid, false otherwise.
 	 \return true if the image is valid, false otherwise.
 	*/

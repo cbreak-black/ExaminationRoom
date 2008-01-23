@@ -54,6 +54,20 @@ public:
 
 public: // Textures
 	/**
+	Sets the texture coordinates of this rectangle. Default is
+	(0,0) (0,1) (1,0) (1,1)
+	 \param llx	lower left corner, x coordinate
+	 \param lly	lower left corner, y coordinate
+	 \param ulx	lower left corner, x coordinate
+	 \param uly	lower left corner, y coordinate
+	 \param lrx	lower left corner, x coordinate
+	 \param lry	lower left corner, y coordinate
+	 \param urx	lower left corner, x coordinate
+	 \param ury	lower left corner, y coordinate
+	*/
+	void setTexCoords(float llx, float lly, float ulx, float uly,
+					  float lrx, float lry, float urx, float ury);
+	/**
 	Sets the texture for this object.
 	 \param t	Texture for left camera
 	*/
@@ -62,6 +76,11 @@ public: // Textures
 private:
 	Tool::Vector directionA_;
 	Tool::Vector directionB_;
+	
+	Tool::Point texA_;
+	Tool::Point texB_;
+	Tool::Point texC_;
+	Tool::Point texD_;
 
 	AbstractTexture * tex_;
 };

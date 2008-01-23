@@ -20,6 +20,8 @@ Rectangle::Rectangle()
 {
 	directionA_.x = 1;
 	directionB_.y = 1;
+	
+	setTexCoords(0,0, 0,1, 1,0, 1,1);
 
 	tex_ = 0;
 }
@@ -45,16 +47,25 @@ void Rectangle::draw(GLWidget * dest)
 	glColor3f(1.0f, 1.0f, 1.0f);
 	
 	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(0.0f, 0.0f); glVertex3fv(v1.vec);
-	glTexCoord2f(0.0f, 4.0f); glVertex3fv(v2.vec);
-	glTexCoord2f(2.0f, 0.0f); glVertex3fv(v3.vec);
-	glTexCoord2f(2.0f, 4.0f); glVertex3fv(v4.vec);
+	glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
+	glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
+	glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);
+	glTexCoord2f(texD_.x, texD_.y); glVertex3fv(v4.vec);
 	glEnd();
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // Accessors
+void Rectangle::setTexCoords(float llx, float lly, float ulx, float uly,
+							 float lrx, float lry, float urx, float ury)
+{
+	texA_ = Point(llx, lly, 0);
+	texB_ = Point(ulx, uly, 0);
+	texC_ = Point(lrx, lry, 0);
+	texD_ = Point(urx, ury, 0);
+}
+
 Tool::Vector Rectangle::dirA()
 {
 	return directionA_;

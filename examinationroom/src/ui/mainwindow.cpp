@@ -24,6 +24,7 @@ GNU General Public License for more details.
 
 #include "rectangle.h"
 #include "texture.h"
+#include "stereogram.h"
 
 namespace Examination
 {
@@ -49,6 +50,7 @@ MainWindow::MainWindow()
 	r->setDirB(Tool::Point(0,0,6));
 	r->setPosition(Tool::Point(0, -3, -3));
 	r->setTexture(new Texture(path));
+	r->setTexCoords(0,0, 0,8, 4,0, 4,8);
 	scene_->addOject(r);
 	
 	// Ceil
@@ -56,6 +58,17 @@ MainWindow::MainWindow()
 	r->setDirA(Tool::Point(3,0,0));
 	r->setDirB(Tool::Point(0,0,6));
 	r->setPosition(Tool::Point(0, 3, -3));
+	r->setTexture(new Texture(path));
+	r->setTexCoords(0,0, 0,8, 4,0, 4,8);
+	scene_->addOject(r);
+
+	// Plane
+	path = std::string("../../res/triangle.png");
+	r = new Rectangle();
+	r->setDirA(Tool::Point(1,0,0));
+	r->setDirB(Tool::Point(0,1,0));
+	r->setPosition(Tool::Point(-2, -2, 0));
+	r->setTexture(new Stereogram(new Texture(path)));
 	scene_->addOject(r);
 }
 

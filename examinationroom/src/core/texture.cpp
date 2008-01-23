@@ -72,6 +72,11 @@ void Texture::deleteGlTexID()
 	}
 }
 
+QImage * Texture::image()
+{
+	return image_;
+}
+
 bool Texture::valid()
 {
 	return image_ && (!image_->isNull());
