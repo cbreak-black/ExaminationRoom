@@ -39,10 +39,10 @@ void Rectangle::draw(GLWidget * dest)
 		tex_->glBindTex(dest);
 	}
 	
-	Point v1 = position() + dirA() + dirB();
-	Point v2 = position() + dirA() - dirB();
-	Point v3 = position() - dirA() + dirB();
-	Point v4 = position() - dirA() - dirB();
+	Point v1 = position() + dirA() - dirB();
+	Point v2 = position() + dirA() + dirB();
+	Point v3 = position() - dirA() - dirB();
+	Point v4 = position() - dirA() + dirB();
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
 	
