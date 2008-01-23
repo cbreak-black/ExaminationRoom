@@ -86,6 +86,35 @@ void GLWidget::paintGL()
 	glBegin(GL_POINTS);
 	glVertex3f(0, 0, 0);
 	glEnd();
+
+	// Left
+	glColorMask(true, false, false, true);
+	setSide(left);
+	
+	// Fixed camera, bad!
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glTranslatef(-0.02, 0, 0);		// Frame Adjustment
+	gluPerspective(50, 4/3, 2, 20);	// Camera
+	glTranslatef(+0.1, 0, -10);		// Camera position
+    glMatrixMode(GL_MODELVIEW);	
+	
+	// Scene
+	if (scene_)
+		scene_->drawScene(this);
+
+	// Right
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glColorMask(false, true, true, true);
+	setSide(right);
+
+	// Fixed camera, bad!
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+	glTranslatef(+0.02, 0, 0);		// Frame Adjustment
+	gluPerspective(50, 4/3, 2, 20);	// Camera
+	glTranslatef(-0.1, 0, -10);		// Camera position
+    glMatrixMode(GL_MODELVIEW);	
 	
 	// Scene
 	if (scene_)
