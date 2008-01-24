@@ -97,9 +97,9 @@ void GLWidget::paintGL()
 	// Fixed camera, bad!
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	glTranslatef(-0.02, 0, 0);		// Frame Adjustment
+	glTranslatef(-0.04, 0, 0);		// Frame Adjustment
 	gluPerspective(50, 4/3, 2, 20);	// Camera
-	glTranslatef(+0.1, 0, -10);		// Camera position
+	glTranslatef(+0.2, 0, -10);		// Camera position
     glMatrixMode(GL_MODELVIEW);	
 	
 	// Scene
@@ -114,9 +114,9 @@ void GLWidget::paintGL()
 	// Fixed camera, bad!
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-	glTranslatef(+0.02, 0, 0);		// Frame Adjustment
+	glTranslatef(+0.04, 0, 0);		// Frame Adjustment
 	gluPerspective(50, 4/3, 2, 20);	// Camera
-	glTranslatef(-0.1, 0, -10);		// Camera position
+	glTranslatef(-0.2, 0, -10);		// Camera position
     glMatrixMode(GL_MODELVIEW);	
 	
 	// Scene
