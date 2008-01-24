@@ -89,8 +89,10 @@ void Rectangle::setDirB(Tool::Vector v)
 // Textures
 void Rectangle::setTexture(AbstractTexture * t)
 {
+	if (tex_ && tex_ != t)
+		delete tex_;
 	tex_ = t;
 }	
-	
+
 	
 }

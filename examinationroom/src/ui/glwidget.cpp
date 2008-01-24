@@ -55,6 +55,9 @@ Scene * GLWidget::scene()
 
 void GLWidget::setScene(Scene * s)
 {
+//	if (scene_ && scene_ != s)
+//		delete scene_;
+	// Weak reference
 	scene_ = s;
 }
 
