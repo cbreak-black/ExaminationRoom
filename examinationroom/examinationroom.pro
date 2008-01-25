@@ -31,3 +31,11 @@ SOURCES += \
 	src/core/abstracttexture.cpp \
 	src/core/texture.cpp \
 	src/core/stereogram.cpp
+
+
+# LUA
+HEADERS += src/lua/src/*.h src/lua/lua.hpp
+SOURCES += src/lua/src/*.c
+
+# LUNA
+HEADERS += src/lua/luna.h
