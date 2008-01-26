@@ -20,6 +20,7 @@ HEADERS += \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
 	src/core/stereogram.h \
+	src/proxy/luaproxy.h \
 	src/tools/vec.h
 SOURCES += \
 	src/main.cpp \
@@ -30,7 +31,8 @@ SOURCES += \
 	src/core/rectangle.cpp \
 	src/core/abstracttexture.cpp \
 	src/core/texture.cpp \
-	src/core/stereogram.cpp
+	src/core/stereogram.cpp \
+	src/proxy/luaproxy.cpp
 
 
 # LUA

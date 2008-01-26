@@ -25,6 +25,7 @@ namespace Examination
 {
 	class Scene;
 	class GLWidget;
+	class LuaProxy;
 
 /**
 The main window. It contains only the GLWidget. It also creates most of the other
@@ -51,8 +52,10 @@ private slots:
 
 private:
     GLWidget * mainGlWidget_;
-	
+
 	Scene * scene_;
+
+	LuaProxy * luaProxy_;
 };
 
 }

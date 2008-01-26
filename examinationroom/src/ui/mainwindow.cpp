@@ -26,6 +26,8 @@ GNU General Public License for more details.
 #include "texture.h"
 #include "stereogram.h"
 
+#include "luaproxy.h"
+
 namespace Examination
 {
 
@@ -43,42 +45,8 @@ MainWindow::MainWindow()
 	scene_ = new Scene();
 	mainGlWidget_->setScene(scene_);
 	
-	// Floor
-	std::string path = std::string("../../res/checkerboard.png");
-	Rectangle * r = new Rectangle();
-	r->setDirA(Tool::Point(3,0,0));
-	r->setDirB(Tool::Point(0,0,6));
-	r->setPosition(Tool::Point(0, -3, -3));
-	r->setTexture(new Texture(path));
-	r->setTexCoords(0,0, 0,6, 3,0, 3,6);
-	scene_->addOject(r);
-	
-	// Ceil
-	r = new Rectangle();
-	r->setDirA(Tool::Point(3,0,0));
-	r->setDirB(Tool::Point(0,0,6));
-	r->setPosition(Tool::Point(0, 3, -3));
-	r->setTexture(new Texture(path));
-	r->setTexCoords(0,0, 0,6, 3,0, 3,6);
-	scene_->addOject(r);
-
-	// Plane
-	path = std::string("../../res/triangle.png");
-	r = new Rectangle();
-	r->setDirA(Tool::Point(1,0,0));
-	r->setDirB(Tool::Point(0,1,0));
-	r->setPosition(Tool::Point(-2, -2, 0));
-	r->setTexture(new Stereogram(new Texture(path)));
-	scene_->addOject(r);
-
-	// Plane
-	path = std::string("../../res/triangle.png");
-	r = new Rectangle();
-	r->setDirA(Tool::Point(1,0,0));
-	r->setDirB(Tool::Point(0,1,0));
-	r->setPosition(Tool::Point(2, -2, 2));
-	r->setTexture(new Stereogram(new Texture(path)));
-	scene_->addOject(r);
+	luaProxy_ = new LuaProxy(scene_);
+	luaProxy_->runFile("scene.lua");
 }
 
 
