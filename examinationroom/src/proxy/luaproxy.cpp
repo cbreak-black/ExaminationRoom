@@ -11,6 +11,8 @@
 
 #include "scene.h"
 
+#include "rectangleproxy.h"
+
 #include <iostream>
 
 namespace Examination
@@ -25,6 +27,8 @@ LuaProxy::LuaProxy(Scene * scene)
 
 	Luna<LuaProxy>::inject(L_, this);
 	lua_setglobal(L_, "Scene");
+	
+	Luna<RectangleProxy>::Register(L_);
 }
 	
 LuaProxy::~LuaProxy()

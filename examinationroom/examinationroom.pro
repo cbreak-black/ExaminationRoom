@@ -20,7 +20,6 @@ HEADERS += \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
 	src/core/stereogram.h \
-	src/proxy/luaproxy.h \
 	src/tools/vec.h
 SOURCES += \
 	src/main.cpp \
@@ -31,9 +30,15 @@ SOURCES += \
 	src/core/rectangle.cpp \
 	src/core/abstracttexture.cpp \
 	src/core/texture.cpp \
-	src/core/stereogram.cpp \
-	src/proxy/luaproxy.cpp
+	src/core/stereogram.cpp
 
+# Proxies
+HEADERS += \
+	src/proxy/luaproxy.h \
+	src/proxy/rectangleproxy.h
+SOURCES += \
+	src/proxy/luaproxy.cpp \
+	src/proxy/rectangleproxy.cpp
 
 # LUA
 HEADERS += src/lua/src/*.h src/lua/lua.hpp
