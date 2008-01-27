@@ -54,7 +54,11 @@ int RectangleProxy::setTexture(lua_State *L)
 	return 0;
 }
 
-	
+Rectangle * RectangleProxy::rectangle()
+{
+	return rectangle_;
+}
+
 const char RectangleProxy::className[] = "Rectangle";
 const Luna<RectangleProxy>::RegType RectangleProxy::Register[] =
 {

@@ -32,6 +32,9 @@ public: // Textures
 	int setTexCoords(lua_State *L);
 	int setTexture(lua_State *L);
 	
+public:
+	Rectangle * rectangle();
+	
 private:
 	Rectangle * rectangle_;
 

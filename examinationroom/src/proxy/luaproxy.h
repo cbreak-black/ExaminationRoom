@@ -39,9 +39,15 @@ public: // From C++
 public: // From LUA
 	int addRectangle(lua_State *L);
 	int clearScene(lua_State *L);
-	
+
 	int setEventListener(lua_State *L);
+
+	int log(lua_State *L);
 	
+private:
+	void error(const char * s1, const char * s2);
+	int handleError(int err, const char * s);
+
 private:
 	lua_State * L_;
 	
