@@ -49,7 +49,7 @@ int LuaProxy::runFile(const char * path)
 			return 0;
 	}
 
-	const char *  s = lua_tostring(L_, 1);
+	const char *  s = lua_tostring(L_, -1);
 	return handleError(res, s);
 }
 
@@ -63,7 +63,7 @@ int LuaProxy::runString(const char * code)
 			return 0;
 	}
 
-	const char *  s = lua_tostring(L_, 1);
+	const char *  s = lua_tostring(L_, -1);
 	return handleError(res, s);
 }
 
@@ -79,11 +79,15 @@ int LuaProxy::addRectangle(lua_State *L)
 	if (lua_istable(L, 2))
 	{
 		lua_pushnumber(L, 0);
-		lua_gettable(L, 2);
-		RectangleProxy ** r = static_cast<RectangleProxy**>(lua_touserdata(L, 3));
-		scene_->addObject((*r)->rectangle());
-		lua_pop(L, 3);
-		return 0;
+		lua_gettable(L, -2);
+		RectangleProxy ** r = static_cast<RectangleProxy**>(luaL_checkudata(L, -1, RectangleProxy::className));
+//		RectangleProxy ** r = static_cast<RectangleProxy**>(lua_touserdata(L, -1));
+		if (r)
+		{
+			scene_->addObject((*r)->rectangle());
+			lua_pop(L, 3);
+			return 0;
+		}
 	}
 
 	lua_pushstring(L, "incorrect argument type");
@@ -93,6 +97,8 @@ int LuaProxy::addRectangle(lua_State *L)
 
 int LuaProxy::clearScene(lua_State *L)
 {
+	scene_->clear();
+	lua_pop(L, 0);
 	return 0;
 }
 
@@ -103,23 +109,15 @@ int LuaProxy::setEventListener(lua_State *L)
 
 int LuaProxy::log(lua_State *L)
 {
-//	int n = lua_gettop(L);
-//	if (n != 1)
-//	{
-//		lua_pushstring(L, "incorrect number of arguments");
-//		lua_error(L);
-//	}
-//	else
-//	{
-		const char *  s = lua_tostring(L, -1);
-		char t[32];
-		time_t rawtime;
-		struct tm * timeinfo;
-		time(&rawtime);
-		timeinfo = gmtime(&rawtime);
-		strftime(t, 32, "%Y.%m.%d %H:%M:%S: ", timeinfo);
-		std::cout << t << s << std::endl;
-//	}
+	const char *  s = lua_tostring(L, -1);
+	char t[32];
+	time_t rawtime;
+	struct tm * timeinfo;
+	time(&rawtime);
+	timeinfo = gmtime(&rawtime);
+	strftime(t, 32, "%Y.%m.%d %H:%M:%S: ", timeinfo);
+	std::cout << t << s << std::endl;
+	lua_pop(L, 1);
 	return 0;
 }
 
@@ -131,7 +129,7 @@ void LuaProxy::error(const char * s1, const char * s2)
 	time(&rawtime);
 	timeinfo = gmtime(&rawtime);
 	strftime(t, 32, "%Y.%m.%d %H:%M:%S: ", timeinfo);
-	std::cerr << t << s1 << s2 << std::endl;
+	std::cerr << t << s1 << ": " << s2 << std::endl;
 }
 
 int LuaProxy::handleError(int err, const char * s)

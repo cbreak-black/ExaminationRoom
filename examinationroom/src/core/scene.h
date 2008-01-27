@@ -68,7 +68,12 @@ public: // Scene management
 	 \param object	A pointer to an object
 	*/
 	void removeObject(Object * object);
-		
+	
+	/**
+	Removes all objects.
+	*/
+	void clear();
+
 private:
 	std::set<Object*> objects_;
 

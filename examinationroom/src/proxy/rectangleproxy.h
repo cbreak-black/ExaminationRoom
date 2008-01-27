@@ -28,6 +28,10 @@ public: // From LUA
 	int setDirA(lua_State *L);
 	int setDirB(lua_State *L);
 
+public: // Object
+	int position(lua_State *L);
+	int setPosition(lua_State *L);
+
 public: // Textures
 	int setTexCoords(lua_State *L);
 	int setTexture(lua_State *L);

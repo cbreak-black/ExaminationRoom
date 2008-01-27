@@ -28,12 +28,7 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-	std::set<Object*>::iterator i = objects_.begin();
-	for (; i != objects_.end(); i++)
-	{
-		(*i)->release();
-	}
-	objects_.clear();
+	clear();
 }
 
 bool Scene::addObject(Object * object)
@@ -50,6 +45,16 @@ void Scene::removeObject(Object * object)
 {
 	objects_.erase(object);
 	object->release();
+}
+
+void Scene::clear()
+{
+	std::set<Object*>::iterator i = objects_.begin();
+	for (; i != objects_.end(); i++)
+	{
+		(*i)->release();
+	}
+	objects_.clear();
 }
 
 void Scene::drawScene(GLWidget * dest)
