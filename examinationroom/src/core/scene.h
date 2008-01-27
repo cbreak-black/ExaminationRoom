@@ -61,13 +61,13 @@ public: // Scene management
 	 \param object	A pointer to an object
 	 \return	true if the object was inserted, false if it already was in the scene.
 	*/
-	bool addOject(Object * object);
+	bool addObject(Object * object);
 	
 	/**
 	Removes an object from the scene and frees the memory it used. The object is deleted.
 	 \param object	A pointer to an object
 	*/
-	void removeOject(Object * object);
+	void removeObject(Object * object);
 		
 private:
 	std::set<Object*> objects_;

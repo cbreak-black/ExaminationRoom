@@ -36,7 +36,7 @@ Scene::~Scene()
 	objects_.clear();
 }
 
-bool Scene::addOject(Object * object)
+bool Scene::addObject(Object * object)
 {
 	if (objects_.insert(object).second)
 	{
@@ -46,7 +46,7 @@ bool Scene::addOject(Object * object)
 	return false;
 }
 
-void Scene::removeOject(Object * object)
+void Scene::removeObject(Object * object)
 {
 	objects_.erase(object);
 	object->release();
