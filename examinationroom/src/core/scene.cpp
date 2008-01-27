@@ -31,19 +31,25 @@ Scene::~Scene()
 	std::set<Object*>::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
 	{
-		delete (*i);
+		(*i)->release();
 	}
 	objects_.clear();
 }
 
 bool Scene::addOject(Object * object)
 {
-	return objects_.insert(object).second;
+	if (objects_.insert(object).second)
+	{
+		object->retain();
+		return true;
+	}
+	return false;
 }
 
 void Scene::removeOject(Object * object)
 {
 	objects_.erase(object);
+	object->release();
 }
 
 void Scene::drawScene(GLWidget * dest)

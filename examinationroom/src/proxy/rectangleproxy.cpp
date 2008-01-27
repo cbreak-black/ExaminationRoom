@@ -16,12 +16,12 @@ namespace Examination
 
 RectangleProxy::RectangleProxy(lua_State *L)
 {
-	rectangle_ = new Rectangle();
+	rectangle_ = new Rectangle(); // Implicit retain
 }
 
 RectangleProxy::~RectangleProxy()
 {
-	delete rectangle_;
+	rectangle_->release();
 }
 	
 int RectangleProxy::dirA(lua_State *L)

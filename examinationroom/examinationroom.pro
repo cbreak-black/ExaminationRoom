@@ -19,8 +19,7 @@ HEADERS += \
 	src/core/drawing.h \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
-	src/core/stereogram.h \
-	src/tools/vec.h
+	src/core/stereogram.h
 SOURCES += \
 	src/main.cpp \
 	src/ui/glwidget.cpp \
@@ -46,3 +45,10 @@ SOURCES += src/lua/src/*.c
 
 # LUNA
 HEADERS += src/lua/luna.h
+
+# TOOLS
+HEADERS += \
+	src/tools/vec.h \
+	src/tools/refcountable.h
+SOURCES += \
+	src/tools/refcountable.cpp

@@ -20,6 +20,7 @@ GNU General Public License for more details.
 
 #include "vec.h"
 #include "drawing.h"
+#include "refcountable.h"
 
 namespace Examination
 {
@@ -30,7 +31,7 @@ A generic object, which can be placed in a scene.
 
 \author Gerhard Roethlin
 */
-class Object
+class Object : public Tool::RefCountable
 {
 
 public:
