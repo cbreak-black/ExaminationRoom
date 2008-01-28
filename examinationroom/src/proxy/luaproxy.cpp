@@ -12,7 +12,11 @@
 #include "scene.h"
 
 #include "objectproxy.h"
+#include "textureproxy.h"
+
 #include "rectangle.h"
+
+#include "luahelper.h"
 
 #include <iostream>
 #include <time.h>
@@ -31,6 +35,7 @@ LuaProxy::LuaProxy(Scene * scene)
 	lua_setglobal(L_, "Scene");
 	
 	Luna<ObjectProxy>::Register(L_);
+	Luna<TextureProxy>::Register(L_);
 }
 	
 LuaProxy::~LuaProxy()
@@ -70,12 +75,8 @@ int LuaProxy::runString(const char * code)
 // From LUA
 int LuaProxy::addObject(lua_State *L)
 {
-	int n = lua_gettop(L);
-	if (n != 2)
-	{
-		lua_pushstring(L, "incorrect number of arguments");
-		lua_error(L);
-	}
+	checkTop(L, 2);
+	
 	if (lua_istable(L, 2))
 	{
 		lua_pushnumber(L, 0);
@@ -90,7 +91,7 @@ int LuaProxy::addObject(lua_State *L)
 		}
 	}
 
-	lua_pushstring(L, "incorrect argument type");
+	lua_pushstring(L, errArgT);
 	lua_error(L);
 	return 0;
 }

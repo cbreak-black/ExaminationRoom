@@ -46,7 +46,7 @@ MainWindow::MainWindow()
 	mainGlWidget_->setScene(scene_);
 	
 	luaProxy_ = new LuaProxy(scene_);
-	luaProxy_->runFile("scene.lua");
+	luaProxy_->runFile("res/scene.lua");
 }
 
 

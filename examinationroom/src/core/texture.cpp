@@ -15,6 +15,13 @@
 namespace Examination
 {
 
+Texture::Texture(const char * path)
+{
+	image_ = new QImage(path);
+
+	glTexID_ = 0;
+}
+
 Texture::Texture(std::string path)
 {
 	image_ = new QImage(path.c_str());

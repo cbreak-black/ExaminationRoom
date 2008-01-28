@@ -1,0 +1,13 @@
+/*
+ *  luahelper.cpp
+ *  ExaminationRoom
+ *
+ *  Created by CBreak on 28.01.08.
+ *  Copyright 2008 __MyCompanyName__. All rights reserved.
+ *
+ */
+
+#include "luahelper.h"
+
+const char * errArgN = "incorrect number of arguments";
+const char * errArgT = "incorrect type of arguments";

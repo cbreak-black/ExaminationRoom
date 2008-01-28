@@ -34,9 +34,11 @@ SOURCES += \
 # Proxies
 HEADERS += \
 	src/proxy/luaproxy.h \
+	src/proxy/textureproxy.h \
 	src/proxy/objectproxy.h
 SOURCES += \
 	src/proxy/luaproxy.cpp \
+	src/proxy/textureproxy.cpp \
 	src/proxy/objectproxy.cpp
 
 # LUA
@@ -48,4 +50,7 @@ HEADERS += src/lua/luna.h
 
 # TOOLS
 HEADERS += \
-	src/tools/vec.h 
+	src/tools/luahelper.h \
+	src/tools/vec.h
+SOURCES += \
+	src/tools/luahelper.cpp

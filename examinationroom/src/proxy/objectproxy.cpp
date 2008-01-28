@@ -11,34 +11,14 @@
 
 #include "rectangle.h"
 
+#include "textureproxy.h"
+
+#include "luahelper.h"
+
 using namespace std::tr1;
 
 namespace Examination
 {
-const char * errArgN = "incorrect number of arguments";
-const char * errArgT = "incorrect type of arguments";
-
-bool checkTop(lua_State *L, int num)
-{
-	int n = lua_gettop(L);
-	if (n != num)
-	{
-		lua_pushstring(L, errArgN);
-		lua_error(L);
-		return false;
-	}
-	else
-	{
-		return true;
-	}
-}
-
-inline void pushVector(lua_State *L, Tool::Vec3f v)
-{
-	lua_pushnumber(L, v.x);
-	lua_pushnumber(L, v.y);
-	lua_pushnumber(L, v.z);	
-}
 
 ObjectProxy::ObjectProxy(lua_State *L)
 {
@@ -124,11 +104,43 @@ int ObjectProxy::setPosition(lua_State *L)
 
 int ObjectProxy::setTexCoords(lua_State *L)
 {
+	checkTop(L, 9);
+	
+	float llx = lua_tonumber(L, -8);
+	float lly = lua_tonumber(L, -7);
+	float ulx = lua_tonumber(L, -6);
+	float uly = lua_tonumber(L, -5);
+	float lrx = lua_tonumber(L, -4);
+	float lry = lua_tonumber(L, -3);
+	float urx = lua_tonumber(L, -2);
+	float ury = lua_tonumber(L, -1);
+	
+	rectangle()->setTexCoords(llx,lly, ulx, uly,
+							  lrx, lry, urx, ury);
+
+	lua_pop(L, 9);
 	return 0;
 }
 
 int ObjectProxy::setTexture(lua_State *L)
 {
+	checkTop(L, 2);
+
+	if (lua_istable(L, 2))
+	{
+		lua_pushnumber(L, 0);
+		lua_gettable(L, -2);
+		TextureProxy ** t = static_cast<TextureProxy**>(luaL_checkudata(L, -1, TextureProxy::className));
+		if (t)
+		{
+			rectangle()->setTexture((*t)->texture());
+			lua_pop(L, 2);
+			return 0;
+		}
+	}
+
+	lua_pushstring(L, errArgT);
+	lua_error(L);
 	return 0;
 }
 
@@ -150,6 +162,5 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 { "setTexture", &ObjectProxy::setTexture },
 { 0, 0 }
 };
-
 
 }

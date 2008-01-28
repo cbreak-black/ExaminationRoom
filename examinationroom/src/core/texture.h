@@ -29,6 +29,7 @@ files from disc.
 class Texture : public AbstractTexture
 {
 public: // Constructors and Destructor
+	Texture(const char * path);
 	Texture(std::string path);
 	Texture(QImage* image);
 	~Texture();
