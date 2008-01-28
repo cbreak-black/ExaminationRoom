@@ -11,6 +11,8 @@
 
 #include "rectangle.h"
 
+using namespace std::tr1;
+
 namespace Examination
 {
 const char * errArgN = "incorrect number of arguments";
@@ -40,13 +42,12 @@ inline void pushVector(lua_State *L, Tool::Vec3f v)
 
 RectangleProxy::RectangleProxy(lua_State *L)
 {
-	rectangle_ = new Rectangle(); // Implicit retain
+	rectangle_ = shared_ptr<Rectangle>(new Rectangle());
 	lua_pop(L, 0);
 }
 
 RectangleProxy::~RectangleProxy()
 {
-	rectangle_->release();
 }
 	
 int RectangleProxy::dirA(lua_State *L)
@@ -131,7 +132,7 @@ int RectangleProxy::setTexture(lua_State *L)
 	return 0;
 }
 
-Rectangle * RectangleProxy::rectangle()
+shared_ptr<Rectangle> RectangleProxy::rectangle()
 {
 	return rectangle_;
 }

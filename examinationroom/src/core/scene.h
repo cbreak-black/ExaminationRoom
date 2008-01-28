@@ -19,6 +19,7 @@ GNU General Public License for more details.
 #define SCENE_H
 
 #include <set>
+#include <memory>
 
 #include "drawing.h"
 
@@ -61,13 +62,13 @@ public: // Scene management
 	 \param object	A pointer to an object
 	 \return	true if the object was inserted, false if it already was in the scene.
 	*/
-	bool addObject(Object * object);
+	bool addObject(std::tr1::shared_ptr<Object> object);
 	
 	/**
 	Removes an object from the scene and frees the memory it used. The object is deleted.
 	 \param object	A pointer to an object
 	*/
-	void removeObject(Object * object);
+	void removeObject(std::tr1::shared_ptr<Object> object);
 	
 	/**
 	Removes all objects.
@@ -75,7 +76,7 @@ public: // Scene management
 	void clear();
 
 private:
-	std::set<Object*> objects_;
+	std::set< std::tr1::shared_ptr<Object> > objects_;
 
 };
 

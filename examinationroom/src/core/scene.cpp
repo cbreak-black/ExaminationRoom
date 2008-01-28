@@ -19,6 +19,8 @@ GNU General Public License for more details.
 
 #include "object.h"
 
+using namespace std::tr1;
+
 namespace Examination
 {
 
@@ -31,35 +33,28 @@ Scene::~Scene()
 	clear();
 }
 
-bool Scene::addObject(Object * object)
+bool Scene::addObject(shared_ptr<Object> object)
 {
 	if (objects_.insert(object).second)
 	{
-		object->retain();
 		return true;
 	}
 	return false;
 }
 
-void Scene::removeObject(Object * object)
+void Scene::removeObject(shared_ptr<Object> object)
 {
 	objects_.erase(object);
-	object->release();
 }
 
 void Scene::clear()
 {
-	std::set<Object*>::iterator i = objects_.begin();
-	for (; i != objects_.end(); i++)
-	{
-		(*i)->release();
-	}
 	objects_.clear();
 }
 
 void Scene::drawScene(GLWidget * dest)
 {
-	std::set<Object*>::iterator i = objects_.begin();
+	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
 	{
 		(*i)->draw(dest);

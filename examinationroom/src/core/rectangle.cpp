@@ -22,13 +22,10 @@ Rectangle::Rectangle()
 	directionB_.y = 1;
 	
 	setTexCoords(0,0, 0,1, 1,0, 1,1);
-
-	tex_ = 0;
 }
 
 Rectangle::~Rectangle()
 {
-	delete tex_;
 }
 
 // Drawing
@@ -87,10 +84,8 @@ void Rectangle::setDirB(Tool::Vector v)
 }
 
 // Textures
-void Rectangle::setTexture(AbstractTexture * t)
+void Rectangle::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 {
-	if (tex_ && tex_ != t)
-		delete tex_;
 	tex_ = t;
 }	
 

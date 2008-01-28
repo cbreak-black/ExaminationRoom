@@ -14,10 +14,10 @@ namespace Examination
 {
 	class GLWidget;
 
-	/**
-	This is an abstract base class for textures. It provides an interface
-	for clients to use all kinds of textures easily.
-	*/
+/**
+This is an abstract base class for textures. It provides an interface
+for clients to use all kinds of textures easily.
+*/
 class AbstractTexture
 {
 public:

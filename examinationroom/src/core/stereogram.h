@@ -10,6 +10,8 @@
 #ifndef STEREOGRAM_H
 #define STEREOGRAM_H
 
+#include <memory>
+
 #include "abstracttexture.h"
 
 namespace Examination
@@ -25,21 +27,18 @@ class Stereogram : public AbstractTexture
 {
 public: // Constructors and Destructor
 	/**
-	Creates a new stereogram by taking the passed texture as depth map. This method
-	takes ownership of the passed texture and releases it when the instance is
-	destroyed.
+	Creates a new stereogram by taking the passed texture as depth map.
 	 \param d	Depth map
 	*/
-	Stereogram(Texture* d);
+	Stereogram(std::tr1::shared_ptr<Texture> d);
 
 	/**
 	Creates a new stereogram by taking the passed textures as left and right
-	sides. This method takes ownership of the passed textures, and releases them
-	when the stereogram instance is destroyed.
+	sides.
 	 \param l	Left texture
 	 \param r	Right texture
 	*/
-	Stereogram(Texture* l, Texture* r);
+	Stereogram(std::tr1::shared_ptr<Texture> l, std::tr1::shared_ptr<Texture> r);
 	
 	/**
 	Deallocates the stereogram and all stored textures.
@@ -55,9 +54,9 @@ public:
 	virtual void glBindTex(GLWidget * w);
 
 private:
-	Texture * texDepth_;
-	Texture * texLeft_;
-	Texture * texRight_;
+	std::tr1::shared_ptr<Texture> texDepth_;
+	std::tr1::shared_ptr<Texture> texLeft_;
+	std::tr1::shared_ptr<Texture> texRight_;
 };
 	
 }

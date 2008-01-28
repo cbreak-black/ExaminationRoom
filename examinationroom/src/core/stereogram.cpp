@@ -19,6 +19,8 @@
 
 #include <math.h>
 
+using namespace std::tr1;
+
 namespace Examination
 {
 
@@ -27,7 +29,7 @@ The number of colors used in random dot stereograms.
 */
 const int maxColor = 3;
 
-Stereogram::Stereogram(Texture* d)
+Stereogram::Stereogram(shared_ptr<Texture> d)
 {
 	texDepth_ = d;
 	
@@ -79,23 +81,18 @@ Stereogram::Stereogram(Texture* d)
 		}
 	}
 	
-	texLeft_ = new Texture(imageL);
-	texRight_ = new Texture(imageR);
+	texLeft_ = shared_ptr<Texture>(new Texture(imageL));
+	texRight_ = shared_ptr<Texture>(new Texture(imageR));
 }
 
-Stereogram::Stereogram(Texture* l, Texture* r)
+Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 {
-	texDepth_ = 0;
-	
 	texLeft_ = l;
 	texRight_ = r;
 }
 
 Stereogram::~Stereogram()
 {
-	delete texDepth_; texDepth_ = 0;
-	delete texLeft_; texLeft_ = 0;
-	delete texRight_; texRight_ = 0;
 }
 
 void Stereogram::glBindTex(GLWidget * w)

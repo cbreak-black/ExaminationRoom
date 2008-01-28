@@ -10,6 +10,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include <memory>
+
 #include "object.h"
 
 namespace Examination
@@ -71,7 +73,7 @@ public: // Textures
 	Sets the texture for this object.
 	 \param t	Texture for left camera
 	*/
-	void setTexture(AbstractTexture * t);
+	void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
 
 private:
 	Tool::Vector directionA_;
@@ -82,7 +84,7 @@ private:
 	Tool::Point texC_;
 	Tool::Point texD_;
 
-	AbstractTexture * tex_;
+	std::tr1::shared_ptr<AbstractTexture> tex_;
 };
 	
 }

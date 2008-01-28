@@ -11,6 +11,7 @@
 #define RECTANGLEPROXY_H
 
 #include "luna.h"
+#include <memory>
 
 namespace Examination
 {
@@ -37,10 +38,10 @@ public: // Textures
 	int setTexture(lua_State *L);
 	
 public:
-	Rectangle * rectangle();
+	std::tr1::shared_ptr<Rectangle> rectangle();
 	
 private:
-	Rectangle * rectangle_;
+	std::tr1::shared_ptr<Rectangle> rectangle_;
 
 public: // LUNA
 	static const char className[];
