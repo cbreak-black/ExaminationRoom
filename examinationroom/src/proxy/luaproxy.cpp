@@ -11,7 +11,7 @@
 
 #include "scene.h"
 
-#include "rectangleproxy.h"
+#include "objectproxy.h"
 #include "rectangle.h"
 
 #include <iostream>
@@ -30,7 +30,7 @@ LuaProxy::LuaProxy(Scene * scene)
 	Luna<LuaProxy>::inject(L_, this);
 	lua_setglobal(L_, "Scene");
 	
-	Luna<RectangleProxy>::Register(L_);
+	Luna<ObjectProxy>::Register(L_);
 }
 	
 LuaProxy::~LuaProxy()
@@ -68,7 +68,7 @@ int LuaProxy::runString(const char * code)
 }
 
 // From LUA
-int LuaProxy::addRectangle(lua_State *L)
+int LuaProxy::addObject(lua_State *L)
 {
 	int n = lua_gettop(L);
 	if (n != 2)
@@ -80,8 +80,8 @@ int LuaProxy::addRectangle(lua_State *L)
 	{
 		lua_pushnumber(L, 0);
 		lua_gettable(L, -2);
-		RectangleProxy ** r = static_cast<RectangleProxy**>(luaL_checkudata(L, -1, RectangleProxy::className));
-//		RectangleProxy ** r = static_cast<RectangleProxy**>(lua_touserdata(L, -1));
+		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
+//		ObjectProxy ** r = static_cast<ObjectProxy**>(lua_touserdata(L, -1));
 		if (r)
 		{
 			scene_->addObject((*r)->rectangle());
@@ -162,7 +162,7 @@ int LuaProxy::handleError(int err, const char * s)
 const char LuaProxy::className[] = "LuaProxy";
 const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 {
-	{ "addRectangle", &LuaProxy::addRectangle },
+	{ "addObject", &LuaProxy::addObject },
 	{ "clearScene", &LuaProxy::clearScene },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },

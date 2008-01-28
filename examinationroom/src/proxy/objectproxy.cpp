@@ -1,5 +1,5 @@
 /*
- *  rectangleproxy.cpp
+ *  objectproxy.cpp
  *  ExaminationRoom
  *
  *  Created by CBreak on 26.01.08.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "rectangleproxy.h"
+#include "objectproxy.h"
 
 #include "rectangle.h"
 
@@ -40,17 +40,17 @@ inline void pushVector(lua_State *L, Tool::Vec3f v)
 	lua_pushnumber(L, v.z);	
 }
 
-RectangleProxy::RectangleProxy(lua_State *L)
+ObjectProxy::ObjectProxy(lua_State *L)
 {
 	rectangle_ = shared_ptr<Rectangle>(new Rectangle());
 	lua_pop(L, 0);
 }
 
-RectangleProxy::~RectangleProxy()
+ObjectProxy::~ObjectProxy()
 {
 }
 	
-int RectangleProxy::dirA(lua_State *L)
+int ObjectProxy::dirA(lua_State *L)
 {
 	checkTop(L, 1);
 
@@ -61,7 +61,7 @@ int RectangleProxy::dirA(lua_State *L)
 	return 3;
 }
 
-int RectangleProxy::dirB(lua_State *L)
+int ObjectProxy::dirB(lua_State *L)
 {
 	checkTop(L, 1);
 	
@@ -72,7 +72,7 @@ int RectangleProxy::dirB(lua_State *L)
 	return 3;
 }
 
-int RectangleProxy::setDirA(lua_State *L)
+int ObjectProxy::setDirA(lua_State *L)
 {
 	checkTop(L, 4);
 
@@ -85,7 +85,7 @@ int RectangleProxy::setDirA(lua_State *L)
 	return 0;
 }
 
-int RectangleProxy::setDirB(lua_State *L)
+int ObjectProxy::setDirB(lua_State *L)
 {
 	checkTop(L, 4);
 	
@@ -98,7 +98,7 @@ int RectangleProxy::setDirB(lua_State *L)
 	return 0;
 }
 
-int RectangleProxy::position(lua_State *L)
+int ObjectProxy::position(lua_State *L)
 {
 	checkTop(L, 1);
 	
@@ -109,7 +109,7 @@ int RectangleProxy::position(lua_State *L)
 	return 3;
 }
 
-int RectangleProxy::setPosition(lua_State *L)
+int ObjectProxy::setPosition(lua_State *L)
 {
 	checkTop(L, 4);
 	
@@ -122,32 +122,32 @@ int RectangleProxy::setPosition(lua_State *L)
 	return 0;
 }
 
-int RectangleProxy::setTexCoords(lua_State *L)
+int ObjectProxy::setTexCoords(lua_State *L)
 {
 	return 0;
 }
 
-int RectangleProxy::setTexture(lua_State *L)
+int ObjectProxy::setTexture(lua_State *L)
 {
 	return 0;
 }
 
-shared_ptr<Rectangle> RectangleProxy::rectangle()
+shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return rectangle_;
 }
 
-const char RectangleProxy::className[] = "Rectangle";
-const Luna<RectangleProxy>::RegType RectangleProxy::Register[] =
+const char ObjectProxy::className[] = "Object";
+const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 {
-{ "dirA", &RectangleProxy::dirA },
-{ "dirB", &RectangleProxy::dirB },
-{ "setDirA", &RectangleProxy::setDirA },
-{ "setDirB", &RectangleProxy::setDirB },
-{ "position", &RectangleProxy::position },
-{ "setPosition", &RectangleProxy::setPosition },
-{ "setTexCoords", &RectangleProxy::setTexCoords },
-{ "setTexture", &RectangleProxy::setTexture },
+{ "dirA", &ObjectProxy::dirA },
+{ "dirB", &ObjectProxy::dirB },
+{ "setDirA", &ObjectProxy::setDirA },
+{ "setDirB", &ObjectProxy::setDirB },
+{ "position", &ObjectProxy::position },
+{ "setPosition", &ObjectProxy::setPosition },
+{ "setTexCoords", &ObjectProxy::setTexCoords },
+{ "setTexture", &ObjectProxy::setTexture },
 { 0, 0 }
 };
 

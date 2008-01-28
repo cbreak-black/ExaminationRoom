@@ -1,5 +1,5 @@
 /*
- *  rectangleproxy.h
+ *  objectproxy.h
  *  ExaminationRoom
  *
  *  Created by CBreak on 26.01.08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RECTANGLEPROXY_H
-#define RECTANGLEPROXY_H
+#ifndef OBJECTPROXY_H
+#define OBJECTPROXY_H
 
 #include "luna.h"
 #include <memory>
@@ -17,11 +17,11 @@ namespace Examination
 {
 	class Rectangle;
 
-class RectangleProxy
+class ObjectProxy
 {
 public:
-	RectangleProxy(lua_State *L);
-	~RectangleProxy();
+	ObjectProxy(lua_State *L);
+	~ObjectProxy();
 
 public: // From LUA
 	int dirA(lua_State *L);
@@ -45,7 +45,7 @@ private:
 
 public: // LUNA
 	static const char className[];
-	static const Luna<RectangleProxy>::RegType Register[];
+	static const Luna<ObjectProxy>::RegType Register[];
 };
 
 }

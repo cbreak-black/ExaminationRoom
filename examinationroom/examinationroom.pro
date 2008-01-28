@@ -34,10 +34,10 @@ SOURCES += \
 # Proxies
 HEADERS += \
 	src/proxy/luaproxy.h \
-	src/proxy/rectangleproxy.h
+	src/proxy/objectproxy.h
 SOURCES += \
 	src/proxy/luaproxy.cpp \
-	src/proxy/rectangleproxy.cpp
+	src/proxy/objectproxy.cpp
 
 # LUA
 HEADERS += src/lua/src/*.h src/lua/lua.hpp

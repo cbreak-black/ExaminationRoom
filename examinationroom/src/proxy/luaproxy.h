@@ -37,7 +37,7 @@ public: // From C++
 	int runString(const char * code);
 
 public: // From LUA
-	int addRectangle(lua_State *L);
+	int addObject(lua_State *L);
 	int clearScene(lua_State *L);
 
 	int setEventListener(lua_State *L);
