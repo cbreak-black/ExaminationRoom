@@ -17,7 +17,8 @@ namespace Examination
 	class Scene;
 
 /**
-This proxy class offers an interface between lua and C++.
+This proxy class offers an interface between lua and C++. It also represents
+The Scene in LUA.
 */
 class LuaProxy
 {
@@ -36,12 +37,17 @@ public: // From C++
 	int runFile(const char * path);
 	int runString(const char * code);
 
-public: // From LUA
+public: // Scene
 	int addObject(lua_State *L);
 	int clearScene(lua_State *L);
+public: // Camera
+	int setCameraPos(lua_State *L);
+	int setCameraDir(lua_State *L);
+	int setCameraFoV(lua_State *L);
+	int setCameraSep(lua_State *L);
 
+public: // Misc
 	int setEventListener(lua_State *L);
-
 	int log(lua_State *L);
 	
 private:

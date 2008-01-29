@@ -1,3 +1,8 @@
+Scene:setCameraPos(0, 0, -10);
+Scene:setCameraDir(0, 0, -1);
+Scene:setCameraFoV(50);
+Scene:setCameraSep(0.2);
+
 local rectFloor = Object();
 rectFloor:setDirA(3,0,0);
 rectFloor:setDirB(0,0,6);

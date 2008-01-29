@@ -55,12 +55,7 @@ int ObjectProxy::dirB(lua_State *L)
 int ObjectProxy::setDirA(lua_State *L)
 {
 	checkTop(L, 4);
-
-	float x, y, z;
-	x = lua_tonumber(L, -3);
-	y = lua_tonumber(L, -2);
-	z = lua_tonumber(L, -1);
-	rectangle()->setDirA(Tool::Vector(x,y,z));
+	rectangle()->setDirA(toVector(L));
 	lua_pop(L, 4);
 	return 0;
 }
@@ -68,12 +63,7 @@ int ObjectProxy::setDirA(lua_State *L)
 int ObjectProxy::setDirB(lua_State *L)
 {
 	checkTop(L, 4);
-	
-	float x, y, z;
-	x = lua_tonumber(L, -3);
-	y = lua_tonumber(L, -2);
-	z = lua_tonumber(L, -1);
-	rectangle()->setDirB(Tool::Vector(x,y,z));
+	rectangle()->setDirB(toVector(L));
 	lua_pop(L, 4);
 	return 0;
 }

@@ -10,6 +10,7 @@
 #include "luaproxy.h"
 
 #include "scene.h"
+#include "camera.h"
 
 #include "objectproxy.h"
 #include "textureproxy.h"
@@ -108,6 +109,38 @@ int LuaProxy::setEventListener(lua_State *L)
 	return 0;
 }
 
+int LuaProxy::setCameraPos(lua_State *L)
+{
+	checkTop(L, 4);
+	scene_->camera()->setPosition(toVector(L));
+	lua_pop(L, 4);
+	return 0;
+}
+
+int LuaProxy::setCameraDir(lua_State *L)
+{
+	checkTop(L, 4);
+	scene_->camera()->setDirection(toVector(L));
+	lua_pop(L, 4);
+	return 0;
+}
+
+int LuaProxy::setCameraFoV(lua_State *L)
+{
+	checkTop(L, 2);
+	scene_->camera()->setFieldOfView(lua_tonumber(L,-1));
+	lua_pop(L, 2);
+	return 0;
+}
+
+int LuaProxy::setCameraSep(lua_State *L)
+{
+	checkTop(L, 2);
+	scene_->camera()->setSeperation(lua_tonumber(L,-1));
+	lua_pop(L, 2);
+	return 0;
+}
+
 int LuaProxy::log(lua_State *L)
 {
 	const char *  s = lua_tostring(L, -1);
@@ -165,6 +198,10 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 {
 	{ "addObject", &LuaProxy::addObject },
 	{ "clearScene", &LuaProxy::clearScene },
+	{ "setCameraPos", &LuaProxy::setCameraPos },
+	{ "setCameraDir", &LuaProxy::setCameraDir },
+	{ "setCameraFoV", &LuaProxy::setCameraFoV },
+	{ "setCameraSep", &LuaProxy::setCameraSep },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ 0, 0 }
