@@ -15,6 +15,7 @@
 #include "glwidget.h"
 
 #include "scene.h"
+#include "camera.h"
 
 namespace Examination
 {
@@ -75,59 +76,38 @@ void GLWidget::initializeGL()
 void GLWidget::paintGL()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	// Center
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glBegin(GL_POINTS);
-	glVertex3f(0, 0, 0);
-	glEnd();
 
-	// Left
-	glColorMask(true, false, false, true);
-	setSide(left);
-	
-	// Fixed camera, bad!
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-	glTranslatef(-0.04, 0, 0);		// Frame Adjustment
-	gluPerspective(50, 4/3, 2, 20);	// Camera
-	glTranslatef(+0.2, 0, -10);		// Camera position
-    glMatrixMode(GL_MODELVIEW);	
-	
 	// Scene
 	if (scene_)
+	{
+		// Center
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_POINTS);
+		glVertex3f(0, 0, 0);
+		glEnd();
+		
+		// Left
+		glColorMask(true, false, false, true);
+		setSide(left);
+
+		scene_->camera()->loadMatrix(this);
 		scene_->drawScene(this);
 
-	// Right
-	glClear(GL_DEPTH_BUFFER_BIT);
-	glColorMask(false, true, true, true);
-	setSide(right);
+		// Right
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glColorMask(false, true, true, true);
+		setSide(right);
 
-	// Fixed camera, bad!
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-	glTranslatef(+0.04, 0, 0);		// Frame Adjustment
-	gluPerspective(50, 4/3, 2, 20);	// Camera
-	glTranslatef(-0.2, 0, -10);		// Camera position
-    glMatrixMode(GL_MODELVIEW);	
+		scene_->camera()->loadMatrix(this);
+		scene_->drawScene(this);
+	}
 	
-	// Scene
-	if (scene_)
-		scene_->drawScene(this);
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
     int side = qMin(width, height);
     glViewport((width - side) / 2, (height - side) / 2, side, side);
-
-	// Fixed camera, bad!
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-//    glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-	gluPerspective(50, width/height, 2, 20);
-	glTranslatef(0, 0, -10);
-    glMatrixMode(GL_MODELVIEW);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)

@@ -14,6 +14,7 @@ HEADERS += \
 	src/ui/glwidget.h \
 	src/ui/mainwindow.h \
 	src/core/scene.h \
+	src/core/camera.h \
 	src/core/object.h \
 	src/core/rectangle.h \
 	src/core/drawing.h \
@@ -25,6 +26,7 @@ SOURCES += \
 	src/ui/glwidget.cpp \
 	src/ui/mainwindow.cpp \
 	src/core/scene.cpp \
+	src/core/camera.cpp \
 	src/core/object.cpp \
 	src/core/rectangle.cpp \
 	src/core/abstracttexture.cpp \

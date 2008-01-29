@@ -17,9 +17,9 @@
 
 namespace Examination
 {
-	
-class Object;
-class GLWidget;
+	class Object;
+	class GLWidget;
+	class Camera;
 
 /**
 This class represents the scene. It contains references to objects.
@@ -67,9 +67,13 @@ public: // Scene management
 	*/
 	void clear();
 
+public: // Camera
+	void setCamera(std::tr1::shared_ptr<Camera> camera);
+	std::tr1::shared_ptr<Camera> camera();
+
 private:
 	std::set< std::tr1::shared_ptr<Object> > objects_;
-
+	std::tr1::shared_ptr<Camera> camera_;
 };
 
 }
