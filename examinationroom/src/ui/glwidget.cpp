@@ -100,6 +100,8 @@ void GLWidget::paintGL()
 
 		scene_->camera()->loadMatrix(this);
 		scene_->drawScene(this);
+
+		glColorMask(true, true, true, true);
 	}
 	
 }

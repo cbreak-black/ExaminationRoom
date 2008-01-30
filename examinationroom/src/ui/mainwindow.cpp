@@ -33,18 +33,31 @@ MainWindow::MainWindow()
 	mainLayout->addWidget(mainGlWidget_, 0, 0);
 
     setLayout(mainLayout);
-	
+
 	scene_ = new Scene();
 	mainGlWidget_->setScene(scene_);
-	
+
 	luaProxy_ = new LuaProxy(scene_);
 	luaProxy_->runFile("res/scene.lua");
+
+	timer_ = new QTimer(this);
+	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
+	timer_->start(33); // 30 fps
 }
 
 
 MainWindow::~MainWindow()
 {
+	delete timer_;
+	delete luaProxy_;
 	delete scene_;
+	delete mainGlWidget_;
+}
+
+void MainWindow::onTimeout()
+{
+	luaProxy_->onUpdate();
+	mainGlWidget_->repaint(); // update() for deferred updates
 }
 
 }

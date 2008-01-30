@@ -21,12 +21,27 @@ Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
 
-local stereogram = Object();
-stereogram:setDirA(1,0,0);
-stereogram:setDirB(0,1,0);
-stereogram:setPosition(2, -2, 2);
-stereogram:setTexture(Texture(2, "res/triangle.png"));
-Scene:addObject(stereogram);
+local stereogramA = Object();
+stereogramA:setDirA(1,0,0);
+stereogramA:setDirB(0,1,0);
+stereogramA:setTexture(Texture(2, "res/triangle.png"));
+Scene:addObject(stereogramA);
+
+local stereogramB = Object();
+stereogramB:setDirA(1,0,0);
+stereogramB:setDirB(0,1,0);
+stereogramB:setTexture(Texture(2, "res/triangle.png"));
+Scene:addObject(stereogramB);
+
+pathLength = 0;
+
+local updateListener = function (delta)
+	pathLength = pathLength + delta;
+	stereogramA:setPosition(math.sin(pathLength)*2, math.cos(pathLength)*2, 2);
+	stereogramB:setPosition(math.sin(pathLength)*2, -2,  math.cos(pathLength)*2);
+end;
+updateListener(0);
+Scene:setUpdateListener(updateListener);
 
 Scene:log("Added stereogram");
 

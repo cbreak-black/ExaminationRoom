@@ -11,7 +11,7 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
-
+#include <QTimer>
 
 namespace Examination
 {
@@ -41,9 +41,11 @@ public:
 	~MainWindow();
 
 private slots:
+	void onTimeout();
 
 private:
     GLWidget * mainGlWidget_;
+	QTimer *timer_;
 
 	Scene * scene_;
 

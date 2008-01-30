@@ -12,6 +12,8 @@
 
 #include "luna.h"
 
+#include <sys/time.h>
+
 namespace Examination
 {
 	class Scene;
@@ -73,8 +75,10 @@ private:
 
 private:
 	lua_State * L_;
-	
+
 	Scene * scene_;
+
+	struct timeval lastUpdate_;
 
 public: // LUNA
 	static const char className[];

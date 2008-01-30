@@ -20,7 +20,6 @@
 #include "luahelper.h"
 
 #include <iostream>
-#include <time.h>
 
 namespace Examination
 {
@@ -37,6 +36,8 @@ LuaProxy::LuaProxy(Scene * scene)
 	
 	Luna<ObjectProxy>::Register(L_);
 	Luna<TextureProxy>::Register(L_);
+
+	gettimeofday(&lastUpdate_, 0);
 }
 	
 LuaProxy::~LuaProxy()
@@ -97,13 +98,6 @@ int LuaProxy::clearScene(lua_State *L)
 	return 0;
 }
 
-int LuaProxy::setUpdateListener(lua_State *L)
-{
-	checkTop(L, 2);
-	luaL_checktype(L, 2, LUA_TFUNCTION);
-	return 0;
-}
-
 int LuaProxy::setCameraPos(lua_State *L)
 {
 	checkTop(L, 4);
@@ -134,6 +128,43 @@ int LuaProxy::setCameraSep(lua_State *L)
 	scene_->camera()->setSeperation(lua_tonumber(L,-1));
 	lua_pop(L, 2);
 	return 0;
+}
+
+const char * idxUpdate = "updateListener";
+int LuaProxy::setUpdateListener(lua_State *L)
+{
+	checkTop(L, 2);
+	luaL_checktype(L, 1, LUA_TTABLE);
+	luaL_checktype(L, 2, LUA_TFUNCTION);
+	lua_setfield(L, 1, idxUpdate);
+	lua_pop(L, 1);
+	return 0;
+}
+
+void LuaProxy::onUpdate()
+{
+	struct timeval now;
+	gettimeofday(&now, 0);
+	double delta = (now.tv_sec-lastUpdate_.tv_sec) + ((double)(now.tv_usec-lastUpdate_.tv_usec))/1000000;
+	lastUpdate_ = now;
+
+	lua_getfield(L_, LUA_GLOBALSINDEX, "Scene");	// 1
+	lua_getfield(L_, 1, idxUpdate);					// 2
+	if (lua_isfunction(L_, 2))
+	{
+		lua_pushnumber(L_, delta);
+		int res = lua_pcall(L_, 1, 0, 0);
+		if (res != 0)
+		{
+			// Error
+			lua_pop(L_, 1);
+		}
+		lua_pop(L_, 1);
+	}
+	else
+	{
+		lua_pop(L_, 2);
+	}
 }
 
 int LuaProxy::log(lua_State *L)
