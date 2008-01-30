@@ -41,7 +41,10 @@ local updateListener = function (delta)
 	stereogramB:setPosition(math.sin(pathLength)*2, -2,  math.cos(pathLength)*2);
 end;
 updateListener(0);
-Scene:setUpdateListener(updateListener);
+
+Scene:setEventListener("update", updateListener);
+Scene:setEventListener("keyDown", function (k) Scene:log("down: "..k); end);
+Scene:setEventListener("keyUp", function (k) Scene:log("up: "..k); end);
 
 Scene:log("Added stereogram");
 

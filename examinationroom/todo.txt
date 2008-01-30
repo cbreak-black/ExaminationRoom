@@ -1,8 +1,8 @@
 In approximate order of importance:
 
-- Customizable Camera support
+- Customizable Camera support (done)
 - LUA/Scriptability support (done)
-- User IO
+- User IO (done)
 - Logging
 - Streogram resizing based on real object size
 

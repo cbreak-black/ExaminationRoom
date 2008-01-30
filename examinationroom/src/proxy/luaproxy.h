@@ -60,7 +60,7 @@ public: // Camera
 	int setCameraSep(lua_State *L);
 
 public: // Misc
-	int setUpdateListener(lua_State *L);
+	int setEventListener(lua_State *L);
 	int log(lua_State *L);
 	
 public:
@@ -69,6 +69,22 @@ public:
 	*/
 	void onUpdate();
 	
+	/**
+	Call to signal a key press.
+	 \param k	The pressed key.
+	*/
+	void onKeyDown(char k);
+	
+	/**
+	Call to signal a key release.
+	 \param k	The released key.
+	*/
+	void onKeyUp(char k);
+
+protected:
+	void onEvent(const char * event, double param);
+	void onEvent(const char * event, char * param);
+
 private:
 	void error(const char * s1, const char * s2);
 	int handleError(int err, const char * s);

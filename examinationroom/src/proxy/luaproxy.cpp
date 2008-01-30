@@ -130,14 +130,21 @@ int LuaProxy::setCameraSep(lua_State *L)
 	return 0;
 }
 
-const char * idxUpdate = "updateListener";
-int LuaProxy::setUpdateListener(lua_State *L)
+const char * eventIdx[] =
 {
-	checkTop(L, 2);
+	"update",
+	"keyDown",
+	"keyUp"
+};
+
+int LuaProxy::setEventListener(lua_State *L)
+{
+	checkTop(L, 3);
 	luaL_checktype(L, 1, LUA_TTABLE);
-	luaL_checktype(L, 2, LUA_TFUNCTION);
-	lua_setfield(L, 1, idxUpdate);
-	lua_pop(L, 1);
+	luaL_checktype(L, 3, LUA_TFUNCTION);
+	int opt = luaL_checkoption(L, 2, 0, eventIdx);
+	lua_setfield(L, 1, eventIdx[opt]);
+	lua_pop(L, 2);
 	return 0;
 }
 
@@ -147,12 +154,53 @@ void LuaProxy::onUpdate()
 	gettimeofday(&now, 0);
 	double delta = (now.tv_sec-lastUpdate_.tv_sec) + ((double)(now.tv_usec-lastUpdate_.tv_usec))/1000000;
 	lastUpdate_ = now;
+	onEvent(eventIdx[0], delta);
+}
 
+void LuaProxy::onKeyDown(char k)
+{
+	char ts[2];
+	ts[0] = k;
+	ts[1] = '\0';
+	onEvent(eventIdx[1], ts);
+}
+
+void LuaProxy::onKeyUp(char k)
+{
+	char ts[2];
+	ts[0] = k;
+	ts[1] = '\0';
+	onEvent(eventIdx[2], ts);
+}
+
+void LuaProxy::onEvent(const char * event, double param)
+{
 	lua_getfield(L_, LUA_GLOBALSINDEX, "Scene");	// 1
-	lua_getfield(L_, 1, idxUpdate);					// 2
+	lua_getfield(L_, 1, event);						// 2
 	if (lua_isfunction(L_, 2))
 	{
-		lua_pushnumber(L_, delta);
+		lua_pushnumber(L_, param);
+		int res = lua_pcall(L_, 1, 0, 0);
+		if (res != 0)
+		{
+			// Error
+			lua_pop(L_, 1);
+		}
+		lua_pop(L_, 1);
+	}
+	else
+	{
+		lua_pop(L_, 2);
+	}
+}
+
+void LuaProxy::onEvent(const char * event, char * param)
+{
+	lua_getfield(L_, LUA_GLOBALSINDEX, "Scene");	// 1
+	lua_getfield(L_, 1, event);						// 2
+	if (lua_isfunction(L_, 2))
+	{
+		lua_pushstring(L_, param);
 		int res = lua_pcall(L_, 1, 0, 0);
 		if (res != 0)
 		{
@@ -228,7 +276,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "setCameraDir", &LuaProxy::setCameraDir },
 	{ "setCameraFoV", &LuaProxy::setCameraFoV },
 	{ "setCameraSep", &LuaProxy::setCameraSep },
-	{ "setUpdateListener", &LuaProxy::setUpdateListener },
+	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ 0, 0 }
 };

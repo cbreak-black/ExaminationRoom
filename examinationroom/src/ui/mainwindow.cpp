@@ -32,7 +32,9 @@ MainWindow::MainWindow()
 	mainGlWidget_ = new GLWidget(this);
 	mainLayout->addWidget(mainGlWidget_, 0, 0);
 
-    setLayout(mainLayout);
+	setLayout(mainLayout);
+
+	setFocusPolicy(Qt::StrongFocus);
 
 	scene_ = new Scene();
 	mainGlWidget_->setScene(scene_);
@@ -52,6 +54,16 @@ MainWindow::~MainWindow()
 	delete luaProxy_;
 	delete scene_;
 	delete mainGlWidget_;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent * event)
+{
+	luaProxy_->onKeyDown(event->key());
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent * event)
+{
+	luaProxy_->onKeyUp(event->key());
 }
 
 void MainWindow::onTimeout()

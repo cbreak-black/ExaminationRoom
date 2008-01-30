@@ -39,6 +39,10 @@ public:
 	Destroys the the MainWindow and the environment.
 	*/
 	~MainWindow();
+	
+protected:
+	virtual void keyPressEvent(QKeyEvent * event);
+	virtual void keyReleaseEvent(QKeyEvent * event);
 
 private slots:
 	void onTimeout();
