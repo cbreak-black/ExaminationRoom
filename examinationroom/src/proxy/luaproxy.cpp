@@ -78,22 +78,15 @@ int LuaProxy::addObject(lua_State *L)
 {
 	checkTop(L, 2);
 	
-	if (lua_istable(L, 2))
-	{
-		lua_pushnumber(L, 0);
-		lua_gettable(L, -2);
-		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-//		ObjectProxy ** r = static_cast<ObjectProxy**>(lua_touserdata(L, -1));
-		if (r)
-		{
-			scene_->addObject((*r)->rectangle());
-			lua_pop(L, 3);
-			return 0;
-		}
-	}
+	//luaL_checktype(L, 2, LUA_TTABLE);
+	luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
+	lua_pushnumber(L, 0);
+	lua_gettable(L, -2);
 
-	lua_pushstring(L, errArgT);
-	lua_error(L);
+	ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
+	scene_->addObject((*r)->rectangle());
+	lua_pop(L, 3);
+
 	return 0;
 }
 
@@ -104,15 +97,17 @@ int LuaProxy::clearScene(lua_State *L)
 	return 0;
 }
 
-int LuaProxy::setEventListener(lua_State *L)
+int LuaProxy::setUpdateListener(lua_State *L)
 {
+	checkTop(L, 2);
+	luaL_checktype(L, 2, LUA_TFUNCTION);
 	return 0;
 }
 
 int LuaProxy::setCameraPos(lua_State *L)
 {
 	checkTop(L, 4);
-	scene_->camera()->setPosition(toVector(L));
+	scene_->camera()->setPosition(toVector(L,2));
 	lua_pop(L, 4);
 	return 0;
 }
@@ -120,7 +115,7 @@ int LuaProxy::setCameraPos(lua_State *L)
 int LuaProxy::setCameraDir(lua_State *L)
 {
 	checkTop(L, 4);
-	scene_->camera()->setDirection(toVector(L));
+	scene_->camera()->setDirection(toVector(L,2));
 	lua_pop(L, 4);
 	return 0;
 }
@@ -202,7 +197,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "setCameraDir", &LuaProxy::setCameraDir },
 	{ "setCameraFoV", &LuaProxy::setCameraFoV },
 	{ "setCameraSep", &LuaProxy::setCameraSep },
-	{ "setEventListener", &LuaProxy::setEventListener },
+	{ "setUpdateListener", &LuaProxy::setUpdateListener },
 	{ "log", &LuaProxy::log },
 	{ 0, 0 }
 };

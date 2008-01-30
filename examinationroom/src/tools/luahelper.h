@@ -38,12 +38,12 @@ inline void pushVector(lua_State *L, Tool::Vec3f v)
 	lua_pushnumber(L, v.z);	
 }
 
-inline Tool::Vec3f toVector(lua_State *L)
+inline Tool::Vec3f toVector(lua_State *L, int idx)
 {
 	float x, y, z;
-	x = lua_tonumber(L, -3);
-	y = lua_tonumber(L, -2);
-	z = lua_tonumber(L, -1);
+	x = luaL_checknumber(L, idx);
+	y = luaL_checknumber(L, idx+1);
+	z = luaL_checknumber(L, idx+2);
 	return Tool::Vec3f(x,y,z);
 }
 

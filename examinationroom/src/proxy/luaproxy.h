@@ -34,7 +34,18 @@ public:
 	~LuaProxy();
 
 public: // From C++
+	/**
+	Loads a lua file from disc, and executes it's contents.
+	 \param path	Path to a lua file
+	 \return 0 on success, error code on failure.
+	*/
 	int runFile(const char * path);
+	
+	/**
+	Loads a lua string from memory, and executes it's contents.
+	 \param code	Pointer to LUA script code
+	 \return 0 on success, error code on failure.
+	 */
 	int runString(const char * code);
 
 public: // Scene
@@ -47,8 +58,14 @@ public: // Camera
 	int setCameraSep(lua_State *L);
 
 public: // Misc
-	int setEventListener(lua_State *L);
+	int setUpdateListener(lua_State *L);
 	int log(lua_State *L);
+	
+public:
+	/**
+	Call to signal the lua world that the scene has to be updated.
+	*/
+	void onUpdate();
 	
 private:
 	void error(const char * s1, const char * s2);

@@ -27,49 +27,26 @@ TextureProxy::TextureProxy(lua_State *L)
 	int n = lua_gettop(L);
 	if (n >= 2)
 	{
-		int c = lua_tonumber(L, 1); // Number of channels
-		const char * p1 = lua_tostring(L, 2); // First Path
+		int c = luaL_checknumber(L, 1); // Number of channels
+		luaL_argcheck(L, (c == 1 || c == 2), 1, "Only one or two channels allowed");
+		const char * p1 = luaL_checkstring(L, 2); // First Path
 		if (c == 1)
 		{
-			if (p1)
-			{
-				texture_ = shared_ptr<AbstractTexture>(new Texture(std::string(p1)));
-			}
-			else
-			{
-				lua_pushstring(L, errArgT);
-				lua_error(L);
-				return;
-			}
+			texture_ = shared_ptr<AbstractTexture>(new Texture(std::string(p1)));
 		}
 		if (c == 2)
 		{
 			if (n == 3)
 			{
-				const char * p2 = lua_tostring(L, 3); // Second Path
-				if (p2)
-				{
-					shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(p1));
-					shared_ptr<Texture> t2 = shared_ptr<Texture>(new Texture(p2));
-					texture_ = shared_ptr<AbstractTexture>(new Stereogram(t1, t2));
-				}
-				else
-				{
-					lua_pushstring(L, errArgT);
-					lua_error(L);
-					return;
-				}				
-			}
-			else if (p1)
-			{
-				shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(std::string(p1)));
-				texture_ = shared_ptr<AbstractTexture>(new Stereogram(t1));
+				const char * p2 = luaL_checkstring(L, 3); // Second Path
+				shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(p1));
+				shared_ptr<Texture> t2 = shared_ptr<Texture>(new Texture(p2));
+				texture_ = shared_ptr<AbstractTexture>(new Stereogram(t1, t2));
 			}
 			else
 			{
-				lua_pushstring(L, errArgT);
-				lua_error(L);
-				return;
+				shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(std::string(p1)));
+				texture_ = shared_ptr<AbstractTexture>(new Stereogram(t1));
 			}
 		}
 	}
