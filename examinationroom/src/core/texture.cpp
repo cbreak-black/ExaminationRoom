@@ -18,65 +18,61 @@ namespace Examination
 Texture::Texture(const char * path)
 {
 	image_ = new QImage(path);
-
-	glTexID_ = 0;
 }
 
 Texture::Texture(std::string path)
 {
 	image_ = new QImage(path.c_str());
-	
-	glTexID_ = 0;
 }
 
 Texture::Texture(QImage* image)
 {
 	image_ = image;
-
-	glTexID_ = 0;
 }
 
 Texture::~Texture()
 {
-	deleteGlTexID();
+	deleteGlTexIDs();
 	delete image_;
 }
 
 void Texture::glBindTex(GLWidget * w)
 {
-	glBindTexture(GL_TEXTURE_2D, glTexID(w));
+	//glBindTexture(GL_TEXTURE_2D, glTexID(w));
+	w->bindTexture(*image_); // SLOW?!
 }
 
 unsigned int Texture::glTexID(GLWidget * w)
 {
-	if (w != glWidget_)
-		deleteGlTexID();
+	unsigned int id = widgetToID_[w];
 	
-	if (glTexID_)
+	if (id)
 	{
-		return glTexID_;
+		return id;
 	}
 	else
 	{
-		glTexID_ = w->bindTexture(*image_);
-		glWidget_ = w;
-		
-		glBindTexture(GL_TEXTURE_2D, glTexID_);
+		id = w->bindTexture(*image_);
+		widgetToID_[w] = id;
+
+		glBindTexture(GL_TEXTURE_2D, id);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		return glTexID_;
+		return id;
 	}
 }
 
-void Texture::deleteGlTexID()
+void Texture::deleteGlTexIDs()
 {
-	if (glTexID_)
+	std::map<GLWidget*, unsigned int>::iterator i = widgetToID_.begin();
+	for (; i != widgetToID_.end(); i++)
 	{
-		glWidget_->deleteTexture(glTexID_);
+		i->first->deleteTexture(i->second);
 	}
+	widgetToID_.clear();
 }
 
 QImage * Texture::image()

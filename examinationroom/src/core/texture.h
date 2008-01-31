@@ -13,6 +13,7 @@
 #include "abstracttexture.h"
 
 #include <map>
+#include <memory>
 
 class QImage;
 
@@ -50,7 +51,7 @@ public:
 	unsigned int glTexID(GLWidget * w);
 
 private:
-	void deleteGlTexID();
+	void deleteGlTexIDs();
 	
 public:
 	/**
@@ -67,9 +68,8 @@ public:
 	
 private:
 	QImage * image_;
-	
-	unsigned int glTexID_;
-	GLWidget * glWidget_;
+
+	std::map<GLWidget*, unsigned int> widgetToID_;
 
 // STATIC
 public: // Factory methods

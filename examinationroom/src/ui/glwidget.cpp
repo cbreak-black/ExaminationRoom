@@ -87,21 +87,21 @@ void GLWidget::paintGL()
 		glEnd();
 		
 		// Left
-		glColorMask(true, false, false, true);
-		setSide(left);
+//		glColorMask(true, false, false, true);
+//		setSide(left);
 
 		scene_->camera()->loadMatrix(this);
 		scene_->drawScene(this);
 
 		// Right
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glColorMask(false, true, true, true);
-		setSide(right);
-
-		scene_->camera()->loadMatrix(this);
-		scene_->drawScene(this);
-
-		glColorMask(true, true, true, true);
+//		glClear(GL_DEPTH_BUFFER_BIT);
+//		glColorMask(false, true, true, true);
+//		setSide(right);
+//
+//		scene_->camera()->loadMatrix(this);
+//		scene_->drawScene(this);
+//
+//		glColorMask(true, true, true, true);
 	}
 	
 }

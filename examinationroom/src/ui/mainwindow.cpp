@@ -35,9 +35,19 @@ MainWindow::MainWindow()
 	setLayout(mainLayout);
 
 	setFocusPolicy(Qt::StrongFocus);
+	
+	lGlWidget_ = new GLWidget(0, mainGlWidget_);
+	rGlWidget_ = new GLWidget(0, mainGlWidget_);
 
 	scene_ = new Scene();
 	mainGlWidget_->setScene(scene_);
+	lGlWidget_->setScene(scene_);
+	rGlWidget_->setScene(scene_);
+	lGlWidget_->setSide(left);
+	rGlWidget_->setSide(right);
+	
+	lGlWidget_->show();
+	rGlWidget_->show();
 
 	luaProxy_ = new LuaProxy(scene_);
 	luaProxy_->runFile("res/scene.lua");
@@ -53,6 +63,8 @@ MainWindow::~MainWindow()
 	delete timer_;
 	delete luaProxy_;
 	delete scene_;
+	delete rGlWidget_;
+	delete lGlWidget_;
 	delete mainGlWidget_;
 }
 
@@ -70,6 +82,8 @@ void MainWindow::onTimeout()
 {
 	luaProxy_->onUpdate();
 	mainGlWidget_->repaint(); // update() for deferred updates
+	lGlWidget_->repaint();
+	rGlWidget_->repaint();
 }
 
 }
