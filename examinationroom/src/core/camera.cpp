@@ -50,7 +50,7 @@ void Camera::loadMatrix(GLWidget * dest)
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	
-	float aspect = viewport[2]/viewport[3];
+	float aspect = (float)viewport[2]/viewport[3];
 	
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
