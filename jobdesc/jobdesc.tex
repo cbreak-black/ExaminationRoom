@@ -85,35 +85,31 @@
 
 %\tableofcontents
 
-\section{Research questions}
+\section{Research question}
 \paragraph{}
-Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. This strains the eyes, and can lead to fatigue, which makes the consumption of stereoscopic information over longer periods of times hard. The general research questions that are asked in this area are:
+Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. This strains the eyes, and can lead to fatigue, which makes the consumption of stereoscopic information over longer periods of times hard. But what are the physiological and psychological limits of stereoscopic viewing fatigue? And how can stereo images be composed to reduce fatigue?
 
-\begin{itemize}
-\item What are the physiological and psychological limits of stereoscopic viewing fatigue?
-\item How can stereo images be composed to reduce fatigue?
-\end{itemize}
+Topic of this thesis is to write a Tool that allows to answer those and similar other questions by providing a flexible and extensible framework for user testing. It is currently unclear how fatigue can be measured properly, and what scenes can be used to specifically test fatigue. Finding out which methods work and which do not is also part of this thesis.
 
-During this thesis, the specific question is: {\it How does continuous depth influence fatigue?} It is hoped that by constructing movies in a certain way, specifically by leading the eyes along paths, and offering a continuous scene, viewing fatigue can be reduced. Alternative questions could consider the influence of motion and occlusion on viewers of stereoscopic material.
-
-\section{Research steps}
+\section{Current Plann}
 \paragraph{}
-To answer this question, experiments with users have to be conducted. The experiments will show, how much the viewing of stereoscopic information tires the eyes, and if adding continuous depth has any influence on this.
+To answer questions on fatigue, experiments with users are conducted. The first experiment is planed to show, how much the viewing of stereoscopic information tires the eyes, and if adding continuous depth has any influence on this.
 
 Fatigue when viewing stereoscopic pictures is tested by showing images without continuous depth, with free standing objects, and scenes with continuous depth, embedded in a scene.
 
-In both test cases, the time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller.
+In both test cases, the time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller. The experiments will show if this is valid.
 
 \section{Example requirement}
 \paragraph{}
-The testing tool, that is the main focus of this thesis should automate those testing steps. This could work as following, but the tool should not be limited to this:
+The testing tool should automate steps needed to test 3D related fatigue. A typical test could work as following:
 
 \begin{enumerate}
 \item Encode information at a certain perceived stereoscopic depth, so that it can only be extracted when focusing with both eyes. Measure the time it takes the test subject to adapt to this depth and extract the information.
 \item Remove the information and place it at an other depth location, measuring reaction time.
 \item Repeat step 1 and 2 at a different depth locations.
 \item Repeat step 1 and 2 with the information being embedded in a scene.
-\item Measure fatigue over a longer period of time, over several test repetitions, with several test subjects.
+\item Measure response time over a longer period of time, over several test repetitions, with several test subjects.
+\item Estimate fatigue based on response time.
 \end{enumerate}
 
 \section{Challenges}
@@ -164,9 +160,9 @@ Thoughts about the design:
 
 \section{Evaluation}
 \paragraph{}
-A first pilot study without the use of the finished tool is conducted to confirm if the test methodology is valid. This will also decide which data is logged in what way, and how it can be evaluated.
+A first pilot study without the use of the finished tool is conducted to evaluate if the test methodology is valid. This will also decide which data is logged in what way, and how it can be evaluated.
 
-The current proposition is that the gathered data is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. Statistical analysis tools will help derive a conclusion, and answer the question: ``Is fatigue influenced by continuous depth?''.
+The current proposition is that user input consists of key presses. Reaction time of switching between different depth locations is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. 
 
 \section{Timeline}
 \paragraph{}
