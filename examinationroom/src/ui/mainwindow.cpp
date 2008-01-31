@@ -46,8 +46,22 @@ MainWindow::MainWindow()
 	lGlWidget_->setSide(left);
 	rGlWidget_->setSide(right);
 	
-	lGlWidget_->show();
-	rGlWidget_->show();
+	int numScreens = QApplication::desktop()->numScreens();
+
+//	if (numScreens == 2)
+//	{
+//		lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(0));
+//		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
+//	}
+	if (numScreens == 3)
+	{
+		this->setGeometry(QApplication::desktop()->screenGeometry(0));
+		lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
+		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(2));
+	}
+
+	lGlWidget_->showFullScreen();
+	rGlWidget_->showFullScreen();
 
 	luaProxy_ = new LuaProxy(scene_);
 	luaProxy_->runFile("res/scene.lua");
