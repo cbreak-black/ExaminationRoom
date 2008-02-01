@@ -12,7 +12,7 @@
 
 #include "luna.h"
 
-#include <sys/time.h>
+#include <QTime>
 
 namespace Examination
 {
@@ -94,7 +94,7 @@ private:
 
 	Scene * scene_;
 
-	struct timeval lastUpdate_;
+	QTime lastUpdate_;
 
 public: // LUNA
 	static const char className[];

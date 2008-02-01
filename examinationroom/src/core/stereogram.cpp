@@ -17,7 +17,7 @@
 #include <cstdlib>
 #include <ctime>
 
-#include <math.h>
+#include "platform_math.h" // for roundf
 
 using namespace std::tr1;
 

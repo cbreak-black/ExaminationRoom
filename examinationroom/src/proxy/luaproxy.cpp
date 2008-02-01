@@ -20,6 +20,7 @@
 #include "luahelper.h"
 
 #include <iostream>
+#include <time.h>
 
 namespace Examination
 {
@@ -37,7 +38,7 @@ LuaProxy::LuaProxy(Scene * scene)
 	Luna<ObjectProxy>::Register(L_);
 	Luna<TextureProxy>::Register(L_);
 
-	gettimeofday(&lastUpdate_, 0);
+	lastUpdate_.start();
 }
 	
 LuaProxy::~LuaProxy()
@@ -150,10 +151,7 @@ int LuaProxy::setEventListener(lua_State *L)
 
 void LuaProxy::onUpdate()
 {
-	struct timeval now;
-	gettimeofday(&now, 0);
-	double delta = (now.tv_sec-lastUpdate_.tv_sec) + ((double)(now.tv_usec-lastUpdate_.tv_usec))/1000000;
-	lastUpdate_ = now;
+	double delta = (double)lastUpdate_.restart() / 1000;
 	onEvent(eventIdx[0], delta);
 }
 

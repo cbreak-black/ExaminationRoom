@@ -4,8 +4,8 @@
 
 TEMPLATE = app
 TARGET = ExaminationRoom
-DEPENDPATH += . src src/ui src/core src/lua src/tools
-INCLUDEPATH += boost/tr1/tr1 . src/ui src/core src/lua src/tools
+DEPENDPATH += . src src/ui src/core src/lua src/tools src/proxy
+INCLUDEPATH += boost/tr1/tr1 . src/ui src/core src/lua src/lua/src src/tools src/proxy
 
 QT           += opengl
 
@@ -53,6 +53,8 @@ HEADERS += src/lua/luna.h
 # TOOLS
 HEADERS += \
 	src/tools/luahelper.h \
+	src/tools/platform.h \
+	src/tools/platform_math.h \
 	src/tools/vec.h
 SOURCES += \
 	src/tools/luahelper.cpp

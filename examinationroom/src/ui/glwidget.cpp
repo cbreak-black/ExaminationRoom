@@ -10,7 +10,7 @@
 #include <QtGui>
 #include <QtOpenGL>
 
-#include <math.h>
+#include "platform_math.h"
 
 #include "glwidget.h"
 
@@ -66,9 +66,9 @@ void GLWidget::setSide(Side s)
 
 void GLWidget::initializeGL()
 {
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_TEXTURE_2D);
-    //glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	//glEnable(GL_CULL_FACE);
 	
 	glClearColor(0, 0, 0, 0);
 }
@@ -108,6 +108,7 @@ void GLWidget::paintGL()
 
 void GLWidget::resizeGL(int width, int height)
 {
+	glViewport(0, 0, width, height);
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event)
