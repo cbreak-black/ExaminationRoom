@@ -20,10 +20,14 @@
 #include "luahelper.h"
 
 #include <iostream>
-#include <time.h>
+#include <QDateTime>
 
 namespace Examination
 {
+
+static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
+static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
+
 // Creation & Destruction	
 LuaProxy::LuaProxy(Scene * scene)
 {
@@ -34,9 +38,12 @@ LuaProxy::LuaProxy(Scene * scene)
 
 	Luna<LuaProxy>::inject(L_, this);
 	lua_setglobal(L_, "Scene");
-	
+
 	Luna<ObjectProxy>::Register(L_);
 	Luna<TextureProxy>::Register(L_);
+
+	QDateTime t = QDateTime::currentDateTime();
+	logOutStream_.open(t.toString(logFileFormatString).toAscii());
 
 	lastUpdate_.start();
 }
@@ -216,26 +223,25 @@ void LuaProxy::onEvent(const char * event, char * param)
 int LuaProxy::log(lua_State *L)
 {
 	const char *  s = lua_tostring(L, -1);
-	char t[32];
-	time_t rawtime;
-	struct tm * timeinfo;
-	time(&rawtime);
-	timeinfo = gmtime(&rawtime);
-	strftime(t, 32, "%Y.%m.%d %H:%M:%S: ", timeinfo);
-	std::cout << t << s << std::endl;
+	QDateTime t = QDateTime::currentDateTime();
+	logOutStream_ << t.toString(dateTimeFormatString).toStdString() << ": " << s << std::endl;
+	lua_pop(L, 1);
+	return 0;
+}
+
+int LuaProxy::debugLog(lua_State *L)
+{
+	const char *  s = lua_tostring(L, -1);
+	QDateTime t = QDateTime::currentDateTime();
+	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << s << std::endl;
 	lua_pop(L, 1);
 	return 0;
 }
 
 void LuaProxy::error(const char * s1, const char * s2)
 {
-	char t[32];
-	time_t rawtime;
-	struct tm * timeinfo;
-	time(&rawtime);
-	timeinfo = gmtime(&rawtime);
-	strftime(t, 32, "%Y.%m.%d %H:%M:%S: ", timeinfo);
-	std::cerr << t << s1 << ": " << s2 << std::endl;
+	QDateTime t = QDateTime::currentDateTime();
+	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << s1 << ": " << s2 << std::endl;
 }
 
 int LuaProxy::handleError(int err, const char * s)
@@ -276,6 +282,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "setCameraSep", &LuaProxy::setCameraSep },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
+	{ "debugLog", &LuaProxy::debugLog },
 	{ 0, 0 }
 };
 

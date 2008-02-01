@@ -13,6 +13,7 @@
 #include "luna.h"
 
 #include <QTime>
+#include <fstream>
 
 namespace Examination
 {
@@ -62,6 +63,7 @@ public: // Camera
 public: // Misc
 	int setEventListener(lua_State *L);
 	int log(lua_State *L);
+	int debugLog(lua_State *L);
 	
 public:
 	/**
@@ -95,6 +97,8 @@ private:
 	Scene * scene_;
 
 	QTime lastUpdate_;
+
+	std::ofstream logOutStream_;
 
 public: // LUNA
 	static const char className[];
