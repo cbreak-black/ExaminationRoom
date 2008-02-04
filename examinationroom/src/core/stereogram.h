@@ -17,7 +17,7 @@
 namespace Examination
 {
 	class Texture;
-	
+
 /**
 This is a class for stereogram textures. It contains one texture for the left
 camera and one for the right camera. It is able to create random dot stereograms
@@ -52,6 +52,15 @@ public:
 	 \param w	A GLWidget
 	*/
 	virtual void glBindTex(GLWidget * w);
+
+public: // Resizing
+	virtual void resizeTo(int width, int height);
+	virtual void resizeToOriginal();
+	virtual int width();
+	virtual int height();
+
+private:
+	void recreateRDS();
 
 private:
 	std::tr1::shared_ptr<Texture> texDepth_;

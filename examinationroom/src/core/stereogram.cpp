@@ -32,22 +32,34 @@ const int maxColor = 3;
 Stereogram::Stereogram(shared_ptr<Texture> d)
 {
 	texDepth_ = d;
-	
-	QImage * imageTemp = d->image();
+	recreateRDS();
+}
+
+Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
+{
+	texLeft_ = l;
+	texRight_ = r;
+}
+
+Stereogram::~Stereogram()
+{
+}
+
+void Stereogram::recreateRDS()
+{
+	QImage * imageTemp = texDepth_->image();
 	QSize s = imageTemp->size();
-	
+
 	// Create left and right tex
 	QImage * imageL = new QImage(s, QImage::Format_Indexed8);
 	QImage * imageR = new QImage(s, QImage::Format_Indexed8);
-	
+
 	srand (time(0));
 
 	int i, j;
 	float step = 255.0/(maxColor-1);
-	
 	imageL->setNumColors(maxColor);
 	imageR->setNumColors(maxColor);
-
 	for (i = 0; i < maxColor; i++)
 	{
 		QRgb c = qRgb(i*step, i*step, i*step);
@@ -65,7 +77,7 @@ Stereogram::Stereogram(shared_ptr<Texture> d)
 
 	int offset = 4;
 	int divisor = 255 / offset;
-	
+
 	for (j = 0; j < s.height(); j++)
 	{
 		for (i = 0; i < s.width(); i++)
@@ -80,19 +92,47 @@ Stereogram::Stereogram(shared_ptr<Texture> d)
 			}
 		}
 	}
-	
+
 	texLeft_ = shared_ptr<Texture>(new Texture(imageL));
 	texRight_ = shared_ptr<Texture>(new Texture(imageR));
 }
 
-Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
+void Stereogram::resizeTo(int width, int height)
 {
-	texLeft_ = l;
-	texRight_ = r;
+	if (texDepth_)
+	{
+		// RDS
+		texDepth_->resizeTo(width, height);
+	}
+	else
+	{
+		texLeft_->resizeTo(width, height);
+		texRight_->resizeTo(width, height);
+	}
 }
 
-Stereogram::~Stereogram()
+void Stereogram::resizeToOriginal()
 {
+	if (texDepth_)
+	{
+		// RDS
+		texDepth_->resizeToOriginal();
+	}
+	else
+	{
+		texLeft_->resizeToOriginal();
+		texRight_->resizeToOriginal();
+	}
+}
+
+int Stereogram::width()
+{
+	return texLeft_->width();
+}
+
+int Stereogram::height()
+{
+	return texLeft_->height();
 }
 
 void Stereogram::glBindTex(GLWidget * w)

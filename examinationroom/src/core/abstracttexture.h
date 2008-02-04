@@ -29,6 +29,12 @@ public:
 	 \param w	A GLWidget
 	*/
 	virtual void glBindTex(GLWidget * w) = 0;
+
+public: // Resizing
+	virtual void resizeTo(int width, int height) = 0;
+	virtual void resizeToOriginal() = 0;
+	virtual int width() = 0;
+	virtual int height() = 0;
 };
 
 }

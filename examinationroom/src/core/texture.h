@@ -43,16 +43,6 @@ public:
 	*/
 	virtual void glBindTex(GLWidget * w);
 
-	/**
-	Binds the texture to the passed widget and returns the texture id. Can be
-	called repeatedly.
-	 \param w	A GLWidget
-	*/
-	unsigned int glTexID(GLWidget * w);
-
-private:
-	void deleteGlTexIDs();
-	
 public:
 	/**
 	Returns the stored image that is used as texture.
@@ -65,20 +55,18 @@ public:
 	 \return true if the image is valid, false otherwise.
 	*/
 	bool valid();
-	
+
+public: // Resizing
+	virtual void resizeTo(int width, int height);
+	virtual void resizeToOriginal();
+	virtual int width();
+	virtual int height();
+
 private:
 	QImage * image_;
-
-	std::map<GLWidget*, unsigned int> widgetToID_;
-
-// STATIC
-public: // Factory methods
-	static Texture* loadImageFromFile(std::string path);
-		
-private: // Static members
-	static TextCache pathToTexture_;
+	QImage * original_;
 };
-	
+
 }
 
 #endif

@@ -18,61 +18,35 @@ namespace Examination
 Texture::Texture(const char * path)
 {
 	image_ = new QImage(path);
+	original_ = new QImage(*image_);
 }
 
 Texture::Texture(std::string path)
 {
 	image_ = new QImage(path.c_str());
+	original_ = new QImage(*image_);
 }
 
 Texture::Texture(QImage* image)
 {
 	image_ = image;
+	original_ = new QImage(*image_);
 }
 
 Texture::~Texture()
 {
-	deleteGlTexIDs();
 	delete image_;
+	delete original_;
 }
 
 void Texture::glBindTex(GLWidget * w)
 {
-	//glBindTexture(GL_TEXTURE_2D, glTexID(w));
-	w->bindTexture(*image_); // SLOW?!
-}
+	w->bindTexture(*image_); // SLOW?! Only without shared contexts.
 
-unsigned int Texture::glTexID(GLWidget * w)
-{
-	unsigned int id = widgetToID_[w];
-	
-	if (id)
-	{
-		return id;
-	}
-	else
-	{
-		id = w->bindTexture(*image_);
-		widgetToID_[w] = id;
-
-		glBindTexture(GL_TEXTURE_2D, id);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		return id;
-	}
-}
-
-void Texture::deleteGlTexIDs()
-{
-	std::map<GLWidget*, unsigned int>::iterator i = widgetToID_.begin();
-	for (; i != widgetToID_.end(); i++)
-	{
-		i->first->deleteTexture(i->second);
-	}
-	widgetToID_.clear();
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 QImage * Texture::image()
@@ -84,32 +58,27 @@ bool Texture::valid()
 {
 	return image_ && (!image_->isNull());
 }
-	
-// STATIC
-Texture * Texture::loadImageFromFile(std::string path)
+
+void Texture::resizeTo(int width, int height)
 {
-//	TextCache::iterator f = pathToTexture_.find(path);
-//	if (f == pathToTexture_.end())
-//	{
-//		return (*f).second;
-//	}
-//	else
-//	{
-		Texture * t = new Texture(path);
-		if (t->valid())
-		{
-			//pathToTexture_[path] = t;
-			return t;
-		}
-		else
-		{
-			delete t;
-			return 0;
-		}
-//	}
-//	return 0;
+	delete image_;
+	image_ = new QImage(original_->scaled(width, height));
 }
 
-std::map<std::string, Texture*> Texture::pathToTexture_;
+void Texture::resizeToOriginal()
+{
+	delete image_;
+	image_ = new QImage(*original_);
+}
+
+int Texture::width()
+{
+	return image()->width();
+}
+
+int Texture::height()
+{
+	return image()->height();
+}
 
 }
