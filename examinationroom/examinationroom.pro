@@ -55,6 +55,8 @@ HEADERS += \
 	src/tools/luahelper.h \
 	src/tools/platform.h \
 	src/tools/platform_math.h \
+	src/tools/screenproject.h \
 	src/tools/vec.h
 SOURCES += \
+	src/tools/screenproject.cpp \
 	src/tools/luahelper.cpp
