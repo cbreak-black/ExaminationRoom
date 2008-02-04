@@ -38,6 +38,11 @@ typedef union _Vec3f
 		y = b;
 		z = c;
 	};
+
+	inline float& operator[](int i)
+	{
+		return vec[i];
+	}
 	
 } Vec3f;
 
@@ -70,12 +75,15 @@ typedef union _Vec4f
 		t = d;
 	};
 	
+	inline float& operator[](int i)
+	{
+		return vec[i];
+	}	
+	
 } Vec4f;
 
 typedef Vec3f Point;
 typedef Vec3f Vector;
-
-typedef Vec3f Point;
 
 // Operators Vec3f
 
