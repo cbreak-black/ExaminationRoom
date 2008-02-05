@@ -48,31 +48,31 @@ Stereogram::~Stereogram()
 
 void Stereogram::recreateRDS()
 {
-	QImage * imageTemp = texDepth_->image();
-	QSize s = imageTemp->size();
+	QImage imageTemp = texDepth_->image();
+	QSize s = imageTemp.size();
 
 	// Create left and right tex
-	QImage * imageL = new QImage(s, QImage::Format_Indexed8);
-	QImage * imageR = new QImage(s, QImage::Format_Indexed8);
+	QImage imageL = QImage(s, QImage::Format_Indexed8);
+	QImage imageR = QImage(s, QImage::Format_Indexed8);
 
 	srand (time(0));
 
 	int i, j;
 	float step = 255.0/(maxColor-1);
-	imageL->setNumColors(maxColor);
-	imageR->setNumColors(maxColor);
+	imageL.setNumColors(maxColor);
+	imageR.setNumColors(maxColor);
 	for (i = 0; i < maxColor; i++)
 	{
 		QRgb c = qRgb(i*step, i*step, i*step);
-		imageL->setColor(i, c);
-		imageR->setColor(i, c);
+		imageL.setColor(i, c);
+		imageR.setColor(i, c);
 	}
 
 	for (j = 0; j < s.height(); j++)
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			imageL->setPixel(i, j, rand()%maxColor);
+			imageL.setPixel(i, j, rand()%maxColor);
 		}
 	}
 
@@ -83,13 +83,13 @@ void Stereogram::recreateRDS()
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			int c = qGray(imageTemp->pixel(i, j));
+			int c = qGray(imageTemp.pixel(i, j));
 			int k = i - roundf(((float)c) / divisor); 
 			if (k < 0 || k >= s.width())
-				imageR->setPixel(i, j, rand()%maxColor);
+				imageR.setPixel(i, j, rand()%maxColor);
 			else
 			{
-				imageR->setPixel(i, j, imageL->pixelIndex(k, j));
+				imageR.setPixel(i, j, imageL.pixelIndex(k, j));
 			}
 		}
 	}

@@ -47,14 +47,19 @@ void Rectangle::draw(GLWidget * dest)
 		{
 			ScreenProject sp;
 			sp.calculateMVP();
-			int w, h;
+			int w, h, cw, ch;
 			Point v1p = sp.transformToScreenSpace(v1);
 			Point v2p = sp.transformToScreenSpace(v2);
 			Point v3p = sp.transformToScreenSpace(v3);
 			Point v4p = sp.transformToScreenSpace(v4);
 			h = abs(v2p.y - v1p.y);
 			w = abs(v3p.x - v1p.x);
-			tex_->resizeTo(w,h);
+			cw = tex_->width();
+			ch = tex_->height();
+			if (abs(cw-w) + abs(ch-h) > 8)
+			{
+				tex_->resizeTo(w,h);
+			}
 		}
 		tex_->glBindTex(dest);
 	}

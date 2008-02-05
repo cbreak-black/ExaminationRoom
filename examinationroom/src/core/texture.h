@@ -15,7 +15,7 @@
 #include <map>
 #include <memory>
 
-class QImage;
+#include <QImage>
 
 namespace Examination
 {
@@ -32,7 +32,7 @@ class Texture : public AbstractTexture
 public: // Constructors and Destructor
 	Texture(const char * path);
 	Texture(std::string path);
-	Texture(QImage* image);
+	Texture(QImage image);
 	~Texture();
 
 public:
@@ -48,7 +48,7 @@ public:
 	Returns the stored image that is used as texture.
 	 \return the stored image that is used as texture.
 	*/
-	QImage * image();
+	QImage image();
 
 	/**
 	Returns true if the image is valid, false otherwise.
@@ -63,8 +63,8 @@ public: // Resizing
 	virtual int height();
 
 private:
-	QImage * image_;
-	QImage * original_;
+	QImage image_;
+	QImage original_;
 };
 
 }
