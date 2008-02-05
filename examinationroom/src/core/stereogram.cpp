@@ -37,6 +37,7 @@ Stereogram::Stereogram(shared_ptr<Texture> d)
 
 Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 {
+	texDepth_.reset();
 	texLeft_ = l;
 	texRight_ = r;
 }
@@ -103,6 +104,7 @@ void Stereogram::resizeTo(int width, int height)
 	{
 		// RDS
 		texDepth_->resizeTo(width, height);
+		recreateRDS();
 	}
 	else
 	{

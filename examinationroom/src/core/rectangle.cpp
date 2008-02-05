@@ -12,6 +12,9 @@
 #include "abstracttexture.h"
 #include "glwidget.h"
 
+#include "screenproject.h"
+#include "platform_math.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -22,6 +25,8 @@ Rectangle::Rectangle()
 	directionB_.y = 1;
 	
 	setTexCoords(0,0, 0,1, 1,0, 1,1);
+	
+	autoresize_ = false;
 }
 
 Rectangle::~Rectangle()
@@ -31,15 +36,28 @@ Rectangle::~Rectangle()
 // Drawing
 void Rectangle::draw(GLWidget * dest)
 {
-	if (tex_)
-	{
-		tex_->glBindTex(dest);
-	}
-	
 	Point v1 = position() + dirA() - dirB();
 	Point v2 = position() + dirA() + dirB();
 	Point v3 = position() - dirA() - dirB();
 	Point v4 = position() - dirA() + dirB();
+	
+	if (tex_)
+	{
+		if (autoresize_)
+		{
+			ScreenProject sp;
+			sp.calculateMVP();
+			int w, h;
+			Point v1p = sp.transformToScreenSpace(v1);
+			Point v2p = sp.transformToScreenSpace(v2);
+			Point v3p = sp.transformToScreenSpace(v3);
+			Point v4p = sp.transformToScreenSpace(v4);
+			h = abs(v2p.y - v1p.y);
+			w = abs(v3p.x - v1p.x);
+			tex_->resizeTo(w,h);
+		}
+		tex_->glBindTex(dest);
+	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
 	
@@ -81,6 +99,16 @@ void Rectangle::setDirA(Tool::Vector v)
 void Rectangle::setDirB(Tool::Vector v)
 {
 	directionB_ = v;
+}
+
+void Rectangle::setAutoResize(bool b)
+{
+	autoresize_ = b;
+}
+
+bool Rectangle::autoResize()
+{
+	return autoresize_;
 }
 
 // Textures

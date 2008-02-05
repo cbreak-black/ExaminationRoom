@@ -35,6 +35,10 @@ void ScreenProject::calculateMVP()
 	double p[16];
 	long vp[4];
 	
+	glGetDoublev(GL_PROJECTION_MATRIX, p);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mv);
+	glGetIntegerv(GL_VIEWPORT, vp);
+	
 	calculateMVP(vp, mv, p);
 }
 

@@ -31,6 +31,7 @@ local stereogramB = Object();
 stereogramB:setDirA(1,0,0);
 stereogramB:setDirB(0,1,0);
 stereogramB:setTexture(Texture(2, "res/triangle.png"));
+stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
 pathLength = 0;

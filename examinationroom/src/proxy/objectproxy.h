@@ -36,6 +36,7 @@ public: // Object
 public: // Textures
 	int setTexCoords(lua_State *L);
 	int setTexture(lua_State *L);
+	int setAutoResize(lua_State *L);
 	
 public:
 	std::tr1::shared_ptr<Rectangle> rectangle();

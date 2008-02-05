@@ -121,6 +121,15 @@ int ObjectProxy::setTexture(lua_State *L)
 	return 0;
 }
 
+int ObjectProxy::setAutoResize(lua_State *L)
+{
+	checkTop(L, 2);
+	rectangle()->setAutoResize(lua_toboolean(L, 2));
+	lua_pop(L, 2);
+	
+	return 0;
+}
+
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return rectangle_;
@@ -137,6 +146,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 { "setPosition", &ObjectProxy::setPosition },
 { "setTexCoords", &ObjectProxy::setTexCoords },
 { "setTexture", &ObjectProxy::setTexture },
+{ "setAutoResize", &ObjectProxy::setAutoResize },
 { 0, 0 }
 };
 
