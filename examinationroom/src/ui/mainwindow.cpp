@@ -58,17 +58,26 @@ MainWindow::MainWindow()
 		this->setGeometry(QApplication::desktop()->screenGeometry(0));
 		lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
 		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(2));
-	}
 
-	lGlWidget_->showFullScreen();
-	rGlWidget_->showFullScreen();
+		lGlWidget_->showFullScreen();
+		rGlWidget_->showFullScreen();
+	}
+	if (numScreens == 2)
+	{
+		this->setGeometry(QApplication::desktop()->screenGeometry(0));
+		//lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(0));
+		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
+
+		rGlWidget_->showFullScreen();
+	}
 
 	luaProxy_ = new LuaProxy(scene_);
 	luaProxy_->runFile("res/scene.lua");
 
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
-	timer_->start(33); // 30 fps
+	//timer_->start(33); // 30 fps
+	timer_->start(1000); // 30 fps
 }
 
 

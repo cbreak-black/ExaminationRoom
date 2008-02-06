@@ -56,7 +56,7 @@ void Rectangle::draw(GLWidget * dest)
 			w = abs(v3p.x - v1p.x);
 			cw = tex_->width();
 			ch = tex_->height();
-			if (abs(cw-w) + abs(ch-h) > 8)
+			if (abs(cw-w) + abs(ch-h) > 2)
 			{
 				tex_->resizeTo(w,h);
 			}

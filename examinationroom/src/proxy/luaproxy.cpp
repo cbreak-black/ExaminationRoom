@@ -210,6 +210,8 @@ void LuaProxy::onEvent(const char * event, char * param)
 		if (res != 0)
 		{
 			// Error
+			const char *  s = lua_tostring(L_, -1);
+			handleError(res, s);
 			lua_pop(L_, 1);
 		}
 		lua_pop(L_, 1);
