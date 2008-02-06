@@ -65,6 +65,8 @@ public: // Resizing
 private:
 	QImage image_;
 	QImage original_;
+	
+	unsigned long imageGLID_;
 };
 
 }
