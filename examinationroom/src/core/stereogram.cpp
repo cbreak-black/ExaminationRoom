@@ -55,8 +55,6 @@ void Stereogram::recreateRDS()
 	QImage imageL = QImage(s, QImage::Format_Indexed8);
 	QImage imageR = QImage(s, QImage::Format_Indexed8);
 
-	srand (time(0));
-
 	int i, j;
 	float step = 255.0/(maxColor-1);
 	imageL.setNumColors(maxColor);

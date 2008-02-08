@@ -20,9 +20,7 @@
 namespace Examination
 {
 	class Texture;
-	
-	typedef std::map<std::string, Texture*> TextCache;
-	
+
 /**
 This is a class for textures. It contains static factory methods to load image
 files from disc.

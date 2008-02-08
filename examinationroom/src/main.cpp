@@ -20,13 +20,16 @@ GNU General Public License for more details.
 
 #include "ui/mainwindow.h"
 
-using namespace Examination;
+#include <cstdlib>
+#include <ctime>
 
 int main (int argc, char** argv)
 {
+	srand (time(0));
+
     QApplication app(argc, argv);
 	
-	MainWindow mw;
+	Examination::MainWindow mw;
 	mw.showFullScreen();
 	
     return app.exec();
