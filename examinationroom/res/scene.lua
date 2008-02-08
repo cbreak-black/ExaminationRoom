@@ -45,6 +45,13 @@ local updateListener = function (delta)
 	stereogramB:setPosition(math.sin(pathLength)*2, -2,  math.cos(pathLength)*2);
 end;
 
+Key = {
+left = 18;
+up = 19;
+right = 20;
+down = 21;
+}
+
 sap = {
 {-2,-2,2},
 {-2,-2,1},
@@ -67,7 +74,7 @@ texpaths = {
 }
 local i = 1;
 local nextFrame = function (k)
-	Scene:log("Input key: "..k);
+	Scene:log("Input key: "..k.." ("..string.byte(k)..")");
 	stereogramB:setTexture(Texture(2, texpaths[math.random(#texpaths)]));
 	local pos = sap[math.random(#sap)];
         stereogramB:setPosition(pos[1], pos[2], pos[3]);
