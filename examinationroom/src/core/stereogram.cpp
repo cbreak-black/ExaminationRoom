@@ -139,7 +139,7 @@ int Stereogram::height()
 
 void Stereogram::glBindTex(GLWidget * w)
 {
-	if (texRight_ && w->side() == right)
+	if (texRight_ && w->side() == GLWidget::right)
 	{
 		texRight_->glBindTex(w);
 	}

@@ -11,7 +11,6 @@
 #define OBJECT_H
 
 #include "vec.h"
-#include "drawing.h"
 
 namespace Examination
 {

@@ -36,7 +36,7 @@ void Camera::loadMatrix(GLWidget * dest)
 {
 	float offsetFrame, offsetCamera;
 	
-	if (dest->side() == left)
+	if (dest->side() == GLWidget::left)
 	{
 		offsetFrame = -0.2*sep_;
 		offsetCamera = sep_;

@@ -11,6 +11,8 @@
 
 #include "glwidget.h"
 
+#include <iostream>
+
 namespace Examination
 {
 
@@ -61,7 +63,7 @@ void Texture::glBindTex(GLWidget * w)
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
 		{
             // mirror + swizzle
-            QImage tm = tx.copy();
+			QImage tm(tx.size(), QImage::Format_ARGB32);
             for (int i=0; i < tx.height(); i++) {
                 uint *p = (uint*) tx.scanLine(i);
                 uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
@@ -86,11 +88,12 @@ void Texture::glBindTex(GLWidget * w)
 		int er = glGetError(); // Clean errors
 		uchar * t =  tx.bits();
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
-					 GL_UNSIGNED_BYTE, t);
+					 GL_UNSIGNED_INT_8_8_8_8, t);
 		er = glGetError();
 		if (er == GL_INVALID_VALUE)
 		{
 			// Only Power of Two textures
+			std::cerr << "On this system, only power of two textures are supported\n";
 		}
 	}
 	else

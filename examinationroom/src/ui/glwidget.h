@@ -12,8 +12,6 @@
 
 #include <QGLWidget>
 
-#include "drawing.h"
-
 namespace Examination
 {
 	class Scene;
@@ -26,6 +24,10 @@ which is drawn into the view.
 */
 class GLWidget : public QGLWidget
 {
+public: // Enums
+	typedef enum {single, anaglyph, sidebyside} DrawStyle;
+	typedef enum {left = 1, right = 2} Side;
+
 public:
     GLWidget(QWidget *parent = 0, QGLWidget *shareWidget = 0);
     virtual ~GLWidget();
@@ -40,6 +42,9 @@ public:
 	Side side();
 	void setSide(Side s);
 	
+	DrawStyle style();
+	void setStyle(DrawStyle s);
+
 protected:
     void initializeGL();
     void paintGL();
@@ -51,6 +56,7 @@ protected:
 private:
 	Scene * scene_;
 	Side side_;
+	DrawStyle style_;
 };
 
 }

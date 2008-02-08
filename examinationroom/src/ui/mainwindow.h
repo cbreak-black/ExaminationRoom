@@ -49,8 +49,7 @@ private slots:
 
 private:
     GLWidget * mainGlWidget_;
-	GLWidget * lGlWidget_;
-	GLWidget * rGlWidget_;
+	GLWidget * outGlWidget_;
 	QTimer *timer_;
 
 	Scene * scene_;

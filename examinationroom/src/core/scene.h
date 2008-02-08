@@ -13,8 +13,6 @@
 #include <set>
 #include <memory>
 
-#include "drawing.h"
-
 namespace Examination
 {
 	class Object;

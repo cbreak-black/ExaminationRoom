@@ -25,6 +25,7 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 {
 	scene_ = 0;
 	side_ = left;
+	style_ = sidebyside;
 }
 
 GLWidget::~GLWidget()
@@ -54,7 +55,7 @@ void GLWidget::setScene(Scene * s)
 	scene_ = s;
 }
 
-Side GLWidget::side()
+GLWidget::Side GLWidget::side()
 {
 	return side_;
 }
@@ -62,6 +63,16 @@ Side GLWidget::side()
 void GLWidget::setSide(Side s)
 {
 	side_ = s;
+}
+
+GLWidget::DrawStyle GLWidget::style()
+{
+	return style_;
+}
+
+void GLWidget::setStyle(DrawStyle s)
+{
+	style_ = s;
 }
 
 void GLWidget::initializeGL()
@@ -87,23 +98,40 @@ void GLWidget::paintGL()
 		glEnd();
 		
 		// Left
-//		glColorMask(true, false, false, true);
-//		setSide(left);
+		QSize s = this->size();
+		if (style_ == anaglyph)
+		{
+			setSide(left);
+			glColorMask(true, false, false, true);
+		}
+		else if (style_ == sidebyside)
+		{
+			setSide(left);
+			glViewport(0,0, s.width()/2, s.height());
+		}
 
 		scene_->camera()->loadMatrix(this);
 		scene_->drawScene(this);
 
 		// Right
-//		glClear(GL_DEPTH_BUFFER_BIT);
-//		glColorMask(false, true, true, true);
-//		setSide(right);
-//
-//		scene_->camera()->loadMatrix(this);
-//		scene_->drawScene(this);
-//
-//		glColorMask(true, true, true, true);
+		if (style_ == anaglyph)
+		{
+			setSide(right);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glColorMask(false, true, true, true);
+			scene_->camera()->loadMatrix(this);
+			scene_->drawScene(this);
+			glColorMask(true, true, true, true);
+		}
+		else if (style_ == sidebyside)
+		{
+			setSide(right);
+			glViewport(s.width()/2,0, s.width()/2, s.height());
+			scene_->camera()->loadMatrix(this);
+			scene_->drawScene(this);
+			glViewport(0,0, s.width(), s.height());
+		}
 	}
-	
 }
 
 void GLWidget::resizeGL(int width, int height)

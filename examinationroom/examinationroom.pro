@@ -17,7 +17,6 @@ HEADERS += \
 	src/core/camera.h \
 	src/core/object.h \
 	src/core/rectangle.h \
-	src/core/drawing.h \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
 	src/core/stereogram.h

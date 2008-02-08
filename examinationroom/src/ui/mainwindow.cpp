@@ -36,39 +36,38 @@ MainWindow::MainWindow()
 
 	setFocusPolicy(Qt::StrongFocus);
 	
-	lGlWidget_ = new GLWidget(0, mainGlWidget_);
-	rGlWidget_ = new GLWidget(0, mainGlWidget_);
+	outGlWidget_ = new GLWidget(0, mainGlWidget_);
 
 	scene_ = new Scene();
 	mainGlWidget_->setScene(scene_);
-	lGlWidget_->setScene(scene_);
-	rGlWidget_->setScene(scene_);
-	lGlWidget_->setSide(left);
-	rGlWidget_->setSide(right);
+	outGlWidget_->setScene(scene_);
 	
 	int numScreens = QApplication::desktop()->numScreens();
 
-//	if (numScreens == 2)
-//	{
-//		lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(0));
-//		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
-//	}
-	if (numScreens == 3)
+	if (numScreens >= 3)
 	{
+		// Main Screen used by main widget
+		// Other two by output widget
 		this->setGeometry(QApplication::desktop()->screenGeometry(0));
-		lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
-		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(2));
-
-		lGlWidget_->showFullScreen();
-		rGlWidget_->showFullScreen();
+		QRect s2 = QApplication::desktop()->screenGeometry(1);
+		s2 = s2.united(QApplication::desktop()->screenGeometry(2));
+		outGlWidget_->setGeometry(s2);
+		mainGlWidget_->setStyle(GLWidget::anaglyph);
+		outGlWidget_->setStyle(GLWidget::sidebyside);
+		outGlWidget_->showFullScreen();
 	}
 	if (numScreens == 2)
 	{
+		// Two Screens used by main widget
+		QRect s2 = QApplication::desktop()->screenGeometry(0);
+		s2 = s2.united(QApplication::desktop()->screenGeometry(1));
+		this->setGeometry(s2);
+		mainGlWidget_->setStyle(GLWidget::sidebyside);
+	}
+	if (numScreens == 1)
+	{
 		this->setGeometry(QApplication::desktop()->screenGeometry(0));
-		//lGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(0));
-		rGlWidget_->setGeometry(QApplication::desktop()->screenGeometry(1));
-
-		rGlWidget_->showFullScreen();
+		mainGlWidget_->setStyle(GLWidget::anaglyph);
 	}
 
 	luaProxy_ = new LuaProxy(scene_);
@@ -77,7 +76,7 @@ MainWindow::MainWindow()
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
 	//timer_->start(33); // 30 fps
-	timer_->start(1000); // 30 fps
+	timer_->start(100); // 30 fps
 }
 
 
@@ -86,27 +85,29 @@ MainWindow::~MainWindow()
 	delete timer_;
 	delete luaProxy_;
 	delete scene_;
-	delete rGlWidget_;
-	delete lGlWidget_;
+	delete outGlWidget_;
 	delete mainGlWidget_;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
 	luaProxy_->onKeyDown(event->key());
+	mainGlWidget_->update(); // update() for deferred updates
+	outGlWidget_->update();
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent * event)
 {
 	luaProxy_->onKeyUp(event->key());
+	mainGlWidget_->update(); // update() for deferred updates
+	outGlWidget_->update();
 }
 
 void MainWindow::onTimeout()
 {
 	luaProxy_->onUpdate();
-	mainGlWidget_->repaint(); // update() for deferred updates
-	lGlWidget_->repaint();
-	rGlWidget_->repaint();
+	mainGlWidget_->update(); // update() for deferred updates
+	outGlWidget_->update();
 }
 
 }
