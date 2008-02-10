@@ -59,37 +59,50 @@ void Texture::glBindTex(GLWidget * w)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		
-		QImage tx = image_.convertToFormat(QImage::Format_ARGB32);
-        if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+		int er = 0;
+		
+		if (image_.format() == QImage::Format_Mono)
 		{
-            // mirror + swizzle
-			QImage tm(tx.size(), QImage::Format_ARGB32);
-            for (int i=0; i < tx.height(); i++) {
-                uint *p = (uint*) tx.scanLine(i);
-                uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
-                uint *end = p + tx.width();
-                while (p < end)
-				{	// To RGBA
-                    *q = ((*p << 8) & 0xff000000)	// Red
+			er = glGetError(); // Clean errors
+			uchar * t =  image_.bits();
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
+						 GL_BITMAP, t);
+			er = glGetError();
+		}
+		else
+		{
+			QImage tx = image_.convertToFormat(QImage::Format_ARGB32);
+			if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+			{
+				// mirror + swizzle
+				QImage tm(tx.size(), QImage::Format_ARGB32);
+				for (int i=0; i < tx.height(); i++) {
+					uint *p = (uint*) tx.scanLine(i);
+					uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+					uint *end = p + tx.width();
+					while (p < end)
+					{	// To RGBA
+						*q = ((*p << 8) & 0xff000000)	// Red
 						| ((*p << 8) & 0x00ff0000)	// Green
 						| ((*p << 8) & 0x0000ff00)	// Blue
 						| ((*p >> 24) & 0x000000ff);	// Alpha
-                    p++;
-                    q++;
-                }
-            }
-			tx = tm;
-        }
-		else
-		{
-			tx = tx.mirrored();
-        }
+						p++;
+						q++;
+					}
+				}
+				tx = tm;
+			}
+			else
+			{
+				tx = tx.mirrored();
+			}
+			er = glGetError(); // Clean errors
+			uchar * t =  tx.bits();
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
+						 GL_UNSIGNED_INT_8_8_8_8, t);
+			er = glGetError();
+		}
 
-		int er = glGetError(); // Clean errors
-		uchar * t =  tx.bits();
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
-					 GL_UNSIGNED_INT_8_8_8_8, t);
-		er = glGetError();
 		if (er == GL_INVALID_VALUE)
 		{
 			// Only Power of Two textures

@@ -26,7 +26,7 @@ stereogramA:setDirA(1,0,0);
 stereogramA:setDirB(0,1,0);
 stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
 stereogramA:setPosition(2, 2, 2);
-stereogramA:setAutoResize(true);
+--stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
 local stereogramB = Object();
@@ -34,7 +34,7 @@ stereogramB:setDirA(1,0,0);
 stereogramB:setDirB(0,1,0);
 stereogramB:setTexture(Texture(2, "res/triangle_down.png"));
 stereogramB:setPosition(-2, -2, -2);
-stereogramB:setAutoResize(true);
+--stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
 pathLength = 0;

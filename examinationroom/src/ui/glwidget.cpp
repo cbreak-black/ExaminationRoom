@@ -82,6 +82,13 @@ void GLWidget::initializeGL()
 	//glEnable(GL_CULL_FACE);
 	
 	glClearColor(0, 0, 0, 0);
+
+	// For Indexed B&W
+	GLfloat map[] = { 0.0f, 1.0f};
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 2,map);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 2,map);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 2,map);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 2,map);
 }
 
 void GLWidget::paintGL()

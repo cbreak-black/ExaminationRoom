@@ -27,7 +27,7 @@ namespace Examination
 /**
 The number of colors used in random dot stereograms.
 */
-const int maxColor = 3;
+const int maxColor = 2;
 
 Stereogram::Stereogram(shared_ptr<Texture> d)
 {
@@ -52,8 +52,8 @@ void Stereogram::recreateRDS()
 	QSize s = imageTemp.size();
 
 	// Create left and right tex
-	QImage imageL = QImage(s, QImage::Format_Indexed8);
-	QImage imageR = QImage(s, QImage::Format_Indexed8);
+	QImage imageL = QImage(s, QImage::Format_Mono);
+	QImage imageR = QImage(s, QImage::Format_Mono);
 
 	int i, j;
 	float step = 255.0/(maxColor-1);
