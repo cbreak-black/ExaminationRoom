@@ -4,5 +4,6 @@ In approximate order of importance:
 - LUA/Scriptability support (done)
 - User IO (done)
 - Logging (done)
-- Streogram resizing based on real object size
-
+- Streogram resizing based on real object size (done)
+- Profiling
+- User Testing

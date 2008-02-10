@@ -36,11 +36,11 @@ Rectangle::~Rectangle()
 // Drawing
 void Rectangle::draw(GLWidget * dest)
 {
-	Point v1 = position() + dirA() - dirB();
-	Point v2 = position() + dirA() + dirB();
-	Point v3 = position() - dirA() - dirB();
-	Point v4 = position() - dirA() + dirB();
-	
+	Point v1 = position() - dirA() - dirB();
+	Point v2 = position() - dirA() + dirB();
+	Point v3 = position() + dirA() - dirB();
+	Point v4 = position() + dirA() + dirB();
+
 	if (tex_)
 	{
 		if (autoresize_)
