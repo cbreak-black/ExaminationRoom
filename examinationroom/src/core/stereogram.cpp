@@ -66,29 +66,22 @@ void Stereogram::recreateRDS()
 		imageR.setColor(i, c);
 	}
 
-	for (j = 0; j < s.height(); j++)
-	{
-		for (i = 0; i < s.width(); i++)
-		{
-			imageL.setPixel(i, j, rand()%maxColor);
-		}
-	}
-
-	int offset = 4;
-	int divisor = 255 / offset;
+	const int offset = 4;
+	const int divisor = 255 / offset;
+	unsigned char history[offset+1];
+	unsigned char historyBase = 0;
 
 	for (j = 0; j < s.height(); j++)
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			int c = qGray(imageTemp.pixel(i, j));
-			int k = i - roundf(((float)c) / divisor); 
-			if (k < 0 || k >= s.width())
-				imageR.setPixel(i, j, rand()%maxColor);
-			else
-			{
-				imageR.setPixel(i, j, imageL.pixelIndex(k, j));
-			}
+			char col = rand()%maxColor;
+			history[historyBase] = col;
+			unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
+			imageL.setPixel(i, j, col);
+			imageR.setPixel(i, j, history[(historyBase+o)%(offset+1)]);
+			if (historyBase == 0) historyBase = offset;
+			else historyBase--;
 		}
 	}
 

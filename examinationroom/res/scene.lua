@@ -88,7 +88,7 @@ local nextFrame = function ()
 		permuteTable(mountPoints);
 		permuteTable(arrowDirs);
 	end
-	stereogramB:setTexture(Texture(1, string.format(texbase, arrowDirs[testNum])));
+	stereogramB:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
 	Scene:log("New Q: "..arrowDirs[testNum]..

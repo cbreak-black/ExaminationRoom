@@ -59,15 +59,21 @@ void Texture::glBindTex(GLWidget * w)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		
+#ifdef DEBUG
 		int er = 0;
+#endif
 		
 		if (image_.format() == QImage::Format_Mono)
 		{
+#ifdef DEBUG
 			er = glGetError(); // Clean errors
+#endif
 			uchar * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
 						 GL_BITMAP, t);
+#ifdef DEBUG
 			er = glGetError();
+#endif
 		}
 		else
 		{
@@ -96,18 +102,24 @@ void Texture::glBindTex(GLWidget * w)
 			{
 				tx = tx.mirrored();
 			}
+#ifdef DEBUG
 			er = glGetError(); // Clean errors
+#endif
 			uchar * t =  tx.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
 						 GL_UNSIGNED_INT_8_8_8_8, t);
+#ifdef DEBUG
 			er = glGetError();
+#endif
 		}
 
+#ifdef DEBUG
 		if (er == GL_INVALID_VALUE)
 		{
 			// Only Power of Two textures
 			std::cerr << "On this system, only power of two textures are supported\n";
 		}
+#endif
 	}
 	else
 	{
