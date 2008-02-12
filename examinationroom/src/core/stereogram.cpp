@@ -52,8 +52,8 @@ void Stereogram::recreateRDS()
 	QSize s = imageTemp.size();
 
 	// Create left and right tex
-	QImage imageL = QImage(s, QImage::Format_Mono);
-	QImage imageR = QImage(s, QImage::Format_Mono);
+	QImage imageL = QImage(s, QImage::Format_Indexed8);
+	QImage imageR = QImage(s, QImage::Format_Indexed8);
 
 	int i, j;
 	float step = 255.0/(maxColor-1);

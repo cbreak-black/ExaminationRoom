@@ -58,19 +58,19 @@ void Texture::glBindTex(GLWidget * w)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		
+
 #ifdef DEBUG
 		int er = 0;
 #endif
 		
-		if (image_.format() == QImage::Format_Mono)
+		if (image_.format() == QImage::Format_Indexed8)
 		{
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
 			uchar * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
-						 GL_BITMAP, t);
+						 GL_BYTE, t);
 #ifdef DEBUG
 			er = glGetError();
 #endif
@@ -100,7 +100,22 @@ void Texture::glBindTex(GLWidget * w)
 			}
 			else
 			{
-				tx = tx.mirrored();
+				QImage tm(tx.size(), QImage::Format_ARGB32);
+				for (int i=0; i < tx.height(); i++) {
+					uint *p = (uint*) tx.scanLine(i);
+					uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+					uint *end = p + tx.width();
+					while (p < end)
+					{       // To RGBA
+						*q = ((*p << 8) & 0xff000000)   // Red
+						| ((*p << 8) & 0x00ff0000)      // Green
+						| ((*p << 8) & 0x0000ff00)      // Blue
+						| ((*p >> 24) & 0x000000ff);    // Alpha
+						p++;
+						q++;
+					}
+				}
+				tx = tm;
 			}
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
