@@ -16,6 +16,7 @@ namespace Examination
 // Creation
 Object::Object()
 {
+	autoresize_ = false;
 }
 
 Object::Object(float x, float y, float z)
@@ -23,11 +24,13 @@ Object::Object(float x, float y, float z)
 	origin_.x = x;
 	origin_.y = y;
 	origin_.z = z;
+	autoresize_ = false;
 }
 
 Object::Object(Point o)
 {
 	origin_ = o;
+	autoresize_ = false;
 }
 
 Object::~Object()
@@ -44,5 +47,25 @@ void Object::setPosition(Tool::Point p)
 	origin_ = p;
 }
 
+void Object::setAutoResize(bool b)
+{
+	autoresize_ = b;
+}
+
+bool Object::autoResize()
+{
+	return autoresize_;
+}
+
+// Textures
+void Object::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
+{
+	tex_ = t;
+}
+
+std::tr1::shared_ptr<AbstractTexture> Object::texture()
+{
+	return tex_;
+}
 
 }

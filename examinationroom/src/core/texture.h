@@ -41,6 +41,12 @@ public:
 	*/
 	virtual void glBindTex(GLWidget * w);
 
+	/**
+	Draws the texture at the current raster pos.
+	 \param w	A GLWidget
+	*/
+	virtual void draw(GLWidget * w);
+
 public:
 	/**
 	Returns the stored image that is used as texture.

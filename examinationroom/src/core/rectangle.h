@@ -53,19 +53,6 @@ public:
 	 \param v	the new direction
 	*/
 	void setDirB(Tool::Vector v);
-	
-	/**
-	Sets the auto resize status. Auto resizing automatically scales
-	textures to correspond pixel-by-pixel to the rendered size.
-	 \param b	Boolean indicating the desired auto resize state
-	*/
-	void setAutoResize(bool b);
-	
-	/**
-	Returns the auto resize status.
-	 \return the auto resize status
-	*/
-	bool autoResize();
 
 public: // Textures
 	/**
@@ -82,11 +69,6 @@ public: // Textures
 	*/
 	void setTexCoords(float llx, float lly, float ulx, float uly,
 					  float lrx, float lry, float urx, float ury);
-	/**
-	Sets the texture for this object.
-	 \param t	Texture for left camera
-	*/
-	void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
 
 private:
 	Tool::Vector directionA_;
@@ -96,10 +78,6 @@ private:
 	Tool::Point texB_;
 	Tool::Point texC_;
 	Tool::Point texD_;
-
-	std::tr1::shared_ptr<AbstractTexture> tex_;
-
-	bool autoresize_;
 };
 	
 }

@@ -140,5 +140,16 @@ void Stereogram::glBindTex(GLWidget * w)
 	}
 }
 
+void Stereogram::draw(GLWidget * w)
+{
+	if (texRight_ && w->side() == GLWidget::right)
+	{
+		texRight_->draw(w);
+	}
+	else if (texLeft_)
+	{
+		texLeft_->draw(w);
+	}
+}
 
 }

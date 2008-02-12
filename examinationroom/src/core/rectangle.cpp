@@ -25,8 +25,6 @@ Rectangle::Rectangle()
 	directionB_.y = 1;
 	
 	setTexCoords(0,0, 0,1, 1,0, 1,1);
-	
-	autoresize_ = false;
 }
 
 Rectangle::~Rectangle()
@@ -41,9 +39,9 @@ void Rectangle::draw(GLWidget * dest)
 	Point v3 = position() + dirA() - dirB();
 	Point v4 = position() + dirA() + dirB();
 
-	if (tex_)
+	if (texture())
 	{
-		if (autoresize_)
+		if (autoResize())
 		{
 			ScreenProject sp;
 			sp.calculateMVP();
@@ -54,14 +52,14 @@ void Rectangle::draw(GLWidget * dest)
 			Point v4p = sp.transformToScreenSpace(v4);
 			h = abs(v2p.y - v1p.y);
 			w = abs(v3p.x - v1p.x);
-			cw = tex_->width();
-			ch = tex_->height();
+			cw = texture()->width();
+			ch = texture()->height();
 			if (abs(cw-w) + abs(ch-h) > 2)
 			{
-				tex_->resizeTo(w,h);
+				texture()->resizeTo(w,h);
 			}
 		}
-		tex_->glBindTex(dest);
+		texture()->glBindTex(dest);
 	}
 	
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -105,22 +103,5 @@ void Rectangle::setDirB(Tool::Vector v)
 {
 	directionB_ = v;
 }
-
-void Rectangle::setAutoResize(bool b)
-{
-	autoresize_ = b;
-}
-
-bool Rectangle::autoResize()
-{
-	return autoresize_;
-}
-
-// Textures
-void Rectangle::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
-{
-	tex_ = t;
-}	
-
 	
 }

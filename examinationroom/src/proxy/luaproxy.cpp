@@ -93,7 +93,7 @@ int LuaProxy::addObject(lua_State *L)
 	lua_gettable(L, -2);
 
 	ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-	scene_->addObject((*r)->rectangle());
+	scene_->addObject((*r)->object());
 	lua_pop(L, 3);
 
 	return 0;

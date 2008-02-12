@@ -142,6 +142,60 @@ void Texture::glBindTex(GLWidget * w)
 	}
 }
 
+void Texture::draw(GLWidget * w)
+{
+	if (image_.format() == QImage::Format_Indexed8)
+	{
+		uchar * t =  image_.bits();
+		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_BYTE, t);
+	}
+	else
+	{
+		QImage tx = image_.convertToFormat(QImage::Format_ARGB32);
+		if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+		{
+			// mirror + swizzle
+			QImage tm(tx.size(), QImage::Format_ARGB32);
+			for (int i=0; i < tx.height(); i++) {
+				uint *p = (uint*) tx.scanLine(i);
+				uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+				uint *end = p + tx.width();
+				while (p < end)
+				{	// To RGBA
+					*q = ((*p << 8) & 0xff000000)	// Red
+					| ((*p << 8) & 0x00ff0000)	// Green
+					| ((*p << 8) & 0x0000ff00)	// Blue
+					| ((*p >> 24) & 0x000000ff);	// Alpha
+					p++;
+					q++;
+				}
+			}
+			tx = tm;
+		}
+		else
+		{
+			QImage tm(tx.size(), QImage::Format_ARGB32);
+			for (int i=0; i < tx.height(); i++) {
+				uint *p = (uint*) tx.scanLine(i);
+				uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+				uint *end = p + tx.width();
+				while (p < end)
+				{       // To RGBA
+					*q = ((*p << 8) & 0xff000000)   // Red
+					| ((*p << 8) & 0x00ff0000)      // Green
+					| ((*p << 8) & 0x0000ff00)      // Blue
+					| ((*p >> 24) & 0x000000ff);    // Alpha
+					p++;
+					q++;
+				}
+			}
+			tx = tm;
+		}
+		uchar * t =  tx.bits();
+		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, t);
+	}
+}
+
 QImage Texture::image()
 {
 	return image_;

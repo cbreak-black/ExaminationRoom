@@ -4,7 +4,7 @@ Scene:setCameraDir(0, 0, -1);
 Scene:setCameraFoV(50);
 Scene:setCameraSep(0.2);
 
-local rectFloor = Object();
+local rectFloor = Object("Rectangle");
 rectFloor:setDirA(3,0,0);
 rectFloor:setDirB(0,0,6);
 rectFloor:setPosition(0, -3, -3);
@@ -12,7 +12,7 @@ rectFloor:setTexCoords(0,0, 0,6, 3,0, 3,6);
 rectFloor:setTexture(Texture(1, "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local rectCeil = Object();
+local rectCeil = Object("Rectangle");
 rectCeil:setDirA(3,0,0);
 rectCeil:setDirB(0,0,6);
 rectCeil:setPosition(0, 3, -3);
@@ -22,20 +22,16 @@ Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
 
-local stereogramA = Object();
-stereogramA:setDirA(1,0,0);
-stereogramA:setDirB(0,1,0);
-stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
-stereogramA:setPosition(2, 2, 2);
-stereogramA:setAutoResize(true);
+local stereogramA = Object("Pixelplane");
+stereogramA:setTexture(Texture(2, "res/triangle_scaled.png"));
+stereogramA:setPosition(1, 1, 2);
+--stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
-local stereogramB = Object();
-stereogramB:setDirA(1,0,0);
-stereogramB:setDirB(0,1,0);
-stereogramB:setTexture(Texture(2, "res/triangle_down.png"));
+local stereogramB = Object("Pixelplane");
+stereogramB:setSize(2.0,2.0);
 stereogramB:setPosition(-2, -2, -2);
-stereogramB:setAutoResize(true);
+--stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
 Scene:log("Added stereogram");

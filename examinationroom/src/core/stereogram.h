@@ -53,6 +53,12 @@ public:
 	*/
 	virtual void glBindTex(GLWidget * w);
 
+	/**
+	Draws the texture at the current raster pos.
+	 \param w	A GLWidget
+	*/
+	virtual void draw(GLWidget * w);
+
 public: // Resizing
 	virtual void resizeTo(int width, int height);
 	virtual void resizeToOriginal();

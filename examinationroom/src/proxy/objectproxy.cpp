@@ -10,6 +10,7 @@
 #include "objectproxy.h"
 
 #include "rectangle.h"
+#include "pixelplane.h"
 
 #include "textureproxy.h"
 
@@ -20,9 +21,31 @@ using namespace std::tr1;
 namespace Examination
 {
 
+const char * errNotRect = "this is not a rectangle";
+const char * errNotPP = "this is not a pixelplane";
+
+const char * objectTypes[] =
+{
+	"Rectangle",
+	"Pixelplane"
+};
+
 ObjectProxy::ObjectProxy(lua_State *L)
 {
-	rectangle_ = shared_ptr<Rectangle>(new Rectangle());
+	checkTop(L, 1);
+	
+	int opt = luaL_checkoption(L, 1, 0, objectTypes);	
+	switch (opt)
+	{
+	case 0:
+		rectangle_ = shared_ptr<Rectangle>(new Rectangle());
+		object_ = rectangle_;
+		break;
+	case 1:
+		pixelplane_ = shared_ptr<Pixelplane>(new Pixelplane());
+		object_ = pixelplane_;
+		break;
+	}
 	lua_pop(L, 0);
 }
 
@@ -32,6 +55,11 @@ ObjectProxy::~ObjectProxy()
 	
 int ObjectProxy::dirA(lua_State *L)
 {
+	if (!rectangle_)
+	{
+		lua_pushstring(L, errNotRect);
+		lua_error(L);
+	}
 	checkTop(L, 1);
 
 	Tool::Vector v = rectangle()->dirA();
@@ -43,6 +71,11 @@ int ObjectProxy::dirA(lua_State *L)
 
 int ObjectProxy::dirB(lua_State *L)
 {
+	if (!rectangle_)
+	{
+		lua_pushstring(L, errNotRect);
+		lua_error(L);
+	}
 	checkTop(L, 1);
 	
 	Tool::Vector v = rectangle()->dirB();
@@ -54,6 +87,11 @@ int ObjectProxy::dirB(lua_State *L)
 
 int ObjectProxy::setDirA(lua_State *L)
 {
+	if (!rectangle_)
+	{
+		lua_pushstring(L, errNotRect);
+		lua_error(L);
+	}
 	checkTop(L, 4);
 	rectangle()->setDirA(toVector(L,2));
 	lua_pop(L, 4);
@@ -62,8 +100,29 @@ int ObjectProxy::setDirA(lua_State *L)
 
 int ObjectProxy::setDirB(lua_State *L)
 {
+	if (!rectangle_)
+	{
+		lua_pushstring(L, errNotRect);
+		lua_error(L);
+	}
 	checkTop(L, 4);
 	rectangle()->setDirB(toVector(L,2));
+	lua_pop(L, 4);
+	return 0;
+}
+
+int ObjectProxy::setSize(lua_State *L)
+{
+	if (!pixelplane_)
+	{
+		lua_pushstring(L, errNotPP);
+		lua_error(L);
+	}
+	checkTop(L, 3);
+	float w, h;
+	w = luaL_checknumber(L, 2);
+	h = luaL_checknumber(L, 3);
+	pixelplane()->setSize(w, h);
 	lua_pop(L, 4);
 	return 0;
 }
@@ -71,7 +130,7 @@ int ObjectProxy::setDirB(lua_State *L)
 int ObjectProxy::position(lua_State *L)
 {
 	checkTop(L, 1);
-	Tool::Point p = rectangle()->position();
+	Tool::Point p = object()->position();
 	lua_pop(L, 1);
 	
 	pushVector(L, p);
@@ -81,13 +140,18 @@ int ObjectProxy::position(lua_State *L)
 int ObjectProxy::setPosition(lua_State *L)
 {
 	checkTop(L, 4);	
-	rectangle()->setPosition(toVector(L,2));
+	object()->setPosition(toVector(L,2));
 	lua_pop(L, 4);
 	return 0;
 }
 
 int ObjectProxy::setTexCoords(lua_State *L)
 {
+if (!rectangle_)
+	{
+		lua_pushstring(L, errNotRect);
+		lua_error(L);
+	}
 	checkTop(L, 9);
 	
 	float llx = luaL_checknumber(L, 2);
@@ -115,7 +179,7 @@ int ObjectProxy::setTexture(lua_State *L)
 	lua_gettable(L, 2);
 
 	TextureProxy ** t = static_cast<TextureProxy**>(luaL_checkudata(L, -1, TextureProxy::className));
-	rectangle()->setTexture((*t)->texture());
+	object()->setTexture((*t)->texture());
 	lua_pop(L, 3);
 
 	return 0;
@@ -124,7 +188,7 @@ int ObjectProxy::setTexture(lua_State *L)
 int ObjectProxy::setAutoResize(lua_State *L)
 {
 	checkTop(L, 2);
-	rectangle()->setAutoResize(lua_toboolean(L, 2));
+	object()->setAutoResize(lua_toboolean(L, 2));
 	lua_pop(L, 2);
 	
 	return 0;
@@ -135,6 +199,16 @@ shared_ptr<Rectangle> ObjectProxy::rectangle()
 	return rectangle_;
 }
 
+shared_ptr<Pixelplane> ObjectProxy::pixelplane()
+{
+	return pixelplane_;
+}
+
+shared_ptr<Object> ObjectProxy::object()
+{
+	return object_;
+}
+
 const char ObjectProxy::className[] = "Object";
 const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 {
@@ -142,6 +216,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 { "dirB", &ObjectProxy::dirB },
 { "setDirA", &ObjectProxy::setDirA },
 { "setDirB", &ObjectProxy::setDirB },
+{ "setSize", &ObjectProxy::setSize },
 { "position", &ObjectProxy::position },
 { "setPosition", &ObjectProxy::setPosition },
 { "setTexCoords", &ObjectProxy::setTexCoords },

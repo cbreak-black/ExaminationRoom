@@ -12,6 +12,9 @@
 
 #include "vec.h"
 
+#include "abstracttexture.h"
+#include <memory>
+
 namespace Examination
 {
 	class GLWidget;
@@ -61,12 +64,39 @@ public: // Accessors
 	 \param p	the new position of the object.
 	*/
 	void setPosition(Tool::Point p);
+
+	/**
+	Sets the auto resize status. Auto resizing automatically scales
+	textures to correspond pixel-by-pixel to the rendered size.
+	 \param b	Boolean indicating the desired auto resize state
+	*/
+	void setAutoResize(bool b);
 	
+	/**
+	Returns the auto resize status.
+	 \return the auto resize status
+	*/
+	bool autoResize();
+
 public: // Drawing
 	virtual void draw(GLWidget * dest) = 0;
 
+	/**
+	Sets the texture for this object.
+	 \param t	Texture for left camera
+	*/
+	void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
+
+	/**
+	Returns the texture of this object.
+	\return	Texture of this object
+	*/
+	std::tr1::shared_ptr<AbstractTexture> texture();
+
 private:
 	Tool::Point origin_;
+	bool autoresize_;
+	std::tr1::shared_ptr<AbstractTexture> tex_;
 };
 
 }
