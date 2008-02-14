@@ -142,7 +142,8 @@ const char * eventIdx[] =
 {
 	"update",
 	"keyDown",
-	"keyUp"
+	"keyUp",
+	0
 };
 
 int LuaProxy::setEventListener(lua_State *L)

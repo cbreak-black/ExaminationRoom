@@ -2,13 +2,11 @@
 
 #include "platform_math.h"
 
-#include <qgl.h>
-
 namespace Tool
 {
 
 // Screen Space
-void ScreenProject::calculateMVP(long * vp, double * mv, double * p)
+void ScreenProject::calculateMVP(GLint * vp, double * mv, double * p)
 {
 	vp_[0] = vp[0];
 	vp_[1] = vp[1];
@@ -33,7 +31,7 @@ void ScreenProject::calculateMVP()
 {
 	double mv[16];
 	double p[16];
-	long vp[4];
+	GLint vp[4];
 	
 	glGetDoublev(GL_PROJECTION_MATRIX, p);
 	glGetDoublev(GL_MODELVIEW_MATRIX, mv);

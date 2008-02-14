@@ -27,7 +27,8 @@ const char * errNotPP = "this is not a pixelplane";
 const char * objectTypes[] =
 {
 	"Rectangle",
-	"Pixelplane"
+	"Pixelplane",
+	0
 };
 
 ObjectProxy::ObjectProxy(lua_State *L)

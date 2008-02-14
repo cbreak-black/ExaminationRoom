@@ -68,9 +68,9 @@ void Texture::glBindTex(GLWidget * w)
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
-			uchar * t =  image_.bits();
+			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
-						 GL_BYTE, t);
+						 GL_UNSIGNED_BYTE, t);
 #ifdef DEBUG
 			er = glGetError();
 #endif
@@ -107,10 +107,10 @@ void Texture::glBindTex(GLWidget * w)
 					uint *end = p + tx.width();
 					while (p < end)
 					{       // To RGBA
-						*q = ((*p << 8) & 0xff000000)   // Red
-						| ((*p << 8) & 0x00ff0000)      // Green
-						| ((*p << 8) & 0x0000ff00)      // Blue
-						| ((*p >> 24) & 0x000000ff);    // Alpha
+						*q = ((*p << 0) & 0x000000ff)   // Red
+						| ((*p << 0) & 0x0000ff00)      // Green
+						| ((*p << 0) & 0x00ff0000)      // Blue
+						| ((*p >> 0) & 0xff000000);    // Alpha
 						p++;
 						q++;
 					}
@@ -120,9 +120,9 @@ void Texture::glBindTex(GLWidget * w)
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
-			uchar * t =  tx.bits();
+			GLubyte * t =  tx.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
-						 GL_UNSIGNED_INT_8_8_8_8, t);
+						 GL_UNSIGNED_BYTE, t);
 #ifdef DEBUG
 			er = glGetError();
 #endif
@@ -144,10 +144,11 @@ void Texture::glBindTex(GLWidget * w)
 
 void Texture::draw(GLWidget * w)
 {
+	w->makeCurrent();
 	if (image_.format() == QImage::Format_Indexed8)
 	{
-		uchar * t =  image_.bits();
-		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_BYTE, t);
+		GLubyte * t =  image_.bits();
+		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 	}
 	else
 	{
@@ -181,18 +182,18 @@ void Texture::draw(GLWidget * w)
 				uint *end = p + tx.width();
 				while (p < end)
 				{       // To RGBA
-					*q = ((*p << 8) & 0xff000000)   // Red
-					| ((*p << 8) & 0x00ff0000)      // Green
-					| ((*p << 8) & 0x0000ff00)      // Blue
-					| ((*p >> 24) & 0x000000ff);    // Alpha
+					*q = ((*p << 0) & 0x000000ff)   // Red
+					| ((*p << 0) & 0x0000ff00)      // Green
+					| ((*p << 0) & 0x00ff0000)      // Blue
+					| ((*p >> 0) & 0xff000000);    // Alpha
 					p++;
 					q++;
 				}
 			}
 			tx = tm;
 		}
-		uchar * t =  tx.bits();
-		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_INT_8_8_8_8, t);
+		GLubyte * t =  tx.bits();
+		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 	}
 }
 

@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#include <qgl.h>
+
 namespace Tool
 {
 
@@ -29,7 +31,7 @@ public: // ScreenSpace
 	 \param mv	Modelview matrix
 	 \param p	Projection matrix
 	*/
-	void calculateMVP(long * vp, double * mv, double * p);
+	void calculateMVP(GLint * vp, double * mv, double * p);
 	void calculateMVP();
 
 	/**

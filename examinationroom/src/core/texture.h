@@ -16,6 +16,7 @@
 #include <memory>
 
 #include <QImage>
+#include <qgl.h>
 
 namespace Examination
 {
@@ -70,7 +71,7 @@ private:
 	QImage image_;
 	QImage original_;
 	
-	unsigned long imageGLID_;
+	GLuint imageGLID_;
 };
 
 }

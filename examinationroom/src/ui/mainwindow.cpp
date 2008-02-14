@@ -48,8 +48,8 @@ MainWindow::MainWindow()
 	{
 		// Main Screen used by main widget
 		// Other two by output widget
-		this->showFullScreen();
-		outGlWidget_->showFullScreen();
+		this->show();
+		outGlWidget_->show();
 		this->setGeometry(QApplication::desktop()->screenGeometry(0));
 		QRect s2 = QApplication::desktop()->screenGeometry(1);
 		s2 = s2.united(QApplication::desktop()->screenGeometry(2));
@@ -60,7 +60,7 @@ MainWindow::MainWindow()
 	if (numScreens == 2)
 	{
 		// Two Screens used by main widget
-		this->showFullScreen();
+		this->show();
 		QRect s2 = QApplication::desktop()->screenGeometry(0);
 		s2 = s2.united(QApplication::desktop()->screenGeometry(1));
 		this->setGeometry(s2);
@@ -68,8 +68,8 @@ MainWindow::MainWindow()
 	}
 	if (numScreens == 1)
 	{
-		this->showFullScreen();
-		this->setGeometry(QApplication::desktop()->screenGeometry(0));
+		this->show();
+		//this->setGeometry(QApplication::desktop()->screenGeometry(0));
 		mainGlWidget_->setStyle(GLWidget::anaglyph);
 	}
 
@@ -94,6 +94,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
 {
+	if (event->key() == Qt::Key_Escape)
+	{
+		QCoreApplication::quit();
+	}
 	luaProxy_->onKeyDown(event->key());
 	mainGlWidget_->update(); // update() for deferred updates
 	outGlWidget_->update();

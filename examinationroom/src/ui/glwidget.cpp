@@ -98,12 +98,6 @@ void GLWidget::paintGL()
 	// Scene
 	if (scene_)
 	{
-		// Center
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glBegin(GL_POINTS);
-		glVertex3f(0, 0, 0);
-		glEnd();
-		
 		// Left
 		QSize s = this->size();
 		if (style_ == anaglyph)
@@ -118,6 +112,11 @@ void GLWidget::paintGL()
 		}
 
 		scene_->camera()->loadMatrix(this);
+		// Center
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_POINTS);
+		glVertex3f(0, 0, 0);
+		glEnd();
 		scene_->drawScene(this);
 
 		// Right
@@ -127,6 +126,11 @@ void GLWidget::paintGL()
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glColorMask(false, true, true, true);
 			scene_->camera()->loadMatrix(this);
+			// Center
+			glColor3f(1.0f, 1.0f, 1.0f);
+			glBegin(GL_POINTS);
+			glVertex3f(0, 0, 0);
+			glEnd();
 			scene_->drawScene(this);
 			glColorMask(true, true, true, true);
 		}
@@ -135,6 +139,11 @@ void GLWidget::paintGL()
 			setSide(right);
 			glViewport(s.width()/2,0, s.width()/2, s.height());
 			scene_->camera()->loadMatrix(this);
+			// Center
+			glColor3f(1.0f, 1.0f, 1.0f);
+			glBegin(GL_POINTS);
+			glVertex3f(0, 0, 0);
+			glEnd();
 			scene_->drawScene(this);
 			glViewport(0,0, s.width(), s.height());
 		}
