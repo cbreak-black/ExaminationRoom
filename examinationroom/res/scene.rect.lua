@@ -22,14 +22,18 @@ Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
 
-local stereogramA = Object("Pixelplane");
+local stereogramA = Object("Rectangle");
 stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
+stereogramA:setDirA(1,0,0);
+stereogramA:setDirB(0,1,0);
 stereogramA:setPosition(1, 1, 2);
 --stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
-local stereogramB = Object("Pixelplane");
-stereogramB:setSize(2.0,2.0);
+local stereogramB = Object("Rectangle");
+--stereogramB:setSize(2.0,2.0);
+stereogramB:setDirA(1,0,0);
+stereogramB:setDirB(0,1,0);
 stereogramB:setPosition(-2, -2, -2);
 --stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
@@ -53,14 +57,14 @@ texbase = "res/triangle_%s.png"
 
 -- Test Scene details
 mountPoints = {
-{-3,-3,2},
-{-3,-3,1},
-{-3,-3,0},
-{-3,-3,-1},
-{-3,-3,-2},
-{-3,-3,-3},
-{-3,-3,-4},
-{-3,-3,-5},
+{-2,-2,2},
+{-2,-2,1},
+{-2,-2,0},
+{-2,-2,-1},
+{-2,-2,-2},
+{-2,-2,-3},
+{-2,-2,-4},
+{-2,-2,-5},
 }
 
 arrowDirs = { -- Same size as mountPoints
