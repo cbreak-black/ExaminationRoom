@@ -47,18 +47,21 @@ public:
 	void setDirection(Tool::Vector dir);
 	void setSeperation(float s);
 	void setFieldOfView(float fov);
+	void setParalaxPlane(float dist);
 	
 public:
 	Tool::Point position();
 	Tool::Vector directon();
 	float seperation();
 	float fieldOfView();
+	float paralaxPlane();
 
 private:
 	Tool::Point		pos_;
 	Tool::Vector	dir_;
 	float			sep_;
 	float			fov_;
+	float			ppd_;
 };
 
 }

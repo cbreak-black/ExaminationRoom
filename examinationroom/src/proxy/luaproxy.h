@@ -59,6 +59,7 @@ public: // Camera
 	int setCameraDir(lua_State *L);
 	int setCameraFoV(lua_State *L);
 	int setCameraSep(lua_State *L);
+	int setCameraParalaxPlane(lua_State *L);
 
 public: // Misc
 	int setEventListener(lua_State *L);

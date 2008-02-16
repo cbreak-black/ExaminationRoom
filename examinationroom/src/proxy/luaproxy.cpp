@@ -138,6 +138,14 @@ int LuaProxy::setCameraSep(lua_State *L)
 	return 0;
 }
 
+int LuaProxy::setCameraParalaxPlane(lua_State *L)
+{
+	checkTop(L, 2);
+	scene_->camera()->setParalaxPlane(lua_tonumber(L,-1));
+	lua_pop(L, 2);
+	return 0;
+}
+
 const char * eventIdx[] =
 {
 	"update",
@@ -283,6 +291,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "setCameraDir", &LuaProxy::setCameraDir },
 	{ "setCameraFoV", &LuaProxy::setCameraFoV },
 	{ "setCameraSep", &LuaProxy::setCameraSep },
+	{ "setCameraParalaxPlane", &LuaProxy::setCameraParalaxPlane },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ "debugLog", &LuaProxy::debugLog },

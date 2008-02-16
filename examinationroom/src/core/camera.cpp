@@ -11,6 +11,8 @@
 
 #include "glwidget.h"
 
+#include "platform_math.h"
+
 namespace Examination
 {
 
@@ -21,6 +23,7 @@ Camera::Camera()
 
 	setSeperation(0.2);
 	setFieldOfView(50);
+	setParalaxPlane(10);
 }
 
 Camera::Camera(Tool::Point pos, Tool::Vector dir)
@@ -30,36 +33,46 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir)
 	
 	setSeperation(0.2);
 	setFieldOfView(50);
+	setParalaxPlane(10);
 }
 
 void Camera::loadMatrix(GLWidget * dest)
 {
-	float offsetFrame, offsetCamera;
+	// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
+	float offsetCamera;
 	
 	if (dest->side() == GLWidget::left)
 	{
-		offsetFrame = -0.15*sep_;
-		offsetCamera = sep_;
+		offsetCamera = sep_/2;
 	}
 	else
 	{
-		offsetFrame = 0.15*sep_;
-		offsetCamera = -sep_;
+		offsetCamera = -sep_/2;
 	}
 	
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	
+	const float nearFactor = 0.1f;
+	const float farFactor = 5.0f;
 	float aspect = (float)viewport[2]/viewport[3];
+	float top, bottom, left, right, near, far;
+	float fovTan = tanf((fov_/2)/180*M_PI);
+	near = ppd_*nearFactor;
+	far = ppd_*farFactor;
+	top = fovTan*near;
+	bottom = -top;
+	left = bottom*aspect;
+	right = top*aspect;
 	
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-	glTranslatef(offsetFrame, 0, 0);		// Frame offset
-	gluPerspective(fov_, aspect, 2, 20);	// Camera
-	glTranslatef(offsetCamera, 0, 0);		// Camera offset
-	glTranslatef(pos_.x, pos_.y, pos_.z);	// Camera position
-    glMatrixMode(GL_MODELVIEW);	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	// TODO: Rotation of camera before adjusting eye position
+	glTranslatef(offsetCamera/nearFactor, 0, 0);
+	glTranslatef(pos_.x, pos_.y, pos_.z);
 }
 
 void Camera::setPosition(Tool::Point pos)
@@ -82,6 +95,11 @@ void Camera::setFieldOfView(float fov)
 	fov_ = fov;
 }
 
+void Camera::setParalaxPlane(float dist)
+{
+	ppd_ = dist;
+}
+
 Tool::Point Camera::position()
 {
 	return pos_;
@@ -100,6 +118,11 @@ float Camera::seperation()
 float Camera::fieldOfView()
 {
 	return fov_;
+}
+
+float Camera::paralaxPlane()
+{
+	return ppd_;
 }
 
 }
