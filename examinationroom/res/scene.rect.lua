@@ -6,18 +6,18 @@ Scene:setCameraSep(0.2);
 Scene:setCameraParalaxPlane(10);
 
 local rectFloor = Object("Rectangle");
-rectFloor:setDirA(3,0,0);
-rectFloor:setDirB(0,0,6);
-rectFloor:setPosition(0, -3, -3);
-rectFloor:setTexCoords(0,0, 0,6, 3,0, 3,6);
+rectFloor:setDirA(6,0,0);
+rectFloor:setDirB(0,0,12);
+rectFloor:setPosition(-3, -3, -9);
+rectFloor:setTexCoords(0,0, 0,12, 6,0, 6,12);
 rectFloor:setTexture(Texture(1, "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
-rectCeil:setDirA(3,0,0);
-rectCeil:setDirB(0,0,6);
-rectCeil:setPosition(0, 3, -3);
-rectCeil:setTexCoords(0,0, 0,6, 3,0, 3,6);
+rectCeil:setDirA(6,0,0);
+rectCeil:setDirB(0,0,12);
+rectCeil:setPosition(-3, 3, -9);
+rectCeil:setTexCoords(0,0, 0,12, 6,0, 6,12);
 rectCeil:setTexture(Texture(1, "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
@@ -25,17 +25,15 @@ Scene:log("Added floor and ceil");
 
 local stereogramA = Object("Rectangle");
 stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
-stereogramA:setDirA(1,0,0);
-stereogramA:setDirB(0,1,0);
+stereogramA:setDirA(2,0,0);
+stereogramA:setDirB(0,2,0);
 stereogramA:setPosition(1, 1, 2);
 --stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
 local stereogramB = Object("Rectangle");
---stereogramB:setSize(2.0,2.0);
-stereogramB:setDirA(1,0,0);
-stereogramB:setDirB(0,1,0);
-stereogramB:setPosition(-2, -2, -2);
+stereogramB:setDirA(2,0,0);
+stereogramB:setDirB(0,2,0);
 --stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
@@ -58,14 +56,14 @@ texbase = "res/triangle_%s.png"
 
 -- Test Scene details
 mountPoints = {
-{-2,-2,2},
-{-2,-2,1},
-{-2,-2,0},
-{-2,-2,-1},
-{-2,-2,-2},
-{-2,-2,-3},
-{-2,-2,-4},
-{-2,-2,-5},
+{-3,-3,2},
+{-3,-3,1},
+{-3,-3,0},
+{-3,-3,-1},
+{-3,-3,-2},
+{-3,-3,-3},
+{-3,-3,-4},
+{-3,-3,-5},
 }
 
 arrowDirs = { -- Same size as mountPoints

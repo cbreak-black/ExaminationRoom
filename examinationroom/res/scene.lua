@@ -6,18 +6,18 @@ Scene:setCameraSep(0.2);
 Scene:setCameraParalaxPlane(10);
 
 local rectFloor = Object("Rectangle");
-rectFloor:setDirA(3,0,0);
-rectFloor:setDirB(0,0,6);
-rectFloor:setPosition(0, -3, -3);
-rectFloor:setTexCoords(0,0, 0,6, 3,0, 3,6);
+rectFloor:setDirA(6,0,0);
+rectFloor:setDirB(0,0,12);
+rectFloor:setPosition(-3, -3, -9);
+rectFloor:setTexCoords(0,0, 0,12, 6,0, 6,12);
 rectFloor:setTexture(Texture(1, "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
-rectCeil:setDirA(3,0,0);
-rectCeil:setDirB(0,0,6);
-rectCeil:setPosition(0, 3, -3);
-rectCeil:setTexCoords(0,0, 0,6, 3,0, 3,6);
+rectCeil:setDirA(6,0,0);
+rectCeil:setDirB(0,0,12);
+rectCeil:setPosition(-3, 3, -9);
+rectCeil:setTexCoords(0,0, 0,12, 6,0, 6,12);
 rectCeil:setTexture(Texture(1, "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
