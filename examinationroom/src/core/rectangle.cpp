@@ -11,6 +11,8 @@
 
 #include "abstracttexture.h"
 #include "glwidget.h"
+#include "scene.h"
+#include "camera.h"
 
 #include "screenproject.h"
 #include "platform_math.h"
@@ -43,13 +45,12 @@ void Rectangle::draw(GLWidget * dest)
 	{
 		if (autoResize())
 		{
-			ScreenProject sp;
-			sp.calculateMVP();
+			ScreenProject * sp = dest->scene()->camera()->screenProject();
 			int w, h, cw, ch;
-			Point v1p = sp.transformToScreenSpace(v1);
-			Point v2p = sp.transformToScreenSpace(v2);
-			Point v3p = sp.transformToScreenSpace(v3);
-			Point v4p = sp.transformToScreenSpace(v4);
+			Point v1p = sp->transformToScreenSpace(v1);
+			Point v2p = sp->transformToScreenSpace(v2);
+			Point v3p = sp->transformToScreenSpace(v3);
+			Point v4p = sp->transformToScreenSpace(v4);
 			h = abs(v2p.y - v1p.y);
 			w = abs(v3p.x - v1p.x);
 			cw = texture()->width();

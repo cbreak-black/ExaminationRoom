@@ -82,8 +82,8 @@ void GLWidget::initializeGL()
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glClearColor(0, 0, 0, 0);
 
@@ -130,6 +130,7 @@ void GLWidget::paintGL()
 		{
 			setSide(right);
 			glClear(GL_DEPTH_BUFFER_BIT);
+			glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
 			//glColorMask(0, 1, 1, 1);
 			scene_->camera()->loadMatrix(this);
 			// Center

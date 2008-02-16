@@ -11,8 +11,8 @@
 
 #include "abstracttexture.h"
 #include "glwidget.h"
-
-#include "screenproject.h"
+#include "scene.h"
+#include "camera.h"
 #include "platform_math.h"
 
 namespace Examination
@@ -36,17 +36,13 @@ void Pixelplane::draw(GLWidget * dest)
 	{
 		if (autoResize())
 		{
-			ScreenProject sp;
-			sp.calculateMVP();
+			std::tr1::shared_ptr<Camera> cam = dest->scene()->camera();
 			int w, h, cw, ch;
-			Point p = position();
-			Point q = Point(p.x+width_, p.y, p.z);
-			Point r = Point(p.x, p.y+height_, p.z);
-			Point pp = sp.transformToScreenSpace(p);
-			Point qp = sp.transformToScreenSpace(q);
-			Point rp = sp.transformToScreenSpace(r);
-			h = abs(pp.y - rp.y);
-			w = abs(pp.x - qp.x);
+			Vector dv = cam->position() - position();
+			float df = abs(dv * (cam->direction()));
+			float uss = cam->unitScreenSize(df);
+			w = width_*uss;
+			h = height_*uss;
 			cw = texture()->width();
 			ch = texture()->height();
 			if (abs(cw-w) + abs(ch-h) > 2)

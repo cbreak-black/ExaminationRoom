@@ -1,5 +1,5 @@
 -- Scene Construction
-Scene:setCameraPos(0, 0, -10);
+Scene:setCameraPos(0, 0, 10);
 Scene:setCameraDir(0, 0, -1);
 Scene:setCameraFoV(50);
 Scene:setCameraSep(0.2);
@@ -26,13 +26,13 @@ Scene:log("Added floor and ceil");
 local stereogramA = Object("Pixelplane");
 stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
 stereogramA:setPosition(1, 1, 2);
---stereogramA:setAutoResize(true);
+stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
 local stereogramB = Object("Pixelplane");
 stereogramB:setSize(2.0,2.0);
 stereogramB:setPosition(-2, -2, -2);
---stereogramB:setAutoResize(true);
+stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
 Scene:log("Added stereogram");

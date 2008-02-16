@@ -98,9 +98,12 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 	{
 		QCoreApplication::quit();
 	}
-	luaProxy_->onKeyDown(event->key());
-	mainGlWidget_->update(); // update() for deferred updates
-	outGlWidget_->update();
+	else
+	{
+		luaProxy_->onKeyDown(event->key());
+		mainGlWidget_->update(); // update() for deferred updates
+		outGlWidget_->update();
+	}
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent * event)

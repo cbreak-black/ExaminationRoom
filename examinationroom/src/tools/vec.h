@@ -123,6 +123,14 @@ inline Vec3f operator*(const float s1, const Vec3f v1)
 	return v;
 }
 
+inline float operator*(const Vec3f v1, const Vec3f v2)
+{
+	return
+		v1.x * v2.x +
+		v1.y * v2.y +
+		v1.z * v2.z;
+}
+
 // Operators Vec4f
 
 inline Vec4f operator+(const Vec4f v1, const Vec4f v2)
@@ -163,6 +171,15 @@ inline Vec4f operator*(const float s1, const Vec4f v1)
 	v.z = v1.z * s1;
 	v.t = v1.t * s1;
 	return v;
+}
+
+inline float operator*(const Vec4f v1, const Vec4f v2)
+{
+	return
+		v1.x * v2.x +
+		v1.y * v2.y +
+		v1.z * v2.z +
+		v1.t * v2.t;
 }
 
 }

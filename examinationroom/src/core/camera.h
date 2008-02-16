@@ -12,6 +12,11 @@
 
 #include "vec.h"
 
+namespace Tool
+{
+	class ScreenProject;
+}
+
 namespace Examination
 {
 	class GLWidget;
@@ -36,6 +41,11 @@ public:
 	*/
 	Camera(Tool::Point pos, Tool::Vector dir);
 
+	/**
+	Destroys the camera
+	*/
+	~Camera();
+
 public:
 	/**
 	Loads the camera for the side of the view into the OpenGL matrix stack.
@@ -48,13 +58,26 @@ public:
 	void setSeperation(float s);
 	void setFieldOfView(float fov);
 	void setParalaxPlane(float dist);
-	
+
 public:
 	Tool::Point position();
-	Tool::Vector directon();
+	Tool::Vector direction();
 	float seperation();
 	float fieldOfView();
 	float paralaxPlane();
+
+public:
+	/**
+	Calculates and returns the size on screen in pixel of one unit at a given distance.
+	Note that not the distance of the object itself to the camera, but the distance of
+	the plane the object lies on matters.
+	 \param d	Distance of line to camera
+	 \return size of a line of length 1 at distance d on screen in pixel
+	*/
+	int unitScreenSize(float d);
+
+public:
+	Tool::ScreenProject * screenProject();
 
 private:
 	Tool::Point		pos_;
@@ -62,6 +85,7 @@ private:
 	float			sep_;
 	float			fov_;
 	float			ppd_;
+	Tool::ScreenProject *	sp_;
 };
 
 }

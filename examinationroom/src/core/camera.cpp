@@ -11,10 +11,16 @@
 
 #include "glwidget.h"
 
+#include "screenproject.h"
 #include "platform_math.h"
+
+using namespace Tool;
 
 namespace Examination
 {
+
+const float nearFactor = 0.1f;
+const float farFactor = 5.0f;
 
 Camera::Camera()
 {
@@ -24,6 +30,8 @@ Camera::Camera()
 	setSeperation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
+
+	sp_ = new ScreenProject();
 }
 
 Camera::Camera(Tool::Point pos, Tool::Vector dir)
@@ -34,6 +42,13 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir)
 	setSeperation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
+
+	sp_ = new ScreenProject();
+}
+
+Camera::~Camera()
+{
+	delete sp_;
 }
 
 void Camera::loadMatrix(GLWidget * dest)
@@ -52,9 +67,7 @@ void Camera::loadMatrix(GLWidget * dest)
 	
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	
-	const float nearFactor = 0.1f;
-	const float farFactor = 5.0f;
+
 	float aspect = (float)viewport[2]/viewport[3];
 	float top, bottom, left, right, near, far;
 	float fovTan = tanf((fov_/2)/180*M_PI);
@@ -72,7 +85,26 @@ void Camera::loadMatrix(GLWidget * dest)
 	glLoadIdentity();
 	// TODO: Rotation of camera before adjusting eye position
 	glTranslatef(offsetCamera/nearFactor, 0, 0);
-	glTranslatef(pos_.x, pos_.y, pos_.z);
+	glTranslatef(-pos_.x, -pos_.y, -pos_.z);
+
+	sp_->calculateMVP();
+}
+
+ScreenProject * Camera::screenProject()
+{
+	return sp_;
+}
+
+int Camera::unitScreenSize(float d)
+{
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	float near, top;
+	float fovTan = tanf((fov_/2)/180*M_PI);
+	near = ppd_*nearFactor;
+	top = fovTan*near;
+	// heightInPix / heightInUnits
+	return viewport[3]/(top*2) * near/d;
 }
 
 void Camera::setPosition(Tool::Point pos)
@@ -105,7 +137,7 @@ Tool::Point Camera::position()
 	return pos_;
 }
 
-Tool::Vector Camera::directon()
+Tool::Vector Camera::direction()
 {
 	return dir_;
 }
