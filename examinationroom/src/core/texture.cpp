@@ -144,7 +144,6 @@ void Texture::glBindTex(GLWidget * w)
 
 void Texture::draw(GLWidget * w)
 {
-	w->makeCurrent();
 	if (image_.format() == QImage::Format_Indexed8)
 	{
 		GLubyte * t =  image_.bits();

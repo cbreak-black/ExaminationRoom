@@ -78,17 +78,22 @@ void GLWidget::setStyle(DrawStyle s)
 void GLWidget::initializeGL()
 {
 	glEnable(GL_DEPTH_TEST);
+
 	glEnable(GL_TEXTURE_2D);
-	//glEnable(GL_CULL_FACE);
-	
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glClearColor(0, 0, 0, 0);
 
 	// For Indexed B&W
 	GLfloat map[] = { 0.0f, 1.0f};
+	GLfloat mapA[] = { 1.0f, 1.0f};
 	glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 2,map);
 	glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 2,map);
 	glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 2,map);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 2,map);
+	glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 2,mapA);
 }
 
 void GLWidget::paintGL()
@@ -103,7 +108,8 @@ void GLWidget::paintGL()
 		if (style_ == anaglyph)
 		{
 			setSide(left);
-			glColorMask(true, false, false, true);
+			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+			//glColorMask(1, 0, 0, 1);
 		}
 		else if (style_ == sidebyside)
 		{
@@ -113,10 +119,10 @@ void GLWidget::paintGL()
 
 		scene_->camera()->loadMatrix(this);
 		// Center
-		glColor3f(1.0f, 1.0f, 1.0f);
 		glBegin(GL_POINTS);
 		glVertex3f(0, 0, 0);
 		glEnd();
+
 		scene_->drawScene(this);
 
 		// Right
@@ -124,15 +130,14 @@ void GLWidget::paintGL()
 		{
 			setSide(right);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			glColorMask(false, true, true, true);
+			//glColorMask(0, 1, 1, 1);
 			scene_->camera()->loadMatrix(this);
 			// Center
-			glColor3f(1.0f, 1.0f, 1.0f);
 			glBegin(GL_POINTS);
 			glVertex3f(0, 0, 0);
 			glEnd();
 			scene_->drawScene(this);
-			glColorMask(true, true, true, true);
+			//glColorMask(1, 1, 1, 1);
 		}
 		else if (style_ == sidebyside)
 		{

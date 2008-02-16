@@ -21,6 +21,8 @@ namespace Examination
 	
 Pixelplane::Pixelplane()
 {
+	width_ = 1;
+	height_ = 1;
 }
 
 Pixelplane::~Pixelplane()
@@ -52,7 +54,8 @@ void Pixelplane::draw(GLWidget * dest)
 				texture()->resizeTo(w,h);
 			}
 		}
-		glRasterPos3fv(position().vec);
+		Point p = position();
+		glRasterPos3f(p.x, p.y, p.z);
 		texture()->draw(dest);
 	}
 }

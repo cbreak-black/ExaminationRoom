@@ -62,8 +62,6 @@ void Rectangle::draw(GLWidget * dest)
 		texture()->glBindTex(dest);
 	}
 	
-	glColor3f(1.0f, 1.0f, 1.0f);
-	
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
 	glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
