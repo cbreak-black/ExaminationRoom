@@ -1,3 +1,10 @@
+-- Load Libraries
+dofile("res/statistics.lua")
+-- Distance to screen: 0.5 meter
+-- Screen height: 0.5 meter
+-- Eye position: screen centered
+statistics:setViewingProperties(0.5, 0.5, 0.5);
+
 -- Scene Construction
 Scene:setCameraPos(0, 0, 10);
 Scene:setCameraDir(0, 0, -1);
@@ -88,8 +95,9 @@ local nextFrame = function ()
 	stereogramB:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
+	local sep = statistics:separationAtPoint(pos[1], pos[2], pos[3]);
 	Scene:log("New Q: "..arrowDirs[testNum]..
-		" @ ("..pos[1]..", "..pos[2]..", "..pos[3]..")");
+		" @ ("..pos[1]..", "..pos[2]..", "..pos[3].."), s="..sep);
 end
 nextFrame();
 
@@ -118,5 +126,6 @@ end;
 --Scene:setEventListener("update", updateListener);
 Scene:setEventListener("keyDown", parseInput);
 --Scene:setEventListener("keyUp", function (k) Scene:log("up: "..k); end);
+Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
 
 --Scene:clearScene();

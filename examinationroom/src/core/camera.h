@@ -55,14 +55,14 @@ public:
 public:
 	void setPosition(Tool::Point pos);
 	void setDirection(Tool::Vector dir);
-	void setSeperation(float s);
+	void setSeparation(float s);
 	void setFieldOfView(float fov);
 	void setParalaxPlane(float dist);
 
 public:
 	Tool::Point position();
 	Tool::Vector direction();
-	float seperation();
+	float separation();
 	float fieldOfView();
 	float paralaxPlane();
 
@@ -71,10 +71,31 @@ public:
 	Calculates and returns the size on screen in pixel of one unit at a given distance.
 	Note that not the distance of the object itself to the camera, but the distance of
 	the plane the object lies on matters.
-	 \param d	Distance of line to camera
+	 \param d	Distance of line to camera (projected on camera viewing direction)
 	 \return size of a line of length 1 at distance d on screen in pixel
 	*/
 	int unitScreenSize(float d);
+
+	/**
+	Calculates and returns the size on screen in pixel of one unit at a given distance.
+	 \param p	Position of the unit measurement
+	 \return size of a line of length 1 at position p on screen in pixel
+	*/
+	int unitScreenSize(Tool::Point p);
+
+	/**
+	Calculates the seperation of an object on screen.
+	 \param d	Distance of object to camera (projected on camera viewing direction)
+	 \return separation on screen of object at distance d from camera in units.
+	*/
+	float separationAtDistance(float d);
+
+	/**
+	Calculates the seperation of an object on screen.
+	 \param p	Position of the separation measurement
+	 \return separation on screen of object at position p from camera in units.
+	*/
+	float separationAtDistance(Tool::Point p);
 
 public:
 	Tool::ScreenProject * screenProject();

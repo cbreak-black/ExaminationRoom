@@ -13,6 +13,7 @@
 
 #include "screenproject.h"
 #include "platform_math.h"
+#include "float.h"
 
 using namespace Tool;
 
@@ -27,7 +28,7 @@ Camera::Camera()
 	setPosition(Tool::Point(0, 0, -10));
 	setDirection(Tool::Vector(0,0,-1));
 
-	setSeperation(0.2);
+	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
 
@@ -39,7 +40,7 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir)
 	setPosition(pos);
 	setDirection(dir);
 	
-	setSeperation(0.2);
+	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
 
@@ -107,6 +108,37 @@ int Camera::unitScreenSize(float d)
 	return viewport[3]/(top*2) * near/d;
 }
 
+int Camera::unitScreenSize(Point p)
+{
+	float df = abs((position() - p) * direction());
+	return unitScreenSize(df);
+}
+
+float Camera::separationAtDistance(float d)
+{
+	if (d <= 0)
+	{
+		// Nothing should be behind the camera
+		return FLT_MAX;
+	}
+	else if (d < ppd_)
+	{
+		// Negative Paralax
+		return sep_ * (d - ppd_)/d;
+	}
+	else
+	{
+		// Positive Paralax (Same as above)
+		return sep_ * (d - ppd_)/d;
+	}
+}
+
+float Camera::separationAtDistance(Point p)
+{
+	float df = abs((position() - p) * direction());
+	return separationAtDistance(df);
+}
+
 void Camera::setPosition(Tool::Point pos)
 {
 	pos_ = pos;
@@ -117,7 +149,7 @@ void Camera::setDirection(Tool::Vector dir)
 	dir_ = dir;
 }
 
-void Camera::setSeperation(float s)
+void Camera::setSeparation(float s)
 {
 	sep_ = s;
 }
@@ -142,7 +174,7 @@ Tool::Vector Camera::direction()
 	return dir_;
 }
 
-float Camera::seperation()
+float Camera::separation()
 {
 	return sep_;
 }

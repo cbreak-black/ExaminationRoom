@@ -38,9 +38,7 @@ void Pixelplane::draw(GLWidget * dest)
 		{
 			std::tr1::shared_ptr<Camera> cam = dest->scene()->camera();
 			int w, h, cw, ch;
-			Vector dv = cam->position() - position();
-			float df = abs(dv * (cam->direction()));
-			float uss = cam->unitScreenSize(df);
+			float uss = cam->unitScreenSize(position());
 			w = width_*uss;
 			h = height_*uss;
 			cw = texture()->width();

@@ -50,6 +50,7 @@ LuaProxy::LuaProxy(Scene * scene)
 	
 LuaProxy::~LuaProxy()
 {
+	onQuit();
 	lua_close(L_);
 }
 
@@ -133,7 +134,7 @@ int LuaProxy::setCameraFoV(lua_State *L)
 int LuaProxy::setCameraSep(lua_State *L)
 {
 	checkTop(L, 2);
-	scene_->camera()->setSeperation(lua_tonumber(L,-1));
+	scene_->camera()->setSeparation(lua_tonumber(L,-1));
 	lua_pop(L, 2);
 	return 0;
 }
@@ -146,11 +147,70 @@ int LuaProxy::setCameraParalaxPlane(lua_State *L)
 	return 0;
 }
 
+int LuaProxy::getCameraPos(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	pushVector(L, scene_->camera()->position());
+	return 3;
+}
+
+int LuaProxy::getCameraDir(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	pushVector(L, scene_->camera()->direction());
+	return 3;
+}
+
+int LuaProxy::getCameraFoV(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushnumber(L, scene_->camera()->fieldOfView());
+	return 1;
+}
+
+int LuaProxy::getCameraSep(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushnumber(L, scene_->camera()->separation());
+	return 1;
+}
+
+int LuaProxy::getCameraParalaxPlane(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushnumber(L, scene_->camera()->paralaxPlane());
+	return 1;
+}
+
+int LuaProxy::getSeparationAtPoint(lua_State *L)
+{
+	checkTop(L, 4);
+	float sep = scene_->camera()->separationAtDistance(toVector(L,2));
+	lua_pop(L, 4);
+	lua_pushnumber(L, sep);
+	return 1;
+}
+
+int LuaProxy::getUnitScreenSize(lua_State *L)
+{
+	checkTop(L, 4);
+	int uss = scene_->camera()->unitScreenSize(toVector(L,2));
+	lua_pop(L, 4);
+	lua_pushinteger(L, uss);
+	return 1;
+}
+
 const char * eventIdx[] =
 {
 	"update",
 	"keyDown",
 	"keyUp",
+	"quit",
 	0
 };
 
@@ -185,6 +245,12 @@ void LuaProxy::onKeyUp(char k)
 	ts[0] = k;
 	ts[1] = '\0';
 	onEvent(eventIdx[2], ts);
+}
+
+void LuaProxy::onQuit()
+{
+	double reserved = 0;
+	onEvent(eventIdx[3], reserved);
 }
 
 void LuaProxy::onEvent(const char * event, double param)
@@ -292,6 +358,13 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "setCameraFoV", &LuaProxy::setCameraFoV },
 	{ "setCameraSep", &LuaProxy::setCameraSep },
 	{ "setCameraParalaxPlane", &LuaProxy::setCameraParalaxPlane },
+	{ "getCameraPos", &LuaProxy::getCameraPos },
+	{ "getCameraDir", &LuaProxy::getCameraDir },
+	{ "getCameraFoV", &LuaProxy::getCameraFoV },
+	{ "getCameraSep", &LuaProxy::getCameraSep },
+	{ "getCameraParalaxPlane", &LuaProxy::getCameraParalaxPlane },
+	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
+	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ "debugLog", &LuaProxy::debugLog },

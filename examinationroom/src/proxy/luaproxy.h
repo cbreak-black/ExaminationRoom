@@ -60,6 +60,15 @@ public: // Camera
 	int setCameraFoV(lua_State *L);
 	int setCameraSep(lua_State *L);
 	int setCameraParalaxPlane(lua_State *L);
+	int getCameraPos(lua_State *L);
+	int getCameraDir(lua_State *L);
+	int getCameraFoV(lua_State *L);
+	int getCameraSep(lua_State *L);
+	int getCameraParalaxPlane(lua_State *L);
+
+public: // Statistical helpers
+	int getSeparationAtPoint(lua_State *L);
+	int getUnitScreenSize(lua_State *L);
 
 public: // Misc
 	int setEventListener(lua_State *L);
@@ -83,6 +92,12 @@ public:
 	 \param k	The released key.
 	*/
 	void onKeyUp(char k);
+
+protected:
+	/**
+	Called by the destructor to signal termination of the scene.
+	*/
+	void onQuit();
 
 protected:
 	void onEvent(const char * event, double param);
