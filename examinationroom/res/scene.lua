@@ -57,7 +57,7 @@ texpaths = {
 "res/triangle_right.png",
 "res/triangle_down.png",
 }
-texbase = "res/triangle_%s.png"
+texbase = "res/e_%s.png"
 
 -- Test Scene details
 mountPoints = {
