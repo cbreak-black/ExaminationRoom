@@ -74,9 +74,9 @@
 \maketitle
 %\tableofcontents
 
-%\begin{center}
-%\includegraphics[width=16cm,clip,trim=0cm 0cm 0cm 0cm]{media/dollyCover.jpg}
-%\end{center}
+\begin{center}
+\includegraphics[width=15cm,clip,trim=0cm 0cm 0cm 0cm]{media/title.png}
+\end{center}
 
 %\begin{abstract}
 %\end{abstract}
@@ -89,11 +89,11 @@
 \paragraph{}
 Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. This strains the eyes, and can lead to fatigue, which makes the consumption of stereoscopic information over longer periods of times hard. But what are the physiological and psychological limits of stereoscopic viewing fatigue? And how can stereo images be composed to reduce fatigue?
 
-Topic of this thesis is to write a Tool that allows to answer those and similar other questions by providing a flexible and extensible framework for user testing. It is currently unclear how fatigue can be measured properly, and what scenes can be used to specifically test fatigue. Finding out which methods work and which do not is also part of this thesis.
+Topic of this thesis is to write a Tool that enables exploration of those and similar other questions by providing a flexible and extensible framework for user testing. It is currently unclear how fatigue can be measured properly, and what scenes can be used to specifically test fatigue. Finding out which methods work and which do not is also part of this thesis.
 
-\section{Current Plann}
+\section{Current Plan}
 \paragraph{}
-To answer questions on fatigue, experiments with users are conducted. The first experiment is planed to show, how much the viewing of stereoscopic information tires the eyes, and if adding continuous depth has any influence on this.
+To answer questions on fatigue, experiments with users are conducted. The first experiment is planned to show how much the viewing of stereoscopic information tires the eyes and if adding continuous depth has any influence on this.
 
 Fatigue when viewing stereoscopic pictures is tested by showing images without continuous depth, with free standing objects, and scenes with continuous depth, embedded in a scene.
 
@@ -107,26 +107,26 @@ The testing tool should automate steps needed to test 3D related fatigue. A typi
 \item Encode information at a certain perceived stereoscopic depth, so that it can only be extracted when focusing with both eyes. Measure the time it takes the test subject to adapt to this depth and extract the information.
 \item Remove the information and place it at an other depth location, measuring reaction time.
 \item Repeat step 1 and 2 at a different depth locations.
-\item Repeat step 1 and 2 with the information being embedded in a scene.
+\item Repeat step 1 and 2 with the information being embedded in a scene that provides a continuous depth clue.
 \item Measure response time over a longer period of time, over several test repetitions, with several test subjects.
 \item Estimate fatigue based on response time.
 \end{enumerate}
 
 \section{Challenges}
 \paragraph{}
-To perform those tests, a flexible and extensible tool is needed. Those are some of the requirements that have to be satisfied:
+To perform those tests, a flexible and extensible tool is needed. Some of the requirements that have to be satisfied include:
 
 \begin{enumerate}
 \item Supporting stereogram encoding of information. Stereograms are used to confirm that the test subject can fuse a picture at a given location with a given separation.
 \item Supporting of various scenes/depth clues
 \item Flexible and powerful log format, that can be transformed to be analyzed by established software.
-\item User input while looking at screen, such as blind typing, audio feedback.
+\item User input while looking at screen, such as blind typing and audio feedback.
 \item Must support various scenes and scenes changing in various ways, such as camera and object movement.
 \end{enumerate}
 
 \section{Baseline features}
 \paragraph{}
-The software should be created for specific tests, and then later extended to other areas. During development, a pilot study will be conducted. Having immediate feedback will help to guide development.
+The software should be created for specific tests, and then later extended to other areas. During development a pilot study will be conducted. Having immediate feedback will help to guide development.
 
 The tool should have at least these baseline featuers:
 
@@ -162,11 +162,14 @@ Thoughts about the design:
 \paragraph{}
 A first pilot study without the use of the finished tool is conducted to evaluate if the test methodology is valid. This will also decide which data is logged in what way, and how it can be evaluated.
 
-The current proposition is that user input consists of key presses. Reaction time of switching between different depth locations is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. 
+The current proposition is that user input consists of key presses. Reaction time of switching between different perceived depth locations is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. 
 
 \section{Timeline}
-\paragraph{}
-TODO
+\begin{itemize}
+\item Start: 2008.01.07
+\item End first test series: 2008.04.01
+\item End: 2008.06.07
+\end{itemize}
 
 \end{multicols}
 
