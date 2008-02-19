@@ -51,7 +51,7 @@ MainWindow::MainWindow()
 		mainGlWidget_->setStyle(GLWidget::anaglyph);
 		outGlWidget_->setStyle(GLWidget::sidebyside);
 		this->show();
-		outGlWidget_->show();
+		outGlWidget_->showFullScreen();
 		this->setGeometry(QApplication::desktop()->screenGeometry(0));
 		QRect s2 = QApplication::desktop()->screenGeometry(1);
 		s2 = s2.united(QApplication::desktop()->screenGeometry(2));
@@ -61,7 +61,7 @@ MainWindow::MainWindow()
 	{
 		// Two Screens used by main widget
 		mainGlWidget_->setStyle(GLWidget::sidebyside);
-		this->show();
+		this->showFullScreen();
 		QRect s2 = QApplication::desktop()->screenGeometry(0);
 		s2 = s2.united(QApplication::desktop()->screenGeometry(1));
 		this->setGeometry(s2);
@@ -69,7 +69,7 @@ MainWindow::MainWindow()
 	if (numScreens == 1)
 	{
 		mainGlWidget_->setStyle(GLWidget::anaglyph);
-		this->show();
+		this->showFullScreen();
 		//this->setGeometry(QApplication::desktop()->screenGeometry(0));
 	}
 
