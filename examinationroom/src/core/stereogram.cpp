@@ -14,25 +14,16 @@
 
 #include <QImage.h>
 
-#include <cstdlib>
-#include <ctime>
-
-#include "platform_math.h" // for roundf
-
 using namespace std::tr1;
 
 namespace Examination
 {
 
-/**
-The number of colors used in random dot stereograms.
-*/
-const int maxColor = 2;
-
-Stereogram::Stereogram(shared_ptr<Texture> d)
+Stereogram::Stereogram()
 {
-	texDepth_ = d;
-	recreateRDS();
+	texDepth_.reset();
+	texLeft_.reset();
+	texRight_.reset();
 }
 
 Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
@@ -46,59 +37,22 @@ Stereogram::~Stereogram()
 {
 }
 
-void Stereogram::recreateRDS()
+void Stereogram::recreateStereogram()
 {
-	QImage imageTemp = texDepth_->image();
-	QSize s = imageTemp.size();
-
-	// Create left and right tex
-	QImage imageL = QImage(s, QImage::Format_Indexed8);
-	QImage imageR = QImage(s, QImage::Format_Indexed8);
-
-	int i, j;
-	float step = 255.0/(maxColor-1);
-	imageL.setNumColors(maxColor);
-	imageR.setNumColors(maxColor);
-	for (i = 0; i < maxColor; i++)
-	{
-		QRgb c = qRgb(i*step, i*step, i*step);
-		imageL.setColor(i, c);
-		imageR.setColor(i, c);
-	}
-
-	const int offset = 4;
-	const int divisor = 255 / offset;
-	unsigned char history[offset+1];
-	unsigned char historyBase = 0;
-
-	for (j = 0; j < s.height(); j++)
-	{
-		for (i = 0; i < s.width(); i++)
-		{
-			char col = rand()%maxColor;
-			history[historyBase] = col;
-			unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
-			imageL.setPixel(i, j, col);
-			imageR.setPixel(i, j, history[(historyBase+o)%(offset+1)]);
-			if (historyBase == 0) historyBase = offset;
-			else historyBase--;
-		}
-	}
-
-	texLeft_ = shared_ptr<Texture>(new Texture(imageL));
-	texRight_ = shared_ptr<Texture>(new Texture(imageR));
+	// Nothing to do here
 }
 
 void Stereogram::resizeTo(int width, int height)
 {
 	if (texDepth_)
 	{
-		// RDS
+		// Automatically generated
 		texDepth_->resizeTo(width, height);
-		recreateRDS();
+		recreateStereogram();
 	}
 	else
 	{
+		// Plain stereogram
 		texLeft_->resizeTo(width, height);
 		texRight_->resizeTo(width, height);
 	}
@@ -108,11 +62,13 @@ void Stereogram::resizeToOriginal()
 {
 	if (texDepth_)
 	{
-		// RDS
+		// Automatically generated
 		texDepth_->resizeToOriginal();
+		recreateStereogram();
 	}
 	else
 	{
+		// Plain stereogram
 		texLeft_->resizeToOriginal();
 		texRight_->resizeToOriginal();
 	}
@@ -120,12 +76,18 @@ void Stereogram::resizeToOriginal()
 
 int Stereogram::width()
 {
-	return texLeft_->width();
+	if (texLeft_)
+		return texLeft_->width();
+	else
+		return 0;
 }
 
 int Stereogram::height()
 {
-	return texLeft_->height();
+	if (texLeft_)
+		return texLeft_->height();
+	else
+		return 0;
 }
 
 void Stereogram::glBindTex(GLWidget * w)
@@ -150,6 +112,37 @@ void Stereogram::draw(GLWidget * w)
 	{
 		texLeft_->draw(w);
 	}
+}
+
+std::tr1::shared_ptr<Texture> Stereogram::texDepth()
+{
+	return texDepth_;
+}
+
+std::tr1::shared_ptr<Texture> Stereogram::texLeft()
+{
+	return texLeft_;
+}
+
+std::tr1::shared_ptr<Texture> Stereogram::texRight()
+{
+	return texRight_;
+}
+
+void Stereogram::setTexDepth(std::tr1::shared_ptr<Texture> t)
+{
+	texDepth_ = t;
+	recreateStereogram();
+}
+
+void Stereogram::setTexLeft(std::tr1::shared_ptr<Texture> t)
+{
+	texLeft_ = t;
+}
+
+void Stereogram::setTexRight(std::tr1::shared_ptr<Texture> t)
+{
+	texRight_ = t;
 }
 
 }

@@ -108,8 +108,8 @@ void GLWidget::paintGL()
 		if (style_ == anaglyph)
 		{
 			setSide(left);
-			glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-			//glColorMask(1, 0, 0, 1);
+			//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+			glColorMask(1, 0, 0, 1);
 		}
 		else if (style_ == sidebyside)
 		{
@@ -130,15 +130,15 @@ void GLWidget::paintGL()
 		{
 			setSide(right);
 			glClear(GL_DEPTH_BUFFER_BIT);
-			glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
-			//glColorMask(0, 1, 1, 1);
+			//glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
+			glColorMask(0, 1, 1, 1);
 			scene_->camera()->loadMatrix(this);
 			// Center
 			glBegin(GL_POINTS);
 			glVertex3f(0, 0, 0);
 			glEnd();
 			scene_->drawScene(this);
-			//glColorMask(1, 1, 1, 1);
+			glColorMask(1, 1, 1, 1);
 		}
 		else if (style_ == sidebyside)
 		{

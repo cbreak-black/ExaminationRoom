@@ -20,6 +20,8 @@ HEADERS += \
 	src/core/pixelplane.h \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
+	src/core/randomdotstereogram.h \
+	src/core/patternstereogram.h \
 	src/core/stereogram.h
 SOURCES += \
 	src/main.cpp \
@@ -32,6 +34,8 @@ SOURCES += \
 	src/core/pixelplane.cpp \
 	src/core/abstracttexture.cpp \
 	src/core/texture.cpp \
+	src/core/randomdotstereogram.cpp \
+	src/core/patternstereogram.cpp \
 	src/core/stereogram.cpp
 
 # Proxies

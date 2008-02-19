@@ -19,7 +19,6 @@ statistics =
 	separationAtPoint = function (this, x, y, z)
 		-- Separation in units
 		local sep = Scene:getSeparationAtPoint(x, y, z);
-		Scene:log("sep: "..sep);
 		-- Field of view the screen takes up
 		local fov =
 			math.atan2(this.screenHeight*(1-this.eyePosition), this.viewingDistance) +

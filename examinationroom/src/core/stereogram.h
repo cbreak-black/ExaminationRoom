@@ -20,18 +20,11 @@ namespace Examination
 
 /**
 This is a class for stereogram textures. It contains one texture for the left
-camera and one for the right camera. It is able to create random dot stereograms
-from a depth map texture.
+camera and one for the right camera.
 */
 class Stereogram : public AbstractTexture
 {
 public: // Constructors and Destructor
-	/**
-	Creates a new stereogram by taking the passed texture as depth map.
-	 \param d	Depth map
-	*/
-	Stereogram(std::tr1::shared_ptr<Texture> d);
-
 	/**
 	Creates a new stereogram by taking the passed textures as left and right
 	sides.
@@ -43,7 +36,13 @@ public: // Constructors and Destructor
 	/**
 	Deallocates the stereogram and all stored textures.
 	*/
-	~Stereogram();
+	virtual ~Stereogram();
+
+protected:
+	/**
+	Creates a new empty stereogram. Should only be used by subclasses.
+	*/
+	Stereogram();
 
 public:
 	/**
@@ -66,7 +65,15 @@ public: // Resizing
 	virtual int height();
 
 private:
-	void recreateRDS();
+	virtual void recreateStereogram();
+
+protected:
+	std::tr1::shared_ptr<Texture> texDepth();
+	std::tr1::shared_ptr<Texture> texLeft();
+	std::tr1::shared_ptr<Texture> texRight();
+	void setTexDepth(std::tr1::shared_ptr<Texture> t);
+	void setTexLeft(std::tr1::shared_ptr<Texture> t);
+	void setTexRight(std::tr1::shared_ptr<Texture> t);
 
 private:
 	std::tr1::shared_ptr<Texture> texDepth_;

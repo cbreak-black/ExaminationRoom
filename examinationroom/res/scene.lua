@@ -57,7 +57,8 @@ texpaths = {
 "res/triangle_right.png",
 "res/triangle_down.png",
 }
-texbase = "res/e_%s.png"
+texbase = "res/e_%s.png";
+pattern = "res/rings_small.png";
 
 -- Test Scene details
 mountPoints = {
@@ -92,7 +93,7 @@ local nextFrame = function ()
 		permuteTable(mountPoints);
 		permuteTable(arrowDirs);
 	end
-	stereogramB:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
+	stereogramB:setTexture(Texture(3, string.format(texbase, arrowDirs[testNum]), pattern));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
 	local sep = statistics:separationAtPoint(pos[1], pos[2], pos[3]);
