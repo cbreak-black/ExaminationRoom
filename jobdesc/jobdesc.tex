@@ -97,7 +97,7 @@ To answer questions on fatigue, experiments with users are conducted. The first 
 
 Fatigue when viewing stereoscopic pictures is tested by showing images without continuous depth, with free standing objects, and scenes with continuous depth, embedded in a scene.
 
-In both test cases, the time it takes the test subjects to change focus from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller. The experiments will show if this is valid.
+In both test cases, the time it takes the test subjects to change vergence from one object to an other object is measured. The expectation is that with continuous depth, the adaption to different perceived depths is faster and the slowdown due to fatigue is smaller. The experiments will show if this is valid.
 
 \section{Example requirement}
 \paragraph{}
@@ -109,7 +109,7 @@ The testing tool should automate steps needed to test 3D related fatigue. A typi
 \item Repeat step 1 and 2 at a different depth locations.
 \item Repeat step 1 and 2 with the information being embedded in a scene that provides a continuous depth clue.
 \item Measure response time over a longer period of time, over several test repetitions, with several test subjects.
-\item Estimate fatigue based on response time.
+\item Correlate fatigue based on response time.
 \end{enumerate}
 
 \section{Challenges}
@@ -155,7 +155,7 @@ Thoughts about the design:
 \item OpenMesh can be used as mesh loader and storage library. It is licensed under the GPL v2.
 \item LUA or some other scripting language can be used to do the interactive stuff. It leaves a lot of freedom to the designer of the scene/test, since most of the functionality would run in script code. LUA is licensed under an MIT style attribution license, which allows use everywhere.
 \item Test files would contain media (pictures, models, textures), lua code (for building scenes out of the media, and animating, moving, randomizing) and a master file that binds it together.
-\item Templates could be provided or a test builder application could be built to create those lua scripts in standard cases, but writing code would give {\textit a lot} of flexibility to the test designer.
+\item Templates or a test builder application will be built to create those lua scripts in standard cases, but writing code would give {\textit a lot} of flexibility to the test designer.
 \end{itemize}
 
 \section{Evaluation}
@@ -164,11 +164,16 @@ A first pilot study without the use of the finished tool is conducted to evaluat
 
 The current proposition is that user input consists of key presses. Reaction time of switching between different perceived depth locations is logged in a time stamp format. An optional post processor can aggregate this data, and transform it in various representations. Alternatives include using audio equipment to store recordings of the test, and use volume or voice recognition for quantitative analysises. 
 
-\section{Timeline}
+\section{Milestones}
 \begin{itemize}
-\item Start: 2008.01.07
-\item End first test series: 2008.04.01
-\item End: 2008.06.07
+\item 2008.01.07: Start
+\item 2008.02.07: First basic framework complete
+\item 2008.03.07: Evaluated testing frameworks through pilot study. Improve the system to meet the encountered requirements to support a full scale study. Identify potential stimuli and tasks to extend the framework.
+\item 2008.04.02: Deadline Paper about fatigue related to continuous depth.
+\item 2008.04.07: Improve data analysis capabilities in framework. Write status report to reflect on the current capabilities of the system in context of conducted tests, state resources utilised, propose future improvements.
+\item 2008.05.07: Apply the tool to other experiments, evaluate the requirements in other contexts.
+\item 2008.06.07: Finish outline for master thesis.
+\item 2008.07.07: Master Thesis completed
 \end{itemize}
 
 \end{multicols}
