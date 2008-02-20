@@ -81,9 +81,27 @@ shared_ptr<AbstractTexture> TextureProxy::texture()
 	return texture_;
 }
 
+int TextureProxy::zoom(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushnumber(L, texture()->zoom());
+	return 1;
+}
+
+int TextureProxy::setZoom(lua_State *L)
+{
+	checkTop(L, 2);
+	texture()->setZoom(lua_tonumber(L,-1));
+	lua_pop(L, 2);
+	return 0;
+}
+
 const char TextureProxy::className[] = "Texture";
 const Luna<TextureProxy>::RegType TextureProxy::Register[] =
 {
+	{ "zoom", &TextureProxy::zoom },
+	{ "setZoom", &TextureProxy::setZoom },
 	{ 0, 0 }
 };
 	

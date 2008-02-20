@@ -32,12 +32,13 @@ PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> 
 
 void PatternStereogram::recreateStereogram()
 {
+	if (!texDepth()) return;
 	QImage imageTemp = texDepth()->image();
 	QImage imagePattern = texPattern_->image();
 	QSize depthSize = imageTemp.size();
 	QSize patSize = imagePattern.size();
 
-	const int offset = 4;
+	const int offset = 4/zoom();
 	const int divisor = 255 / offset;
 	int i, j;
 	

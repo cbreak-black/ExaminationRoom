@@ -36,6 +36,7 @@ RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 
 void RandomdotStereogram::recreateStereogram()
 {
+	if (!texDepth()) return;
 	QImage imageTemp = texDepth()->image();
 	QSize s = imageTemp.size();
 

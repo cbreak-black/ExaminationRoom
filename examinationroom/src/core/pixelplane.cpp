@@ -43,7 +43,7 @@ void Pixelplane::draw(GLWidget * dest)
 			h = height_*uss;
 			cw = texture()->width();
 			ch = texture()->height();
-			if (abs(cw-w) + abs(ch-h) > 2)
+			if (abs(cw-w) > 2 || abs(ch-h) > 2)
 			{
 				texture()->resizeTo(w,h);
 			}

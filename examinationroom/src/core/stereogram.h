@@ -32,11 +32,6 @@ public: // Constructors and Destructor
 	 \param r	Right texture
 	*/
 	Stereogram(std::tr1::shared_ptr<Texture> l, std::tr1::shared_ptr<Texture> r);
-	
-	/**
-	Deallocates the stereogram and all stored textures.
-	*/
-	virtual ~Stereogram();
 
 protected:
 	/**
@@ -63,6 +58,18 @@ public: // Resizing
 	virtual void resizeToOriginal();
 	virtual int width();
 	virtual int height();
+	/**
+	Returns the zoom factor. Zooming does not change the internal size of the depth texture,
+	but the drawing resolution of the stereogram. When drawing it directly, it wil be coarser
+	resolved. The sterograms will be recreated to fit. Mapping as texture is not influenced.
+	Default is 1.0f;
+	 \return the zoom factor
+	*/
+	virtual float zoom();
+	virtual void setZoom(float z);
+
+private:
+	float zoomFactor_;
 
 private:
 	virtual void recreateStereogram();

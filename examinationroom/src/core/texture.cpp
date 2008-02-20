@@ -22,6 +22,7 @@ Texture::Texture(const char * path)
 	original_ = image_;
 	
 	imageGLID_ = 0;
+	zoomFactor_ = 1.0f;
 }
 
 Texture::Texture(std::string path)
@@ -30,6 +31,7 @@ Texture::Texture(std::string path)
 	original_ = image_;
 	
 	imageGLID_ = 0;
+	zoomFactor_ = 1.0f;
 }
 
 Texture::Texture(QImage image)
@@ -38,6 +40,7 @@ Texture::Texture(QImage image)
 	original_ = image;
 	
 	imageGLID_ = 0;
+	zoomFactor_ = 1.0f;
 }
 
 Texture::~Texture()
@@ -147,7 +150,9 @@ void Texture::draw(GLWidget * w)
 	if (image_.format() == QImage::Format_Indexed8)
 	{
 		GLubyte * t =  image_.bits();
+		glPixelZoom(zoomFactor_,zoomFactor_);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
+		glPixelZoom(1.0f,1.0f);
 	}
 	else
 	{
@@ -192,7 +197,9 @@ void Texture::draw(GLWidget * w)
 			tx = tm;
 		}
 		GLubyte * t =  tx.bits();
+		glPixelZoom(zoomFactor_,zoomFactor_);
 		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
+		glPixelZoom(1.0f,1.0f);
 	}
 }
 
@@ -210,7 +217,7 @@ void Texture::resizeTo(int width, int height)
 {
 	glDeleteTextures(1, &imageGLID_); // Delete old image
 	imageGLID_ = 0;
-	image_ = original_.scaled(width, height);
+	image_ = original_.scaled(width/zoomFactor_, height/zoomFactor_);
 }
 
 void Texture::resizeToOriginal()
@@ -222,12 +229,22 @@ void Texture::resizeToOriginal()
 
 int Texture::width()
 {
-	return image().width();
+	return image().width() * zoomFactor_;
 }
 
 int Texture::height()
 {
-	return image().height();
+	return image().height() * zoomFactor_;
+}
+
+float Texture::zoom()
+{
+	return zoomFactor_;
+}
+
+void Texture::setZoom(float z)
+{
+	zoomFactor_ = z;
 }
 
 }

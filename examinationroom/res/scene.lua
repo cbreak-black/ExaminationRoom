@@ -3,13 +3,13 @@ dofile("res/statistics.lua")
 -- Distance to screen: 0.5 meter
 -- Screen height: 0.5 meter
 -- Eye position: screen centered
-statistics:setViewingProperties(0.5, 0.5, 0.5);
+statistics:setViewingProperties(2, 0.75, 0.5);
 
 -- Scene Construction
 Scene:setCameraPos(0, 0, 10);
 Scene:setCameraDir(0, 0, -1);
 Scene:setCameraFoV(50);
-Scene:setCameraSep(0.2);
+Scene:setCameraSep(0.15);
 Scene:setCameraParalaxPlane(10);
 
 local rectFloor = Object("Rectangle");
@@ -57,7 +57,7 @@ texpaths = {
 "res/triangle_right.png",
 "res/triangle_down.png",
 }
-texbase = "res/e_%s.png";
+texbase = "res/triangle_%s.png";
 pattern = "res/rings_small.png";
 
 -- Test Scene details
@@ -93,7 +93,10 @@ local nextFrame = function ()
 		permuteTable(mountPoints);
 		permuteTable(arrowDirs);
 	end
-	stereogramB:setTexture(Texture(3, string.format(texbase, arrowDirs[testNum]), pattern));
+--	local texture = Texture(3, string.format(texbase, arrowDirs[testNum]), pattern);
+	local texture = Texture(2, string.format(texbase, arrowDirs[testNum]));
+	texture:setZoom(3.0);
+	stereogramB:setTexture(texture);
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
 	local sep = statistics:separationAtPoint(pos[1], pos[2], pos[3]);

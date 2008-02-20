@@ -66,12 +66,15 @@ public: // Resizing
 	virtual void resizeToOriginal();
 	virtual int width();
 	virtual int height();
+	virtual float zoom();
+	virtual void setZoom(float z);
 
 private:
 	QImage image_;
 	QImage original_;
-	
+
 	GLuint imageGLID_;
+	float zoomFactor_;
 };
 
 }

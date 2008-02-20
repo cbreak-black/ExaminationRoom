@@ -24,6 +24,7 @@ Stereogram::Stereogram()
 	texDepth_.reset();
 	texLeft_.reset();
 	texRight_.reset();
+	zoomFactor_ = 1.0f;
 }
 
 Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
@@ -31,10 +32,7 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	texDepth_.reset();
 	texLeft_ = l;
 	texRight_ = r;
-}
-
-Stereogram::~Stereogram()
-{
+	zoomFactor_ = 1.0f;
 }
 
 void Stereogram::recreateStereogram()
@@ -90,6 +88,23 @@ int Stereogram::height()
 		return 0;
 }
 
+float Stereogram::zoom()
+{
+	return zoomFactor_;
+}
+
+void Stereogram::setZoom(float z)
+{
+	zoomFactor_ = z;
+	if (texDepth_)
+		texDepth_->setZoom(z);
+	recreateStereogram();
+	if (texLeft_)
+		texLeft_->setZoom(z);
+	if (texRight_)
+		texRight_->setZoom(z);
+}
+
 void Stereogram::glBindTex(GLWidget * w)
 {
 	if (texRight_ && w->side() == GLWidget::right)
@@ -132,17 +147,23 @@ std::tr1::shared_ptr<Texture> Stereogram::texRight()
 void Stereogram::setTexDepth(std::tr1::shared_ptr<Texture> t)
 {
 	texDepth_ = t;
+	if (texDepth_)
+		texDepth_->setZoom(zoomFactor_);
 	recreateStereogram();
 }
 
 void Stereogram::setTexLeft(std::tr1::shared_ptr<Texture> t)
 {
 	texLeft_ = t;
+	if (texLeft_)
+		texLeft_->setZoom(zoomFactor_);
 }
 
 void Stereogram::setTexRight(std::tr1::shared_ptr<Texture> t)
 {
 	texRight_ = t;
+	if (texRight_)
+		texRight_->setZoom(zoomFactor_);
 }
 
 }

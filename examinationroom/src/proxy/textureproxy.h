@@ -28,6 +28,10 @@ public:
 	~TextureProxy();
 
 public:
+	int zoom(lua_State *L);
+	int setZoom(lua_State *L);
+
+public:
 	std::tr1::shared_ptr<AbstractTexture> texture();
 
 private:

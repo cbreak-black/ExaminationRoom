@@ -8,6 +8,7 @@
  */
 
 #include "object.h"
+#include "abstracttexture.h"
 
 namespace Examination
 {

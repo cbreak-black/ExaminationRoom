@@ -41,6 +41,19 @@ public: // Resizing
 	virtual void resizeToOriginal() = 0;
 	virtual int width() = 0;
 	virtual int height() = 0;
+	/**
+	Returns the zoom factor. Zooming does not change the internal size of a texture, but
+	it's drawing resolution. When drawing it directly, it wil be coarser resolved. Mapping
+	as texture is not influenced. Default is 1.0f;
+	 \return the zoom factor
+	*/
+	virtual float zoom() = 0;
+	/**
+	Sets the zoom factor.
+	 \see zoom()
+	 \param z	the new zoom factor
+	*/
+	virtual void setZoom(float z) = 0;
 };
 
 }

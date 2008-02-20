@@ -12,12 +12,12 @@
 
 #include "vec.h"
 
-#include "abstracttexture.h"
 #include <memory>
 
 namespace Examination
 {
 	class GLWidget;
+	class AbstractTexture;
 
 /**
 A generic object, which can be placed in a scene.
