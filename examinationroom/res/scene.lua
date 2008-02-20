@@ -31,13 +31,14 @@ Scene:addObject(rectCeil);
 Scene:log("Added floor and ceil");
 
 local stereogramA = Object("Pixelplane");
-stereogramA:setTexture(Texture(2, "res/rectangles.l.png", "res/rectangles.r.png"));
+stereogramA:setTexture(Texture(2, "res/marble.l.png", "res/marble.r.png"));
 stereogramA:setSize(2.0,2.0);
 stereogramA:setPosition(1, 1, 2);
 stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
 local stereogramB = Object("Pixelplane");
+stereogramB:setTexture(Texture(2, "res/marble_back.l.png", "res/marble_back.r.png"));
 stereogramB:setSize(2.0,2.0);
 stereogramB:setPosition(-2, -2, -2);
 stereogramB:setAutoResize(true);
@@ -95,9 +96,9 @@ local nextFrame = function ()
 		permuteTable(arrowDirs);
 	end
 --	local texture = Texture(3, string.format(texbase, arrowDirs[testNum]), pattern);
-	local texture = Texture(2, string.format(texbase, arrowDirs[testNum]));
-	texture:setZoom(2.0);
-	stereogramB:setTexture(texture);
+--	local texture = Texture(2, string.format(texbase, arrowDirs[testNum]));
+--	texture:setZoom(2.0);
+--	stereogramB:setTexture(texture);
 --	stereogramA:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
