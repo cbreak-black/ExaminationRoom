@@ -31,7 +31,7 @@ Scene:addObject(rectCeil);
 Scene:log("Added floor and ceil");
 
 local stereogramA = Object("Pixelplane");
-stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
+stereogramA:setTexture(Texture(2, "res/rectangles.l.png", "res/rectangles.r.png"));
 stereogramA:setSize(2.0,2.0);
 stereogramA:setPosition(1, 1, 2);
 stereogramA:setAutoResize(true);
@@ -98,7 +98,7 @@ local nextFrame = function ()
 	local texture = Texture(2, string.format(texbase, arrowDirs[testNum]));
 	texture:setZoom(2.0);
 	stereogramB:setTexture(texture);
-	stereogramA:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
+--	stereogramA:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
 	stereogramA:setPosition(pos[1]+4, pos[2], pos[3]);
