@@ -31,16 +31,12 @@ Scene:addObject(rectCeil);
 Scene:log("Added floor and ceil");
 
 local stereogramA = Object("Pixelplane");
-stereogramA:setTexture(Texture(2, "res/marble.l.png", "res/marble.r.png"));
 stereogramA:setSize(2.0,2.0);
-stereogramA:setPosition(1, 1, 2);
 stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
 local stereogramB = Object("Pixelplane");
-stereogramB:setTexture(Texture(2, "res/marble_back.l.png", "res/marble_back.r.png"));
 stereogramB:setSize(2.0,2.0);
-stereogramB:setPosition(-2, -2, -2);
 stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
 
@@ -53,30 +49,31 @@ Key = {
 [20] = "right";
 [21] = "down";
 }
-texpaths = {
-"res/triangle_left.png",
-"res/triangle_up.png",
-"res/triangle_right.png",
-"res/triangle_down.png",
+Dir = {
+["up"] = "back";
+["down"] = "front";
 }
-texbase = "res/triangle_%s.png";
-pattern = "res/rings_small.png";
+texbase = "res/marble_%s.%s.png";
 
 -- Test Scene details
 mountPoints = {
 {-3,-3,2},
-{-3,-3,1},
 {-3,-3,0},
-{-3,-3,-1},
-{-3,-3,-2},
-{-3,-3,-3},
-{-3,-3,-4},
 {-3,-3,-5},
+{1,-3,2},
+{1,-3,0},
+{1,-3,-5},
+{1,1,2},
+{1,1,0},
+{1,1,-5},
+{-3,1,2},
+{-3,1,0},
+{-3,1,-5},
 }
 
-arrowDirs = { -- Same size as mountPoints
-"left", "up", "right", "down",
-"left", "up", "right", "down",
+replies = { -- Same size as mountPoints
+"back","back","back","back","back","back",
+"front","front","front","front","front","front",
 }
 
 permuteTable = function (t)
@@ -93,26 +90,30 @@ local nextFrame = function ()
 	if testNum == 1 then
 		Scene:log("New Test Cycle");
 		permuteTable(mountPoints);
-		permuteTable(arrowDirs);
+		permuteTable(replies);
 	end
---	local texture = Texture(3, string.format(texbase, arrowDirs[testNum]), pattern);
---	local texture = Texture(2, string.format(texbase, arrowDirs[testNum]));
---	texture:setZoom(2.0);
---	stereogramB:setTexture(texture);
---	stereogramA:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
+	local texture = Texture(2,
+		string.format(texbase, replies[testNum], "l"),
+		string.format(texbase, replies[testNum], "r"));
 	local pos = mountPoints[testNum];
-	stereogramB:setPosition(pos[1], pos[2], pos[3]);
-	stereogramA:setPosition(pos[1]+4, pos[2], pos[3]);
+	if (testNum % 2 == 0) then
+		stereogramB:setTexture(texture);
+		stereogramB:setPosition(pos[1], pos[2], pos[3]);
+	else
+		stereogramA:setTexture(texture);
+		stereogramA:setPosition(pos[1], pos[2], pos[3]);
+	end;
 	local sep = statistics:separationAtPoint(pos[1], pos[2], pos[3]);
-	Scene:log("New Q: "..arrowDirs[testNum]..
+	Scene:log("New Q: "..replies[testNum]..
 		" @ ("..pos[1]..", "..pos[2]..", "..pos[3].."), s="..sep);
 end
 nextFrame();
 
 local parseInput = function (k)
 	local d = Key[string.byte(k)];
+	if d then d = Dir[d] end;
 	if d then
-		if d == arrowDirs[testNum] then
+		if d == replies[testNum] then
 			Scene:log("Input Correct: "..d);
 		else
 			Scene:log("Input Incorrect: "..d);
