@@ -53,27 +53,34 @@ Dir = {
 ["up"] = "back";
 ["down"] = "front";
 }
-texbase = "res/marble_%s.%s.png";
+texbases = {
+"res/marble_%s.%s.png";
+"res/rectangles_%s.%s.png";
+}
 
 -- Test Scene details
-mountPoints = {
-{-3,-3,2},
+mountPoints = { -- Pre Permuted, no oclusion
+{-3,1,-5},
 {-3,-3,0},
-{-3,-3,-5},
-{1,-3,2},
-{1,-3,0},
-{1,-3,-5},
-{1,1,2},
-{1,1,0},
 {1,1,-5},
 {-3,1,2},
+{1,1,0},
+{1,-3,-5},
+{-3,-3,-5},
+{1,-3,0},
+{1,1,2},
 {-3,1,0},
-{-3,1,-5},
+{-3,-3,2},
+{1,-3,2},
 }
 
 replies = { -- Same size as mountPoints
 "back","back","back","back","back","back",
 "front","front","front","front","front","front",
+}
+texIndexes = {
+1,1,1,1,1,1,
+2,2,2,2,2,2,
 }
 
 permuteTable = function (t)
@@ -89,12 +96,13 @@ local nextFrame = function ()
 	testNum = (testNum % #mountPoints) + 1;
 	if testNum == 1 then
 		Scene:log("New Test Cycle");
-		permuteTable(mountPoints);
+--		permuteTable(mountPoints);
 		permuteTable(replies);
+		permuteTable(texIndexes);
 	end
 	local texture = Texture(2,
-		string.format(texbase, replies[testNum], "l"),
-		string.format(texbase, replies[testNum], "r"));
+		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
+		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 	local pos = mountPoints[testNum];
 	if (testNum % 2 == 0) then
 		stereogramB:setTexture(texture);
