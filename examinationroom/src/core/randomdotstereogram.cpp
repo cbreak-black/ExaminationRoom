@@ -26,7 +26,8 @@ namespace Examination
 /**
 The number of colors used in random dot stereograms.
 */
-const int maxColor = 2;
+const int maxColor = 4; // Number of grayscales in image
+const int excColor = 0; // Number of colors exclusively to fg/bg
 
 RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 {
@@ -55,24 +56,34 @@ void RandomdotStereogram::recreateStereogram()
 		imageR.setColor(i, c);
 	}
 
-	const int offset = 4;
+	const int offset = 6;
 	const int divisor = 255 / offset;
-	unsigned char history[offset+1];
-	unsigned char historyBase = 0;
-	for (i = 0; i < offset+1; i++)
-		history[i] = rand()%maxColor;
 
 	for (j = 0; j < s.height(); j++)
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			char col = rand()%maxColor;
-			history[historyBase] = col;
-			unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
+			char col = rand()%(maxColor-excColor);
 			imageL.setPixel(i, j, col);
-			imageR.setPixel(i, j, history[(historyBase+o)%(offset+1)]);
-			if (historyBase == 0) historyBase = offset;
-			else historyBase--;
+			imageR.setPixel(i, j, col);
+		}
+	}
+
+	for (j = 0; j < s.height(); j++)
+	{
+		for (i = 0; i < s.width(); i++)
+		{
+			char col = rand()%(maxColor-excColor)+excColor;
+			unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
+			if (o > 0)
+			{
+				unsigned char oL = floor(0.5f*o);
+				unsigned char oR = o - oL;
+				if (i+oL < s.width())
+					imageL.setPixel(i+oL, j, col);
+				if (i-oR > 0)
+					imageR.setPixel(i-oR, j, col);
+			}
 		}
 	}
 
