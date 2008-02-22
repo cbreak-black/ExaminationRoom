@@ -45,7 +45,7 @@ void Rectangle::draw(GLWidget * dest)
 	{
 		if (autoResize())
 		{
-			ScreenProject * sp = dest->scene()->camera()->screenProject();
+			ScreenProject * sp = dest->scene()->camera()->screenProject(dest->side());
 			int w, h, cw, ch;
 			Point v1p = sp->transformToScreenSpace(v1);
 			Point v2p = sp->transformToScreenSpace(v2);

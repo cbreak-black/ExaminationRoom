@@ -11,6 +11,7 @@
 #define CAMERA_H
 
 #include "vec.h"
+#include "glwidget.h"
 
 namespace Tool
 {
@@ -19,7 +20,6 @@ namespace Tool
 
 namespace Examination
 {
-	class GLWidget;
 
 /**
 Represents a stereoscopic camera pair. It can load itself into the OpenGL
@@ -49,8 +49,20 @@ public:
 public:
 	/**
 	Loads the camera for the side of the view into the OpenGL matrix stack.
+	 \parm dest	Destination view, used to determine left or right
 	*/
 	void loadMatrix(GLWidget * dest);
+
+	/**
+	Loads the camera with that offset into the OpenGL matrix stack.
+	 \parm offsetCamera
+	 */
+	void loadMatrix(float offsetCamera);
+
+	/**
+	Loads the camera and prepares the screen projection objects for both sides.
+	*/
+	void preLoadMatrix();
 
 public:
 	void setPosition(Tool::Point pos);
@@ -85,20 +97,17 @@ public:
 
 	/**
 	Calculates the seperation of an object on screen.
-	 \param d	Distance of object to camera (projected on camera viewing direction)
-	 \return separation on screen of object at distance d from camera in units.
-	*/
-	float separationAtDistance(float d);
-
-	/**
-	Calculates the seperation of an object on screen.
 	 \param p	Position of the separation measurement
-	 \return separation on screen of object at position p from camera in units.
+	 \return separation on screen of object at position p from camera in pixel.
 	*/
-	float separationAtDistance(Tool::Point p);
+	float separationAtPoint(Tool::Point p);
 
 public:
-	Tool::ScreenProject * screenProject();
+	/**
+	Returns a pre-loaded screenProject object for the queried side.
+	 \return a pre-loaded screenProject object for the queried side.
+	*/
+	Tool::ScreenProject * screenProject(GLWidget::Side s);
 
 private:
 	Tool::Point		pos_;
@@ -106,7 +115,8 @@ private:
 	float			sep_;
 	float			fov_;
 	float			ppd_;
-	Tool::ScreenProject *	sp_;
+	Tool::ScreenProject *	spL_;
+	Tool::ScreenProject *	spR_;
 };
 
 }

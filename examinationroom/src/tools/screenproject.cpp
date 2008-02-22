@@ -50,6 +50,12 @@ Point ScreenProject::transformToScreenSpace(Point _p, float _f) const
 				 (pT[2] + 1)/2);
 }
 
+Point ScreenProject::transformToClipSpace(Point _p, float _f) const
+{
+	Point pT = transformPointWithMatrix(_p, mvp_, _f);
+	return Point((pT[0] + 1)/2, (pT[1] + 1)/2, (pT[2] + 1)/2);
+}
+
 Point ScreenProject::transformToWorldSpace(Point _p) const
 {
 	// Transform to normalized coordinates
@@ -71,6 +77,21 @@ Point ScreenProject::transformPointWithMatrix(Point _p, const double * _m, float
 		return Point(xp, yp, zp);
     else
 		return Point(xp / tp, yp / tp, zp / tp);
+}
+
+long * ScreenProject::viewport()
+{
+	return vp_;
+}
+
+double * ScreenProject::modelviewProjection()
+{
+	return mvp_;
+}
+
+double * ScreenProject::modelviewProjectionInv()
+{
+	return mvpInv_;
 }
 
 bool ScreenProject::invertMatrix(const double * m, double * out) const

@@ -55,7 +55,6 @@ Dir = {
 }
 texbases = {
 "res/marble_%s.%s.png";
-"res/rectangles_%s.%s.png";
 }
 
 -- Test Scene details
@@ -80,7 +79,7 @@ replies = { -- Same size as mountPoints
 }
 texIndexes = {
 1,1,1,1,1,1,
-2,2,2,2,2,2,
+1,1,1,1,1,1,
 }
 
 permuteTable = function (t)
@@ -111,9 +110,11 @@ local nextFrame = function ()
 		stereogramA:setTexture(texture);
 		stereogramA:setPosition(pos[1], pos[2], pos[3]);
 	end;
-	local sep = statistics:separationAtPoint(pos[1], pos[2], pos[3]);
-	Scene:log("New Q: "..replies[testNum]..
-		" @ ("..pos[1]..", "..pos[2]..", "..pos[3].."), s="..sep);
+	-- Separation at center
+	local sep = statistics:separationAtPoint(pos[1]+1, pos[2]+1, pos[3]);
+	local s = string.format("New Q: %s @ (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
+		replies[testNum], pos[1]+1, pos[2]+1, pos[3], sep);
+	Scene:log(s);
 end
 nextFrame();
 

@@ -44,12 +44,26 @@ public: // ScreenSpace
 	Point transformToScreenSpace(Point _p, float _f = 1) const;
 
 	/**
+	Transforms the given point from world space into clip space. Make sure to
+	call calculateMVP or this call will fail silently.
+	 \param _p The point in World Space
+	 \param _f The fourth coordinate of a point, if desired
+	 \return the transformed _p
+	 */
+	Point transformToClipSpace(Point _p, float _f = 1) const;
+
+	/**
 	Transforms the given point from screen space into world space. Make sure to
 	call calculateMVP or this call will fail in unpredictable ways.
 	 \param _p The point in screen space
 	 \return the back transformed _p
 	*/
 	Point transformToWorldSpace(Point _p) const;
+
+public:
+	long * viewport();
+	double * modelviewProjection();
+	double * modelviewProjectionInv();
 
 private:
 	/**

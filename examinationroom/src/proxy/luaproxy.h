@@ -69,6 +69,7 @@ public: // Camera
 public: // Statistical helpers
 	int getSeparationAtPoint(lua_State *L);
 	int getUnitScreenSize(lua_State *L);
+	int getViewport(lua_State *L);
 
 public: // Misc
 	int setEventListener(lua_State *L);

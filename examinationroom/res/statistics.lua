@@ -17,20 +17,18 @@ statistics =
 	end;
 
 	separationAtPoint = function (this, x, y, z)
-		-- Separation in units
+		-- Separation in pixel
 		local sep = Scene:getSeparationAtPoint(x, y, z);
 		-- Field of view the screen takes up
 		local fov =
 			math.atan2(this.screenHeight*(1-this.eyePosition), this.viewingDistance) +
 			math.atan2(this.screenHeight*(this.eyePosition), this.viewingDistance);
 		fov = fov / math.pi * 180;
-		-- Height of screen in units
-		local suh = math.tan(Scene:getCameraFoV()/180*math.pi/2) *
-			Scene:getCameraParalaxPlane() * 2;
-		-- FoV per Unit
-		local fpu = fov / suh;
+		-- FoV per Pixel (approximation)
+		local vx, vy, vw, vh = Scene:getViewport();
+		local fpp = fov / vh;
 		-- Asumes object is in camera focus and directly looked at
-		return fpu * sep;
+		return fpp * sep;
 	end;
 
 };

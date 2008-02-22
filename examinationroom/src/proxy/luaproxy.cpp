@@ -11,6 +11,7 @@
 
 #include "scene.h"
 #include "camera.h"
+#include "screenproject.h"
 
 #include "objectproxy.h"
 #include "textureproxy.h"
@@ -190,7 +191,7 @@ int LuaProxy::getCameraParalaxPlane(lua_State *L)
 int LuaProxy::getSeparationAtPoint(lua_State *L)
 {
 	checkTop(L, 4);
-	float sep = scene_->camera()->separationAtDistance(toVector(L,2));
+	float sep = scene_->camera()->separationAtPoint(toVector(L,2));
 	lua_pop(L, 4);
 	lua_pushnumber(L, sep);
 	return 1;
@@ -203,6 +204,19 @@ int LuaProxy::getUnitScreenSize(lua_State *L)
 	lua_pop(L, 4);
 	lua_pushinteger(L, uss);
 	return 1;
+}
+
+int LuaProxy::getViewport(lua_State *L)
+{
+	checkTop(L, 1);
+	// Could be right side too, the viewport should be the same...
+	long int * vp_ = scene_->camera()->screenProject(GLWidget::left)->viewport();
+	lua_pop(L, 1);
+	lua_pushinteger(L, vp_[0]);
+	lua_pushinteger(L, vp_[1]);
+	lua_pushinteger(L, vp_[2]);
+	lua_pushinteger(L, vp_[3]);
+	return 4;
 }
 
 const char * eventIdx[] =
@@ -365,6 +379,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "getCameraParalaxPlane", &LuaProxy::getCameraParalaxPlane },
 	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
 	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },
+	{ "getViewport", &LuaProxy::getViewport },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ "debugLog", &LuaProxy::debugLog },

@@ -9,8 +9,6 @@
 
 #include "camera.h"
 
-#include "glwidget.h"
-
 #include "screenproject.h"
 #include "platform_math.h"
 #include "float.h"
@@ -25,47 +23,52 @@ const float farFactor = 5.0f;
 
 Camera::Camera()
 {
+	spL_ = new ScreenProject();
+	spR_ = new ScreenProject();
+
 	setPosition(Tool::Point(0, 0, -10));
 	setDirection(Tool::Vector(0,0,-1));
 
 	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
-
-	sp_ = new ScreenProject();
 }
 
 Camera::Camera(Tool::Point pos, Tool::Vector dir)
 {
+	spL_ = new ScreenProject();
+	spR_ = new ScreenProject();
+
 	setPosition(pos);
 	setDirection(dir);
 	
 	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
-
-	sp_ = new ScreenProject();
 }
 
 Camera::~Camera()
 {
-	delete sp_;
+	delete spL_;
+	delete spR_;
 }
 
 void Camera::loadMatrix(GLWidget * dest)
 {
-	// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
-	float offsetCamera;
-	
 	if (dest->side() == GLWidget::left)
 	{
-		offsetCamera = sep_/2;
+		loadMatrix(sep_/2);
 	}
 	else
 	{
-		offsetCamera = -sep_/2;
+		loadMatrix(-sep_/2);
 	}
-	
+}
+
+void Camera::loadMatrix(float offsetCamera)
+{
+	// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
+
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -87,13 +90,22 @@ void Camera::loadMatrix(GLWidget * dest)
 	// TODO: Rotation of camera before adjusting eye position
 	glTranslatef(offsetCamera/nearFactor, 0, 0);
 	glTranslatef(-pos_.x, -pos_.y, -pos_.z);
-
-	sp_->calculateMVP();
 }
 
-ScreenProject * Camera::screenProject()
+void Camera::preLoadMatrix()
 {
-	return sp_;
+	loadMatrix(sep_/2);
+	spL_->calculateMVP();
+	loadMatrix(-sep_/2);
+	spR_->calculateMVP();
+}
+
+ScreenProject * Camera::screenProject(GLWidget::Side s)
+{
+	if (s == GLWidget::left)
+		return spL_;
+	else
+		return spR_;
 }
 
 int Camera::unitScreenSize(float d)
@@ -114,54 +126,60 @@ int Camera::unitScreenSize(Point p)
 	return unitScreenSize(df);
 }
 
-float Camera::separationAtDistance(float d)
-{
-	if (d <= 0)
-	{
-		// Nothing should be behind the camera
-		return FLT_MAX;
-	}
-	else if (d < ppd_)
-	{
-		// Negative Paralax
-		return sep_ * (d - ppd_)/d;
-	}
-	else
-	{
-		// Positive Paralax (Same as above)
-		return sep_ * (d - ppd_)/d;
-	}
-}
+//float Camera::separationAtDistance(float d)
+//{
+//	if (d <= 0)
+//	{
+//		// Nothing should be behind the camera
+//		return FLT_MAX;
+//	}
+//	else if (d < ppd_)
+//	{
+//		// Negative Paralax
+//		return sep_ * (d - ppd_)/d;
+//	}
+//	else
+//	{
+//		// Positive Paralax (Same as above)
+//		return sep_ * (d - ppd_)/d;
+//	}
+//}
 
-float Camera::separationAtDistance(Point p)
+float Camera::separationAtPoint(Point p)
 {
-	float df = abs((position() - p) * direction());
-	return separationAtDistance(df);
+	Point pL = spL_->transformToScreenSpace(p);
+	Point pR = spR_->transformToScreenSpace(p);
+	return pR.x - pL.x;
 }
 
 void Camera::setPosition(Tool::Point pos)
 {
 	pos_ = pos;
+	preLoadMatrix();
 }
 
 void Camera::setDirection(Tool::Vector dir)
 {
 	dir_ = dir;
+	preLoadMatrix();
 }
 
 void Camera::setSeparation(float s)
 {
 	sep_ = s;
+	preLoadMatrix();
 }
 
 void Camera::setFieldOfView(float fov)
 {
 	fov_ = fov;
+	preLoadMatrix();
 }
 
 void Camera::setParalaxPlane(float dist)
 {
 	ppd_ = dist;
+	preLoadMatrix();
 }
 
 Tool::Point Camera::position()
