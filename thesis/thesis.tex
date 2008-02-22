@@ -1,0 +1,101 @@
+\documentclass[11pt]{scrartcl}
+%\documentclass[12pt, a4paper]{article}
+
+\newif\ifpdf
+\ifx\pdfoutput\undefined
+\pdffalse % we are not running PDFLaTeX
+\else
+\pdfoutput=1 % we are running PDFLaTeX
+\pdftrue
+\fi
+
+\ifpdf
+\usepackage[pdftex]{graphicx}
+\else
+\usepackage{graphicx}
+\fi
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+%\usepackage{german}
+%\usepackage{longtable}
+%\usepackage{tocbibind}
+%\usepackage{makeidx}
+\usepackage[pdftex,pageanchor,colorlinks,pdfborder=0,breaklinks,urlcolor=blue]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%\usepackage{pdfsync}  % enable tex source and pdf output syncronicity
+%\usepackage[all]{xy}
+\usepackage{multicol}
+%\usepackage{rotating}
+%\usepackage{wrapfig}
+%\usepackage{subfigure}
+%\usepackage{listings}
+
+\usepackage{geometry} % to change the page dimensions
+\geometry{a4paper}
+\geometry{textwidth=16.0cm,textheight=24.5cm}
+\geometry{left=3.0cm,twoside}
+\parskip=0 cm
+\parindent=0.0cm
+
+\renewcommand{\baselinestretch}{1.25}
+
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{fancy} % options: empty , plain , fancy
+
+\renewcommand{\labelitemi}{-}
+
+% Tiefe des Inhaltsverzeichnisses
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\hypersetup{
+    pdftitle={Master Thesis: Tool support for user testing of stereoscopic fatigue},
+%    pdfsubject={Subject of the document}, % Subject 
+    pdfauthor={Gerhard Roethlin},              % Author
+    pdfkeywords={master, fatigue testing software, stereo vision},       % Keywords
+}
+
+\title{Master Thesis: Tool support for user testing of stereoscopic fatigue\\
+{\large Implementing a flexible and extensible testing framework}}
+\author{\normalsize Gerhard R\"othlin 
+{\tt  \href{mailto:gerhardr@student.ethz.ch}{gerhardr@student.ethz.ch}}}
+\date{2008.01.07 - 2008.07.07}
+
+\ifpdf
+\DeclareGraphicsExtensions{.pdf, .jpg, .tif}
+\else
+\DeclareGraphicsExtensions{.eps, .jpg}
+\fi
+
+\begin{document}
+
+\maketitle
+%\tableofcontents
+
+\begin{center}
+\includegraphics[width=15cm,clip,trim=0cm 0cm 0cm 0cm]{media/title.png}
+\end{center}
+
+%\begin{abstract}
+%\end{abstract}
+
+\begin{multicols}{2}
+
+%\tableofcontents
+
+\input{sections/abstract.tex}
+\input{sections/stereogram.tex}
+
+\end{multicols}
+
+\appendix
+
+\input{sections/appendix.tex}
+
+
+
+\end{document}
+\end
