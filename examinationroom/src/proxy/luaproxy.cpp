@@ -251,6 +251,7 @@ void LuaProxy::onKeyDown(char k)
 	ts[0] = k;
 	ts[1] = '\0';
 	onEvent(eventIdx[1], ts);
+	lua_gc(L_, LUA_GCSTEP, 8);
 }
 
 void LuaProxy::onKeyUp(char k)
@@ -259,6 +260,7 @@ void LuaProxy::onKeyUp(char k)
 	ts[0] = k;
 	ts[1] = '\0';
 	onEvent(eventIdx[2], ts);
+	lua_gc(L_, LUA_GCSTEP, 8);
 }
 
 void LuaProxy::onQuit()
