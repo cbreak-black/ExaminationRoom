@@ -16,6 +16,9 @@
 namespace Examination
 {
 	class AbstractTexture;
+	class Stereogram;
+	class RandomdotStereogram;
+	class PatternStereogram;
 
 /**
 A proxy class to interface LUA and C++ AbsstractTexture objects.
@@ -31,11 +34,21 @@ public:
 	int zoom(lua_State *L);
 	int setZoom(lua_State *L);
 
+public: // Stereogram
+	int offset(lua_State *L);
+	int setOffset(lua_State *L);
+
+public: // RDS
+	int setMaxColor(lua_State *L);
+	int setExclusiveColor(lua_State *L);
+
 public:
 	std::tr1::shared_ptr<AbstractTexture> texture();
 
 private:
 	std::tr1::shared_ptr<AbstractTexture> texture_;
+	std::tr1::shared_ptr<Stereogram> stereogram_;
+	std::tr1::shared_ptr<RandomdotStereogram> rds_;
 
 public: // LUNA
 	static const char className[];

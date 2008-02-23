@@ -70,6 +70,9 @@ public: // Resizing
 	virtual void setZoom(float z);
 
 private:
+	void loadPixelMap(QImage image);
+
+private:
 	QImage image_;
 	QImage original_;
 

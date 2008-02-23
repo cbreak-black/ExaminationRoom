@@ -24,51 +24,62 @@ using namespace std::tr1;
 namespace Examination
 {
 
+const char * textureTypes[] =
+{
+	"Simple",
+	"Stereogram",
+	"RandomDot",
+	"Pattern",
+	0
+};
+
 TextureProxy::TextureProxy(lua_State *L)
 {
 	int n = lua_gettop(L);
-	if (n >= 2)
+	int opt = luaL_checkoption(L, 1, 0, textureTypes);
+
+	switch (opt)
 	{
-		int c = luaL_checknumber(L, 1); // Number of channels
-		luaL_argcheck(L, (c == 1 || c == 2 || c == 3), 1, "Only one, two or three channels allowed");
-		const char * p1 = luaL_checkstring(L, 2); // First Path
-		if (c == 1)
+		case 0:
 		{
-			texture_ = shared_ptr<AbstractTexture>(new Texture(std::string(p1)));
+			// Simple Texture
+			const char * p1 = luaL_checkstring(L, 2); // First Path
+			texture_ = shared_ptr<Texture>(new Texture(std::string(p1)));
+			break;
 		}
-		else if (c == 2)
+		case 1:
 		{
-			if (n == 3)
-			{
-				const char * p2 = luaL_checkstring(L, 3); // Second Path
-				shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(p1));
-				shared_ptr<Texture> t2 = shared_ptr<Texture>(new Texture(p2));
-				texture_ = shared_ptr<AbstractTexture>(new Stereogram(t1, t2));
-			}
-			else
-			{
-				shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(std::string(p1)));
-				texture_ = shared_ptr<AbstractTexture>(new RandomdotStereogram(t1));
-			}
+			// Stereogram
+			const char * p1 = luaL_checkstring(L, 2); // First Path
+			const char * p2 = luaL_checkstring(L, 3); // Second Path
+			shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(p1));
+			shared_ptr<Texture> t2 = shared_ptr<Texture>(new Texture(p2));
+			stereogram_ = shared_ptr<Stereogram>(new Stereogram(t1, t2));
+			texture_ = stereogram_;
+			break;
 		}
-		else if (c == 3)
+		case 2:
 		{
-			if (n == 3)
-			{
-				const char * p2 = luaL_checkstring(L, 3); // Second Path
-				shared_ptr<Texture> depth = shared_ptr<Texture>(new Texture(p1));
-				shared_ptr<Texture> pattern = shared_ptr<Texture>(new Texture(p2));
-				texture_ = shared_ptr<AbstractTexture>(new PatternStereogram(depth, pattern));
-			}
+			// Random Dot Stereogram
+			const char * p1 = luaL_checkstring(L, 2); // First Path
+			shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(std::string(p1)));
+			rds_ = shared_ptr<RandomdotStereogram>(new RandomdotStereogram(t1));
+			stereogram_ = rds_;
+			texture_ = stereogram_;
+			break;
+		}
+		case 3:
+		{
+			// Pattern Stereogram
+			const char * p1 = luaL_checkstring(L, 2); // First Path
+			const char * p2 = luaL_checkstring(L, 3); // Second Path
+			shared_ptr<Texture> depth = shared_ptr<Texture>(new Texture(p1));
+			shared_ptr<Texture> pattern = shared_ptr<Texture>(new Texture(p2));
+			stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern));
+			texture_ = stereogram_;
+			break;
 		}
 	}
-	else
-	{
-		lua_pushstring(L, errArgN);
-		lua_error(L);
-		return;
-	}
-	
 	lua_pop(L, n);
 }
 	
@@ -92,9 +103,73 @@ int TextureProxy::zoom(lua_State *L)
 int TextureProxy::setZoom(lua_State *L)
 {
 	checkTop(L, 2);
-	texture()->setZoom(lua_tonumber(L,-1));
+	texture()->setZoom(lua_tonumber(L,2));
 	lua_pop(L, 2);
 	return 0;
+}
+
+int TextureProxy::offset(lua_State *L)
+{
+	if (stereogram_)
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, stereogram_->offset());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int TextureProxy::setOffset(lua_State *L)
+{
+	if (stereogram_)
+	{
+		checkTop(L, 2);
+		stereogram_->setOffset(lua_tonumber(L,2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int TextureProxy::setMaxColor(lua_State *L)
+{
+	if (rds_)
+	{
+		checkTop(L, 2);
+		rds_->setMaxColor(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int TextureProxy::setExclusiveColor(lua_State *L)
+{
+	if (rds_)
+	{
+		checkTop(L, 2);
+		rds_->setExclusiveColor(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
 }
 
 const char TextureProxy::className[] = "Texture";
@@ -102,6 +177,10 @@ const Luna<TextureProxy>::RegType TextureProxy::Register[] =
 {
 	{ "zoom", &TextureProxy::zoom },
 	{ "setZoom", &TextureProxy::setZoom },
+	{ "offset", &TextureProxy::offset },
+	{ "setOffset", &TextureProxy::setOffset },
+	{ "setMaxColor", &TextureProxy::setMaxColor },
+	{ "setExclusiveColor", &TextureProxy::setExclusiveColor },
 	{ 0, 0 }
 };
 	

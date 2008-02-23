@@ -25,6 +25,7 @@ Stereogram::Stereogram()
 	texLeft_.reset();
 	texRight_.reset();
 	zoomFactor_ = 1.0f;
+	offset_ = 0;
 }
 
 Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
@@ -33,6 +34,7 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	texLeft_ = l;
 	texRight_ = r;
 	zoomFactor_ = 1.0f;
+	offset_ = 0;
 }
 
 void Stereogram::recreateStereogram()
@@ -103,6 +105,17 @@ void Stereogram::setZoom(float z)
 		texLeft_->setZoom(z);
 	if (texRight_)
 		texRight_->setZoom(z);
+}
+
+int Stereogram::offset()
+{
+	return offset_;
+}
+
+void Stereogram::setOffset(int o)
+{
+	offset_ = o;
+	recreateStereogram();
 }
 
 void Stereogram::glBindTex(GLWidget * w)

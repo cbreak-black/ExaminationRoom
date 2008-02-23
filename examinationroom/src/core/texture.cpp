@@ -12,6 +12,7 @@
 #include "glwidget.h"
 
 #include <iostream>
+#include "platform_math.h"
 
 namespace Examination
 {
@@ -49,6 +50,42 @@ Texture::~Texture()
 	// Delete associated GL Textures
 }
 
+void Texture::loadPixelMap(QImage image)
+{
+	int nc = image.numColors();
+	if (nc > 0)
+	{
+		int nm = pow(2, ceil(log2(nc)));
+		GLfloat * mapR = new GLfloat[nm];
+		GLfloat * mapG = new GLfloat[nm];
+		GLfloat * mapB = new GLfloat[nm];
+		GLfloat * mapA = new GLfloat[nm];
+		for (int i = 0; i<nc; i++)
+		{
+			QRgb c = image.color(i);
+			mapR[i] = (float)qRed(c)/0xff;
+			mapG[i] = (float)qGreen(c)/0xff;
+			mapB[i] = (float)qBlue(c)/0xff;
+			mapA[i] = (float)qAlpha(c)/0xff;
+		}
+		for (int i = nc; i<nm; i++)
+		{
+			mapR[i] = 0.0f;
+			mapG[i] = 0.0f;
+			mapB[i] = 0.0f;
+			mapA[i] = 0.0f;
+		}
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_R, nm,mapR);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_G, nm,mapG);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_B, nm,mapB);
+		glPixelMapfv(GL_PIXEL_MAP_I_TO_A, nm,mapA);
+		delete [] mapR;
+		delete [] mapG;
+		delete [] mapB;
+		delete [] mapA;
+	}
+}
+
 void Texture::glBindTex(GLWidget * w)
 {
 //	imageGLID_ = w->bindTexture(image_); // SLOW?! Only without shared contexts.
@@ -71,6 +108,7 @@ void Texture::glBindTex(GLWidget * w)
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
+			loadPixelMap(image_);
 			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
 						 GL_UNSIGNED_BYTE, t);
@@ -149,6 +187,7 @@ void Texture::draw(GLWidget * w)
 {
 	if (image_.format() == QImage::Format_Indexed8)
 	{
+		loadPixelMap(image_);
 		GLubyte * t =  image_.bits();
 		glPixelZoom(zoomFactor_,zoomFactor_);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);

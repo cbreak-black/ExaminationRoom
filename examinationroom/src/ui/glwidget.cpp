@@ -86,14 +86,6 @@ void GLWidget::initializeGL()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glClearColor(0, 0, 0, 0);
-
-	// For Indexed B&W
-	GLfloat map[] = { 0.0f, 0.333f, 0.667f, 1.0f};
-	GLfloat mapA[] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 4,map);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 4,map);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 4,map);
-	glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 4,mapA);
 }
 
 void GLWidget::paintGL()

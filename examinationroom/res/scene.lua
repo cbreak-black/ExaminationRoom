@@ -17,7 +17,7 @@ rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,12);
 rectFloor:setPosition(-3, -3, -9);
 rectFloor:setTexCoords(0,0, 0,12, 6,0, 6,12);
-rectFloor:setTexture(Texture(1, "res/checkerboard.png"));
+rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
@@ -25,7 +25,7 @@ rectCeil:setDirA(6,0,0);
 rectCeil:setDirB(0,0,12);
 rectCeil:setPosition(-3, 3, -9);
 rectCeil:setTexCoords(0,0, 0,12, 6,0, 6,12);
-rectCeil:setTexture(Texture(1, "res/checkerboard.png"));
+rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
@@ -99,9 +99,12 @@ local nextFrame = function ()
 		permuteTable(replies);
 		permuteTable(texIndexes);
 	end
-	local texture = Texture(2,
-		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
-		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
+--	local texture = Texture("Stereogram",
+--		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
+--		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
+	local texture = Texture("RandomDot", "res/triangle_up.png");
+	texture:setMaxColor(4);
+	texture:setExclusiveColor(1);
 	local pos = mountPoints[testNum];
 	if (testNum % 2 == 0) then
 		stereogramB:setTexture(texture);

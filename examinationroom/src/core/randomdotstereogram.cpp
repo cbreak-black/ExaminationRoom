@@ -23,14 +23,11 @@ using namespace std::tr1;
 namespace Examination
 {
 
-/**
-The number of colors used in random dot stereograms.
-*/
-const int maxColor = 4; // Number of grayscales in image
-const int excColor = 0; // Number of colors exclusively to fg/bg
-
 RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 {
+	maxColor_ = 4;
+	excColor_ = 0;
+	setOffset(6);
 	setTexDepth(d);
 	// Stereogram gets generated automatically
 }
@@ -46,24 +43,23 @@ void RandomdotStereogram::recreateStereogram()
 	QImage imageR = QImage(s, QImage::Format_Indexed8);
 
 	int i, j;
-	float step = 255.0/(maxColor-1);
-	imageL.setNumColors(maxColor);
-	imageR.setNumColors(maxColor);
-	for (i = 0; i < maxColor; i++)
+	float step = 255.0/(maxColor_-1);
+	imageL.setNumColors(maxColor_);
+	imageR.setNumColors(maxColor_);
+	for (i = 0; i < maxColor_; i++)
 	{
 		QRgb c = qRgb(i*step, i*step, i*step);
 		imageL.setColor(i, c);
 		imageR.setColor(i, c);
 	}
 
-	const int offset = 6;
-	const int divisor = 255 / offset;
+	const int divisor = 255 / offset();
 
 	for (j = 0; j < s.height(); j++)
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			char col = rand()%(maxColor-excColor);
+			char col = rand()%(maxColor_-excColor_);
 			imageL.setPixel(i, j, col);
 			imageR.setPixel(i, j, col);
 		}
@@ -73,7 +69,7 @@ void RandomdotStereogram::recreateStereogram()
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			char col = rand()%(maxColor-excColor)+excColor;
+			char col = rand()%(maxColor_-excColor_)+excColor_;
 			unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
 			if (o > 0)
 			{
@@ -91,6 +87,16 @@ void RandomdotStereogram::recreateStereogram()
 	shared_ptr<Texture> texRight = shared_ptr<Texture>(new Texture(imageR));
 	setTexLeft(texLeft);
 	setTexRight(texRight);
+}
+
+void RandomdotStereogram::setMaxColor(int mc)
+{
+	maxColor_ = mc;
+}
+
+void RandomdotStereogram::setExclusiveColor(int ec)
+{
+	excColor_ = ec;
 }
 
 }

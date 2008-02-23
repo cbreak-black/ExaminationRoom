@@ -68,8 +68,13 @@ public: // Resizing
 	virtual float zoom();
 	virtual void setZoom(float z);
 
+public:
+	virtual int offset();
+	virtual void setOffset(int o);
+
 private:
 	float zoomFactor_;
+	int offset_;	/**< Pixel offset between left and right */
 
 private:
 	virtual void recreateStereogram();
@@ -87,7 +92,7 @@ private:
 	std::tr1::shared_ptr<Texture> texLeft_;
 	std::tr1::shared_ptr<Texture> texRight_;
 };
-	
+
 }
 
 #endif

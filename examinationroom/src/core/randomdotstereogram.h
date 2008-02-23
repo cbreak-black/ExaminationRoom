@@ -29,8 +29,16 @@ public: // Constructors and Destructor
 	*/
 	RandomdotStereogram(std::tr1::shared_ptr<Texture> d);
 
+public:
+	void setMaxColor(int mc);
+	void setExclusiveColor(int ec);
+
 private:
 	virtual void recreateStereogram();
+
+private:
+	int maxColor_;	/**< Number of grayscales in image */
+	int excColor_;	/**< Number of colors exclusively to fg/bg */
 };
 	
 }
