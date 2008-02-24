@@ -50,11 +50,20 @@ Key = {
 [21] = "down";
 }
 Dir = {
-["up"] = "back";
-["down"] = "front";
+["up"] = "concave";
+["down"] = "convex";
 }
-texbases = {
-"res/marble_%s.%s.png";
+-- For FG/BG
+patterns = {
+"res/texMarbleBlack.jpg";
+"res/texMarbleGrey.jpg";
+"res/texMarbleBrown.jpg";
+}
+-- For object
+shapes =
+{
+"res/square.png";
+"res/circle.png";
 }
 
 -- Test Scene details
@@ -73,13 +82,10 @@ mountPoints = { -- Pre Permuted, no oclusion
 {1,-3,2},
 }
 
+-- Possible replies
 replies = { -- Same size as mountPoints
-"back","back","back","back","back","back",
-"front","front","front","front","front","front",
-}
-texIndexes = {
-1,1,1,1,1,1,
-1,1,1,1,1,1,
+"convex","convex","convex","convex","convex","convex",
+"concave","concave","concave","concave","concave","concave",
 }
 
 permuteTable = function (t)
@@ -97,14 +103,22 @@ local nextFrame = function ()
 		Scene:log("New Test Cycle");
 --		permuteTable(mountPoints);
 		permuteTable(replies);
-		permuteTable(texIndexes);
 	end
+--	// Uncomment the following for a (rerendered) Stereogram version
 --	local texture = Texture("Stereogram",
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
-	local texture = Texture("RandomDot", "res/triangle_up.png");
-	texture:setMaxColor(4);
-	texture:setExclusiveColor(1);
+--	// Uncomment the following for a Random Dot version
+--	permuteTable(shapes); -- Pick a random shape
+--	local texture = Texture("RandomDot", shapes[1]);
+--	texture:setMaxColor(4);
+--	texture:setExclusiveColor(1);
+--	// Uncomment the following for a Pattern version
+	permuteTable(patterns); -- Pick two random patterns
+	permuteTable(shapes); -- Pick a random shape
+	local texture = Texture("Pattern", shapes[1], patterns[1], patterns[2]);
+--	// End Comments
+	texture:setStyle(replies[testNum]); -- Here the concave/convex status is set
 	local pos = mountPoints[testNum];
 	if (testNum % 2 == 0) then
 		stereogramB:setTexture(texture);

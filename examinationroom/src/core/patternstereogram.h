@@ -28,14 +28,23 @@ public: // Constructors and Destructor
 	/**
 	Creates a new stereogram by taking the passed texture as depth map.
 	 \param d	Depth map
+	 \param p	Background pattern map
 	*/
 	PatternStereogram(std::tr1::shared_ptr<Texture> d, std::tr1::shared_ptr<Texture> p);
+	/**
+	 Creates a new stereogram by taking the passed texture as depth map.
+	 \param d	Depth map
+	 \param p	Background pattern map
+	 \param q	Foreground pattern map
+	 */
+	PatternStereogram(std::tr1::shared_ptr<Texture> d, std::tr1::shared_ptr<Texture> p, std::tr1::shared_ptr<Texture> q);
 
 private:
 	virtual void recreateStereogram();
 
 private:
-	std::tr1::shared_ptr<Texture> texPattern_;
+	std::tr1::shared_ptr<Texture> bgPattern_;
+	std::tr1::shared_ptr<Texture> fgPattern_;
 };
 	
 }

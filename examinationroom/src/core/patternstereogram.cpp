@@ -25,7 +25,16 @@ namespace Examination
 
 PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> p)
 {
-	texPattern_ = p;
+	bgPattern_ = p;
+	fgPattern_ = p;
+	setTexDepth(d);
+	// Stereogram gets generated automatically
+}
+
+PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> p, shared_ptr<Texture> q)
+{
+	bgPattern_ = p;
+	fgPattern_ = q;
 	setTexDepth(d);
 	// Stereogram gets generated automatically
 }
@@ -34,48 +43,68 @@ void PatternStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;
 	QImage imageTemp = texDepth()->image();
-	QImage imagePattern = texPattern_->image();
-	QSize depthSize = imageTemp.size();
-	QSize patSize = imagePattern.size();
+	QImage imageBG = bgPattern_->image();
+	QImage imageFG = fgPattern_->image();
+	QSize s = imageTemp.size();
+	QSize bgSize = imageBG.size();
+	QSize fgSize = imageFG.size();
 
-	const int offset = 4/zoom();
-	const int divisor = 255 / offset;
-	int i, j;
-	
-	// Create left and right tex
-	// TODO: Select random subset
-	int targetSizeX = patSize.width() - depthSize.width() - offset;
-	int targetSizeY = patSize.height() - depthSize.height();
-	if (targetSizeX < 0 || targetSizeY < 0) return; // Error
-	int targetX = rand() % targetSizeX;
-	int targetY = rand() % targetSizeY;
-	QRect r = QRect(targetX+offset, targetY, depthSize.width(), depthSize.height());
-	QImage imageL = imagePattern.copy(r);
-	QImage imageR = QImage(depthSize, imagePattern.format());
-
-	unsigned int c;		// Color
-	unsigned char o;	// Offset
-	if (imagePattern.depth() > 8)
+	// Create left and right tex rectangle for bg
+	int targetX = rand() % bgSize.width();
+	int targetY = rand() % bgSize.height();
+	QRect bgR = QRect(targetX, targetY, s.width(), s.height());
+	// Create left and right tex rectangle for fg
+	targetX = rand() % fgSize.width();
+	targetY = rand() % fgSize.height();
+	QRect fgR = QRect(targetX, targetY, s.width(), s.height());
+	// Set Up BG
+	QImage imageL = QImage(s, QImage::Format_RGB32);
+	QImage imageR = QImage(s, QImage::Format_RGB32);
+	for (int j = 0; j < s.height(); j++)
 	{
-		for (j = 0; j < depthSize.height(); j++)
+		for (int i = 0; i < s.width(); i++)
 		{
-			for (i = 0; i < depthSize.width(); i++)
+			QRgb col = imageBG.pixel(i%imageBG.width(), j%imageBG.height());
+			imageL.setPixel(i, j, col);
+			imageR.setPixel(i, j, col);
+		}
+	}
+
+	const int divisor = 255 / offset();
+	if (style() == Stereogram::convex)
+	{
+		for (int j = 0; j < s.height(); j++)
+		{
+			for (int i = 0; i < s.width(); i++)
 			{
-				o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
-				c = imagePattern.pixel(i-o+r.x(), j+r.y());
-				imageR.setPixel(i, j, c);
+				unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
+				if (o > 0)
+				{
+					// For convex objects, the destination in the picture is offset
+					QRgb col = imageFG.pixel(i%imageFG.width(), j%imageFG.height());
+					unsigned char oL = floor(0.5f*o);
+					unsigned char oR = o - oL;
+					if (i+oL < s.width())
+						imageL.setPixel(i+oL, j, col);
+					if (i-oR > 0)
+						imageR.setPixel(i-oR, j, col);
+				}
 			}
 		}
 	}
-	else
+	else // (style() == Stereogram::concave)
 	{
-		for (j = 0; j < depthSize.height(); j++)
+		for (int j = 0; j < s.height(); j++)
 		{
-			for (i = 0; i < depthSize.width(); i++)
+			for (int i = 0; i < s.width(); i++)
 			{
-				o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
-				c = imagePattern.pixelIndex(i-o+r.x(), j+r.y());
-				imageR.setPixel(i, j, c);
+				unsigned char o = roundf(((float)qGray(imageTemp.pixel(i, j))) / divisor);
+				if (o > 0)
+				{
+					// For concave objects, the source of the picture is offset
+					imageL.setPixel(i, j, imageFG.pixel((i+o)%imageFG.width(), j%imageFG.height()));
+					imageR.setPixel(i, j, imageFG.pixel(i%imageFG.width(), j%imageFG.height()));
+				}
 			}
 		}
 	}

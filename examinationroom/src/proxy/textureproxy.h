@@ -37,6 +37,8 @@ public:
 public: // Stereogram
 	int offset(lua_State *L);
 	int setOffset(lua_State *L);
+	int style(lua_State *L);
+	int setStyle(lua_State *L);
 
 public: // RDS
 	int setMaxColor(lua_State *L);

@@ -24,6 +24,13 @@ camera and one for the right camera.
 */
 class Stereogram : public AbstractTexture
 {
+public: // Enums
+	/**
+	The style of the stereogram. Convex means going out of the screen, Concave means
+	going into the screen.
+	*/
+	typedef enum { convex, concave } Style;
+
 public: // Constructors and Destructor
 	/**
 	Creates a new stereogram by taking the passed textures as left and right
@@ -71,10 +78,13 @@ public: // Resizing
 public:
 	virtual int offset();
 	virtual void setOffset(int o);
+	virtual Style style();
+	virtual void setStyle(Style s);
 
 private:
 	float zoomFactor_;
 	int offset_;	/**< Pixel offset between left and right */
+	Style style_;
 
 private:
 	virtual void recreateStereogram();
@@ -87,7 +97,7 @@ protected:
 	void setTexLeft(std::tr1::shared_ptr<Texture> t);
 	void setTexRight(std::tr1::shared_ptr<Texture> t);
 
-private:
+private: // Subtextures
 	std::tr1::shared_ptr<Texture> texDepth_;
 	std::tr1::shared_ptr<Texture> texLeft_;
 	std::tr1::shared_ptr<Texture> texRight_;

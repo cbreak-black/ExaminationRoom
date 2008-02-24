@@ -33,6 +33,13 @@ const char * textureTypes[] =
 	0
 };
 
+const char * textureStyles[] =
+{
+	"convex",
+	"concave",
+	0
+};
+
 TextureProxy::TextureProxy(lua_State *L)
 {
 	int n = lua_gettop(L);
@@ -75,7 +82,16 @@ TextureProxy::TextureProxy(lua_State *L)
 			const char * p2 = luaL_checkstring(L, 3); // Second Path
 			shared_ptr<Texture> depth = shared_ptr<Texture>(new Texture(p1));
 			shared_ptr<Texture> pattern = shared_ptr<Texture>(new Texture(p2));
-			stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern));
+			if (n == 3)
+			{
+				stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern));
+			}
+			else // (n == 4)
+			{
+				const char * p3 = luaL_checkstring(L, 4); // Second Path
+				shared_ptr<Texture> patternFG = shared_ptr<Texture>(new Texture(p3));
+				stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern, patternFG));
+			}
 			texture_ = stereogram_;
 			break;
 		}
@@ -140,6 +156,38 @@ int TextureProxy::setOffset(lua_State *L)
 	}
 }
 
+int TextureProxy::style(lua_State *L)
+{
+	if (stereogram_)
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushstring(L, textureStyles[stereogram_->style()]);
+		return 1;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int TextureProxy::setStyle(lua_State *L)
+{
+	if (stereogram_)
+	{
+		checkTop(L, 2);
+		stereogram_->setStyle((Stereogram::Style)luaL_checkoption(L, 2, 0, textureStyles));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
 int TextureProxy::setMaxColor(lua_State *L)
 {
 	if (rds_)
@@ -179,6 +227,8 @@ const Luna<TextureProxy>::RegType TextureProxy::Register[] =
 	{ "setZoom", &TextureProxy::setZoom },
 	{ "offset", &TextureProxy::offset },
 	{ "setOffset", &TextureProxy::setOffset },
+	{ "style", &TextureProxy::style },
+	{ "setStyle", &TextureProxy::setStyle },
 	{ "setMaxColor", &TextureProxy::setMaxColor },
 	{ "setExclusiveColor", &TextureProxy::setExclusiveColor },
 	{ 0, 0 }

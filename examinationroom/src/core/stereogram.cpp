@@ -25,7 +25,8 @@ Stereogram::Stereogram()
 	texLeft_.reset();
 	texRight_.reset();
 	zoomFactor_ = 1.0f;
-	offset_ = 0;
+	offset_ = 6;
+	style_ = convex;
 }
 
 Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
@@ -34,7 +35,8 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	texLeft_ = l;
 	texRight_ = r;
 	zoomFactor_ = 1.0f;
-	offset_ = 0;
+	offset_ = 6;
+	style_ = convex;
 }
 
 void Stereogram::recreateStereogram()
@@ -114,7 +116,21 @@ int Stereogram::offset()
 
 void Stereogram::setOffset(int o)
 {
-	offset_ = o;
+	if (o > 0)
+	{
+		offset_ = o;
+		recreateStereogram();
+	}
+}
+
+Stereogram::Style Stereogram::style()
+{
+	return style_;
+}
+
+void Stereogram::setStyle(Stereogram::Style s)
+{
+	style_ = s;
 	recreateStereogram();
 }
 
