@@ -147,11 +147,11 @@ void Texture::glBindTex(GLWidget * w)
 					uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
 					uint *end = p + tx.width();
 					while (p < end)
-					{       // To RGBA
-						*q = ((*p << 0) & 0x000000ff)   // Red
-						| ((*p << 0) & 0x0000ff00)      // Green
-						| ((*p << 0) & 0x00ff0000)      // Blue
-						| ((*p >> 0) & 0xff000000);    // Alpha
+					{       // To RGBA Little Endian
+						*q = ((*p >> 16) & 0x000000ff)	// Red
+						| ((*p << 0) & 0x0000ff00)		// Green
+						| ((*p << 16) & 0x00ff0000)		// Blue
+						| ((*p >> 0) & 0xff000000);		// Alpha
 						p++;
 						q++;
 					}
@@ -224,11 +224,11 @@ void Texture::draw(GLWidget * w)
 				uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
 				uint *end = p + tx.width();
 				while (p < end)
-				{       // To RGBA
-					*q = ((*p << 0) & 0x000000ff)   // Red
-					| ((*p << 0) & 0x0000ff00)      // Green
-					| ((*p << 0) & 0x00ff0000)      // Blue
-					| ((*p >> 0) & 0xff000000);    // Alpha
+				{       // To RGBA Little endian
+					*q = ((*p >> 16) & 0x000000ff)	// Red
+					| ((*p << 0) & 0x0000ff00)		// Green
+					| ((*p << 16) & 0x00ff0000)		// Blue
+					| ((*p >> 0) & 0xff000000);		// Alpha
 					p++;
 					q++;
 				}
