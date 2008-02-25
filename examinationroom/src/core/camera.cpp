@@ -94,10 +94,21 @@ void Camera::loadMatrix(float offsetCamera)
 
 void Camera::preLoadMatrix()
 {
+	// Hopefully an old context is still active
+	// (Since contexts are never deactivated without making an other active,
+	// it should work)
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
 	loadMatrix(sep_/2);
 	spL_->calculateMVP();
 	loadMatrix(-sep_/2);
 	spR_->calculateMVP();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 ScreenProject * Camera::screenProject(GLWidget::Side s)

@@ -12,6 +12,11 @@ Scene:setCameraFoV(50);
 Scene:setCameraSep(0.15);
 Scene:setCameraParalaxPlane(10);
 
+local sn = Object("Text");
+sn:setText("Watch here");
+sn:setPosition(0,0,0);
+Scene:addObject(sn);
+
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,12);
@@ -127,6 +132,7 @@ local nextFrame = function ()
 		stereogramA:setTexture(texture);
 		stereogramA:setPosition(pos[1], pos[2], pos[3]);
 	end;
+	sn:setPosition(pos[1]+2, pos[2], pos[3]);
 	-- Separation at center
 	local sep = statistics:separationAtPoint(pos[1]+1, pos[2]+1, pos[3]);
 	local s = string.format("New Q: %s @ (%0.2f, %0.2f, %0.2f), s=%0.4f deg",

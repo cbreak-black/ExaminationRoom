@@ -11,6 +11,7 @@
 
 #include "rectangle.h"
 #include "pixelplane.h"
+#include "text.h"
 
 #include "textureproxy.h"
 
@@ -28,6 +29,7 @@ const char * objectTypes[] =
 {
 	"Rectangle",
 	"Pixelplane",
+	"Text",
 	0
 };
 
@@ -45,6 +47,10 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	case 1:
 		pixelplane_ = shared_ptr<Pixelplane>(new Pixelplane());
 		object_ = pixelplane_;
+		break;
+	case 2:
+		text_ = shared_ptr<Text>(new Text());
+		object_ = text_;
 		break;
 	}
 	lua_pop(L, 0);
@@ -195,6 +201,34 @@ int ObjectProxy::setAutoResize(lua_State *L)
 	return 0;
 }
 
+int ObjectProxy::text(lua_State *L)
+{
+	if (text())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushstring(L, qPrintable(text()->text()));
+		return 1;
+	}
+
+	lua_settop(L, 0);
+	return 0;
+}
+
+int ObjectProxy::setText(lua_State *L)
+{
+	if (text())
+	{
+		checkTop(L, 2);
+		text()->setText(lua_tostring(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+
+	lua_settop(L,0);
+	return 0;
+}
+
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return rectangle_;
@@ -203,6 +237,11 @@ shared_ptr<Rectangle> ObjectProxy::rectangle()
 shared_ptr<Pixelplane> ObjectProxy::pixelplane()
 {
 	return pixelplane_;
+}
+
+shared_ptr<Text> ObjectProxy::text()
+{
+	return text_;
 }
 
 shared_ptr<Object> ObjectProxy::object()
@@ -218,6 +257,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 { "setDirA", &ObjectProxy::setDirA },
 { "setDirB", &ObjectProxy::setDirB },
 { "setSize", &ObjectProxy::setSize },
+{ "text", &ObjectProxy::text },
+{ "setText", &ObjectProxy::setText },
 { "position", &ObjectProxy::position },
 { "setPosition", &ObjectProxy::setPosition },
 { "setTexCoords", &ObjectProxy::setTexCoords },

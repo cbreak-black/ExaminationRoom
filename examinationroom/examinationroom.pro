@@ -18,6 +18,7 @@ HEADERS += \
 	src/core/object.h \
 	src/core/rectangle.h \
 	src/core/pixelplane.h \
+	src/core/text.h \
 	src/core/abstracttexture.h \
 	src/core/texture.h \
 	src/core/randomdotstereogram.h \
@@ -32,6 +33,7 @@ SOURCES += \
 	src/core/object.cpp \
 	src/core/rectangle.cpp \
 	src/core/pixelplane.cpp \
+	src/core/text.cpp \
 	src/core/abstracttexture.cpp \
 	src/core/texture.cpp \
 	src/core/randomdotstereogram.cpp \

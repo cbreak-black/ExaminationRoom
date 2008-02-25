@@ -12,9 +12,6 @@
 
 #include "abstracttexture.h"
 
-#include <map>
-#include <memory>
-
 #include <QImage>
 #include <qgl.h>
 

@@ -17,6 +17,7 @@ namespace Examination
 {
 	class Rectangle;
 	class Pixelplane;
+	class Text;
 	class Object;
 
 class ObjectProxy
@@ -40,15 +41,21 @@ public: // Textures
 	int setTexCoords(lua_State *L);
 	int setTexture(lua_State *L);
 	int setAutoResize(lua_State *L);
-	
+
+public: // Text
+	int text(lua_State *L);
+	int setText(lua_State *L);
+
 public:
 	std::tr1::shared_ptr<Rectangle> rectangle();
 	std::tr1::shared_ptr<Pixelplane> pixelplane();
+	std::tr1::shared_ptr<Text> text();
 	std::tr1::shared_ptr<Object> object();
 	
 private:
 	std::tr1::shared_ptr<Rectangle> rectangle_;
 	std::tr1::shared_ptr<Pixelplane> pixelplane_;
+	std::tr1::shared_ptr<Text> text_;
 	std::tr1::shared_ptr<Object> object_;
 
 public: // LUNA
