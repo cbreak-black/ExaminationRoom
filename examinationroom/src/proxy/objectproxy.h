@@ -16,6 +16,7 @@
 namespace Examination
 {
 	class Rectangle;
+	class Parallelepiped;
 	class Pixelplane;
 	class Text;
 	class Object;
@@ -24,13 +25,14 @@ class ObjectProxy
 {
 public:
 	ObjectProxy(lua_State *L);
-	~ObjectProxy();
 
 public: // From LUA
 	int dirA(lua_State *L);
 	int dirB(lua_State *L);
+	int dirC(lua_State *L);
 	int setDirA(lua_State *L);
 	int setDirB(lua_State *L);
+	int setDirC(lua_State *L);
 	int setSize(lua_State *L);
 
 public: // Object
@@ -48,6 +50,7 @@ public: // Text
 
 public:
 	std::tr1::shared_ptr<Rectangle> rectangle();
+	std::tr1::shared_ptr<Parallelepiped> parallelepiped();
 	std::tr1::shared_ptr<Pixelplane> pixelplane();
 	std::tr1::shared_ptr<Text> text();
 	std::tr1::shared_ptr<Object> object();

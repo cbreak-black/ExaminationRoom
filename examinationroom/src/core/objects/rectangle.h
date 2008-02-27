@@ -69,6 +69,10 @@ public: // Textures
 	*/
 	void setTexCoords(float llx, float lly, float ulx, float uly,
 					  float lrx, float lry, float urx, float ury);
+	Tool::Point texA();
+	Tool::Point texB();
+	Tool::Point texC();
+	Tool::Point texD();
 
 private:
 	Tool::Vector directionA_;

@@ -13,11 +13,6 @@ Scene:setCameraFoV(18);
 Scene:setCameraSep(0.065);
 Scene:setCameraParalaxPlane(25);
 
-local sn = Object("Text");
-sn:setText("Watch here");
-sn:setPosition(0,0,0);
-Scene:addObject(sn);
-
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,48);
@@ -34,18 +29,21 @@ rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
 rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
+local pep1 = Object("Parallelepiped");
+pep1:setDirA(1,0,0);
+pep1:setDirB(0,1,0);
+pep1:setDirC(0,0,1);
+pep1:setTexCoords(0,0, 0,2, 2,0, 2,2);
+pep1:setPosition(-3, -3, 0);
+pep1:setTexture(Texture("Simple", "res/checkerboard.png"));
+Scene:addObject(pep1);
+local pep2 = Object("Parallelepiped");
+pep2:setPosition(0, -3, -2);
+pep2.pos = {0,-3,-2};
+pep2:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
+Scene:addObject(pep2);
+
 Scene:log("Added floor and ceil");
-
-local stereograms = {};
-for i=1,9 do
-	stereograms[i] = Object("Pixelplane");
-	stereograms[i]:setSize(2.0,2.0);
-	stereograms[i]:setAutoResize(true);
-	stereograms[i].pos = {0,0,0};
-	Scene:addObject(stereograms[i]);
-	Scene:log("Added stereogram "..i);
-end
-
 
 -- Library
 Key = {
@@ -68,17 +66,6 @@ patterns = {
 "res/texMarbleGrey.jpg";
 "res/texMarbleBrown.jpg";
 }
--- For object
-shapes =
-{
-"res/square.png";
-"res/circle.png";
-}
-
--- Possible replies
-replies = { -- Same size as mountPoints
-"convex","concave",
-}
 
 permuteTable = function (t)
 	local n = #t;
@@ -88,42 +75,18 @@ permuteTable = function (t)
 	end
 end;
 
-local cur = 1;
-
 local nextFrame = function ()
-	permuteTable(replies);
---	// Uncomment the following for a Random Dot version
-	permuteTable(shapes); -- Pick a random shape
-	local texture = Texture("RandomDot", shapes[1]);
-	texture:setMaxColor(8);
-	texture:setExclusiveColor(1);
---	// Uncomment the following for a Pattern version
---	permuteTable(patterns); -- Pick two random patterns
---	permuteTable(shapes); -- Pick a random shape
---	local texture = Texture("Pattern", shapes[1], patterns[1], patterns[2]);
---	// End Comments
-	texture:setStyle(replies[1]); -- Here the concave/convex status is set
-
-	local pos = stereograms[cur].pos;
-	stereograms[cur]:setTexture(texture);
-	stereograms[cur]:setPosition(pos[1], pos[2], pos[3]);
-	sn:setPosition(pos[1]+2, pos[2], pos[3]);
-	-- Separation at center
-	local sep = statistics:separationAtPoint(pos[1]+1, pos[2]+1, pos[3]);
-	local s = string.format("%s @ (%0.2f,%0.2f,%0.2f),s=%0.4f",
-		replies[1], pos[1]+1, pos[2]+1, pos[3], sep);
-	Scene:log(s);
-	sn:setText(s);
+	local pos = pep2.pos;
+	pep2:setPosition(pos[1], pos[2], pos[3]);
 end
 nextFrame();
 
 local parseInput = function (k)
 	local step = 1;
 	local d = Key[string.byte(k)];
-	local n = tonumber(k);
 	if d then
 		Scene:log("input: "..d);
-		local pos = stereograms[cur].pos;
+		local pos = pep2.pos;
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
@@ -144,12 +107,35 @@ local parseInput = function (k)
 			Scene:addObject(rectCeil);
 		end;
 		nextFrame();
-	elseif n then
-		cur = n;
+	else
+		Scene:log("Unknown key "..k.." ("..string.byte(k)..")");
 	end
 end;
 
---Scene:setEventListener("update", updateListener);
+local tPassed = 0;
+local updateListener = function (delta)
+	local fullCircle = math.pi*2;
+	tPassed = tPassed + delta;
+	if (tPassed > fullCircle)  then
+		tPassed = tPassed - fullCircle;
+	end;
+	local x, y;
+	local d = fullCircle/3;
+	local l = 0.816*3;
+	local s = 0.578*3;
+	x = math.sin(tPassed-d);
+	y = math.cos(tPassed-d);
+	pep2:setDirA(x*l, s, y*l);
+	x = math.sin(tPassed);
+	y = math.cos(tPassed);
+	pep2:setDirB(x*l, s, y*l);
+	x = math.sin(tPassed+d);
+	y = math.cos(tPassed+d);
+	pep2:setDirC(x*l, s, y*l);
+end;
+updateListener(0);
+
+Scene:setEventListener("update", updateListener);
 Scene:setEventListener("keyDown", parseInput);
 --Scene:setEventListener("keyUp", function (k) Scene:log("up: "..k); end);
 Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);

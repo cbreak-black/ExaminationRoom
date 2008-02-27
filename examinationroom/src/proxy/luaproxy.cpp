@@ -16,8 +16,6 @@
 #include "objectproxy.h"
 #include "textureproxy.h"
 
-#include "rectangle.h"
-
 #include "luahelper.h"
 
 #include <iostream>
@@ -89,13 +87,27 @@ int LuaProxy::addObject(lua_State *L)
 {
 	checkTop(L, 2);
 	
-	//luaL_checktype(L, 2, LUA_TTABLE);
 	luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
 	lua_pushnumber(L, 0);
 	lua_gettable(L, -2);
 
 	ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
 	scene_->addObject((*r)->object());
+	lua_pop(L, 3);
+
+	return 0;
+}
+
+int LuaProxy::removeObject(lua_State *L)
+{
+	checkTop(L, 2);
+
+	luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
+	lua_pushnumber(L, 0);
+	lua_gettable(L, -2);
+
+	ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
+	scene_->removeObject((*r)->object());
 	lua_pop(L, 3);
 
 	return 0;
@@ -368,6 +380,7 @@ const char LuaProxy::className[] = "LuaProxy";
 const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 {
 	{ "addObject", &LuaProxy::addObject },
+	{ "removeObject", &LuaProxy::removeObject },
 	{ "clearScene", &LuaProxy::clearScene },
 	{ "setCameraPos", &LuaProxy::setCameraPos },
 	{ "setCameraDir", &LuaProxy::setCameraDir },

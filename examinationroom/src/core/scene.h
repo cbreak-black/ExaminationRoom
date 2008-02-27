@@ -47,15 +47,14 @@ public: // Drawing
 	
 public: // Scene management
 	/**
-	Adds an object to the scene. An object can only be added once. The scene takes
-	responsibility to free the used memory once it is not used anymore.
-	 \param object	A pointer to an object
-	 \return	true if the object was inserted, false if it already was in the scene.
+	Adds an object to the scene. An object can only be added once.
+	 \param object	A shared pointer to an object
+	 \return true if the object was inserted, false if it already was in the scene.
 	*/
 	bool addObject(std::tr1::shared_ptr<Object> object);
 	
 	/**
-	Removes an object from the scene and frees the memory it used. The object is deleted.
+	Removes an object from the scene.
 	 \param object	A pointer to an object
 	*/
 	void removeObject(std::tr1::shared_ptr<Object> object);

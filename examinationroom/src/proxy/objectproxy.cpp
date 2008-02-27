@@ -10,6 +10,7 @@
 #include "objectproxy.h"
 
 #include "objects/rectangle.h"
+#include "objects/parallelepiped.h"
 #include "objects/pixelplane.h"
 #include "objects/text.h"
 
@@ -25,6 +26,7 @@ namespace Examination
 const char * objectTypes[] =
 {
 	"Rectangle",
+	"Parallelepiped",
 	"Pixelplane",
 	"Text",
 	0
@@ -41,17 +43,16 @@ ObjectProxy::ObjectProxy(lua_State *L)
 		object_ = shared_ptr<Rectangle>(new Rectangle());
 		break;
 	case 1:
-		object_ = shared_ptr<Pixelplane>(new Pixelplane());
+		object_ = shared_ptr<Parallelepiped>(new Parallelepiped());
 		break;
 	case 2:
+		object_ = shared_ptr<Pixelplane>(new Pixelplane());
+		break;
+	case 3:
 		object_ = shared_ptr<Text>(new Text());
 		break;
 	}
 	lua_pop(L, 0);
-}
-
-ObjectProxy::~ObjectProxy()
-{
 }
 	
 int ObjectProxy::dirA(lua_State *L)
@@ -86,6 +87,22 @@ int ObjectProxy::dirB(lua_State *L)
 	}
 }
 
+int ObjectProxy::dirC(lua_State *L)
+{
+	if (parallelepiped())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		pushVector(L, parallelepiped()->dirC());
+		return 3;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::setDirA(lua_State *L)
 {
 	if (rectangle())
@@ -108,6 +125,22 @@ int ObjectProxy::setDirB(lua_State *L)
 	{
 		checkTop(L, 4);
 		rectangle()->setDirB(toVector(L,2));
+		lua_pop(L, 4);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setDirC(lua_State *L)
+{
+	if (parallelepiped())
+	{
+		checkTop(L, 4);
+		parallelepiped()->setDirC(toVector(L,2));
 		lua_pop(L, 4);
 		return 0;
 	}
@@ -244,6 +277,11 @@ shared_ptr<Rectangle> ObjectProxy::rectangle()
 	return dynamic_pointer_cast<Rectangle, Object>(object_);
 }
 
+std::tr1::shared_ptr<Parallelepiped> ObjectProxy::parallelepiped()
+{
+	return dynamic_pointer_cast<Parallelepiped, Object>(object_);
+}
+
 shared_ptr<Pixelplane> ObjectProxy::pixelplane()
 {
 	return dynamic_pointer_cast<Pixelplane, Object>(object_);
@@ -262,19 +300,21 @@ shared_ptr<Object> ObjectProxy::object()
 const char ObjectProxy::className[] = "Object";
 const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 {
-{ "dirA", &ObjectProxy::dirA },
-{ "dirB", &ObjectProxy::dirB },
-{ "setDirA", &ObjectProxy::setDirA },
-{ "setDirB", &ObjectProxy::setDirB },
-{ "setSize", &ObjectProxy::setSize },
-{ "text", &ObjectProxy::text },
-{ "setText", &ObjectProxy::setText },
-{ "position", &ObjectProxy::position },
-{ "setPosition", &ObjectProxy::setPosition },
-{ "setTexCoords", &ObjectProxy::setTexCoords },
-{ "setTexture", &ObjectProxy::setTexture },
-{ "setAutoResize", &ObjectProxy::setAutoResize },
-{ 0, 0 }
+	{ "dirA", &ObjectProxy::dirA },
+	{ "dirB", &ObjectProxy::dirB },
+	{ "dirC", &ObjectProxy::dirC },
+	{ "setDirA", &ObjectProxy::setDirA },
+	{ "setDirB", &ObjectProxy::setDirB },
+	{ "setDirC", &ObjectProxy::setDirC },
+	{ "setSize", &ObjectProxy::setSize },
+	{ "text", &ObjectProxy::text },
+	{ "setText", &ObjectProxy::setText },
+	{ "position", &ObjectProxy::position },
+	{ "setPosition", &ObjectProxy::setPosition },
+	{ "setTexCoords", &ObjectProxy::setTexCoords },
+	{ "setTexture", &ObjectProxy::setTexture },
+	{ "setAutoResize", &ObjectProxy::setAutoResize },
+	{ 0, 0 }
 };
 
 }

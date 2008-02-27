@@ -83,6 +83,26 @@ void Rectangle::setTexCoords(float llx, float lly, float ulx, float uly,
 	texD_ = Point(urx, ury, 0);
 }
 
+Tool::Point Rectangle::texA()
+{
+	return texA_;
+}
+
+Tool::Point Rectangle::texB()
+{
+	return texB_;
+}
+
+Tool::Point Rectangle::texC()
+{
+	return texC_;
+}
+
+Tool::Point Rectangle::texD()
+{
+	return texD_;
+}
+
 Tool::Vector Rectangle::dirA()
 {
 	return directionA_;
