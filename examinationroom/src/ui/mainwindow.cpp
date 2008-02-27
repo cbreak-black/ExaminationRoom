@@ -14,10 +14,6 @@
 #include "glwidget.h"
 #include "scene.h"
 
-#include "rectangle.h"
-#include "texture.h"
-#include "stereogram.h"
-
 #include "luaproxy.h"
 
 namespace Examination

@@ -9,11 +9,11 @@
 
 #include "textureproxy.h"
 
-#include "abstracttexture.h"
-#include "texture.h"
-#include "stereogram.h"
-#include "randomdotstereogram.h"
-#include "patternstereogram.h"
+#include "surfaces/abstracttexture.h"
+#include "surfaces/texture.h"
+#include "surfaces/stereogram.h"
+#include "surfaces/randomdotstereogram.h"
+#include "surfaces/patternstereogram.h"
 
 #include "luahelper.h"
 

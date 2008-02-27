@@ -14,41 +14,25 @@ HEADERS += \
 	src/ui/glwidget.h \
 	src/ui/mainwindow.h \
 	src/core/scene.h \
-	src/core/camera.h \
-	src/core/object.h \
-	src/core/rectangle.h \
-	src/core/pixelplane.h \
-	src/core/text.h \
-	src/core/abstracttexture.h \
-	src/core/texture.h \
-	src/core/randomdotstereogram.h \
-	src/core/patternstereogram.h \
-	src/core/stereogram.h
+	src/core/camera.h
 SOURCES += \
 	src/main.cpp \
 	src/ui/glwidget.cpp \
 	src/ui/mainwindow.cpp \
 	src/core/scene.cpp \
-	src/core/camera.cpp \
-	src/core/object.cpp \
-	src/core/rectangle.cpp \
-	src/core/pixelplane.cpp \
-	src/core/text.cpp \
-	src/core/abstracttexture.cpp \
-	src/core/texture.cpp \
-	src/core/randomdotstereogram.cpp \
-	src/core/patternstereogram.cpp \
-	src/core/stereogram.cpp
+	src/core/camera.cpp
+
+# Surfaces
+HEADERS += src/core/surfaces/*.h
+SOURCES += src/core/surfaces/*.cpp
+
+# Objects
+HEADERS += src/core/objects/*.h
+SOURCES += src/core/objects/*.cpp
 
 # Proxies
-HEADERS += \
-	src/proxy/luaproxy.h \
-	src/proxy/textureproxy.h \
-	src/proxy/objectproxy.h
-SOURCES += \
-	src/proxy/luaproxy.cpp \
-	src/proxy/textureproxy.cpp \
-	src/proxy/objectproxy.cpp
+HEADERS += src/proxy/*.h
+SOURCES += src/proxy/*.cpp
 
 # LUA
 HEADERS += src/lua/src/*.h src/lua/lua.hpp
@@ -67,3 +51,4 @@ HEADERS += \
 SOURCES += \
 	src/tools/screenproject.cpp \
 	src/tools/luahelper.cpp
+

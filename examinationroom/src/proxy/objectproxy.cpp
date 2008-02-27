@@ -9,9 +9,9 @@
 
 #include "objectproxy.h"
 
-#include "rectangle.h"
-#include "pixelplane.h"
-#include "text.h"
+#include "objects/rectangle.h"
+#include "objects/pixelplane.h"
+#include "objects/text.h"
 
 #include "textureproxy.h"
 
