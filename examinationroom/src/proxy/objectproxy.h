@@ -53,9 +53,6 @@ public:
 	std::tr1::shared_ptr<Object> object();
 	
 private:
-	std::tr1::shared_ptr<Rectangle> rectangle_;
-	std::tr1::shared_ptr<Pixelplane> pixelplane_;
-	std::tr1::shared_ptr<Text> text_;
 	std::tr1::shared_ptr<Object> object_;
 
 public: // LUNA

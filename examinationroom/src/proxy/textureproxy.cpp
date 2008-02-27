@@ -61,8 +61,7 @@ TextureProxy::TextureProxy(lua_State *L)
 			const char * p2 = luaL_checkstring(L, 3); // Second Path
 			shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(p1));
 			shared_ptr<Texture> t2 = shared_ptr<Texture>(new Texture(p2));
-			stereogram_ = shared_ptr<Stereogram>(new Stereogram(t1, t2));
-			texture_ = stereogram_;
+			texture_ = shared_ptr<Stereogram>(new Stereogram(t1, t2));
 			break;
 		}
 		case 2:
@@ -70,9 +69,7 @@ TextureProxy::TextureProxy(lua_State *L)
 			// Random Dot Stereogram
 			const char * p1 = luaL_checkstring(L, 2); // First Path
 			shared_ptr<Texture> t1 = shared_ptr<Texture>(new Texture(std::string(p1)));
-			rds_ = shared_ptr<RandomdotStereogram>(new RandomdotStereogram(t1));
-			stereogram_ = rds_;
-			texture_ = stereogram_;
+			texture_ = shared_ptr<RandomdotStereogram>(new RandomdotStereogram(t1));
 			break;
 		}
 		case 3:
@@ -84,15 +81,14 @@ TextureProxy::TextureProxy(lua_State *L)
 			shared_ptr<Texture> pattern = shared_ptr<Texture>(new Texture(p2));
 			if (n == 3)
 			{
-				stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern));
+				texture_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern));
 			}
 			else // (n == 4)
 			{
 				const char * p3 = luaL_checkstring(L, 4); // Second Path
 				shared_ptr<Texture> patternFG = shared_ptr<Texture>(new Texture(p3));
-				stereogram_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern, patternFG));
+				texture_ = shared_ptr<PatternStereogram>(new PatternStereogram(depth, pattern, patternFG));
 			}
-			texture_ = stereogram_;
 			break;
 		}
 	}
@@ -106,6 +102,16 @@ TextureProxy::~TextureProxy()
 shared_ptr<AbstractTexture> TextureProxy::texture()
 {
 	return texture_;
+}
+
+std::tr1::shared_ptr<Stereogram> TextureProxy::stereogram()
+{
+	return dynamic_pointer_cast<Stereogram, AbstractTexture>(texture_);
+}
+
+std::tr1::shared_ptr<RandomdotStereogram> TextureProxy::rds()
+{
+	return dynamic_pointer_cast<RandomdotStereogram, AbstractTexture>(texture_);
 }
 
 int TextureProxy::zoom(lua_State *L)
@@ -126,11 +132,11 @@ int TextureProxy::setZoom(lua_State *L)
 
 int TextureProxy::offset(lua_State *L)
 {
-	if (stereogram_)
+	if (stereogram())
 	{
 		checkTop(L, 1);
 		lua_pop(L, 1);
-		lua_pushnumber(L, stereogram_->offset());
+		lua_pushnumber(L, stereogram()->offset());
 		return 1;
 	}
 	else
@@ -142,10 +148,10 @@ int TextureProxy::offset(lua_State *L)
 
 int TextureProxy::setOffset(lua_State *L)
 {
-	if (stereogram_)
+	if (stereogram())
 	{
 		checkTop(L, 2);
-		stereogram_->setOffset(lua_tonumber(L,2));
+		stereogram()->setOffset(lua_tonumber(L,2));
 		lua_pop(L, 2);
 		return 0;
 	}
@@ -158,11 +164,11 @@ int TextureProxy::setOffset(lua_State *L)
 
 int TextureProxy::style(lua_State *L)
 {
-	if (stereogram_)
+	if (stereogram())
 	{
 		checkTop(L, 1);
 		lua_pop(L, 1);
-		lua_pushstring(L, textureStyles[stereogram_->style()]);
+		lua_pushstring(L, textureStyles[stereogram()->style()]);
 		return 1;
 	}
 	else
@@ -174,10 +180,10 @@ int TextureProxy::style(lua_State *L)
 
 int TextureProxy::setStyle(lua_State *L)
 {
-	if (stereogram_)
+	if (stereogram())
 	{
 		checkTop(L, 2);
-		stereogram_->setStyle((Stereogram::Style)luaL_checkoption(L, 2, 0, textureStyles));
+		stereogram()->setStyle((Stereogram::Style)luaL_checkoption(L, 2, 0, textureStyles));
 		lua_pop(L, 2);
 		return 0;
 	}
@@ -190,10 +196,10 @@ int TextureProxy::setStyle(lua_State *L)
 
 int TextureProxy::setMaxColor(lua_State *L)
 {
-	if (rds_)
+	if (rds())
 	{
 		checkTop(L, 2);
-		rds_->setMaxColor(lua_tonumber(L, 2));
+		rds()->setMaxColor(lua_tonumber(L, 2));
 		lua_pop(L, 2);
 		return 0;
 	}
@@ -206,10 +212,10 @@ int TextureProxy::setMaxColor(lua_State *L)
 
 int TextureProxy::setExclusiveColor(lua_State *L)
 {
-	if (rds_)
+	if (rds())
 	{
 		checkTop(L, 2);
-		rds_->setExclusiveColor(lua_tonumber(L, 2));
+		rds()->setExclusiveColor(lua_tonumber(L, 2));
 		lua_pop(L, 2);
 		return 0;
 	}

@@ -46,11 +46,11 @@ public: // RDS
 
 public:
 	std::tr1::shared_ptr<AbstractTexture> texture();
+	std::tr1::shared_ptr<Stereogram> stereogram();
+	std::tr1::shared_ptr<RandomdotStereogram> rds();
 
 private:
 	std::tr1::shared_ptr<AbstractTexture> texture_;
-	std::tr1::shared_ptr<Stereogram> stereogram_;
-	std::tr1::shared_ptr<RandomdotStereogram> rds_;
 
 public: // LUNA
 	static const char className[];

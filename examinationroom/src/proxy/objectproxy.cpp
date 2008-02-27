@@ -22,9 +22,6 @@ using namespace std::tr1;
 namespace Examination
 {
 
-const char * errNotRect = "this is not a rectangle";
-const char * errNotPP = "this is not a pixelplane";
-
 const char * objectTypes[] =
 {
 	"Rectangle",
@@ -41,16 +38,13 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	switch (opt)
 	{
 	case 0:
-		rectangle_ = shared_ptr<Rectangle>(new Rectangle());
-		object_ = rectangle_;
+		object_ = shared_ptr<Rectangle>(new Rectangle());
 		break;
 	case 1:
-		pixelplane_ = shared_ptr<Pixelplane>(new Pixelplane());
-		object_ = pixelplane_;
+		object_ = shared_ptr<Pixelplane>(new Pixelplane());
 		break;
 	case 2:
-		text_ = shared_ptr<Text>(new Text());
-		object_ = text_;
+		object_ = shared_ptr<Text>(new Text());
 		break;
 	}
 	lua_pop(L, 0);
@@ -62,76 +56,85 @@ ObjectProxy::~ObjectProxy()
 	
 int ObjectProxy::dirA(lua_State *L)
 {
-	if (!rectangle_)
+	if (rectangle())
 	{
-		lua_pushstring(L, errNotRect);
-		lua_error(L);
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		pushVector(L, rectangle()->dirA());
+		return 3;
 	}
-	checkTop(L, 1);
-
-	Tool::Vector v = rectangle()->dirA();
-	lua_pop(L, 1);
-
-	pushVector(L, v);
-	return 3;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::dirB(lua_State *L)
 {
-	if (!rectangle_)
+	if (rectangle())
 	{
-		lua_pushstring(L, errNotRect);
-		lua_error(L);
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		pushVector(L, rectangle()->dirB());
+		return 3;
 	}
-	checkTop(L, 1);
-	
-	Tool::Vector v = rectangle()->dirB();
-	lua_pop(L, 1);
-	
-	pushVector(L, v);
-	return 3;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::setDirA(lua_State *L)
 {
-	if (!rectangle_)
+	if (rectangle())
 	{
-		lua_pushstring(L, errNotRect);
-		lua_error(L);
+		checkTop(L, 4);
+		rectangle()->setDirA(toVector(L,2));
+		lua_pop(L, 4);
+		return 0;
 	}
-	checkTop(L, 4);
-	rectangle()->setDirA(toVector(L,2));
-	lua_pop(L, 4);
-	return 0;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::setDirB(lua_State *L)
 {
-	if (!rectangle_)
+	if (rectangle())
 	{
-		lua_pushstring(L, errNotRect);
-		lua_error(L);
+		checkTop(L, 4);
+		rectangle()->setDirB(toVector(L,2));
+		lua_pop(L, 4);
+		return 0;
 	}
-	checkTop(L, 4);
-	rectangle()->setDirB(toVector(L,2));
-	lua_pop(L, 4);
-	return 0;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::setSize(lua_State *L)
 {
-	if (!pixelplane_)
+	if (pixelplane())
 	{
-		lua_pushstring(L, errNotPP);
-		lua_error(L);
+		checkTop(L, 3);
+		float w, h;
+		w = luaL_checknumber(L, 2);
+		h = luaL_checknumber(L, 3);
+		pixelplane()->setSize(w, h);
+		lua_pop(L, 4);
+		return 0;
 	}
-	checkTop(L, 3);
-	float w, h;
-	w = luaL_checknumber(L, 2);
-	h = luaL_checknumber(L, 3);
-	pixelplane()->setSize(w, h);
-	lua_pop(L, 4);
-	return 0;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::position(lua_State *L)
@@ -154,27 +157,30 @@ int ObjectProxy::setPosition(lua_State *L)
 
 int ObjectProxy::setTexCoords(lua_State *L)
 {
-if (!rectangle_)
+	if (rectangle())
 	{
-		lua_pushstring(L, errNotRect);
-		lua_error(L);
-	}
-	checkTop(L, 9);
-	
-	float llx = luaL_checknumber(L, 2);
-	float lly = luaL_checknumber(L, 3);
-	float ulx = luaL_checknumber(L, 4);
-	float uly = luaL_checknumber(L, 5);
-	float lrx = luaL_checknumber(L, 6);
-	float lry = luaL_checknumber(L, 7);
-	float urx = luaL_checknumber(L, 8);
-	float ury = luaL_checknumber(L, 9);
-	
-	rectangle()->setTexCoords(llx,lly, ulx, uly,
-							  lrx, lry, urx, ury);
+		checkTop(L, 9);
 
-	lua_pop(L, 9);
-	return 0;
+		float llx = luaL_checknumber(L, 2);
+		float lly = luaL_checknumber(L, 3);
+		float ulx = luaL_checknumber(L, 4);
+		float uly = luaL_checknumber(L, 5);
+		float lrx = luaL_checknumber(L, 6);
+		float lry = luaL_checknumber(L, 7);
+		float urx = luaL_checknumber(L, 8);
+		float ury = luaL_checknumber(L, 9);
+
+		rectangle()->setTexCoords(llx,lly, ulx, uly,
+								  lrx, lry, urx, ury);
+
+		lua_pop(L, 9);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 int ObjectProxy::setTexture(lua_State *L)
@@ -210,9 +216,11 @@ int ObjectProxy::text(lua_State *L)
 		lua_pushstring(L, qPrintable(text()->text()));
 		return 1;
 	}
-
-	lua_settop(L, 0);
-	return 0;
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
 }
 
 int ObjectProxy::setText(lua_State *L)
@@ -224,24 +232,26 @@ int ObjectProxy::setText(lua_State *L)
 		lua_pop(L, 2);
 		return 0;
 	}
-
-	lua_settop(L,0);
-	return 0;
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
-	return rectangle_;
+	return dynamic_pointer_cast<Rectangle, Object>(object_);
 }
 
 shared_ptr<Pixelplane> ObjectProxy::pixelplane()
 {
-	return pixelplane_;
+	return dynamic_pointer_cast<Pixelplane, Object>(object_);
 }
 
 shared_ptr<Text> ObjectProxy::text()
 {
-	return text_;
+	return dynamic_pointer_cast<Text, Object>(object_);
 }
 
 shared_ptr<Object> ObjectProxy::object()
