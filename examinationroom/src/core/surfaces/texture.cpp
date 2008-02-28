@@ -86,10 +86,47 @@ void Texture::loadPixelMap(QImage image)
 	}
 }
 
+QImage Texture::transformColorSpace(QImage image)
+{
+	QImage tx = image.convertToFormat(QImage::Format_ARGB32);
+	QImage tm(tx.size(), QImage::Format_ARGB32);
+	if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
+	{
+		// mirror + swizzle
+		for (int i=0; i < tx.height(); i++)
+		{
+			uint *p = (uint*) tx.scanLine(i);
+			uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+			uint *end = p + tx.width();
+			while (p < end)
+			{	// To RGBA
+				*q = ((*p << 8) & 0xffffff00)	// Red & Green & Blue
+				| ((*p >> 24) & 0x000000ff);	// Alpha
+				p++; q++;
+			}
+		}
+	}
+	else
+	{
+		for (int i=0; i < tx.height(); i++)
+		{
+			uint *p = (uint*) tx.scanLine(i);
+			uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
+			uint *end = p + tx.width();
+			while (p < end)
+			{	// To RGBA Little Endian (ABGR)
+				*q = ((*p) & 0xff00ff00)		// Green & Alpha
+				| ((*p >> 16) & 0x000000ff)		// Red
+				| ((*p << 16) & 0x00ff0000);	// Blue
+				p++; q++;
+			}
+		}
+	}
+	return tm;
+}
+
 void Texture::glBindTex(GLWidget * w)
 {
-//	imageGLID_ = w->bindTexture(image_); // SLOW?! Only without shared contexts.
-	w->makeCurrent();
 	if (imageGLID_ == 0)
 	{
 		glGenTextures(1, &imageGLID_);
@@ -97,7 +134,8 @@ void Texture::glBindTex(GLWidget * w)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
 #ifdef DEBUG
 		int er = 0;
@@ -118,46 +156,7 @@ void Texture::glBindTex(GLWidget * w)
 		}
 		else
 		{
-			QImage tx = image_.convertToFormat(QImage::Format_ARGB32);
-			if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
-			{
-				// mirror + swizzle
-				QImage tm(tx.size(), QImage::Format_ARGB32);
-				for (int i=0; i < tx.height(); i++) {
-					uint *p = (uint*) tx.scanLine(i);
-					uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
-					uint *end = p + tx.width();
-					while (p < end)
-					{	// To RGBA
-						*q = ((*p << 8) & 0xff000000)	// Red
-						| ((*p << 8) & 0x00ff0000)	// Green
-						| ((*p << 8) & 0x0000ff00)	// Blue
-						| ((*p >> 24) & 0x000000ff);	// Alpha
-						p++;
-						q++;
-					}
-				}
-				tx = tm;
-			}
-			else
-			{
-				QImage tm(tx.size(), QImage::Format_ARGB32);
-				for (int i=0; i < tx.height(); i++) {
-					uint *p = (uint*) tx.scanLine(i);
-					uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
-					uint *end = p + tx.width();
-					while (p < end)
-					{       // To RGBA Little Endian
-						*q = ((*p >> 16) & 0x000000ff)	// Red
-						| ((*p << 0) & 0x0000ff00)		// Green
-						| ((*p << 16) & 0x00ff0000)		// Blue
-						| ((*p >> 0) & 0xff000000);		// Alpha
-						p++;
-						q++;
-					}
-				}
-				tx = tm;
-			}
+			QImage tx = transformColorSpace(image_);
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
@@ -195,46 +194,7 @@ void Texture::draw(GLWidget * w)
 	}
 	else
 	{
-		QImage tx = image_.convertToFormat(QImage::Format_ARGB32);
-		if (QSysInfo::ByteOrder == QSysInfo::BigEndian)
-		{
-			// mirror + swizzle
-			QImage tm(tx.size(), QImage::Format_ARGB32);
-			for (int i=0; i < tx.height(); i++) {
-				uint *p = (uint*) tx.scanLine(i);
-				uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
-				uint *end = p + tx.width();
-				while (p < end)
-				{	// To RGBA
-					*q = ((*p << 8) & 0xff000000)	// Red
-					| ((*p << 8) & 0x00ff0000)	// Green
-					| ((*p << 8) & 0x0000ff00)	// Blue
-					| ((*p >> 24) & 0x000000ff);	// Alpha
-					p++;
-					q++;
-				}
-			}
-			tx = tm;
-		}
-		else
-		{
-			QImage tm(tx.size(), QImage::Format_ARGB32);
-			for (int i=0; i < tx.height(); i++) {
-				uint *p = (uint*) tx.scanLine(i);
-				uint *q = (uint*) tm.scanLine(tx.height() - i - 1);
-				uint *end = p + tx.width();
-				while (p < end)
-				{       // To RGBA Little endian
-					*q = ((*p >> 16) & 0x000000ff)	// Red
-					| ((*p << 0) & 0x0000ff00)		// Green
-					| ((*p << 16) & 0x00ff0000)		// Blue
-					| ((*p >> 0) & 0xff000000);		// Alpha
-					p++;
-					q++;
-				}
-			}
-			tx = tm;
-		}
+		QImage tx = transformColorSpace(image_);
 		GLubyte * t =  tx.bits();
 		glPixelZoom(zoomFactor_,zoomFactor_);
 		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);

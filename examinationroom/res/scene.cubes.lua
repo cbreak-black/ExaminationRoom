@@ -82,7 +82,7 @@ end
 nextFrame();
 
 local parseInput = function (k)
-	local step = 1;
+	local step = 0.5;
 	local d = Key[string.byte(k)];
 	if d then
 		Scene:log("input: "..d);

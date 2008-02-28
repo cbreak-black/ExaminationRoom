@@ -74,8 +74,7 @@ MainWindow::MainWindow()
 
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
-	//timer_->start(33); // 30 fps
-	timer_->start(100); // 30 fps
+	timer_->start(33); // 30 fps
 }
 
 

@@ -68,6 +68,7 @@ public: // Resizing
 
 private:
 	void loadPixelMap(QImage image);
+	QImage transformColorSpace(QImage image);
 
 private:
 	QImage image_;
