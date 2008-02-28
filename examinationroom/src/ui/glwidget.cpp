@@ -110,11 +110,6 @@ void GLWidget::paintGL()
 		}
 
 		scene_->camera()->loadMatrix(this);
-		// Center
-		glBegin(GL_POINTS);
-		glVertex3f(0, 0, 0);
-		glEnd();
-
 		scene_->drawScene(this);
 
 		// Right
@@ -125,10 +120,6 @@ void GLWidget::paintGL()
 			//glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
 			glColorMask(0, 1, 1, 1);
 			scene_->camera()->loadMatrix(this);
-			// Center
-			glBegin(GL_POINTS);
-			glVertex3f(0, 0, 0);
-			glEnd();
 			scene_->drawScene(this);
 			glColorMask(1, 1, 1, 1);
 		}
@@ -137,11 +128,6 @@ void GLWidget::paintGL()
 			setSide(right);
 			glViewport(s.width()/2,0, s.width()/2, s.height());
 			scene_->camera()->loadMatrix(this);
-			// Center
-			glColor3f(1.0f, 1.0f, 1.0f);
-			glBegin(GL_POINTS);
-			glVertex3f(0, 0, 0);
-			glEnd();
 			scene_->drawScene(this);
 			glViewport(0,0, s.width(), s.height());
 		}
