@@ -9,15 +9,28 @@ Random dot stereograms are a topic that has interested scientists since over a c
 The two images of an RDS consist of a random pattern, usually dots. Since either image on it's own is purely random, no information can be derived of it. When seen with binocular vision, depth can be seen. There are several different methods to create a random dot stereograms, but their principle is the same:
 Based on depth information, parts of the pattern in one or both eyes are shifted on the horizontal axis.
 
-\paragraph{Simple algorithm}
+\subsubsection{Simple algorithm}
+\paragraph{}
 The first and most simple algorithm implemented is based on the original technique used by Julesz\cite{BellRDS}. A random pattern for the left eye is created, and also serves as the background in the image for the right eye. A subset of this pattern, which is defined by a mask, is shifted by a fixed amount of pixel. This is enough to create a pair of images that are on their own almost completely random, but produce a perceivable depth effect.
 
 This approach does have problems: Areas who's contents are shifted have to be filled up again. The chosen solution was to not move but copy the contents, so that there are duplicate patterns in the image. Creating concave surfaces requires shifting the area in the image for the other eye, or there will be border conflicts similar to pinning.
 
 It's advantage is that it's fast and easy to both implement and execute. Memory access to the image buffers can be limited to one write per pixel, the pixel data for the shift can be cached in short ring buffer.
 
-\paragraph{Advanced algorithm}
-The second algorithm is split into two parts, which deal with convex concave stereograms seperately. It also uses different patterns for fore- and background. This was inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
+\subsubsection{Advanced algorithm}
+\paragraph{}
+The second algorithm is split into two parts, which deal with convex concave stereograms seperately. Doing this is neccessary to deal with subtile problems with partial occlusion. It also uses different patterns for fore- and background. This was inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
+
+Using different colors for the foreground and the background makes the object defined in the depth map stand out. This helps visibility, but that way the shape of the object itself can not be used to validate fusion. Depending on the offset of fore- and background, and the size of the random dot stereogram, it is not monocularly visible if the shape is convex or concave.
+
+\todo{Diagrams}
+
+\paragraph{Convex}
+The algorithm for convex shapes treats the depth map as a source to calculate the new position of pixel in a source pattern. The calculated offset is used to displace the surface into the destination image. The shape is shifted horizontally, and appears to come out of the surface.
+
+\paragraph{Concave}
+The algorithm for concave shapes works slightly different. It treats the depth map as a source to calculate the position of the pixel in a source pattern to place in the destination pattern. The shape is not shifted, but it's texture is. It appears to go into the surface.
 
 \subsection{Pattern stereogram}
 \paragraph{}
+

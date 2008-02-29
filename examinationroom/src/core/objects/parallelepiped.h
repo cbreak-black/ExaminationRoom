@@ -39,22 +39,6 @@ public:
 	*/
 	void setDirC(Tool::Vector v);
 
-public: // Textures
-	/**
-	Sets the texture coordinates of this rectangle. Default is
-	(0,0) (0,1) (1,0) (1,1)
-	 \param llx	lower left corner, x coordinate
-	 \param lly	lower left corner, y coordinate
-	 \param ulx	lower left corner, x coordinate
-	 \param uly	lower left corner, y coordinate
-	 \param lrx	lower left corner, x coordinate
-	 \param lry	lower left corner, y coordinate
-	 \param urx	lower left corner, x coordinate
-	 \param ury	lower left corner, y coordinate
-	*/
-	void setTexCoords(float llx, float lly, float ulx, float uly,
-					  float lrx, float lry, float urx, float ury);
-
 private:
 	Tool::Vector directionC_;
 };
