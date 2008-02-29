@@ -18,19 +18,27 @@ This approach does have problems: Areas who's contents are shifted have to be fi
 It's advantage is that it's fast and easy to both implement and execute. Memory access to the image buffers can be limited to one write per pixel, the pixel data for the shift can be cached in short ring buffer.
 
 \subsubsection{Advanced algorithm}
+\begin{figure*}[htb]
+\begin{center}
+\includegraphics[width=15.5cm]{media/rds.pdf}
+\caption{RDS of Convex and Concave surfaces can be created in different ways\label{ccRDS}}
+\end{center}
+\end{figure*}
+
 \paragraph{}
-The second algorithm is split into two parts, which deal with convex concave stereograms seperately. Doing this is neccessary to deal with subtile problems with partial occlusion. It also uses different patterns for fore- and background. This was inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
+The second algorithm is split into two parts, which deal with convex concave stereograms seperately. Doing this allows to deal with subtile problems with partial occlusion (see figure \ref{ccRDS}). It also uses different patterns for fore- and background. This was inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
 
-Using different colors for the foreground and the background makes the object defined in the depth map stand out. This helps visibility, but that way the shape of the object itself can not be used to validate fusion. Depending on the offset of fore- and background, and the size of the random dot stereogram, it is not monocularly visible if the shape is convex or concave.
+Using different colors for the foreground and the background makes the object defined in the depth map stand out. This helps visibility, but that way the shape of the object itself can not be used to validate fusion. Depending on the offset of fore- and background, and the size of the random dot stereogram, it is not easily monocularly visible if the shape is convex or concave.
 
-\todo{Diagrams}
+Both methods are simplified, so that the eyes are always at the same relative position of the pixel that is considered, similar to a parallel projection.
 
 \paragraph{Convex}
-The algorithm for convex shapes treats the depth map as a source to calculate the new position of pixel in a source pattern. The calculated offset is used to displace the surface into the destination image. The shape is shifted horizontally, and appears to come out of the surface.
+The algorithm for convex shapes treats the depth map as a source to calculate the new position of pixel in a source pattern. The calculated offset is used to displace the surface into the destination image. The shape is shifted horizontally, and appears to come out of the surface. This is equivalent to tracking the surface of the object, and projecting the observed value onto the background. (figure \ref{ccRDS}, left.)
 
 \paragraph{Concave}
-The algorithm for concave shapes works slightly different. It treats the depth map as a source to calculate the position of the pixel in a source pattern to place in the destination pattern. The shape is not shifted, but it's texture is. It appears to go into the surface.
+The algorithm for concave shapes works slightly different. It treats the depth map as a source to calculate the position of the pixel in a source pattern to place in the destination pattern. The shape is not shifted, but it's texture is. It appears to go into the surface. This is equivalent to tracking the background plane, and projecting the corresponding object pattern values onto the background. (figure \ref{ccRDS}, right.)
 
 \subsection{Pattern stereogram}
 \paragraph{}
+Pattern stereograms are created similarly to random dot stereograms. Instead of a random data source, they use a pre-computed pattern as foreground and background image. This makes the shape stand out more, and allows a high customizability of the pattern. Possible sources include randomly generated noise images, photographed textures and randomly distributed shapes.
 
