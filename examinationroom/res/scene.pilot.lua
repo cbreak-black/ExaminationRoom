@@ -146,8 +146,8 @@ local nextFrame = function ()
 	end;
 	-- Separation at center
 	local sep = statistics:separationAtPoint(pos[1]+1, pos[2]+1, pos[3]);
-	local s = string.format("New Q: %s @ (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
-		replies[testNum], pos[1]+1, pos[2]+1, pos[3], sep);
+	local s = string.format("New Q: %s/%s (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
+		replies[testNum],shapes[1], pos[1]+1, pos[2]+1, pos[3], sep);
 	Scene:log(s);
 end
 nextFrame();
