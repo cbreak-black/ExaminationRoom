@@ -10,11 +10,13 @@
 #include "logmodel.h"
 
 #include "logline.h"
+#include "tools/vec.h"
 
 #include <QSize>
 #include <QRegExp>
 
 using namespace std::tr1;
+using namespace Tool;
 
 namespace Statistics
 {
@@ -49,18 +51,21 @@ void LogModel::calculateStatistics(QTextStream * output)
 	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect): (.*)$");
 	QRegExp stimulusSeperation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
 	QRegExp stimulusNewCycle = QRegExp("^New Test Cycle$");
+	QRegExp stimulusPosition = QRegExp("^New Q:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
 
 	QList<int> listTrials;
 	QList<QString> listCorrect;
 	QList<float> listSeperation;
 	QList<float> listSeperationChange;
 	QList<int> listCycleNumber;
+	QList<Point> listPositions;
 
 	QDateTime tStart;
 	QString sCorrect;
 	float seperation = 0;
 	float seperationChange = 0;
 	int cycleNumber = 0;
+	Point position;
 	for (int i = 0; i < logTable_.size(); i++)
 	{
 		shared_ptr<LogLine> ll = logTable_.at(i);
@@ -83,6 +88,12 @@ void LogModel::calculateStatistics(QTextStream * output)
 		{
 			cycleNumber++;
 		}
+		if (stimulusPosition.exactMatch(lm))
+		{
+			position = Point(stimulusPosition.cap(1).toFloat(),
+							 stimulusPosition.cap(2).toFloat(),
+							 stimulusPosition.cap(3).toFloat());
+		}
 		if (stimulusEnd.exactMatch(lm))
 		{
 			listTrials.append(tStart.time().msecsTo(ll->timestamp().time()));
@@ -90,18 +101,24 @@ void LogModel::calculateStatistics(QTextStream * output)
 			listSeperation.append(seperation);
 			listSeperationChange.append(seperationChange);
 			listCycleNumber.append(cycleNumber);
+			listPositions.append(position);
 			sCorrect = "";
 			tStart = QDateTime();
 		}
 	}
 
-	(*output) << "Time (msec)\t" << "Result\tConditions\t" << "Seperation\t" << "Seperation Change\t" << "Cycle Number\n";
+	(*output) << "Time (msec)\t" << "Result\tConditions\t"
+		<< "Seperation\t"
+		<< "Seperation Change\t"
+		<< "Position (x\ty\tz)\t"
+		<< "Cycle Number\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
 		(*output) << listTrials.at(i) << "\t"
 			<< listCorrect.at(i) << "\t"
 			<< listSeperation.at(i) << "\t"
 			<< listSeperationChange.at(i) << "\t"
+			<< listPositions.at(i).x << "\t" << listPositions.at(i).y << "\t" << listPositions.at(i).z << "\t"
 			<< listCycleNumber.at(i) << "\n";
 	}
 }
