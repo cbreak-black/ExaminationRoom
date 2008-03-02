@@ -32,6 +32,9 @@ public: // Bare Bones
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
+public: // Statistics
+	void calculateStatistics(QTextStream * output);
+
 public: // Factory Methods
 	static std::tr1::shared_ptr<LogModel> logModelFromStream(QTextStream * input);
 

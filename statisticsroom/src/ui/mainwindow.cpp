@@ -28,6 +28,9 @@ MainWindow::MainWindow()
 	setLayout(mainLayout);
 	
 	tableView_ = new QTableView();
+	tableView_->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+	tableView_->horizontalHeader()->setStretchLastSection(true);
+	tableView_->verticalHeader()->setVisible(false);
 	mainLayout->addWidget(tableView_, 0, 0, 3, 3);
 	
 	QPushButton * bLoad = new QPushButton(tr("Load..."));
@@ -48,12 +51,12 @@ MainWindow::~MainWindow()
 
 QSize MainWindow::minimumSizeHint() const
 {
-	return QSize(640, 480);
+	return QSize(800, 600);
 }
 
 QSize MainWindow::sizeHint() const
 {
-	return QSize(800, 600);
+	return QSize(1024, 768);
 }	
 
 shared_ptr<LogModel> MainWindow::logModel() const
@@ -84,6 +87,16 @@ void MainWindow::loadClicked(bool checked)
 
 void MainWindow::exportClicked(bool checked)
 {
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Statistics File"), QString(), tr("Tab seperated list (*.csv)"));
+	if (!fileName.isNull())
+	{
+		QFile * f = new QFile(fileName);
+		f->open(QIODevice::WriteOnly | QIODevice::Text);
+		QTextStream * s = new QTextStream(f);
+		logModel()->calculateStatistics(s);
+		delete s;
+		delete f;
+	}
 }
 
 

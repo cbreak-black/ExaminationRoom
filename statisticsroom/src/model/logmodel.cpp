@@ -12,6 +12,7 @@
 #include "logline.h"
 
 #include <QSize>
+#include <QRegExp>
 
 using namespace std::tr1;
 
@@ -40,6 +41,54 @@ shared_ptr<LogModel> LogModel::logModelFromStream(QTextStream * input)
 	return shared_ptr<LogModel>(new LogModel(input));
 }
 
+// Statistics
+void LogModel::calculateStatistics(QTextStream * output)
+{
+	QRegExp stimulusStart = QRegExp("^New Q:.*$");
+	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect): .*$");
+	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect): (.*)$");
+	QRegExp stimulusSeperation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
+
+	QList<int> listTrials;
+	QList<QString> listCorrect;
+	QList<float> listSeperation;
+
+	QDateTime tStart;
+	QString sCorrect;
+	float seperation;
+	for (int i = 0; i < logTable_.size(); i++)
+	{
+		shared_ptr<LogLine> ll = logTable_.at(i);
+		QString lm = ll->message();
+		if (stimulusStart.exactMatch(lm))
+		{
+			tStart = ll->timestamp();
+		}
+		if (stimulusCorrect.exactMatch(lm))
+		{
+			sCorrect = stimulusCorrect.cap(1) + "\t" + stimulusCorrect.cap(2);
+		}
+		if (stimulusSeperation.exactMatch(lm))
+		{
+			seperation = stimulusSeperation.cap(1).toFloat();
+		}
+		if (stimulusEnd.exactMatch(lm))
+		{
+			listTrials.append(tStart.time().msecsTo(ll->timestamp().time()));
+			listCorrect.append(sCorrect);
+			listSeperation.append(seperation);
+			sCorrect = "";
+			tStart = QDateTime();
+			seperation = 999999;
+		}
+	}
+
+	(*output) << "Time (msec)\t" << "Result\tConditions\t" << "Seperation\n";
+	for (int i = 0; i < listTrials.size(); i++)
+	{
+		(*output) << listTrials.at(i) << "\t" << listCorrect.at(i) << "\t" << listSeperation.at(i) << "\n";
+	}
+}
 
 int LogModel::rowCount(const QModelIndex &parent) const
 {
@@ -48,7 +97,7 @@ int LogModel::rowCount(const QModelIndex &parent) const
 
 int LogModel::columnCount(const QModelIndex &parent) const
 {
-	return 2;
+	return 3;
 }
 
 QVariant LogModel::data(const QModelIndex &index, int role) const
@@ -59,11 +108,11 @@ QVariant LogModel::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case 0:
-				return QVariant(logTable_.at(logLineIdx)->timestamp());
-				break;
+				return QVariant(logLineIdx);
 			case 1:
+				return QVariant(logTable_.at(logLineIdx)->timestamp().toString("hh:mm:ss.zzz"));
+			case 2:
 				return QVariant(logTable_.at(logLineIdx)->message());
-				break;
 		}
 	}
 	else if (role == Qt::SizeHintRole)
@@ -71,11 +120,11 @@ QVariant LogModel::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case 0:
-				return QVariant(QSize(128, 18));
-				break;
+				return QVariant(QSize(32, 18));
 			case 1:
+				return QVariant(QSize(128, 18));
+			case 2:
 				return QVariant(QSize(512, 18));
-				break;
 		}
 	}
 	return QVariant();
@@ -90,11 +139,11 @@ QVariant LogModel::headerData(int section, Qt::Orientation orientation, int role
 			switch (section)
 			{
 				case 0:
-					return QVariant(tr("Time Stamp"));
-					break;
+					return QVariant("#");
 				case 1:
+					return QVariant(tr("Time Stamp"));
+				case 2:
 					return QVariant(tr("Message"));
-					break;
 			}
 		}
 		else if (role == Qt::SizeHintRole)
@@ -102,11 +151,11 @@ QVariant LogModel::headerData(int section, Qt::Orientation orientation, int role
 			switch (section)
 			{
 				case 0:
-					return QVariant(QSize(128, 18));
-					break;
+					return QVariant(QSize(32, 18));
 				case 1:
+					return QVariant(QSize(128, 18));
+				case 2:
 					return QVariant(QSize(512, 18));
-					break;
 			}
 		}
 	}
