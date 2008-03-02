@@ -11,12 +11,18 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
+#include <QTableView>
+
+#include <memory>
 
 namespace Statistics
 {
+	class LogModel;
 
 class MainWindow : public QWidget
 {
+	Q_OBJECT
+
 public:
 	/**
 	Creates the MainWindow and the environment.
@@ -27,6 +33,22 @@ public:
 	Destroys the the MainWindow and the environment.
 	*/
 	~MainWindow();
+
+public:
+	QSize minimumSizeHint() const;
+    QSize sizeHint() const;
+
+public slots:
+	void loadClicked(bool checked);
+	void exportClicked(bool checked);
+
+private:
+	std::tr1::shared_ptr<LogModel> logModel() const;
+	void setLogModel(std::tr1::shared_ptr<LogModel> lm);
+
+private:
+	std::tr1::shared_ptr<LogModel> logModel_;
+	QTableView * tableView_;
 };
 
 }

@@ -11,20 +11,78 @@
 
 #include <QtGui>
 
+#include "logmodel.h"
+
+using namespace std::tr1;
+
 namespace Statistics
 {
 
 MainWindow::MainWindow()
 {
+	// Visual
     QGridLayout *mainLayout = new QGridLayout;
-	mainLayout->setContentsMargins(0,0,0,0);
-	mainLayout->setSpacing(0);
+	//mainLayout->setContentsMargins(0,0,0,0);
+	//mainLayout->setSpacing(0);
 
 	setLayout(mainLayout);
+	
+	tableView_ = new QTableView();
+	mainLayout->addWidget(tableView_, 0, 0, 3, 3);
+	
+	QPushButton * bLoad = new QPushButton(tr("Load..."));
+	QPushButton * bExport = new QPushButton(tr("Export..."));
+	mainLayout->addWidget(bLoad, 3, 1);
+	mainLayout->addWidget(bExport, 3, 2);
+	QObject::connect(bLoad, SIGNAL(clicked(bool)), this, SLOT(loadClicked(bool)));
+	QObject::connect(bExport, SIGNAL(clicked(bool)), this, SLOT(exportClicked(bool)));
+	
+	// Model
+	setLogModel(shared_ptr<LogModel>(new LogModel()));
 }
 
 
 MainWindow::~MainWindow()
+{
+}
+
+QSize MainWindow::minimumSizeHint() const
+{
+	return QSize(640, 480);
+}
+
+QSize MainWindow::sizeHint() const
+{
+	return QSize(800, 600);
+}	
+
+shared_ptr<LogModel> MainWindow::logModel() const
+{
+	return logModel_;
+}
+
+void MainWindow::setLogModel(shared_ptr<LogModel> lm)
+{
+	tableView_->setModel(lm.get());
+	logModel_ = lm;
+}
+
+// Slots
+void MainWindow::loadClicked(bool checked)
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Log File"), QString(), tr("Log Files (*.log *.txt)"));
+	if (!fileName.isNull())
+	{
+		QFile * f = new QFile(fileName);
+		f->open(QIODevice::ReadOnly | QIODevice::Text);
+		QTextStream * s = new QTextStream(f);
+		setLogModel(LogModel::logModelFromStream(s));
+		delete s;
+		delete f;
+	}
+}
+
+void MainWindow::exportClicked(bool checked)
 {
 }
 

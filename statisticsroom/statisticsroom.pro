@@ -4,8 +4,8 @@
 
 TEMPLATE = app
 TARGET = StatisticsRoom
-DEPENDPATH += . src src/ui
-INCLUDEPATH += . src/ui
+DEPENDPATH += . src src/ui src/model
+INCLUDEPATH += boost/tr1/tr1 . src/ui src/model
 
 # Input
 HEADERS += \

@@ -12,6 +12,9 @@
 
 #include <QAbstractTableModel>
 #include <QList>
+#include <QTextStream>
+
+#include <memory>
 
 namespace Statistics
 {
@@ -21,14 +24,19 @@ class LogModel : public QAbstractTableModel
 {
 public:
 	LogModel();
+	LogModel(QTextStream * input);
 
 public: // Bare Bones
 	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+public: // Factory Methods
+	static std::tr1::shared_ptr<LogModel> logModelFromStream(QTextStream * input);
 
 private:
-	QList<LogLine> logTable_;
+	QList<std::tr1::shared_ptr<LogLine> > logTable_;
 };
 
 }
