@@ -48,14 +48,19 @@ void LogModel::calculateStatistics(QTextStream * output)
 	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect): .*$");
 	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect): (.*)$");
 	QRegExp stimulusSeperation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
+	QRegExp stimulusNewCycle = QRegExp("^New Test Cycle$");
 
 	QList<int> listTrials;
 	QList<QString> listCorrect;
 	QList<float> listSeperation;
+	QList<float> listSeperationChange;
+	QList<int> listCycleNumber;
 
 	QDateTime tStart;
 	QString sCorrect;
-	float seperation;
+	float seperation = 0;
+	float seperationChange = 0;
+	int cycleNumber = 0;
 	for (int i = 0; i < logTable_.size(); i++)
 	{
 		shared_ptr<LogLine> ll = logTable_.at(i);
@@ -70,23 +75,34 @@ void LogModel::calculateStatistics(QTextStream * output)
 		}
 		if (stimulusSeperation.exactMatch(lm))
 		{
-			seperation = stimulusSeperation.cap(1).toFloat();
+			float s = stimulusSeperation.cap(1).toFloat();
+			seperationChange = s - seperation;
+			seperation = s;
+		}
+		if (stimulusNewCycle.exactMatch(lm))
+		{
+			cycleNumber++;
 		}
 		if (stimulusEnd.exactMatch(lm))
 		{
 			listTrials.append(tStart.time().msecsTo(ll->timestamp().time()));
 			listCorrect.append(sCorrect);
 			listSeperation.append(seperation);
+			listSeperationChange.append(seperationChange);
+			listCycleNumber.append(cycleNumber);
 			sCorrect = "";
 			tStart = QDateTime();
-			seperation = 999999;
 		}
 	}
 
-	(*output) << "Time (msec)\t" << "Result\tConditions\t" << "Seperation\n";
+	(*output) << "Time (msec)\t" << "Result\tConditions\t" << "Seperation\t" << "Seperation Change\t" << "Cycle Number\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
-		(*output) << listTrials.at(i) << "\t" << listCorrect.at(i) << "\t" << listSeperation.at(i) << "\n";
+		(*output) << listTrials.at(i) << "\t"
+			<< listCorrect.at(i) << "\t"
+			<< listSeperation.at(i) << "\t"
+			<< listSeperationChange.at(i) << "\t"
+			<< listCycleNumber.at(i) << "\n";
 	}
 }
 
