@@ -123,40 +123,60 @@ int LuaProxy::clearScene(lua_State *L)
 int LuaProxy::setCameraPos(lua_State *L)
 {
 	checkTop(L, 4);
-	scene_->camera()->setPosition(toVector(L,2));
+	Tool::Point p = toVector(L,2);
+	scene_->camera()->setPosition(p);
 	lua_pop(L, 4);
+	char msg[80];
+	snprintf(msg, 80, "Camera Position: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
+	log(msg);
 	return 0;
 }
 
 int LuaProxy::setCameraDir(lua_State *L)
 {
 	checkTop(L, 4);
-	scene_->camera()->setDirection(toVector(L,2));
+	Tool::Point p = toVector(L,2);
+	scene_->camera()->setDirection(p);
 	lua_pop(L, 4);
+	char msg[80];
+	snprintf(msg, 80, "Camera Direction: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
+	log(msg);
 	return 0;
 }
 
 int LuaProxy::setCameraFoV(lua_State *L)
 {
 	checkTop(L, 2);
-	scene_->camera()->setFieldOfView(lua_tonumber(L,-1));
+	float fov = lua_tonumber(L,2);
+	scene_->camera()->setFieldOfView(fov);
 	lua_pop(L, 2);
+	char msg[80];
+	snprintf(msg, 80, "Camera Field of View: %2.2f deg", fov);
+	log(msg);
 	return 0;
 }
 
 int LuaProxy::setCameraSep(lua_State *L)
 {
 	checkTop(L, 2);
-	scene_->camera()->setSeparation(lua_tonumber(L,-1));
+	float sep = lua_tonumber(L,2);
+	scene_->camera()->setSeparation(sep);
 	lua_pop(L, 2);
+	char msg[80];
+	snprintf(msg, 80, "Camera Seperation: %2.3f", sep);
+	log(msg);
 	return 0;
 }
 
 int LuaProxy::setCameraParalaxPlane(lua_State *L)
 {
 	checkTop(L, 2);
-	scene_->camera()->setParalaxPlane(lua_tonumber(L,-1));
+	float pp = lua_tonumber(L,2);
+	scene_->camera()->setParalaxPlane(pp);
 	lua_pop(L, 2);
+	char msg[80];
+	snprintf(msg, 80, "Camera Paralax Plane: %2.2f", pp);
+	log(msg);
 	return 0;
 }
 
@@ -328,8 +348,7 @@ void LuaProxy::onEvent(const char * event, char * param)
 int LuaProxy::log(lua_State *L)
 {
 	const char *  s = lua_tostring(L, -1);
-	QDateTime t = QDateTime::currentDateTime();
-	logOutStream_ << t.toString(dateTimeFormatString).toStdString() << ": " << s << std::endl;
+	log(s);
 	lua_pop(L, 1);
 	return 0;
 }
@@ -337,8 +356,7 @@ int LuaProxy::log(lua_State *L)
 int LuaProxy::debugLog(lua_State *L)
 {
 	const char *  s = lua_tostring(L, -1);
-	QDateTime t = QDateTime::currentDateTime();
-	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << s << std::endl;
+	debugLog(s);
 	lua_pop(L, 1);
 	return 0;
 }
@@ -349,6 +367,18 @@ void LuaProxy::error(const char * s1, const char * s2)
 	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << s1 << ": " << s2 << std::endl;
 }
 
+void LuaProxy::log(const char * msg)
+{
+	QDateTime t = QDateTime::currentDateTime();
+	logOutStream_ << t.toString(dateTimeFormatString).toStdString() << ": " << msg << std::endl;
+}
+
+void LuaProxy::debugLog(const char * msg)
+{
+	QDateTime t = QDateTime::currentDateTime();
+	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << msg << std::endl;
+}
+	
 int LuaProxy::handleError(int err, const char * s)
 {
 	switch (err)

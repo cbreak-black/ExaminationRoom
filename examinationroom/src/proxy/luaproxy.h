@@ -76,6 +76,8 @@ public: // Misc
 	int setEventListener(lua_State *L);
 	int log(lua_State *L);
 	int debugLog(lua_State *L);
+	void log(const char * msg);
+	void debugLog(const char * msg);
 	
 public:
 	/**
