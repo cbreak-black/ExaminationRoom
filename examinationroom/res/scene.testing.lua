@@ -109,7 +109,7 @@ local nextFrame = function ()
 	stereograms[cur]:setPosition(pos[1], pos[2], pos[3]);
 	sn:setPosition(pos[1]+2, pos[2], pos[3]);
 	-- Separation at center
-	local sep = statistics:separationAtPoint(pos[1]+1, pos[2]+1, pos[3]);
+	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
 	local s = string.format("%s @ (%0.2f,%0.2f,%0.2f),s=%0.4f",
 		replies[1], pos[1]+1, pos[2]+1, pos[3], sep);
 	Scene:log(s);

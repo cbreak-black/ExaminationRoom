@@ -16,7 +16,7 @@ statistics =
 		end;
 	end;
 
-	separationAtPoint = function (this, x, y, z)
+	paralaxAtPoint = function (this, x, y, z)
 		-- Separation in pixel
 		local sep = Scene:getSeparationAtPoint(x, y, z);
 		-- Field of view the screen takes up
@@ -27,6 +27,11 @@ statistics =
 		-- FoV per Pixel (approximation)
 		local vx, vy, vw, vh = Scene:getViewport();
 		local fpp = fov / vh;
+		-- Distance of a pixel
+		local dpp = this.screenHeight / vh;
+		if (dpp * sep > 0.065) then
+			Scene:log(string.format("Warning: Separation %0.4f > 0.065m", dpp*sep));
+		end;
 		-- Asumes object is in camera focus and directly looked at
 		return fpp * sep;
 	end;
