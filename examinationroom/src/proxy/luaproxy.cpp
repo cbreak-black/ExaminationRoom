@@ -264,10 +264,20 @@ int LuaProxy::setEventListener(lua_State *L)
 {
 	checkTop(L, 3);
 	luaL_checktype(L, 1, LUA_TTABLE);
-	luaL_checktype(L, 3, LUA_TFUNCTION);
+	//luaL_checktype(L, 3, LUA_TFUNCTION);
 	int opt = luaL_checkoption(L, 2, 0, eventIdx);
-	lua_setfield(L, 1, eventIdx[opt]);
-	lua_pop(L, 2);
+	int t = lua_type(L, 3);
+	if (t == LUA_TFUNCTION)
+	{
+		lua_setfield(L, 1, eventIdx[opt]);
+		lua_pop(L, 2);
+	}
+	else
+	{
+		lua_pushnil(L);
+		lua_setfield(L, 1, eventIdx[opt]);
+		lua_pop(L, 3);
+	}
 	return 0;
 }
 
