@@ -163,7 +163,7 @@ int LuaProxy::setCameraSep(lua_State *L)
 	scene_->camera()->setSeparation(sep);
 	lua_pop(L, 2);
 	char msg[80];
-	snprintf(msg, 80, "Camera Seperation: %2.3f", sep);
+	snprintf(msg, 80, "Camera Separation: %2.3f", sep);
 	log(msg);
 	return 0;
 }

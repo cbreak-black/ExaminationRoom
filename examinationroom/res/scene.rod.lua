@@ -29,11 +29,14 @@ rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
 rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
-local pep1 = Object("Parallelepiped");
-pep1:setPosition(0, -3, -2);
-pep1.pos = {0,0,0};
-pep1:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
-Scene:addObject(pep1);
+pep = {};
+for i = 1,5 do
+	pep[i] = Object("Parallelepiped");
+	pep[i]:setPosition(0, -3, -2);
+	pep[i]:setTexture(Texture("Simple", "res/checkerboard.png"));
+	Scene:addObject(pep[i]);
+end
+pep.pos = {0,0,0};
 
 Scene:log("Added floor and ceil");
 
@@ -60,7 +63,7 @@ local parseInput = function (k)
 	local d = Key[string.byte(k)];
 	if d then
 		Scene:log("input: "..d);
-		local pos = pep1.pos;
+		local pos = pep.pos;
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
@@ -97,17 +100,25 @@ updateListener = function (delta)
 	if (tPassed > fullCircle)  then
 		tPassed = tPassed - fullCircle;
 	end;
-	local pos = pep1.pos;
+	local pos = pep.pos;
+	local step = math.pi/2
 	local x, y;
-	local l = 4;
+	local l = 2;
 	local r = 0.25;
-	x = math.sin(tPassed);
-	y = math.cos(tPassed);
-	pep1:setDirA(x*l, y*l, 0);
-	pep1:setDirB(y*r, -x*r, 0);
-	pep1:setDirC(0, 0, r);
-	pep1:setPosition(pos[1]-1/2*(x*l+y*r), pos[2]-1/2*(y*l-x*r), pos[3]-1/2*r);
-	pep1:setTexCoords(0,0, 0,1/l, 1/r,0, 1/r,1/l);
+	for i = 1,4 do
+		x = math.sin(tPassed+(i-1)*step);
+		y = math.cos(tPassed+(i-1)*step);
+		pep[i]:setDirA(x*l, y*l, 0);
+		pep[i]:setDirB(y*r, -x*r, 0);
+		pep[i]:setDirC(0, 0, r);
+		pep[i]:setPosition(pos[1], pos[2], pos[3]-1/2*r);
+		pep[i]:setTexCoords(0,0, 0,2/l, 2/r,0, 2/r,2/l);
+	end
+	pep[5]:setDirA(2*r, 0, 0);
+	pep[5]:setDirB(0, 2*r, 0);
+	pep[5]:setDirC(0, 0, -4*l);
+	pep[5]:setPosition(pos[1]-r, pos[2]-r, pos[3]);
+	pep[5]:setTexCoords(0,0, 0,4/l, 2/r,0, 2/r,4/l);
 end;
 updateListener(0);
 

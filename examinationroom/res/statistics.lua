@@ -7,6 +7,7 @@ statistics =
 	eyePosition = 0.5;		-- Relative height of eyes (1= upper screen border, 0=lower screen border)
 
 	setViewingProperties = function (this, dist, height, eyePos)
+		Scene:log(string.format("Viewer Properties: %1.1fm distance, %1.2fm screen height", dist, height));
 		this.viewingDistance = dist;
 		this.screenHeight = height;
 		if (eyePos == nil) then
