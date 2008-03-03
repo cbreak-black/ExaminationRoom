@@ -49,21 +49,21 @@ void LogModel::calculateStatistics(QTextStream * output)
 	QRegExp stimulusStart = QRegExp("^New Q:.*$");
 	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect): .*$");
 	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect): (.*)$");
-	QRegExp stimulusSeperation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
+	QRegExp stimulusSeparation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
 	QRegExp stimulusNewCycle = QRegExp("^New Test Cycle$");
 	QRegExp stimulusPosition = QRegExp("^New Q:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
 
 	QList<int> listTrials;
 	QList<QString> listCorrect;
-	QList<float> listSeperation;
-	QList<float> listSeperationChange;
+	QList<float> listSeparation;
+	QList<float> listSeparationChange;
 	QList<int> listCycleNumber;
 	QList<Point> listPositions;
 
 	QDateTime tStart;
 	QString sCorrect;
-	float seperation = 0;
-	float seperationChange = 0;
+	float separation = 0;
+	float separationChange = 0;
 	int cycleNumber = 0;
 	Point position;
 	for (int i = 0; i < logTable_.size(); i++)
@@ -78,11 +78,11 @@ void LogModel::calculateStatistics(QTextStream * output)
 		{
 			sCorrect = stimulusCorrect.cap(1) + "\t" + stimulusCorrect.cap(2);
 		}
-		if (stimulusSeperation.exactMatch(lm))
+		if (stimulusSeparation.exactMatch(lm))
 		{
-			float s = stimulusSeperation.cap(1).toFloat();
-			seperationChange = s - seperation;
-			seperation = s;
+			float s = stimulusSeparation.cap(1).toFloat();
+			separationChange = s - separation;
+			separation = s;
 		}
 		if (stimulusNewCycle.exactMatch(lm))
 		{
@@ -98,8 +98,8 @@ void LogModel::calculateStatistics(QTextStream * output)
 		{
 			listTrials.append(tStart.time().msecsTo(ll->timestamp().time()));
 			listCorrect.append(sCorrect);
-			listSeperation.append(seperation);
-			listSeperationChange.append(seperationChange);
+			listSeparation.append(separation);
+			listSeparationChange.append(separationChange);
 			listCycleNumber.append(cycleNumber);
 			listPositions.append(position);
 			sCorrect = "";
@@ -108,16 +108,16 @@ void LogModel::calculateStatistics(QTextStream * output)
 	}
 
 	(*output) << "Time (msec)\t" << "Result\tConditions\t"
-		<< "Seperation\t"
-		<< "Seperation Change\t"
+		<< "Separation\t"
+		<< "Separation Change\t"
 		<< "Position (x\ty\tz)\t"
 		<< "Cycle Number\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
 		(*output) << listTrials.at(i) << "\t"
 			<< listCorrect.at(i) << "\t"
-			<< listSeperation.at(i) << "\t"
-			<< listSeperationChange.at(i) << "\t"
+			<< listSeparation.at(i) << "\t"
+			<< listSeparationChange.at(i) << "\t"
 			<< listPositions.at(i).x << "\t" << listPositions.at(i).y << "\t" << listPositions.at(i).z << "\t"
 			<< listCycleNumber.at(i) << "\n";
 	}
@@ -184,7 +184,7 @@ QVariant LogModel::headerData(int section, Qt::Orientation orientation, int role
 			switch (section)
 			{
 				case 0:
-					return QVariant(QSize(32, 18));
+					return QVariant(QSize(48, 18));
 				case 1:
 					return QVariant(QSize(128, 18));
 				case 2:
