@@ -31,7 +31,7 @@ statistics =
 		-- Distance of a pixel
 		local dpp = this.screenHeight / vh;
 		if (dpp * sep > 0.065) then
-			Scene:log(string.format("Warning: Separation %0.4f > 0.065m", dpp*sep));
+			Scene:log(string.format("Warning: Separation %0.4fm > 0.065m", dpp*sep));
 		end;
 		-- Asumes object is in camera focus and directly looked at
 		return fpp * sep;
