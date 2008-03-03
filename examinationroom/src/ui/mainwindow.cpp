@@ -70,11 +70,17 @@ MainWindow::MainWindow()
 	}
 
 	luaProxy_ = new LuaProxy(scene_);
-	luaProxy_->runFile("res/scene.lua");
-
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
 	timer_->start(33); // 30 fps
+	
+	QString fileName = QFileDialog::getOpenFileName(this, "Open Log File",
+		"res/scene.lua",
+		"Lua Scene File (*.lua)");
+	if (!fileName.isNull())
+	{
+		luaProxy_->runFile(fileName.toAscii());
+	}
 }
 
 
