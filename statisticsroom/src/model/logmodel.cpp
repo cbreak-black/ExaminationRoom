@@ -107,14 +107,17 @@ void LogModel::calculateStatistics(QTextStream * output)
 		}
 	}
 
-	(*output) << "Time (msec)\t" << "Result\tConditions\t"
+	(*output) << "#\t"
+		<< "Time (msec)\t"
+		<< "Result\tConditions\t"
 		<< "Separation\t"
 		<< "Separation Change\t"
 		<< "Position (x\ty\tz)\t"
 		<< "Cycle Number\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
-		(*output) << listTrials.at(i) << "\t"
+		(*output) << i << "\t"
+			<< listTrials.at(i) << "\t"
 			<< listCorrect.at(i) << "\t"
 			<< listSeparation.at(i) << "\t"
 			<< listSeparationChange.at(i) << "\t"

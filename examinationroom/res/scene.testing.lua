@@ -18,6 +18,7 @@ sn:setText("Watch here");
 sn:setPosition(0,0,0);
 Scene:addObject(sn);
 
+floorPos = {-3, -2.5, -40};
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,48);
@@ -104,26 +105,36 @@ local nextFrame = function ()
 --	// End Comments
 	texture:setStyle(replies[1]); -- Here the concave/convex status is set
 
-	local pos = stereograms[cur].pos;
-	stereograms[cur]:setTexture(texture);
-	stereograms[cur]:setPosition(pos[1], pos[2], pos[3]);
-	sn:setPosition(pos[1]+2, pos[2], pos[3]);
-	-- Separation at center
-	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
-	local s = string.format("%s @ (%0.2f,%0.2f,%0.2f),s=%0.4f",
-		replies[1], pos[1]+1, pos[2]+1, pos[3], sep);
-	Scene:log(s);
-	sn:setText(s);
+	if cur == 0 then
+		rectFloor:setPosition(floorPos[1], floorPos[2], floorPos[3]);
+		rectCeil:setPosition(floorPos[1], -1*floorPos[2], floorPos[3]);
+	else
+		local pos = stereograms[cur].pos;
+		stereograms[cur]:setTexture(texture);
+		stereograms[cur]:setPosition(pos[1], pos[2], pos[3]);
+		sn:setPosition(pos[1]+2, pos[2], pos[3]);
+		-- Separation at center
+		local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
+		local s = string.format("%s @ (%0.2f,%0.2f,%0.2f),s=%0.4f",
+			replies[1], pos[1]+1, pos[2]+1, pos[3], sep);
+		Scene:log(s);
+		sn:setText(s);
+	end
 end
 nextFrame();
 
 local parseInput = function (k)
-	local step = 0.5;
+	local step = 0.25;
 	local d = Key[string.byte(k)];
 	local n = tonumber(k);
 	if d then
 		Scene:log("input: "..d);
-		local pos = stereograms[cur].pos;
+		local pos;
+		if cur == 0 then
+			pos = floorPos;
+		else
+			pos = stereograms[cur].pos;
+		end
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
