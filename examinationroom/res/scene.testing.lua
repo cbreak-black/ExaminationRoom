@@ -18,19 +18,19 @@ sn:setText("Watch here");
 sn:setPosition(0,0,0);
 Scene:addObject(sn);
 
-floorPos = {-3, -2.5, -40};
+floorPos = {-3, -2.5, -20};
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,48);
-rectFloor:setPosition(-3, -2.5, -40);
+rectFloor:setDirB(0,0,28);
+rectFloor:setPosition(-3, -2.5, -20);
 rectFloor:setTexCoords(0,0, 0,48, 6,0, 6,48);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
 rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,48);
-rectCeil:setPosition(-3, 2.5, -40);
+rectCeil:setDirB(0,0,28);
+rectCeil:setPosition(-3, 2.5, -20);
 rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
 rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
