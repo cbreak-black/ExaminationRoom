@@ -47,13 +47,14 @@ public: // Resizing
 	as texture is not influenced. Default is 1.0f;
 	 \return the zoom factor
 	*/
-	virtual float zoom() = 0;
+	virtual float zoomX() = 0;
+	virtual float zoomY() = 0;
 	/**
 	Sets the zoom factor.
 	 \see zoom()
 	 \param z	the new zoom factor
 	*/
-	virtual void setZoom(float z) = 0;
+	virtual void setZoom(float zx, float zy) = 0;
 };
 
 }

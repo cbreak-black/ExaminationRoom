@@ -24,7 +24,8 @@ Stereogram::Stereogram()
 	texDepth_.reset();
 	texLeft_.reset();
 	texRight_.reset();
-	zoomFactor_ = 1.0f;
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
 	offset_ = 6;
 	style_ = convex;
 }
@@ -34,7 +35,8 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	texDepth_.reset();
 	texLeft_ = l;
 	texRight_ = r;
-	zoomFactor_ = 1.0f;
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
 	offset_ = 6;
 	style_ = convex;
 }
@@ -92,21 +94,27 @@ int Stereogram::height()
 		return 0;
 }
 
-float Stereogram::zoom()
+float Stereogram::zoomX()
 {
-	return zoomFactor_;
+	return zoomFactorX_;
 }
 
-void Stereogram::setZoom(float z)
+float Stereogram::zoomY()
 {
-	zoomFactor_ = z;
+	return zoomFactorY_;
+}
+
+void Stereogram::setZoom(float zx, float zy)
+{
+	zoomFactorX_ = zx;
+	zoomFactorY_ = zy;
 	if (texDepth_)
-		texDepth_->setZoom(z);
+		texDepth_->setZoom(zx, zy);
 	recreateStereogram();
 	if (texLeft_)
-		texLeft_->setZoom(z);
+		texLeft_->setZoom(zx, zy);
 	if (texRight_)
-		texRight_->setZoom(z);
+		texRight_->setZoom(zx, zy);
 }
 
 int Stereogram::offset()
@@ -177,7 +185,7 @@ void Stereogram::setTexDepth(std::tr1::shared_ptr<Texture> t)
 {
 	texDepth_ = t;
 	if (texDepth_)
-		texDepth_->setZoom(zoomFactor_);
+		texDepth_->setZoom(zoomFactorX_, zoomFactorY_);
 	recreateStereogram();
 }
 
@@ -185,14 +193,14 @@ void Stereogram::setTexLeft(std::tr1::shared_ptr<Texture> t)
 {
 	texLeft_ = t;
 	if (texLeft_)
-		texLeft_->setZoom(zoomFactor_);
+		texLeft_->setZoom(zoomFactorX_, zoomFactorY_);
 }
 
 void Stereogram::setTexRight(std::tr1::shared_ptr<Texture> t)
 {
 	texRight_ = t;
 	if (texRight_)
-		texRight_->setZoom(zoomFactor_);
+		texRight_->setZoom(zoomFactorX_, zoomFactorY_);
 }
 
 }

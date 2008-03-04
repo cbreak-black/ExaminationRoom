@@ -63,8 +63,9 @@ public: // Resizing
 	virtual void resizeToOriginal();
 	virtual int width();
 	virtual int height();
-	virtual float zoom();
-	virtual void setZoom(float z);
+	virtual float zoomX();
+	virtual float zoomY();
+	virtual void setZoom(float zx, float zy);
 
 private:
 	void loadPixelMap(QImage image);
@@ -75,7 +76,8 @@ private:
 	QImage original_;
 
 	GLuint imageGLID_;
-	float zoomFactor_;
+	float zoomFactorX_;
+	float zoomFactorY_;
 };
 
 }

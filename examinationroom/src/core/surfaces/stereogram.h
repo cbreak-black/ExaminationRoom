@@ -72,8 +72,9 @@ public: // Resizing
 	Default is 1.0f;
 	 \return the zoom factor
 	*/
-	virtual float zoom();
-	virtual void setZoom(float z);
+	virtual float zoomX();
+	virtual float zoomY();
+	virtual void setZoom(float zx, float zy);
 
 public:
 	virtual int offset();
@@ -82,7 +83,8 @@ public:
 	virtual void setStyle(Style s);
 
 private:
-	float zoomFactor_;
+	float zoomFactorX_;
+	float zoomFactorY_;
 	int offset_;	/**< Pixel offset between left and right */
 	Style style_;
 

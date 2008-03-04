@@ -23,7 +23,8 @@ Texture::Texture(const char * path)
 	original_ = image_;
 	
 	imageGLID_ = 0;
-	zoomFactor_ = 1.0f;
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
 }
 
 Texture::Texture(std::string path)
@@ -32,7 +33,8 @@ Texture::Texture(std::string path)
 	original_ = image_;
 	
 	imageGLID_ = 0;
-	zoomFactor_ = 1.0f;
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
 }
 
 Texture::Texture(QImage image)
@@ -41,7 +43,8 @@ Texture::Texture(QImage image)
 	original_ = image;
 	
 	imageGLID_ = 0;
-	zoomFactor_ = 1.0f;
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
 }
 
 Texture::~Texture()
@@ -189,7 +192,7 @@ void Texture::draw(GLWidget * w)
 	{
 		loadPixelMap(image_);
 		GLubyte * t =  image_.bits();
-		glPixelZoom(zoomFactor_,zoomFactor_);
+		glPixelZoom(zoomFactorX_,zoomFactorY_);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
 	}
@@ -197,7 +200,7 @@ void Texture::draw(GLWidget * w)
 	{
 		QImage tx = transformColorSpace(image_);
 		GLubyte * t =  tx.bits();
-		glPixelZoom(zoomFactor_,zoomFactor_);
+		glPixelZoom(zoomFactorX_,zoomFactorY_);
 		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
 	}
@@ -217,7 +220,7 @@ void Texture::resizeTo(int width, int height)
 {
 	glDeleteTextures(1, &imageGLID_); // Delete old image
 	imageGLID_ = 0;
-	image_ = original_.scaled(width/zoomFactor_, height/zoomFactor_);
+	image_ = original_.scaled(width, height);
 }
 
 void Texture::resizeToOriginal()
@@ -229,22 +232,28 @@ void Texture::resizeToOriginal()
 
 int Texture::width()
 {
-	return image().width() * zoomFactor_;
+	return image().width();
 }
 
 int Texture::height()
 {
-	return image().height() * zoomFactor_;
+	return image().height();
 }
 
-float Texture::zoom()
+float Texture::zoomX()
 {
-	return zoomFactor_;
+	return zoomFactorX_;
 }
 
-void Texture::setZoom(float z)
+float Texture::zoomY()
 {
-	zoomFactor_ = z;
+	return zoomFactorY_;
+}
+
+void Texture::setZoom(float zx, float zy)
+{
+	zoomFactorX_ = zx;
+	zoomFactorY_ = zy;
 }
 
 }

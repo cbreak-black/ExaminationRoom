@@ -118,15 +118,16 @@ int TextureProxy::zoom(lua_State *L)
 {
 	checkTop(L, 1);
 	lua_pop(L, 1);
-	lua_pushnumber(L, texture()->zoom());
-	return 1;
+	lua_pushnumber(L, texture()->zoomX());
+	lua_pushnumber(L, texture()->zoomY());
+	return 2;
 }
 
 int TextureProxy::setZoom(lua_State *L)
 {
-	checkTop(L, 2);
-	texture()->setZoom(lua_tonumber(L,2));
-	lua_pop(L, 2);
+	checkTop(L, 3);
+	texture()->setZoom(lua_tonumber(L,2), lua_tonumber(L,3));
+	lua_pop(L, 3);
 	return 0;
 }
 
