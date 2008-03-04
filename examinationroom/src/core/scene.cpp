@@ -27,34 +27,6 @@ Scene::~Scene()
 	clear();
 }
 
-bool Scene::addObject(shared_ptr<Object> object)
-{
-	if (objects_.insert(object).second)
-	{
-		return true;
-	}
-	return false;
-}
-
-void Scene::removeObject(shared_ptr<Object> object)
-{
-	objects_.erase(object);
-}
-
-void Scene::clear()
-{
-	objects_.clear();
-}
-
-void Scene::drawScene(GLWidget * dest)
-{
-	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
-	for (; i != objects_.end(); i++)
-	{
-		(*i)->draw(dest);
-	}
-}
-
 void Scene::setCamera(std::tr1::shared_ptr<Camera> camera)
 {
 	camera_ = camera;

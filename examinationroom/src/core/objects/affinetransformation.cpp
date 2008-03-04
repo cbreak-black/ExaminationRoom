@@ -11,6 +11,8 @@
 
 #include "vec.h"
 
+using namespace std::tr1;
+
 namespace Examination
 {
 	using namespace Tool;
@@ -22,7 +24,7 @@ AffineTransformation::AffineTransformation()
 // Drawing
 void AffineTransformation::draw(GLWidget * dest)
 {
-	
+	Container::draw(dest);
 }
 
 

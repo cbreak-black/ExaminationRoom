@@ -49,6 +49,7 @@ Key = {
 [19] = "up";
 [20] = "right";
 [21] = "down";
+[32] = "space";
 }
 Dir = {
 ["up"] = "concave";
@@ -154,14 +155,19 @@ nextFrame();
 
 local parseInput = function (k)
 	local d = Key[string.byte(k)];
-	if d then d = Dir[d] end;
 	if d then
-		if d == replies[testNum] then
-			Scene:log("Input Correct: "..d);
-		else
-			Scene:log("Input Incorrect: "..d);
-		end;
-		nextFrame();
+		if Dir[d] then
+			d = Dir[d];
+			if d == replies[testNum] then
+				Scene:log("Input Correct: "..d);
+			else
+				Scene:log("Input Incorrect: "..d);
+			end;
+			nextFrame();
+		elseif d == "space" then
+			Scene:log("Input Skipped: "..d);
+			nextFrame();
+		end
 	else
 		Scene:log("Input invalid, ignored ("..string.byte(k)..")");
 	end

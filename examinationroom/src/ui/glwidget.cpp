@@ -110,7 +110,7 @@ void GLWidget::paintGL()
 		}
 
 		scene_->camera()->loadMatrix(this);
-		scene_->drawScene(this);
+		scene_->draw(this);
 
 		// Right
 		if (style_ == anaglyph)
@@ -120,7 +120,7 @@ void GLWidget::paintGL()
 			//glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
 			glColorMask(0, 1, 1, 1);
 			scene_->camera()->loadMatrix(this);
-			scene_->drawScene(this);
+			scene_->draw(this);
 			glColorMask(1, 1, 1, 1);
 		}
 		else if (style_ == sidebyside)
@@ -128,7 +128,7 @@ void GLWidget::paintGL()
 			setSide(right);
 			glViewport(s.width()/2,0, s.width()/2, s.height());
 			scene_->camera()->loadMatrix(this);
-			scene_->drawScene(this);
+			scene_->draw(this);
 			glViewport(0,0, s.width(), s.height());
 		}
 	}

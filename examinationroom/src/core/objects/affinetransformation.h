@@ -11,26 +11,21 @@
 #define AFFINE_TRANSFORMATION_H
 
 #include "object.h"
-
-#include <memory>
-#include <set>
+#include "container.h"
 
 namespace Examination
 {
 
 /**
-This class represents a renderable piece of text.
+This class represents a transformable group of objects.
 */
-class AffineTransformation : public Object
+class AffineTransformation : public Object, public Container
 {
 public: // Construction
 	AffineTransformation();
-
+	
 public:
 	virtual void draw(GLWidget * dest);
-
-private:
-	std::set< std::tr1::shared_ptr<Object> > objects_;
 };
 	
 }
