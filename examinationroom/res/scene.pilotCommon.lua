@@ -90,13 +90,11 @@ end;
 Scene:setEventListener("keyDown", parseInput);
 Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
 
-mountPoints = persistence.load("res/scene.pilot.pos.lua");
-replies = persistence.load("res/scene.pilot.rep.lua");
+mountPoints,replies = persistence.load("res/scene.pilot.in.lua");
 
 -- If no mount points exist, recalculate
 if mountPoints == nil or replies == nil then
 	Scene:log("Recalculating mount points");
 	dofile("res/scene.generator.lua");
-	mountPoints = persistence.load("res/scene.pilot.pos.lua");
-	replies = persistence.load("res/scene.pilot.rep.lua");
+	mountPoints,replies = persistence.load("res/scene.pilot.in.lua");
 end

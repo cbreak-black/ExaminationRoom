@@ -59,5 +59,4 @@ for i = 1, 100 do -- 100 cycles
 	lastPoint = mountPoints[#mountPoints];
 end;
 
-persistence.store("res/scene.pilot.pos.lua", testPositions);
-persistence.store("res/scene.pilot.rep.lua", testReplies);
+persistence.store("res/scene.pilot.in.lua", testPositions, testReplies);

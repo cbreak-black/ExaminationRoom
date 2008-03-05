@@ -2,12 +2,17 @@ Scene:log("Persistence Library loaded");
 
 persistence =
 {
-	store = function (path, item)
+	store = function (path, ...)
 		local f, e = io.open(path, "w");
 		if f then
 			f:write("-- Persistent Data\n");
 			f:write("return ");
-			persistence.write(f, item, 0);
+			persistence.write(f, select(1,...), 0);
+			for i = 2, select("#", ...) do
+				f:write(",\n");
+				persistence.write(f, select(i,...), 0);
+			end;
+			f:write("\n");
 		else
 			error(e);
 		end;
