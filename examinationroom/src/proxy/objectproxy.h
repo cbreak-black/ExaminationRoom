@@ -19,6 +19,7 @@ namespace Examination
 	class Parallelepiped;
 	class Pixelplane;
 	class Text;
+	class AffineTransformation;
 	class Object;
 
 class ObjectProxy
@@ -48,11 +49,22 @@ public: // Text
 	int text(lua_State *L);
 	int setText(lua_State *L);
 
-public:
+public: // AffineTransformation
+	int loadIdentity(lua_State *L);
+	int translate(lua_State *L);
+	int rotate(lua_State *L);
+
+public: // Container (AffineTransformation)
+	int addObject(lua_State *L);
+	int removeObject(lua_State *L);
+	int clear(lua_State *L);
+
+public: // Dynamic Casts
 	std::tr1::shared_ptr<Rectangle> rectangle();
 	std::tr1::shared_ptr<Parallelepiped> parallelepiped();
 	std::tr1::shared_ptr<Pixelplane> pixelplane();
 	std::tr1::shared_ptr<Text> text();
+	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
 	std::tr1::shared_ptr<Object> object();
 	
 private:

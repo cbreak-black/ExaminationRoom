@@ -79,8 +79,8 @@ parseInput = function (k)
 			end;
 			nextFrame();
 		elseif d == "space" then
-			Scene:log("Input Skipped: "..d);
-			nextFrame();
+			--Scene:log("Input Skipped: "..d);
+			--nextFrame();
 		end
 	else
 		Scene:log("Input invalid, ignored ("..string.byte(k)..")");

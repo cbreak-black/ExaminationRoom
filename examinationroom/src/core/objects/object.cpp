@@ -17,6 +17,7 @@ namespace Examination
 // Creation
 Object::Object()
 {
+	origin_ = Point(0,0,0);
 	autoresize_ = false;
 }
 

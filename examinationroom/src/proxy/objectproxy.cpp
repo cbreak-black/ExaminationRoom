@@ -13,6 +13,7 @@
 #include "objects/parallelepiped.h"
 #include "objects/pixelplane.h"
 #include "objects/text.h"
+#include "objects/affinetransformation.h"
 
 #include "textureproxy.h"
 
@@ -29,6 +30,7 @@ const char * objectTypes[] =
 	"Parallelepiped",
 	"Pixelplane",
 	"Text",
+	"AffineTransformation",
 	0
 };
 
@@ -40,16 +42,19 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	switch (opt)
 	{
 	case 0:
-		object_ = shared_ptr<Rectangle>(new Rectangle());
+		object_ = shared_ptr<Object>(new Rectangle());
 		break;
 	case 1:
-		object_ = shared_ptr<Parallelepiped>(new Parallelepiped());
+		object_ = shared_ptr<Object>(new Parallelepiped());
 		break;
 	case 2:
-		object_ = shared_ptr<Pixelplane>(new Pixelplane());
+		object_ = shared_ptr<Object>(new Pixelplane());
 		break;
 	case 3:
-		object_ = shared_ptr<Text>(new Text());
+		object_ = shared_ptr<Object>(new Text());
+		break;
+	case 4:
+		object_ = shared_ptr<Object>(new AffineTransformation());
 		break;
 	}
 	lua_pop(L, 0);
@@ -272,6 +277,110 @@ int ObjectProxy::setText(lua_State *L)
 	}
 }
 
+int ObjectProxy::loadIdentity(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 1);
+		affineTransformation()->loadIdentity();
+		lua_pop(L, 1);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::translate(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 4);
+		affineTransformation()->translate(toVector(L, 2));
+		lua_pop(L, 4);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::rotate(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 5);
+		affineTransformation()->rotate(toVector(L, 2), lua_tonumber(L, 5));
+		lua_pop(L, 5);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::addObject(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 2);
+		luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
+		lua_pushnumber(L, 0);
+		lua_gettable(L, -2);
+		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
+		affineTransformation()->addObject((*r)->object());
+		lua_pop(L, 3);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::removeObject(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 2);
+		luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
+		lua_pushnumber(L, 0);
+		lua_gettable(L, -2);
+		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
+		affineTransformation()->removeObject((*r)->object());
+		lua_pop(L, 3);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::clear(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 1);
+		affineTransformation()->clear();
+		lua_pop(L, 1);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return dynamic_pointer_cast<Rectangle, Object>(object_);
@@ -292,6 +401,11 @@ shared_ptr<Text> ObjectProxy::text()
 	return dynamic_pointer_cast<Text, Object>(object_);
 }
 
+shared_ptr<AffineTransformation> ObjectProxy::affineTransformation()
+{
+	return dynamic_pointer_cast<AffineTransformation, Object>(object_);
+}
+
 shared_ptr<Object> ObjectProxy::object()
 {
 	return object_;
@@ -309,6 +423,12 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setSize", &ObjectProxy::setSize },
 	{ "text", &ObjectProxy::text },
 	{ "setText", &ObjectProxy::setText },
+	{ "loadIdentity", &ObjectProxy::loadIdentity },
+	{ "translate", &ObjectProxy::translate },
+	{ "rotate", &ObjectProxy::rotate },
+	{ "addObject", &ObjectProxy::addObject },
+	{ "removeObject", &ObjectProxy::removeObject },
+	{ "clear", &ObjectProxy::clear },
 	{ "position", &ObjectProxy::position },
 	{ "setPosition", &ObjectProxy::setPosition },
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
