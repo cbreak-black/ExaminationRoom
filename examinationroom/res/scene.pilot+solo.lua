@@ -5,22 +5,16 @@ Scene:addObject(rectCeil);
 
 testNum = 0;
 nextFrame = function ()
-	testNum = (testNum % #mountPoints) + 1;
-	if testNum == 1 then
-		Scene:log("New Test Cycle");
-		permuteTable(mountPoints);
-		while checkOverlap(mountPoints) do
-			permuteTable(mountPoints);
-		end
-		permuteTable(replies);
-	end
+	testNum = testNum + 1;
+	if testNum > #mountPoints then
+		return;
+	end;
 --	// Uncomment the following for a (rerendered) Stereogram version
 --	local texture = Texture("Stereogram",
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	permuteTable(shapes); -- Pick a random shape
-	local texture = Texture("RandomDot", shapes[1]);
+	local texture = Texture("RandomDot", shapes[math.random(1, #shapes)]);
 	texture:setMaxColor(8);
 	texture:setExclusiveColor(1);
 --	// Uncomment the following for a Pattern version
@@ -44,6 +38,3 @@ nextFrame = function ()
 	Scene:log(s);
 end
 nextFrame();
-
-Scene:setEventListener("keyDown", parseInput);
-Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);

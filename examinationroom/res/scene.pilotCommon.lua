@@ -1,5 +1,6 @@
 -- Load Libraries
 dofile("res/statistics.lua")
+dofile("res/persistence.lua")
 -- Distance to screen: 2.5 meter
 -- Screen height: 0.79 meter
 -- Screen width:  1.31 meter
@@ -66,49 +67,6 @@ shapes =
 "res/circle.png";
 }
 
--- Test Scene details
-depths = {
-	-17, -8.5, -3.5, 0, 5, 8
-}
-xys = {
-	{ -3, -2.5 };
-	{ 1, -2.5};
-	{ -3, 0.5};
-	{ 1, 0.5};
-}
-mountPoints = {}
-for j = 1, #depths do
-	for i = 1, #xys do
-		table.insert(mountPoints, {xys[i][1], xys[i][2], depths[j]});
-	end
-end
-
--- Possible replies
-replies = {};
-for i = 1, #mountPoints/2 do
-	table.insert(replies, "convex");
-	table.insert(replies, "concave");
-end
-
-permuteTable = function (t)
-	local n = #t;
-	for i = 1, n do
-		local j = math.random(i, n);
-		t[i], t[j] = t[j], t[i];
-	end
-end;
-
-checkOverlap = function (t)
-	local pold = {0,0,0};
-	for i, p in ipairs(t) do
-		if p[1] == pold[1] and p[2] == pold[2] then
-			return true;
-		end;
-		pold = p;
-	end
-	return false;
-end
-
 parseInput = function (k)
 	local d = Key[string.byte(k)];
 	if d then
@@ -128,3 +86,17 @@ parseInput = function (k)
 		Scene:log("Input invalid, ignored ("..string.byte(k)..")");
 	end
 end;
+
+Scene:setEventListener("keyDown", parseInput);
+Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
+
+mountPoints = persistence.load("res/scene.pilot.pos.lua");
+replies = persistence.load("res/scene.pilot.rep.lua");
+
+-- If no mount points exist, recalculate
+if mountPoints == nil or replies == nil then
+	Scene:log("Recalculating mount points");
+	dofile("res/scene.generator.lua");
+	mountPoints = persistence.load("res/scene.pilot.pos.lua");
+	replies = persistence.load("res/scene.pilot.rep.lua");
+end
