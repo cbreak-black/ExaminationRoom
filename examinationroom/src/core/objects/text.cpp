@@ -22,13 +22,13 @@ Text::Text()
 }
 
 // Drawing
-void Text::draw(GLWidget * dest)
+void Text::draw(GLWidget * dest) const
 {
 	Point p = position();
 	dest->renderText(p.x, p.y, p.z, text_, font_);
 }
 
-QString Text::text()
+QString Text::text() const
 {
 	return text_;
 }

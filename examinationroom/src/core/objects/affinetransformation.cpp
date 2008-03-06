@@ -86,10 +86,10 @@ void AffineTransformation::rotate(Vector axis, double angle)
 }
 
 // Drawing
-void AffineTransformation::draw(GLWidget * dest)
+void AffineTransformation::draw(GLWidget * dest) const
 {
 	glPushMatrix();
-	glLoadMatrixd(trans_);
+	glMultMatrixd(trans_);
 	Container::draw(dest);
 	glPopMatrix();
 }

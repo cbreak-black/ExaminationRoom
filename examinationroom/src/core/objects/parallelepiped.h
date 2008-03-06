@@ -24,14 +24,14 @@ public: // Construction
 	Parallelepiped();
 
 public:
-	virtual void draw(GLWidget * dest);
+	virtual void draw(GLWidget * dest) const;
 	
 public:
 	/**
 	Returns the third direction of this rectangle.
 	 \return the third direction of this rectangle.
 	 */
-	Tool::Vector dirC();
+	Tool::Vector dirC() const;
 
 	/**
 	Sets the third direction of the rectangle.

@@ -34,7 +34,7 @@ Rectangle::~Rectangle()
 }
 
 // Drawing
-void Rectangle::draw(GLWidget * dest)
+void Rectangle::draw(GLWidget * dest) const
 {
 	Point v1 = position();
 	Point v2 = position() + dirB();
@@ -83,32 +83,32 @@ void Rectangle::setTexCoords(float llx, float lly, float ulx, float uly,
 	texD_ = Point(urx, ury, 0);
 }
 
-Tool::Point Rectangle::texA()
+Tool::Point Rectangle::texA() const
 {
 	return texA_;
 }
 
-Tool::Point Rectangle::texB()
+Tool::Point Rectangle::texB() const
 {
 	return texB_;
 }
 
-Tool::Point Rectangle::texC()
+Tool::Point Rectangle::texC() const
 {
 	return texC_;
 }
 
-Tool::Point Rectangle::texD()
+Tool::Point Rectangle::texD() const
 {
 	return texD_;
 }
 
-Tool::Vector Rectangle::dirA()
+Tool::Vector Rectangle::dirA() const
 {
 	return directionA_;
 }
 
-Tool::Vector Rectangle::dirB()
+Tool::Vector Rectangle::dirB() const
 {
 	return directionB_;
 }

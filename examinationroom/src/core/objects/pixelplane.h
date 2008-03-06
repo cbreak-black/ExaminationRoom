@@ -25,7 +25,7 @@ public: // Construction
 	~Pixelplane();
 
 public:
-	virtual void draw(GLWidget * dest);
+	virtual void draw(GLWidget * dest) const;
 	
 	void setSize(float w, float h);
 

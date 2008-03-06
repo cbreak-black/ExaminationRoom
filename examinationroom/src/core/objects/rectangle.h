@@ -25,20 +25,20 @@ public: // Construction
 	~Rectangle();
 
 public:
-	virtual void draw(GLWidget * dest);
-	
+	virtual void draw(GLWidget * dest) const;
+
 public:
 	/**
 	Returns the first direction of this rectangle.
 	 \return the first direction of this rectangle.
 	*/
-	Tool::Vector dirA();
+	Tool::Vector dirA() const;
 
 	/**
 	Returns the second direction of this rectangle.
 	 \return the second direction of this rectangle.
 	 */
-	Tool::Vector dirB();
+	Tool::Vector dirB() const;
 
 	/**
 	Sets the first direction of the rectangle.
@@ -69,10 +69,10 @@ public: // Textures
 	*/
 	void setTexCoords(float llx, float lly, float ulx, float uly,
 					  float lrx, float lry, float urx, float ury);
-	Tool::Point texA();
-	Tool::Point texB();
-	Tool::Point texC();
-	Tool::Point texD();
+	Tool::Point texA() const;
+	Tool::Point texB() const;
+	Tool::Point texC() const;
+	Tool::Point texD() const;
 
 private:
 	Tool::Vector directionA_;

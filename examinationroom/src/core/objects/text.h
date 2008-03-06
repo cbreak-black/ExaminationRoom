@@ -27,10 +27,10 @@ public: // Construction
 	Text();
 
 public:
-	virtual void draw(GLWidget * dest);
+	virtual void draw(GLWidget * dest) const;
 
 public:
-	QString text();
+	QString text() const;
 	void setText(QString t);
 	void setText(const char * c);
 

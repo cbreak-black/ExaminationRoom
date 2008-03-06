@@ -52,7 +52,7 @@ public:
 	void rotate(Tool::Vector axis, double angle);
 
 public:
-	virtual void draw(GLWidget * dest);
+	virtual void draw(GLWidget * dest) const;
 
 private:
 	double trans_[16];

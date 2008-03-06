@@ -39,7 +39,7 @@ Object::~Object()
 {
 }
 
-Tool::Point Object::position()
+Tool::Point Object::position() const
 {
 	return origin_;
 }
@@ -54,7 +54,7 @@ void Object::setAutoResize(bool b)
 	autoresize_ = b;
 }
 
-bool Object::autoResize()
+bool Object::autoResize() const
 {
 	return autoresize_;
 }
@@ -65,7 +65,7 @@ void Object::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 	tex_ = t;
 }
 
-std::tr1::shared_ptr<AbstractTexture> Object::texture()
+std::tr1::shared_ptr<AbstractTexture> Object::texture() const
 {
 	return tex_;
 }

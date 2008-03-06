@@ -30,7 +30,7 @@ Pixelplane::~Pixelplane()
 }
 
 // Drawing
-void Pixelplane::draw(GLWidget * dest)
+void Pixelplane::draw(GLWidget * dest) const
 {
 	if (texture())
 	{

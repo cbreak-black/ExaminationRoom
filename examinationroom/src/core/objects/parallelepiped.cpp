@@ -26,7 +26,7 @@ Parallelepiped::Parallelepiped()
 }
 
 // Drawing
-void Parallelepiped::draw(GLWidget * dest)
+void Parallelepiped::draw(GLWidget * dest) const
 {
 	Point v1 = position();
 	Point v2 = position() + dirB();
@@ -74,7 +74,7 @@ void Parallelepiped::draw(GLWidget * dest)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Tool::Vector Parallelepiped::dirC()
+Tool::Vector Parallelepiped::dirC() const
 {
 	return directionC_;
 }

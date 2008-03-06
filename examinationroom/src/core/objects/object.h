@@ -57,29 +57,29 @@ public: // Accessors
 	Returns the position of this object.
 	 \return the position of this object.
 	*/
-	Tool::Point position();
+	virtual Tool::Point position() const;
 
 	/**
 	Sets the position of the object.
 	 \param p	the new position of the object.
 	*/
-	void setPosition(Tool::Point p);
+	virtual void setPosition(Tool::Point p);
 
 	/**
 	Sets the auto resize status. Auto resizing automatically scales
 	textures to correspond pixel-by-pixel to the rendered size.
 	 \param b	Boolean indicating the desired auto resize state
 	*/
-	void setAutoResize(bool b);
+	virtual void setAutoResize(bool b);
 	
 	/**
 	Returns the auto resize status.
 	 \return the auto resize status
 	*/
-	bool autoResize();
+	virtual bool autoResize() const;
 
 public: // Drawing
-	virtual void draw(GLWidget * dest) = 0;
+	virtual void draw(GLWidget * dest) const = 0;
 
 	/**
 	Sets the texture for this object.
@@ -91,7 +91,7 @@ public: // Drawing
 	Returns the texture of this object.
 	\return	Texture of this object
 	*/
-	std::tr1::shared_ptr<AbstractTexture> texture();
+	std::tr1::shared_ptr<AbstractTexture> texture() const;
 
 private:
 	Tool::Point origin_;

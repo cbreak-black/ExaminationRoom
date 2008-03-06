@@ -41,7 +41,7 @@ public:
 	void clear();
 
 public:
-	virtual void draw(GLWidget * dest);
+	virtual void draw(GLWidget * dest) const;
 
 public:
 	std::set< std::tr1::shared_ptr<Object> > objects();

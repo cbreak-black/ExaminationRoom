@@ -44,7 +44,7 @@ void Container::clear()
 }
 
 // Drawing
-void Container::draw(GLWidget * dest)
+void Container::draw(GLWidget * dest) const
 {
 	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
