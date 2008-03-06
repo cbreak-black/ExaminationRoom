@@ -43,6 +43,8 @@ public: // Stereogram
 public: // RDS
 	int setMaxColor(lua_State *L);
 	int setExclusiveColor(lua_State *L);
+	int setColor(lua_State *L);
+	int resetColor(lua_State *L);
 
 public:
 	std::tr1::shared_ptr<AbstractTexture> texture();

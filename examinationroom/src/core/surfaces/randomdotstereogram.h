@@ -12,6 +12,8 @@
 
 #include "stereogram.h"
 
+#include <vector>
+
 namespace Examination
 {
 
@@ -32,13 +34,19 @@ public: // Constructors and Destructor
 public:
 	void setMaxColor(int mc);
 	void setExclusiveColor(int ec);
+	void setColor(int idx, unsigned char r, unsigned char g, unsigned char b);
+	void setColor(int idx, unsigned int color);
+	void resetColor();
 
 private:
 	virtual void recreateStereogram();
+	void applyColorPalette();
 
 private:
 	int maxColor_;	/**< Number of grayscales in image */
 	int excColor_;	/**< Number of colors exclusively to fg/bg */
+
+	std::vector<unsigned int> colors_;
 };
 	
 }

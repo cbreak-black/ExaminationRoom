@@ -25,8 +25,8 @@ namespace Examination
 
 RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 {
-	maxColor_ = 4;
-	excColor_ = 0;
+	setMaxColor(4);
+	setExclusiveColor(0);
 	setOffset(6);
 	setTexDepth(d);
 	// Stereogram gets generated automatically
@@ -44,12 +44,11 @@ void RandomdotStereogram::recreateStereogram()
 
 	int i, j;
 	// Color Map
-	float step = 255.0/(maxColor_-1);
 	imageL.setNumColors(maxColor_);
 	imageR.setNumColors(maxColor_);
 	for (i = 0; i < maxColor_; i++)
 	{
-		QRgb c = qRgb(i*step, i*step, i*step);
+		QRgb c = colors_[i];
 		imageL.setColor(i, c);
 		imageR.setColor(i, c);
 	}
@@ -95,7 +94,7 @@ void RandomdotStereogram::recreateStereogram()
 		imageS.setNumColors(maxColor_);
 		for (i = 0; i < maxColor_; i++)
 		{
-			QRgb c = qRgb(i*step, i*step, i*step);
+			QRgb c = colors_[i];
 			imageS.setColor(i, c);
 		}
 		for (j = 0; j < s.height(); j++)
@@ -130,11 +129,59 @@ void RandomdotStereogram::recreateStereogram()
 void RandomdotStereogram::setMaxColor(int mc)
 {
 	maxColor_ = mc;
+	resetColor();
 }
 
 void RandomdotStereogram::setExclusiveColor(int ec)
 {
 	excColor_ = ec;
+}
+
+void RandomdotStereogram::setColor(int idx, unsigned char r, unsigned char g, unsigned char b)
+{
+	setColor(idx, qRgb(r, g, b));
+}
+
+void RandomdotStereogram::setColor(int idx, unsigned int color)
+{
+	if (idx < maxColor_ && idx >= 0)
+	{
+		colors_[idx] = color;
+		applyColorPalette();
+	}
+}
+
+void RandomdotStereogram::resetColor()
+{
+	colors_.clear();
+	float step = 255.0/(maxColor_-1);
+	for (int i = 0; i < maxColor_; i++)
+	{
+		colors_.push_back(qRgb(i*step, i*step, i*step));
+	}
+	applyColorPalette();
+}
+
+void RandomdotStereogram::applyColorPalette()
+{
+	if (texLeft())
+	{
+		QImage image = texLeft()->image();
+		image.setNumColors(maxColor_);
+		for (int i = 0; i < maxColor_; i++)
+		{
+			image.setColor(i, colors_[i]);
+		}
+	}
+	if (texRight())
+	{
+		QImage image = texRight()->image();
+		image.setNumColors(maxColor_);
+		for (int i = 0; i < maxColor_; i++)
+		{
+			image.setColor(i, colors_[i]);
+		}
+	}
 }
 
 }

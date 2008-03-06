@@ -227,6 +227,38 @@ int TextureProxy::setExclusiveColor(lua_State *L)
 	}
 }
 
+int TextureProxy::setColor(lua_State *L)
+{
+	if (rds())
+	{
+		checkTop(L, 5);
+		rds()->setColor(lua_tonumber(L, 2), lua_tonumber(L, 3), lua_tonumber(L, 4), lua_tonumber(L, 5));
+		lua_pop(L, 5);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int TextureProxy::resetColor(lua_State *L)
+{
+	if (rds())
+	{
+		checkTop(L, 1);
+		rds()->resetColor();
+		lua_pop(L, 1);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
 const char TextureProxy::className[] = "Texture";
 const Luna<TextureProxy>::RegType TextureProxy::Register[] =
 {
@@ -238,6 +270,8 @@ const Luna<TextureProxy>::RegType TextureProxy::Register[] =
 	{ "setStyle", &TextureProxy::setStyle },
 	{ "setMaxColor", &TextureProxy::setMaxColor },
 	{ "setExclusiveColor", &TextureProxy::setExclusiveColor },
+	{ "setColor", &TextureProxy::setColor },
+	{ "resetColor", &TextureProxy::resetColor },
 	{ 0, 0 }
 };
 	
