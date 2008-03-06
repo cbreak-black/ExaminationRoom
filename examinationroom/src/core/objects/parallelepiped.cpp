@@ -39,10 +39,6 @@ void Parallelepiped::draw(GLWidget * dest) const
 
 	if (texture())
 	{
-		if (autoResize())
-		{
-			// Ignored
-		}
 		texture()->glBindTex(dest);
 	}
 

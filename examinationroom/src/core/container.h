@@ -13,6 +13,7 @@
 namespace Examination
 {
 	class Object;
+	class Scene;
 	class GLWidget;
 
 class Container
@@ -27,18 +28,23 @@ public:
 	 \param object	A shared pointer to an object
 	 \return true if the object was inserted, false if it already was in the scene.
 	*/
-	bool addObject(std::tr1::shared_ptr<Object> object);
+	virtual bool addObject(std::tr1::shared_ptr<Object> object);
 
 	/**
 	Removes an object from the container.
 	 \param object	A pointer to an object
 	*/
-	void removeObject(std::tr1::shared_ptr<Object> object);
+	virtual void removeObject(std::tr1::shared_ptr<Object> object);
 
 	/**
 	Removes all objects.
 	*/
-	void clear();
+	virtual void clear();
+
+protected:
+	virtual Container * getParent() = 0;
+	virtual Scene * getScene() = 0;
+	void setParentsAndScenes(Container * p, Scene * s);
 
 public:
 	virtual void draw(GLWidget * dest) const;

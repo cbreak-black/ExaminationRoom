@@ -34,7 +34,6 @@ public: // From LUA
 	int setDirA(lua_State *L);
 	int setDirB(lua_State *L);
 	int setDirC(lua_State *L);
-	int setSize(lua_State *L);
 
 public: // Object
 	int position(lua_State *L);
@@ -43,7 +42,12 @@ public: // Object
 public: // Textures
 	int setTexCoords(lua_State *L);
 	int setTexture(lua_State *L);
+
+public: // Pixelplane
+	int setSize(lua_State *L);
 	int setAutoResize(lua_State *L);
+	int resizeToCurrent(lua_State *L);
+	int resizeTo(lua_State *L);
 
 public: // Text
 	int text(lua_State *L);

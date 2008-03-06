@@ -17,6 +17,8 @@
 namespace Examination
 {
 	class GLWidget;
+	class Scene;
+	class Container;
 	class AbstractTexture;
 
 /**
@@ -65,19 +67,6 @@ public: // Accessors
 	*/
 	virtual void setPosition(Tool::Point p);
 
-	/**
-	Sets the auto resize status. Auto resizing automatically scales
-	textures to correspond pixel-by-pixel to the rendered size.
-	 \param b	Boolean indicating the desired auto resize state
-	*/
-	virtual void setAutoResize(bool b);
-	
-	/**
-	Returns the auto resize status.
-	 \return the auto resize status
-	*/
-	virtual bool autoResize() const;
-
 public: // Drawing
 	virtual void draw(GLWidget * dest) const = 0;
 
@@ -93,10 +82,17 @@ public: // Drawing
 	*/
 	std::tr1::shared_ptr<AbstractTexture> texture() const;
 
+public: // Nesting
+	Scene * scene() const;
+	virtual void setScene(Scene * s);
+	Container * parent() const;
+	virtual void setParent(Container * c);
+
 private:
 	Tool::Point origin_;
-	bool autoresize_;
 	std::tr1::shared_ptr<AbstractTexture> tex_;
+	Scene * scene_;
+	Container * parent_;
 };
 
 }

@@ -18,7 +18,8 @@ namespace Examination
 Object::Object()
 {
 	origin_ = Point(0,0,0);
-	autoresize_ = false;
+	setScene(0);
+	setParent(0);
 }
 
 Object::Object(float x, float y, float z)
@@ -26,13 +27,15 @@ Object::Object(float x, float y, float z)
 	origin_.x = x;
 	origin_.y = y;
 	origin_.z = z;
-	autoresize_ = false;
+	setScene(0);
+	setParent(0);
 }
 
 Object::Object(Point o)
 {
 	origin_ = o;
-	autoresize_ = false;
+	setScene(0);
+	setParent(0);
 }
 
 Object::~Object()
@@ -49,14 +52,24 @@ void Object::setPosition(Tool::Point p)
 	origin_ = p;
 }
 
-void Object::setAutoResize(bool b)
+Scene * Object::scene() const
 {
-	autoresize_ = b;
+	return scene_;
 }
 
-bool Object::autoResize() const
+void Object::setScene(Scene * s)
 {
-	return autoresize_;
+	scene_ = s;
+}
+
+Container * Object::parent() const
+{
+	return parent_;
+}
+
+void Object::setParent(Container * c)
+{
+	parent_ = c;
 }
 
 // Textures

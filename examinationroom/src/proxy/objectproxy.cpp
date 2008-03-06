@@ -238,11 +238,50 @@ int ObjectProxy::setTexture(lua_State *L)
 
 int ObjectProxy::setAutoResize(lua_State *L)
 {
-	checkTop(L, 2);
-	object()->setAutoResize(lua_toboolean(L, 2));
-	lua_pop(L, 2);
-	
-	return 0;
+	if (pixelplane())
+	{
+		checkTop(L, 2);
+		pixelplane()->setAutoResize(lua_toboolean(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int ObjectProxy::resizeToCurrent(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 1);
+		pixelplane()->resizeToCurrent();
+		lua_pop(L, 1);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int ObjectProxy::resizeTo(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 3);
+		pixelplane()->resizeTo(lua_tonumber(L, 2), lua_tonumber(L, 3));
+		lua_pop(L, 3);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
 }
 
 int ObjectProxy::text(lua_State *L)
@@ -434,6 +473,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
 	{ "setTexture", &ObjectProxy::setTexture },
 	{ "setAutoResize", &ObjectProxy::setAutoResize },
+	{ "resizeToCurrent", &ObjectProxy::resizeToCurrent },
+	{ "resizeTo", &ObjectProxy::resizeTo },
 	{ 0, 0 }
 };
 

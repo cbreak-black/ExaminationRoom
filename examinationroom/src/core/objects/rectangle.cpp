@@ -43,26 +43,9 @@ void Rectangle::draw(GLWidget * dest) const
 
 	if (texture())
 	{
-		if (autoResize())
-		{
-			ScreenProject * sp = dest->scene()->camera()->screenProject(dest->side());
-			int w, h, cw, ch;
-			Point v1p = sp->transformToScreenSpace(v1);
-			Point v2p = sp->transformToScreenSpace(v2);
-			Point v3p = sp->transformToScreenSpace(v3);
-			Point v4p = sp->transformToScreenSpace(v4);
-			h = abs(v2p.y - v1p.y);
-			w = abs(v3p.x - v1p.x);
-			cw = texture()->width();
-			ch = texture()->height();
-			if (abs(cw-w) + abs(ch-h) > 2)
-			{
-				texture()->resizeTo(w,h);
-			}
-		}
 		texture()->glBindTex(dest);
 	}
-	
+
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
 	glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);

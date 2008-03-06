@@ -48,6 +48,10 @@ public: // BG Color
 	void setBackgroundColor(Tool::Vec4f c);
 	Tool::Vec4f backgroundColor() const;
 
+protected:
+	virtual Container * getParent();
+	virtual Scene * getScene();
+
 private:
 	std::tr1::shared_ptr<Camera> camera_;
 	Tool::Vec4f backgroundColor_;

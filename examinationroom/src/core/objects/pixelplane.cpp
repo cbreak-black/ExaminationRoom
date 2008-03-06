@@ -36,17 +36,7 @@ void Pixelplane::draw(GLWidget * dest) const
 	{
 		if (autoResize())
 		{
-			std::tr1::shared_ptr<Camera> cam = dest->scene()->camera();
-			int w, h, cw, ch;
-			float uss = cam->unitScreenSize(position());
-			w = width_*uss;
-			h = height_*uss;
-			cw = texture()->width();
-			ch = texture()->height();
-			if (abs(cw-w) > 2 || abs(ch-h) > 2)
-			{
-				texture()->resizeTo(w,h);
-			}
+			resizeToCurrent();
 		}
 		Point p = position();
 		glRasterPos3f(p.x, p.y, p.z);
@@ -59,5 +49,36 @@ void Pixelplane::setSize(float w, float h)
 	width_ = w;
 	height_ = h;
 }
+
+void Pixelplane::setAutoResize(bool b)
+{
+	autoresize_ = b;
+}
+
+bool Pixelplane::autoResize() const
+{
+	return autoresize_;
+}
+
+void Pixelplane::resizeToCurrent() const
+{
+	std::tr1::shared_ptr<Camera> cam = scene()->camera();
+	int w, h, cw, ch;
+	float uss = cam->unitScreenSize(position());
+	w = width_*uss;
+	h = height_*uss;
+	cw = texture()->width();
+	ch = texture()->height();
+	if (abs(cw-w) >	0 || abs(ch-h) > 0)
+	{
+		resizeTo(w,h);
+	}
+}
+
+void Pixelplane::resizeTo(int w, int h) const
+{
+	texture()->resizeTo(w,h);
+}
+
 	
 }

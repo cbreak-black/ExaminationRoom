@@ -55,4 +55,15 @@ Tool::Vec4f Scene::backgroundColor() const
 	return backgroundColor_;
 }
 
+Container * Scene::getParent()
+{
+	return 0;
+}
+
+Scene * Scene::getScene()
+{
+	return this;
+}
+
+
 }
