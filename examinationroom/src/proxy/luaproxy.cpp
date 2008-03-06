@@ -120,6 +120,17 @@ int LuaProxy::clearScene(lua_State *L)
 	return 0;
 }
 
+int LuaProxy::setBackgroundColor(lua_State *L)
+{
+	checkTop(L, 5);
+	scene_->setBackgroundColor(lua_tonumber(L, 2),
+							   lua_tonumber(L, 3),
+							   lua_tonumber(L, 4),
+							   lua_tonumber(L, 5));
+	lua_pop(L, 5);
+	return 0;
+}
+
 int LuaProxy::setCameraPos(lua_State *L)
 {
 	checkTop(L, 4);
@@ -432,6 +443,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "getCameraFoV", &LuaProxy::getCameraFoV },
 	{ "getCameraSep", &LuaProxy::getCameraSep },
 	{ "getCameraParalaxPlane", &LuaProxy::getCameraParalaxPlane },
+	{ "setBackgroundColor", &LuaProxy::setBackgroundColor },
 	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
 	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },
 	{ "getViewport", &LuaProxy::getViewport },

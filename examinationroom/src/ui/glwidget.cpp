@@ -84,17 +84,17 @@ void GLWidget::initializeGL()
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glClearColor(0, 0, 0, 0);
 }
 
 void GLWidget::paintGL()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Scene
 	if (scene_)
 	{
+		Tool::Vec4f c = scene_->backgroundColor();
+		glClearColor(c.r, c.g, c.b, c.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		// Left
 		QSize s = this->size();
 		if (style_ == anaglyph)

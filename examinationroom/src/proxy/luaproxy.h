@@ -55,6 +55,7 @@ public: // Scene
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);
 	int clearScene(lua_State *L);
+	int setBackgroundColor(lua_State *L);
 public: // Camera
 	int setCameraPos(lua_State *L);
 	int setCameraDir(lua_State *L);

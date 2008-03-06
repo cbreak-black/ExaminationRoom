@@ -12,6 +12,8 @@
 
 #include "container.h"
 
+#include "vec.h"
+
 namespace Examination
 {
 	class Object;
@@ -39,10 +41,16 @@ public:
 
 public: // Camera
 	void setCamera(std::tr1::shared_ptr<Camera> camera);
-	std::tr1::shared_ptr<Camera> camera();
+	std::tr1::shared_ptr<Camera> camera() const;
+
+public: // BG Color
+	void setBackgroundColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+	void setBackgroundColor(Tool::Vec4f c);
+	Tool::Vec4f backgroundColor() const;
 
 private:
 	std::tr1::shared_ptr<Camera> camera_;
+	Tool::Vec4f backgroundColor_;
 };
 
 }
