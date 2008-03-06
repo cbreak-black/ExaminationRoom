@@ -37,11 +37,23 @@ pep1:setTexCoords(0,0, 0,2, 2,0, 2,2);
 pep1:setPosition(-3, -3, 0);
 pep1:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(pep1);
+
+local container = Object("AffineTransformation");
+container:setPosition(0, 0, -2);
+Scene:addObject(container);
+container.pos = {0, 0, -2};
+
 local pep2 = Object("Parallelepiped");
-pep2:setPosition(0, -3, -2);
-pep2.pos = {0,-3,-2};
 pep2:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
-Scene:addObject(pep2);
+local d = 3;
+local l = 0.816*d;
+local s = 0.578*d;
+local s120 = math.sin(math.pi*2/3);
+pep2:setDirA(0, s, l);
+pep2:setDirB(s120*l, s, -0.5*l);
+pep2:setDirC(-s120*l, s, -0.5*l);
+pep2:setPosition(0, -math.sqrt(3*d*d)/2, 0)
+container:addObject(pep2);
 
 Scene:log("Added floor and ceil");
 
@@ -76,8 +88,8 @@ permuteTable = function (t)
 end;
 
 local nextFrame = function ()
-	local pos = pep2.pos;
-	pep2:setPosition(pos[1], pos[2], pos[3]);
+	local pos = container.pos;
+	container:setPosition(pos[1], pos[2], pos[3]);
 end
 nextFrame();
 
@@ -86,7 +98,7 @@ local parseInput = function (k)
 	local d = Key[string.byte(k)];
 	if d then
 		Scene:log("input: "..d);
-		local pos = pep2.pos;
+		local pos = container.pos;
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
@@ -114,24 +126,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	local fullCircle = math.pi*2;
-	tPassed = tPassed + delta;
-	if (tPassed > fullCircle)  then
-		tPassed = tPassed - fullCircle;
-	end;
-	local x, y;
-	local d = fullCircle/3;
-	local l = 0.816*3;
-	local s = 0.578*3;
-	x = math.sin(tPassed-d);
-	y = math.cos(tPassed-d);
-	pep2:setDirA(x*l, s, y*l);
-	x = math.sin(tPassed);
-	y = math.cos(tPassed);
-	pep2:setDirB(x*l, s, y*l);
-	x = math.sin(tPassed+d);
-	y = math.cos(tPassed+d);
-	pep2:setDirC(x*l, s, y*l);
+	container:rotate(1,0,0, delta);
 end;
 updateListener(0);
 

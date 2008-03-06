@@ -26,10 +26,9 @@ AffineTransformation::AffineTransformation()
 
 void AffineTransformation::loadIdentity()
 {
-	Vector p = position();
-	trans_[0] = 1;	trans_[4] = 0;	trans_[8] = 0;	trans_[12] = p.x;
-	trans_[1] = 0;	trans_[5] = 1;	trans_[9] = 0;	trans_[13] = p.y;
-	trans_[2] = 0;	trans_[6] = 0;	trans_[10] = 1;	trans_[14] = p.z;
+	trans_[0] = 1;	trans_[4] = 0;	trans_[8] = 0;	trans_[12] = 0;
+	trans_[1] = 0;	trans_[5] = 1;	trans_[9] = 0;	trans_[13] = 0;
+	trans_[2] = 0;	trans_[6] = 0;	trans_[10] = 1;	trans_[14] = 0;
 	trans_[3] = 0;	trans_[7] = 0;	trans_[11] = 0;	trans_[15] = 1;
 }
 
@@ -88,7 +87,9 @@ void AffineTransformation::rotate(Vector axis, double angle)
 // Drawing
 void AffineTransformation::draw(GLWidget * dest) const
 {
+	Point p = position();
 	glPushMatrix();
+	glTranslatef(p.x, p.y, p.z);
 	glMultMatrixd(trans_);
 	Container::draw(dest);
 	glPopMatrix();
