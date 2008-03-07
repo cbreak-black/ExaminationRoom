@@ -119,7 +119,7 @@ ScreenProject * Camera::screenProject(GLWidget::Side s)
 		return spR_;
 }
 
-int Camera::unitScreenSize(float d)
+float Camera::unitScreenSize(float d)
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -128,12 +128,12 @@ int Camera::unitScreenSize(float d)
 	near = ppd_*nearFactor;
 	top = fovTan*near;
 	// heightInPix / heightInUnits
-	return viewport[3]/(top*2) * near/d;
+	return (float)viewport[3]/(top*2) * near/d;
 }
 
-int Camera::unitScreenSize(Point p)
+float Camera::unitScreenSize(Point p)
 {
-	float df = abs((position() - p) * direction());
+	float df = fabsf((position() - p) * direction());
 	return unitScreenSize(df);
 }
 

@@ -21,8 +21,8 @@ namespace Examination
 	
 Pixelplane::Pixelplane()
 {
-	width_ = 1;
-	height_ = 1;
+	setAutoResize(false);
+	setSize(1,1);
 }
 
 Pixelplane::~Pixelplane()
@@ -62,22 +62,28 @@ bool Pixelplane::autoResize() const
 
 void Pixelplane::resizeToCurrent() const
 {
-	std::tr1::shared_ptr<Camera> cam = scene()->camera();
-	int w, h, cw, ch;
-	float uss = cam->unitScreenSize(position());
-	w = width_*uss;
-	h = height_*uss;
-	cw = texture()->width();
-	ch = texture()->height();
-	if (abs(cw-w) >	0 || abs(ch-h) > 0)
+	if (scene() && texture())
 	{
-		resizeTo(w,h);
+		std::tr1::shared_ptr<Camera> cam = scene()->camera();
+		int w, h, cw, ch;
+		float uss = cam->unitScreenSize(position());
+		w = uss*width_;
+		h = uss*height_;
+		cw = texture()->width();
+		ch = texture()->height();
+		if (cw != w || ch != h)
+		{
+			Pixelplane::resizeTo(w,h);
+		}
 	}
 }
 
 void Pixelplane::resizeTo(int w, int h) const
 {
-	texture()->resizeTo(w,h);
+	if (texture())
+	{
+		texture()->resizeTo(w,h);
+	}
 }
 
 	

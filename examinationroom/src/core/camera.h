@@ -86,14 +86,14 @@ public:
 	 \param d	Distance of line to camera (projected on camera viewing direction)
 	 \return size of a line of length 1 at distance d on screen in pixel
 	*/
-	int unitScreenSize(float d);
+	float unitScreenSize(float d);
 
 	/**
 	Calculates and returns the size on screen in pixel of one unit at a given distance.
 	 \param p	Position of the unit measurement
 	 \return size of a line of length 1 at position p on screen in pixel
 	*/
-	int unitScreenSize(Tool::Point p);
+	float unitScreenSize(Tool::Point p);
 
 	/**
 	Calculates the seperation of an object on screen.
