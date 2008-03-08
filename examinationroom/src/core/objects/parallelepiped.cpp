@@ -9,7 +9,7 @@
 
 #include "parallelepiped.h"
 
-#include "abstracttexture.h"
+#include "surfaces/abstracttexture.h"
 #include "glwidget.h"
 #include "scene.h"
 

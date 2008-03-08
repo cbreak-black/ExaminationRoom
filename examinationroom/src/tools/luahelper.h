@@ -48,3 +48,4 @@ inline Tool::Vec3f toVector(lua_State *L, int idx)
 }
 
 #endif
+

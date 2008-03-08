@@ -4,7 +4,7 @@
 
 TEMPLATE = app
 TARGET = ExaminationRoom
-DEPENDPATH += . src src/ui src/core src/lua src/tools src/proxy
+DEPENDPATH += . src/ui src/core src/lua src/tools src/proxy
 INCLUDEPATH += boost/tr1/tr1 . src/ui src/core src/lua src/lua/src src/tools src/proxy
 
 QT           += opengl

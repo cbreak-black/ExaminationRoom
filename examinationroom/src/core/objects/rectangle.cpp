@@ -9,7 +9,7 @@
 
 #include "rectangle.h"
 
-#include "abstracttexture.h"
+#include "surfaces/abstracttexture.h"
 #include "glwidget.h"
 #include "scene.h"
 #include "camera.h"

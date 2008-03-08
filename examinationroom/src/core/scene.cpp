@@ -9,7 +9,7 @@
 
 #include "scene.h"
 
-#include "object.h"
+#include "objects/object.h"
 #include "camera.h"
 
 using namespace std::tr1;

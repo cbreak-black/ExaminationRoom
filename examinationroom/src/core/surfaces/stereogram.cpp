@@ -12,7 +12,7 @@
 #include "texture.h"
 #include "glwidget.h"
 
-#include <QImage.h>
+#include <QImage>
 
 using namespace std::tr1;
 
