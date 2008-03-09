@@ -1,0 +1,110 @@
+\section{Cues}
+\paragraph{}
+Seeing stereo is not only based on binocular stereopsis.There are several aspects of the visual impression that allow the perception of depth. Common depth cues include accommodation, aerial perspective, binocular disparity, convergence, height in visual field, motion perspective, occlusion, relative size, and relative density. In addition others have been suggested, such as linear perspective, light and shading and texture gradients.%, kinetic depth, kinetic occlusion and disocclusion, and gravity.
+
+Cutting and Vishton\cite{DepthCues} analyzed nine of these depth cues to asses their relative strength. Those cues will be described in the following paragraphs, and their reproduction or elimination on screen in a digitally generated scene is discussed. The use of OpenGL or a similar technology is assumed, techniques like ray-tracing or vector based painting may require different methods.
+
+
+\subsection{Projection based cues}
+\paragraph{}
+These cues are caused by the way the 3D world gets projected onto the 2D surface of the retina.
+Even though the reason that each of them exists is the same, the way they are evaluated and their reproduction is different.
+
+Most projections\cite{proj} that are in use, map a ray in the world space onto a single point in the image space. Parallel Projection\cite{parallel} and Perspective Projection\cite{perspective} are the most commonly used methods. Physical optics use a projection similar to perspective projection.
+
+
+\subsubsection{Relative size}
+\paragraph{Description}
+The size of objects relative to each other is a strong clue for their distance, but it requires knowledge or assumptions about the size of an object. Due to the perspective projection, objects further away from a viewer take up less space in it's field-of-view. When seeing a human, it's distance can be estimated fairly accurately.
+
+Seeing an unknown object requires comparisons with other objects in the scene. Upon seeing a number of cubes with different perceived sizes, and without prior knowledge of their size, one could assume similarity in size, and derive depth relations between them.
+
+\paragraph{Reproduction}
+Relative size only works when the perceived size of an object changes with it's distance. Using a perspective camera is an easy way to do this. When creating an artificial image, the size change can also be simulated by scaling objects based on their distance to the camera. In the case of OpenGL or most RayTracers, both parallel and perspective cameras are available.
+Note that the change of a certain projection method also influences many other depth cues.
+
+\paragraph{Non-reproduction}
+If the size of objects is not intended to change with their distance from the viewer, either choosing a parallel projection or compensating the projection based scaling by scaling the object size is needed.
+Note that the change of a certain projection method also influences many other depth cues.
+
+
+\subsubsection{Relative density}
+\paragraph{Description}
+Relative density is closely related to relative size. It concerns the projected density of objects, which are distributed regularly. When such a group of objects change in depth, or take up different depth areas, their change in perceived density yield information about the depth change.
+
+\paragraph{Reproduction}
+
+\paragraph{Non-reproduction}
+
+
+\subsubsection{Height in visual field}
+\paragraph{Description}
+
+\paragraph{Reproduction}
+
+\paragraph{Non-reproduction}
+
+
+\subsubsection{Motion perspective}
+\paragraph{Description}
+
+\paragraph{Reproduction}
+
+\paragraph{Non-reproduction}
+
+
+\subsubsection{Convergence}
+\paragraph{Description}
+
+\paragraph{Reproduction}
+
+\paragraph{Non-reproduction}
+
+
+\subsubsection{Binocular disparity and stereopsis}
+\paragraph{Description}
+
+\paragraph{Reproduction}
+
+\paragraph{Non-reproduction}
+
+
+
+\subsection{Other cues}
+
+
+\subsubsection{Occlusion}
+\paragraph{Description}
+Objects that are in front of other objects relative to the viewer are perceived to occlude the object behind. Even transparent or translucent objects often change the appearance of objects they occlude. This allows to infer depth ordering of objects. This clue is very strong, and it's range is the longest of all depth cues. It does however not allow to judge the distance between objects.
+
+\paragraph{Reproduction}
+Reproducing this depth clue digitally requires extra work, since most output media do not have a notion of depth. A traditional approach is the Painter's Algorithm\cite{painters}. Objects are ordered by depth and drawn from far to close. Ordering objects has performance implications, and is not always possible.
+A newer method that does not require sorting is the Depth Buffer\cite{zbuffer} (also known as Z-Buffer). For every pixel it's associated depth value is stored. New objects only replace pixels further away.
+
+\paragraph{Non-reproduction}
+Not reproducing this clue is fairly straight forward. Disabling the depth buffer allows ordering objects according to preferred depth appearance, independently of their actual depth coordinates. Objects that are both behind and in front of an other object have to be segmented into pieces. This is most commonly the case when objects intersect.
+
+Objects that consist of several surfaces might require internal ordering to appear correct, which is expensive. One way to resolve this problem is to clear the depth buffer after every object drawing. Depending on the size of the image this might be costly also.
+
+
+\subsubsection{Aerial perspective}
+\paragraph{Description}
+Areal perspective is related with Occlusion: Objects far away from the viewer are often occluded by the atmosphere, be it air, smoke, fog or water. Consequentially, objects far away change their appeared color, losing saturation, and chroma.
+Unlike most depth cues, it gets more effective as the distance from the observer increases.
+
+\paragraph{Reproduction}
+Reproducing this cue requires extra work. A common approach is to mix the object color with a fog color, depending on it's distance to the observer. This is cheap, and can be enabled per object\cite{fog}. Weights of the mixing is determined by a fog equation.
+
+\paragraph{Non-reproduction}
+Not reproducing this clue is easy, and it is not enabled by default. Explicit control over the appeared depth can be achieved by individually changing the fog equation for each object.
+
+
+\subsubsection{Accomodation}
+\paragraph{Description}
+Accommodation is the change in the shape of the lens of the eye, to keep the perceived image of the world sharp\cite{accommodation}. It is coupled with convergence. Viewing stereoscopic material requires that the accommodation stays the same, since all image information comes from a screen at a fixed depth.
+
+\paragraph{Reproduction}
+Artificially generating the requirement that the human eye changes accommodation is hard. It requires optics in between the eye and the screen, or the changing of distance to screen depending on the object that is focused. Neither is practical.
+
+\paragraph{Non-reproduction}
+Not reproducing this cue is almost required. Everything seen on a screen requires the same accommodation to be viewed as the screen itself. If a constant accommodation requirement throughout the scene exists, a screen at a huge distance, or a convex screen can be used.

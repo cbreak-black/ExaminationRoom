@@ -1,4 +1,4 @@
-\documentclass[11pt]{scrartcl}
+\documentclass[11pt,twoside,bibtotoc]{scrartcl}
 %\documentclass[12pt, a4paper]{article}
 
 \newif\ifpdf
@@ -40,30 +40,35 @@
 \parskip=0 cm
 \parindent=0.0cm
 
-\renewcommand{\baselinestretch}{1.25}
+\renewcommand{\baselinestretch}{1.2}
+
+\newcommand{\mytitle}{Tool support for user testing of stereoscopic fatigue}
 
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
 \pagestyle{fancy} % options: empty , plain , fancy
+\fancyfoot{}
+\fancyfoot[LE,RO]{\rm\thepage}
+\fancyfoot[LO,RE]{\it Roethlin, G. 2008}
 
 \renewcommand{\labelitemi}{-}
 
 \newcommand{\todo}[1]{{\LARGE TODO: #1}}
 
-% Tiefe des Inhaltsverzeichnisses
-\setcounter{secnumdepth}{2}
-\setcounter{tocdepth}{2}
+% Depth of the TOC
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{2}
 
 \hypersetup{
-    pdftitle={Master Thesis: Tool support for user testing of stereoscopic fatigue},
+    pdftitle={\mytitle},
 %    pdfsubject={Subject of the document}, % Subject 
     pdfauthor={Gerhard Roethlin},              % Author
     pdfkeywords={master, fatigue testing software, stereo vision},       % Keywords
 }
 
-\title{Master Thesis: Tool support for user testing of stereoscopic fatigue\\
-{\large Implementing a flexible and extensible testing framework}}
+\title{\mytitle\\
+{\large Designing and implementing a flexible and extensible testing framework}}
 \author{\normalsize Gerhard R\"othlin 
-{\tt  \href{mailto:gerhardr@student.ethz.ch}{gerhardr@student.ethz.ch}}}
+{\tt  \href{mailto:cbreak@the-color-black.net}{cbreak@the-color-black.net}}}
 \date{2008.01.07 - 2008.07.07}
 
 \ifpdf
@@ -75,21 +80,25 @@
 \begin{document}
 
 \maketitle
-%\tableofcontents
 
 \begin{center}
 \includegraphics[width=15cm,clip,trim=0cm 0cm 0cm 0cm]{media/title.png}
 \end{center}
 
-%\begin{abstract}
-%\end{abstract}
+\begin{multicols}{2}
+
+\input{sections/abstract.tex}
+\input{sections/cues.tex}
+\input{sections/stereogram.tex}
+\input{sections/mesh.tex}
+
+\end{multicols}
+
+\newpage
 
 \begin{multicols}{2}
 
-%\tableofcontents
-
-\input{sections/abstract.tex}
-\input{sections/stereogram.tex}
+\tableofcontents
 
 \end{multicols}
 
