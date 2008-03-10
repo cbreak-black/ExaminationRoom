@@ -17,14 +17,14 @@ Scene:setCameraParalaxPlane(25);
 rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+rectFloor:setPosition(-3, -2.5, -18.5);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 
 rectCeil = Object("Rectangle");
 rectCeil:setDirA(6,0,0);
 rectCeil:setDirB(0,0,26);
-rectCeil:setPosition(-3, 2.5, -18);
+rectCeil:setPosition(-3, 2.5, -18.5);
 rectCeil:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 

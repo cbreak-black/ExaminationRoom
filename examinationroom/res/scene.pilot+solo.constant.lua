@@ -2,6 +2,8 @@ dofile("res/scene.pilotCommon.lua");
 
 Scene:addObject(rectFloor);
 Scene:addObject(rectCeil);
+stereogramA:setAutoResize(false);
+stereogramB:setAutoResize(false);
 
 testNum = 0;
 nextFrame = function ()
@@ -18,9 +20,6 @@ nextFrame = function ()
 	local maxColor = 8;
 	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(1);
---	for i=0, (maxColor-1) do
---		texture:setColor(i, 0, 0, 255/(maxColor-1)*i);
---	end
 
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
@@ -29,12 +28,27 @@ nextFrame = function ()
 --	// End Comments
 	texture:setStyle(replies[testNum]); -- Here the concave/convex status is set
 	local pos = mountPoints[testNum];
+	local zoomX, zoomY = 1,1;
+	local offsetX, offsetY = 0,0;
+	if pos[1] > 0 then
+		zoomX = -1;
+		offsetX = 2;
+	end;
+	if pos[2] > 0 then
+		zoomY = -1;
+		offsetY = 2;
+	end;
+	texture:setZoom(zoomX,zoomY);
 	if true then
+		stereogramB:setPosition(pos[1]+offsetX, pos[2]+offsetY, 0);
 		stereogramB:setTexture(texture);
-		stereogramB:setPosition(pos[1], pos[2], pos[3]);
+		stereogramB:resizeToCurrent();
+		stereogramB:setPosition(pos[1]+offsetX, pos[2]+offsetY, pos[3]);
 	else
+		stereogramA:setPosition(pos[1]+offsetX, pos[2]+offsetY, 0);
 		stereogramA:setTexture(texture);
-		stereogramA:setPosition(pos[1], pos[2], pos[3]);
+		stereogramA:resizeToCurrent();
+		stereogramA:setPosition(pos[1]+offsetX, pos[2]+offsetY, pos[3]);
 	end;
 	-- Separation at center
 	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);

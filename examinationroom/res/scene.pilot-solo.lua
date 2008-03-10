@@ -12,8 +12,13 @@ nextFrame = function ()
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
 	local texture = Texture("RandomDot", shapes[math.random(1, #shapes)]);
-	texture:setMaxColor(8);
+	local maxColor = 8;
+	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(1);
+--	for i=0, (maxColor-1) do
+--		texture:setColor(i, 0, 0, 255/(maxColor-1)*i);
+--	end
+
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
 --	permuteTable(shapes); -- Pick a random shape

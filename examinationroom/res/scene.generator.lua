@@ -1,8 +1,9 @@
 -- Create a list of positions and stores them persistently
 dofile("res/persistence.lua");
 
+-- 	-18, -6.5, 0, 4.25, 7.5
 local depths = {
-	-17, 8
+	-18, 0, 7.5
 }
 local xys = {
 	{ -3, -2.5 };

@@ -4,13 +4,13 @@ dofile("res/statistics.lua")
 -- Screen height: 0.79 meter
 -- Screen width:  1.31 meter
 -- Eye position: screen centered
-statistics:setViewingProperties(2.5, 0.79, 0.5);
+statistics:setViewingProperties(1.0, 0.70, 0.5);
 
 -- Scene Construction
 Scene:setCameraPos(0, 0, 25);
 Scene:setCameraDir(0, 0, -1);
 Scene:setCameraFoV(18);
-Scene:setCameraSep(0.2);
+Scene:setCameraSep(0.15);
 Scene:setCameraParalaxPlane(25);
 
 local sn = Object("Text");
@@ -21,17 +21,17 @@ Scene:addObject(sn);
 floorPos = {-3, -2.5, -20};
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,28);
-rectFloor:setPosition(-3, -2.5, -20);
-rectFloor:setTexCoords(0,0, 0,48, 6,0, 6,48);
+rectFloor:setDirB(0,0,26);
+rectFloor:setPosition(-3, -2.5, -18);
+rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
 rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,28);
-rectCeil:setPosition(-3, 2.5, -20);
-rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
+rectCeil:setDirB(0,0,26);
+rectCeil:setPosition(-3, 2.5, -18);
+rectCeil:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
