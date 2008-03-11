@@ -274,12 +274,16 @@ scenes = {
 		{{textToken, textObject2, "Wrong :("};}
 	};
 
-	{hideToken, stereogramA};
-	{textToken, textObject1, "That's it"};
+	{rdsToken, stereogramA, shapes[1], convex};
+	{posToken, stereogramA, {1, -2.5, -18}};
+	{textToken, textObject1, "Very far"};
 	{waitKeyToken, {"down"},
 		{{textToken, textObject2, "Correct :)"};},
 		{{textToken, textObject2, "Wrong :("};}
 	};
+
+	{hideToken, stereogramA};
+	{textToken, textObject1, "That's it"};
 };
 
 -- Start the Scene

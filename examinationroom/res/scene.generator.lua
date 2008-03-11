@@ -3,7 +3,8 @@ dofile("res/persistence.lua");
 
 -- 	-18, -6.5, 0, 4.25, 7.5
 local depths = {
-	-18, 0, 7.5
+--	-18, 0, 7.5
+	-4.25, 0, 3.25
 }
 local xys = {
 	{ -3, -2.5 };
