@@ -2,14 +2,18 @@ dofile("res/scene.pilotCommon.lua");
 
 Scene:log("Bisect");
 
+-- Permutes a table
 local permuteTable = function (t)
 	local n = #t;
+	-- For every element
 	for i = 1, n do
+		-- randomly pick an other element to change with
 		local j = math.random(i, n);
 		t[i], t[j] = t[j], t[i];
 	end
 end;
 
+-- The near/far limits, initial conditions
 farPoint = -16;
 nearPoint = 4;
 
@@ -46,31 +50,43 @@ parseInput = function (k)
 	else
 		Scene:log("Input invalid, ignored ("..string.byte(k)..")");
 	end
+	-- After 5 tests for far
 	if farCorrect + farWrong == 5 then
-		farCorrect = 0;
-		farWrong = 0;
-		if farCorrect == 5 then
+		-- and change the position
+		if farCorrect >= 4 then
 			farPoint = farPoint -1;
 		else
 			farPoint = farPoint +1;
 		end;
+		-- reset
+		farCorrect = 0;
+		farWrong = 0;
+		Scene:log("New far point: "..farPoint);
 	end
+	-- After 5 tests for near
 	if nearCorrect + nearWrong == 5 then
-		nearCorrect = 0;
-		nearWrong = 0;
-		if nearCorrect == 5 then
+		-- and change the position
+		if nearCorrect >= 4 then
 			nearPoint = nearPoint +1;
 		else
 			nearPoint = nearPoint -1;
 		end;
+		-- reset
+		nearCorrect = 0;
+		nearWrong = 0;
+		Scene:log("New near point: "..nearPoint);
 	end
 end;
+Scene:setEventListener("keyDown", parseInput);
 
+-- Return true if this is the trial number of a far target
+-- (or false in case of a near target test)
 farTrial = function (n)
 	return n%2 == 0;
 end
 
 testNum = 0;
+-- Advance the scene to the next frame
 nextFrame = function ()
 	testNum = testNum+1;
 --	// Uncomment the following for a (rerendered) Stereogram version
@@ -89,17 +105,19 @@ nextFrame = function ()
 	texture:setStyle(replies[testNum]); -- Here the concave/convex status is set
 	local pos = mountPoints[testNum];
 	stereogramA:setTexture(texture);
+	local z;
 	if farTrial(testNum) then
 		-- Test far
-		stereogramA:setPosition(pos[1], pos[2], farPoint);
+		z = farPoint;
 	else
 		-- Test near
-		stereogramA:setPosition(pos[1], pos[2], nearPoint);
+		z = nearPoint;
 	end
+	stereogramA:setPosition(pos[1], pos[2], z);
 	-- Separation at center
-	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
+	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, z);
 	local s = string.format("New Q: %s/%s (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
-		replies[testNum],shapes[1], pos[1]+1, pos[2]+1, pos[3], sep);
+		replies[testNum],shapes[1], pos[1]+1, pos[2]+1, z, sep);
 	Scene:log(s);
 end
 nextFrame();
