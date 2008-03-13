@@ -15,9 +15,9 @@ end;
 
 -- The near/far limits, initial conditions
 farPoint = -16;
-farLimit = -17;
+farLimit = -90;
 nearPoint = 4;
-nearLimit = 5;
+nearLimit = 9;
 
 farCorrect = 0;
 farWrong = 0;
@@ -84,10 +84,10 @@ parseInput = function (k)
 		-- and change the position
 		if nearCorrect >= 4 then
 			if nearPreviousPoint == nearPoint then
-				nearPreviousCorreet =  nearPreviousCorreet + nearCorrect;
+				nearPreviousCorrect =  nearPreviousCorrect + nearCorrect;
 			elseif nearPreviousPoint < nearPoint then
 				nearPreviousPoint = nearPoint;
-				nearPreviousCorreet = nearCorrect;
+				nearPreviousCorrect = nearCorrect;
 			end
 			nearPoint = nearPoint +0.5;
 			if nearPoint > nearLimit then
@@ -102,6 +102,7 @@ parseInput = function (k)
 		nearWrong = 0;
 		Scene:log("New near point: "..nearPoint);
 	end
+	Scene:log("Correct Count: Near "..nearPreviousCorrect.." Far "..farPreviousCorrect);
 	if nearPreviousCorrect > 12 and farPreviousCorrect > 12 then
 		Scene:log("Mission Completed");
 		os.exit(0);
