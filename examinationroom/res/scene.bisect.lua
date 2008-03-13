@@ -15,12 +15,18 @@ end;
 
 -- The near/far limits, initial conditions
 farPoint = -16;
+farLimit = -17;
 nearPoint = 4;
+nearLimit = 5;
 
 farCorrect = 0;
 farWrong = 0;
 nearCorrect = 0;
 nearWrong = 0;
+farPreviousCorrect = 0;
+farPreviousPoint = 0;
+nearPreviousCorrect = 0;
+nearPreviousPoint = 0;
 
 parseInput = function (k)
 	local d = Key[string.byte(k)];
@@ -54,7 +60,17 @@ parseInput = function (k)
 	if farCorrect + farWrong == 5 then
 		-- and change the position
 		if farCorrect >= 4 then
+			if farPreviousPoint == farPoint then
+				farPreviousCorrect =  farPreviousCorrect + farCorrect;
+			elseif farPreviousPoint > farPoint then
+				farPreviousPoint = farPoint;
+				farPreviousCorrect = farCorrect;
+			end
 			farPoint = farPoint -1;
+			if farPoint < farLimit then
+				farPoint = farLimit;
+				Scene:log("Far Limit reached!");
+			end
 		else
 			farPoint = farPoint +1;
 		end;
@@ -67,14 +83,28 @@ parseInput = function (k)
 	if nearCorrect + nearWrong == 5 then
 		-- and change the position
 		if nearCorrect >= 4 then
-			nearPoint = nearPoint +1;
+			if nearPreviousPoint == nearPoint then
+				nearPreviousCorreet =  nearPreviousCorreet + nearCorrect;
+			elseif nearPreviousPoint < nearPoint then
+				nearPreviousPoint = nearPoint;
+				nearPreviousCorreet = nearCorrect;
+			end
+			nearPoint = nearPoint +0.5;
+			if nearPoint > nearLimit then
+				nearPoint = nearLimit;
+				Scene:log("Near Limit reached!");
+			end
 		else
-			nearPoint = nearPoint -1;
+			nearPoint = nearPoint -0.5;
 		end;
 		-- reset
 		nearCorrect = 0;
 		nearWrong = 0;
 		Scene:log("New near point: "..nearPoint);
+	end
+	if nearPreviousCorrect > 12 and farPreviousCorrect > 12 then
+		Scene:log("Mission Completed");
+		os.exit(0);
 	end
 end;
 Scene:setEventListener("keyDown", parseInput);
