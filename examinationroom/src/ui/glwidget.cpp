@@ -26,6 +26,7 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 	scene_ = 0;
 	side_ = left;
 	style_ = sidebyside;
+	this->setCursor(Qt::BlankCursor);
 }
 
 GLWidget::~GLWidget()

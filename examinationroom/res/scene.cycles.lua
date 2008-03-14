@@ -107,6 +107,7 @@ Scene:log("Added floor");
 
 -- State
 cycleNum = 0;
+blockNum = 0;
 currentBlock = 1; -- 1 = continuous depth, 2 = no continuous depth
 currentCycle = math.random(1, #perfectCycles);
 currentSide = math.random(1,  2); -- 1 = left, 2 = right, as defined in targetX
@@ -152,6 +153,10 @@ end;
 
 -- Prepares the state for the next block
 nextBlock = function ()
+	if blockNum == 12 then
+		Scene:log("Scene Completed");
+		os.exit(0);
+	end;
 	if currentBlock == 1 then
 		Scene:addObject(rectFloor);
 		Scene:log("New Block: Continuous depth");
@@ -160,6 +165,7 @@ nextBlock = function ()
 		Scene:log("New Block: No Continuous depth");
 	end
 	currentBlock = currentBlock % 2 + 1;
+	blockNum = blockNum + 1;
 end
 
 -- Prepares the state for the next cycle
