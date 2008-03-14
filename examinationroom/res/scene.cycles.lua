@@ -1,11 +1,11 @@
 -- Load Libraries
 dofile("res/statistics.lua")
 
--- Distance to screen: 2.5 meter
--- Screen height: 0.79 meter
--- Screen width:  1.31 meter
+-- Distance to screen: 1 meter
+-- Screen height: 0.70 meter
+-- Screen width:  1.17 meter
 -- Eye position: screen centered
-local screenHeight = 0.79;
+local screenHeight = 0.70;
 local viewingDistance = 1;
 local headPosition = 0.5;
 -- Camera Position
@@ -66,8 +66,9 @@ Dir = {
 ["down"] = "convex";
 }
 
-statistics:setViewingProperties(screenHeight,
+statistics:setViewingProperties(
 	viewingDistance,
+	screenHeight,
 	headPosition);
 Scene:log("Screen Height = "..screenHeight);
 Scene:log("Viewing Distance = "..viewingDistance);
@@ -90,7 +91,7 @@ Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHei
 rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18.5);
+rectFloor:setPosition(-3, -2, -18.5);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 
@@ -105,6 +106,8 @@ end
 Scene:log("Added floor");
 
 -- State
+cycleNum = 0;
+currentBlock = 1; -- 1 = continuous depth, 2 = no continuous depth
 currentCycle = math.random(1, #perfectCycles);
 currentSide = math.random(1,  2); -- 1 = left, 2 = right, as defined in targetX
 currentTest = 1;
@@ -147,15 +150,33 @@ permuteTable = function (t)
 	end
 end;
 
+-- Prepares the state for the next block
+nextBlock = function ()
+	if currentBlock == 1 then
+		Scene:addObject(rectFloor);
+		Scene:log("New Block: Continuous depth");
+	else
+		Scene:removeObject(rectFloor);
+		Scene:log("New Block: No Continuous depth");
+	end
+	currentBlock = currentBlock % 2 + 1;
+end
+
 -- Prepares the state for the next cycle
 nextCycle = function ()
+	if cycleNum%5 == 0 then
+		nextBlock();
+	end;
 	-- Permute the label-to-index table
 	for i, t in ipairs(labelToIndex) do
 		permuteTable(t);
 	end
+	-- Randomly chose the order of replies
 	permuteTable(replies);
+	-- Randomly chose which cycle to test
 	currentCycle = math.random(1, #perfectCycles);
-	Scene:log("New Cycle: "..currentCycle);
+	Scene:log("New Cycle: "..cycleNum);
+	cycleNum = cycleNum + 1;
 end
 
 -- Prepares the state for the next target

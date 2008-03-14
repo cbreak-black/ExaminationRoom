@@ -50,14 +50,17 @@ void LogModel::calculateStatistics(QTextStream * output)
 	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect|Skipped): .*$");
 	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect|Skipped): (.*)$");
 	QRegExp stimulusSeparation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
-	QRegExp stimulusNewCycle = QRegExp("^New Cycle:.*$");
+	QRegExp stimulusNewCycle = QRegExp("^New Cycle: (.*)$");
 	QRegExp stimulusPosition = QRegExp("^Target Properties:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
+	QRegExp stimulusNewBlock = QRegExp("^New Block: (.*)$");
 
 	QList<int> listTrials;
 	QList<QString> listCorrect;
 	QList<float> listSeparation;
 	QList<float> listSeparationChange;
 	QList<int> listCycleNumber;
+	QList<int> listBlockNumber;
+	QList<QString> listBlockLabel;
 	QList<Point> listPositions;
 
 	QDateTime tStart;
@@ -65,6 +68,8 @@ void LogModel::calculateStatistics(QTextStream * output)
 	float separation = 0;
 	float separationChange = 0;
 	int cycleNumber = 0;
+	int blockNumber = 0;
+	QString sBlock;
 	Point position;
 	for (int i = 0; i < logTable_.size(); i++)
 	{
@@ -88,6 +93,11 @@ void LogModel::calculateStatistics(QTextStream * output)
 		{
 			cycleNumber++;
 		}
+		if (stimulusNewBlock.exactMatch(lm))
+		{
+			blockNumber++;
+			sBlock = stimulusNewBlock.cap(1);
+		}
 		if (stimulusPosition.exactMatch(lm))
 		{
 			position = Point(stimulusPosition.cap(1).toFloat(),
@@ -101,8 +111,11 @@ void LogModel::calculateStatistics(QTextStream * output)
 			listSeparation.append(separation);
 			listSeparationChange.append(separationChange);
 			listCycleNumber.append(cycleNumber);
+			listBlockNumber.append(blockNumber);
+			listBlockLabel.append(sBlock);
 			listPositions.append(position);
 			sCorrect = "";
+			sBlock = "";
 			tStart = QDateTime();
 		}
 	}
@@ -113,7 +126,9 @@ void LogModel::calculateStatistics(QTextStream * output)
 		<< "Separation\t"
 		<< "Separation Change\t"
 		<< "Position (x\ty\tz)\t"
-		<< "Cycle Number\n";
+		<< "Cycle Number\n"
+		<< "Block Number\n"
+		<< "Block Label\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
 		(*output) << i << "\t"
@@ -122,7 +137,9 @@ void LogModel::calculateStatistics(QTextStream * output)
 			<< listSeparation.at(i) << "\t"
 			<< listSeparationChange.at(i) << "\t"
 			<< listPositions.at(i).x << "\t" << listPositions.at(i).y << "\t" << listPositions.at(i).z << "\t"
-			<< listCycleNumber.at(i) << "\n";
+			<< listCycleNumber.at(i) << "\t"
+			<< listBlockNumber.at(i) << "\t"
+			<< listBlockLabel.at(i) << "\n";
 	}
 }
 
