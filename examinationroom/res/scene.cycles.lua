@@ -22,9 +22,12 @@ local camPP = 25;
 local maxColor = 8;
 local exclusiveColor = 1;
 -- Target properties
-local numTargets = 2; -- Should only be 1 or 2
+local numTargets = 1; -- Should only be 1 or 2
 local targetWidth = 2;
 local targetHeight = 2;
+-- Scene Properties
+local cyclesPerBlock = 10;
+local blocksPerScene = 12;
 
 -- A perfect cycle visits all three depths/ two positions,
 -- and uses every path exactly once
@@ -87,6 +90,7 @@ Scene:log("Camera Separation = "..camSep);
 Scene:log("Camera Paralax Plane = "..camPP);
 Scene:log("Texture Colors = "..maxColor.."(-"..exclusiveColor..")");
 Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHeight);
+Scene:log("Scene Properties = "..blocksPerScene.." blocks with "..cyclesPerBlock.." cycles per Block");
 
 rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
@@ -153,7 +157,7 @@ end;
 
 -- Prepares the state for the next block
 nextBlock = function ()
-	if blockNum == 12 then
+	if blockNum == blocksPerScene then
 		Scene:log("Scene Completed");
 		os.exit(0);
 	end;
@@ -170,7 +174,7 @@ end
 
 -- Prepares the state for the next cycle
 nextCycle = function ()
-	if cycleNum%5 == 0 then
+	if cycleNum%cyclesPerBlock == 0 then
 		nextBlock();
 	end;
 	-- Permute the label-to-index table

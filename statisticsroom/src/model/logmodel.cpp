@@ -126,8 +126,8 @@ void LogModel::calculateStatistics(QTextStream * output)
 		<< "Separation\t"
 		<< "Separation Change\t"
 		<< "Position (x\ty\tz)\t"
-		<< "Cycle Number\n"
-		<< "Block Number\n"
+		<< "Cycle Number\t"
+		<< "Block Number\t"
 		<< "Block Label\n";
 	for (int i = 0; i < listTrials.size(); i++)
 	{
