@@ -46,12 +46,12 @@ shared_ptr<LogModel> LogModel::logModelFromStream(QTextStream * input)
 // Statistics
 void LogModel::calculateStatistics(QTextStream * output)
 {
-	QRegExp stimulusStart = QRegExp("^New Q:.*$");
+	QRegExp stimulusStart = QRegExp("^New Target:.*$");
 	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect|Skipped): .*$");
 	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect|Skipped): (.*)$");
 	QRegExp stimulusSeparation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
-	QRegExp stimulusNewCycle = QRegExp("^New Test Cycle$");
-	QRegExp stimulusPosition = QRegExp("^New Q:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
+	QRegExp stimulusNewCycle = QRegExp("^New Cycle:.*$");
+	QRegExp stimulusPosition = QRegExp("^Target Properties:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
 
 	QList<int> listTrials;
 	QList<QString> listCorrect;
