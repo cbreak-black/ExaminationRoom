@@ -22,7 +22,7 @@ local camPP = 25;
 local maxColor = 8;
 local exclusiveColor = 1;
 -- Target properties
-local numTargets = 2; -- Don't change without changing side dependent code
+local numTargets = 2; -- Should only be 1 or 2
 local targetWidth = 2;
 local targetHeight = 2;
 
@@ -218,8 +218,13 @@ displayNextTarget = function ()
 --	local texture = Texture("Pattern", shape, patterns[1], patterns[2]);
 --	// End Comments
 	texture:setStyle(replies[currentTest]); -- Here the concave/convex status is set
-	
-	local target = targets[currentSide];
+
+	local target;
+	if numTargets == 2 then
+		target = targets[currentSide];
+	else
+		target = targets[1];
+	end
 	target:setTexture(texture);
 	target:setPosition(pos[1], pos[2], pos[3]);
 	Scene:addObject(target);
