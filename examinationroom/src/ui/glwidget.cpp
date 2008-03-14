@@ -93,7 +93,7 @@ void GLWidget::paintGL()
 	if (scene_)
 	{
 		Tool::Vec4f c = scene_->backgroundColor();
-		glClearColor(c.r/255, c.g/255, c.b/255, c.a/255);
+		glClearColor(c.r, c.g, c.b, c.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Left

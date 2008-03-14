@@ -44,8 +44,25 @@ public: // Camera
 	std::tr1::shared_ptr<Camera> camera() const;
 
 public: // BG Color
+	/**
+	Sets the background color of this scene. This is a wrapper for setBackgroundColor(Tool::Vec4f c)
+	 \param r	Red component
+	 \param g	Green component
+	 \param b	Blue component
+	 \param a	Alpha component
+	*/
 	void setBackgroundColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+
+	/**
+	Sets the background color of this scene.
+	 \param c	A color vector. Each component should be in the range of [0.0f, 1.0f]
+	*/
 	void setBackgroundColor(Tool::Vec4f c);
+
+	/**
+	Returns the current background color of this scene.
+	 \return The background color of this scene as vector. Each component should be in the range of [0.0f, 1.0f]
+	*/
 	Tool::Vec4f backgroundColor() const;
 
 protected:

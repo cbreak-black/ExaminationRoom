@@ -39,10 +39,10 @@ std::tr1::shared_ptr<Camera> Scene::camera() const
 
 void Scene::setBackgroundColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-	backgroundColor_.r = r;
-	backgroundColor_.g = g;
-	backgroundColor_.b = b;
-	backgroundColor_.a = a;
+	backgroundColor_.r = (float)r/255;
+	backgroundColor_.g = (float)g/255;
+	backgroundColor_.b = (float)b/255;
+	backgroundColor_.a = (float)a/255;
 }
 
 void Scene::setBackgroundColor(Tool::Vec4f c)
