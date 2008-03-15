@@ -13,61 +13,72 @@
 namespace Tool
 {
 
-typedef union _Vec3f
+/**
+A small helper object, that is a 3 element vector. It can be treated as point
+(with x, y, z accessors), a color (with r, g, b accessors) or an array (with
+operator[] accessor).
+*/
+template <typename T>
+union Vec3
 {
 	struct
 	{
-		float x;
-		float y;
-		float z;
+		T x;
+		T y;
+		T z;
 	};
 
 	struct
 	{
-		float r;
-		float g;
-		float b;
+		T r;
+		T g;
+		T b;
 	};
 	
-	float vec[3];
+	T vec[3];
 	
-	_Vec3f() {x = y = z = 0; };
-	_Vec3f(float a, float b, float c)
+	Vec3() {x = y = z = 0; };
+	Vec3(T a, T b, T c)
 	{
 		x = a;
 		y = b;
 		z = c;
 	};
 
-	inline float& operator[](int i)
+	inline T& operator[](int i)
 	{
 		return vec[i];
 	}
 	
-} Vec3f;
+};
 
-typedef union _Vec4f
+/**
+A small helper object, that is a 4 element vector. It can be treated as point
+(with x, y, z, t accessors), a color (with r, g, b, a accessors) or an array (with
+operator[] accessor).
+*/
+template <typename T> union Vec4
 {
 	struct
 	{
-		float x;
-		float y;
-		float z;
-		float t;
+		T x;
+		T y;
+		T z;
+		T t;
 	};
 
 	struct
 	{
-		float r;
-		float g;
-		float b;
-		float a;
+		T r;
+		T g;
+		T b;
+		T a;
 	};
 	
-	float vec[4];
+	T vec[4];
 
-	_Vec4f() {x = y = z = t = 0; };
-	_Vec4f(float a, float b, float c, float d)
+	Vec4() {x = y = z = t = 0; };
+	Vec4(T a, T b, T c, T d)
 	{
 		x = a;
 		y = b;
@@ -75,19 +86,22 @@ typedef union _Vec4f
 		t = d;
 	};
 	
-	inline float& operator[](int i)
+	inline T& operator[](int i)
 	{
 		return vec[i];
 	}	
 	
-} Vec4f;
+};
 
+typedef Vec3<float> Vec3f;
+typedef Vec4<float> Vec4f;
 typedef Vec3f Point;
 typedef Vec3f Vector;
 
 // Operators Vec3f
 
-inline Vec3f operator+(const Vec3f v1, const Vec3f v2)
+template <typename T>
+inline Vec3<T> operator+(const Vec3<T> v1, const Vec3<T> v2)
 {
 	Vec3f v;
 	v.x = v1.x + v2.x;
@@ -96,7 +110,8 @@ inline Vec3f operator+(const Vec3f v1, const Vec3f v2)
 	return v;
 }
 
-inline Vec3f operator-(const Vec3f v1, const Vec3f v2)
+template <typename T>
+inline Vec3<T> operator-(const Vec3<T> v1, const Vec3<T> v2)
 {
 	Vec3f v;
 	v.x = v1.x - v2.x;
@@ -105,25 +120,28 @@ inline Vec3f operator-(const Vec3f v1, const Vec3f v2)
 	return v;
 }
 
-inline Vec3f operator*(const Vec3f v1, const float s1)
+template <typename T>
+inline Vec3<T> operator*(const Vec3<T> v1, const T s1)
 {
-	Vec3f v;
+	Vec3<T> v;
 	v.x = v1.x * s1;
 	v.y = v1.y * s1;
 	v.z = v1.z * s1;
 	return v;
 }
 
-inline Vec3f operator*(const float s1, const Vec3f v1)
+template <typename T>
+inline Vec3<T> operator*(const T s1, const Vec3<T> v1)
 {
-	Vec3f v;
+	Vec3<T> v;
 	v.x = v1.x * s1;
 	v.y = v1.y * s1;
 	v.z = v1.z * s1;
 	return v;
 }
 
-inline float operator*(const Vec3f v1, const Vec3f v2)
+template <typename T>
+inline T operator*(const Vec3<T> v1, const Vec3<T> v2)
 {
 	return
 		v1.x * v2.x +
@@ -133,9 +151,10 @@ inline float operator*(const Vec3f v1, const Vec3f v2)
 
 // Operators Vec4f
 
-inline Vec4f operator+(const Vec4f v1, const Vec4f v2)
+template <typename T>
+inline Vec4<T> operator+(const Vec4<T> v1, const Vec4<T> v2)
 {
-	Vec4f v;
+	Vec4<T> v;
 	v.x = v1.x + v2.x;
 	v.y = v1.y + v2.y;
 	v.z = v1.z + v2.z;
@@ -143,7 +162,8 @@ inline Vec4f operator+(const Vec4f v1, const Vec4f v2)
 	return v;
 }
 
-inline Vec4f operator-(const Vec4f v1, const Vec4f v2)
+template <typename T>
+inline Vec4<T> operator-(const Vec4<T> v1, const Vec4<T> v2)
 {
 	Vec4f v;
 	v.x = v1.x - v2.x;
@@ -153,7 +173,8 @@ inline Vec4f operator-(const Vec4f v1, const Vec4f v2)
 	return v;
 }
 
-inline Vec4f operator*(const Vec4f v1, const float s1)
+template <typename T>
+inline Vec4<T> operator*(const Vec4<T> v1, const T s1)
 {
 	Vec4f v;
 	v.x = v1.x * s1;
@@ -163,7 +184,8 @@ inline Vec4f operator*(const Vec4f v1, const float s1)
 	return v;
 }
 
-inline Vec4f operator*(const float s1, const Vec4f v1)
+template <typename T>
+inline Vec4<T> operator*(const T s1, const Vec4<T> v1)
 {
 	Vec4f v;
 	v.x = v1.x * s1;
@@ -173,7 +195,8 @@ inline Vec4f operator*(const float s1, const Vec4f v1)
 	return v;
 }
 
-inline float operator*(const Vec4f v1, const Vec4f v2)
+template <typename T>
+inline T operator*(const Vec4<T> v1, const Vec4<T> v2)
 {
 	return
 		v1.x * v2.x +
