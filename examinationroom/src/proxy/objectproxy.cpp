@@ -13,6 +13,7 @@
 #include "objects/parallelepiped.h"
 #include "objects/pixelplane.h"
 #include "objects/text.h"
+#include "objects/mesh.h"
 #include "objects/affinetransformation.h"
 
 #include "textureproxy.h"
@@ -30,6 +31,7 @@ const char * objectTypes[] =
 	"Parallelepiped",
 	"Pixelplane",
 	"Text",
+	"Mesh",
 	"AffineTransformation",
 	0
 };
@@ -54,6 +56,9 @@ ObjectProxy::ObjectProxy(lua_State *L)
 		object_ = shared_ptr<Object>(new Text());
 		break;
 	case 4:
+		object_ = shared_ptr<Object>(new Mesh());
+		break;
+	case 5:
 		object_ = shared_ptr<Object>(new AffineTransformation());
 		break;
 	}
@@ -316,6 +321,22 @@ int ObjectProxy::setText(lua_State *L)
 	}
 }
 
+int ObjectProxy::loadMesh(lua_State *L)
+{
+	if (mesh())
+	{
+		checkTop(L, 2);
+		mesh()->loadMesh(lua_tostring(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::loadIdentity(lua_State *L)
 {
 	if (affineTransformation())
@@ -440,6 +461,11 @@ shared_ptr<Text> ObjectProxy::text()
 	return dynamic_pointer_cast<Text, Object>(object_);
 }
 
+shared_ptr<Mesh> ObjectProxy::mesh()
+{
+	return dynamic_pointer_cast<Mesh, Object>(object_);
+}
+
 shared_ptr<AffineTransformation> ObjectProxy::affineTransformation()
 {
 	return dynamic_pointer_cast<AffineTransformation, Object>(object_);
@@ -462,6 +488,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setSize", &ObjectProxy::setSize },
 	{ "text", &ObjectProxy::text },
 	{ "setText", &ObjectProxy::setText },
+	{ "loadMesh", &ObjectProxy::loadMesh },
 	{ "loadIdentity", &ObjectProxy::loadIdentity },
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },

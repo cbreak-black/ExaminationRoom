@@ -5,7 +5,11 @@
 TEMPLATE = app
 TARGET = ExaminationRoom
 DEPENDPATH += . src/ui src/core src/lua src/tools src/proxy
-INCLUDEPATH += boost/tr1/tr1 . src/ui src/core src/lua src/lua/src src/tools src/proxy
+INCLUDEPATH += \
+	boost boost/tr1/tr1 \
+	. src \
+	src/ui src/core src/tools src/proxy \
+	src/lua src/lua/src src/parser
 
 QT           += opengl
 
@@ -35,6 +39,10 @@ SOURCES += src/core/objects/*.cpp
 # Proxies
 HEADERS += src/proxy/*.h
 SOURCES += src/proxy/*.cpp
+
+# Parsers
+HEADERS += src/parser/obj/*.hpp src/parser/*.hpp
+SOURCES += src/parser/obj/*.cpp
 
 # LUA
 HEADERS += src/lua/src/*.h src/lua/lua.hpp

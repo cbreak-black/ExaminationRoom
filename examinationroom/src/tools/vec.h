@@ -14,6 +14,38 @@ namespace Tool
 {
 
 /**
+A small helper object, that is a 2 element vector. It can be treated as point
+(with x, y accessors) or an array (with operator[] accessor).
+*/
+template <typename T>
+union Vec2
+{
+	struct
+	{
+		T x;
+		T y;
+	};
+
+	T vec[2];
+
+	Vec2() {x = y = 0; };
+	Vec2(T a, T b)
+	{
+		x = a;
+		y = b;
+	};
+
+	inline T& operator[](int i)
+	{
+		return vec[i];
+	}
+	inline const T& operator[](int i) const
+	{
+		return vec[i];
+	}
+};
+
+/**
 A small helper object, that is a 3 element vector. It can be treated as point
 (with x, y, z accessors), a color (with r, g, b accessors) or an array (with
 operator[] accessor).
@@ -34,9 +66,9 @@ union Vec3
 		T g;
 		T b;
 	};
-	
+
 	T vec[3];
-	
+
 	Vec3() {x = y = z = 0; };
 	Vec3(T a, T b, T c)
 	{
@@ -49,7 +81,10 @@ union Vec3
 	{
 		return vec[i];
 	}
-	
+	inline const T& operator[](int i) const
+	{
+		return vec[i];
+	}
 };
 
 /**
@@ -74,7 +109,7 @@ template <typename T> union Vec4
 		T b;
 		T a;
 	};
-	
+
 	T vec[4];
 
 	Vec4() {x = y = z = t = 0; };
@@ -85,14 +120,18 @@ template <typename T> union Vec4
 		z = c;
 		t = d;
 	};
-	
+
 	inline T& operator[](int i)
 	{
 		return vec[i];
-	}	
-	
+	}
+	inline const T& operator[](int i) const
+	{
+		return vec[i];
+	}
 };
 
+typedef Vec2<float> Vec2f;
 typedef Vec3<float> Vec3f;
 typedef Vec4<float> Vec4f;
 typedef Vec3f Point;

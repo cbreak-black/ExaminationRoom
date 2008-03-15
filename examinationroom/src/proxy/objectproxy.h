@@ -19,6 +19,7 @@ namespace Examination
 	class Parallelepiped;
 	class Pixelplane;
 	class Text;
+	class Mesh;
 	class AffineTransformation;
 	class Object;
 
@@ -53,6 +54,9 @@ public: // Text
 	int text(lua_State *L);
 	int setText(lua_State *L);
 
+public: // Mesh
+	int loadMesh(lua_State *L);
+
 public: // AffineTransformation
 	int loadIdentity(lua_State *L);
 	int translate(lua_State *L);
@@ -68,6 +72,7 @@ public: // Dynamic Casts
 	std::tr1::shared_ptr<Parallelepiped> parallelepiped();
 	std::tr1::shared_ptr<Pixelplane> pixelplane();
 	std::tr1::shared_ptr<Text> text();
+	std::tr1::shared_ptr<Mesh> mesh();
 	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
 	std::tr1::shared_ptr<Object> object();
 	
