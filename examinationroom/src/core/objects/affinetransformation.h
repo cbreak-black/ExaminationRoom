@@ -51,6 +51,12 @@ public:
 	*/
 	void rotate(Tool::Vector axis, double angle);
 
+	/**
+	Scales the object by a given factor in x, y and z direction.
+	 \param scale	Scale factor vector
+	*/
+	void scale(Tool::Vec3f scale);
+
 public:
 	virtual void draw(GLWidget * dest) const;
 

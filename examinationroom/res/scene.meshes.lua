@@ -35,6 +35,7 @@ meshObject:setTexture(Texture("Simple", "res/checkerboard.png"));
 
 local container = Object("AffineTransformation");
 container:setPosition(0, 0, -2);
+container:scale(10,10,10);
 Scene:addObject(container);
 container.pos = {0, 0, -2};
 container:addObject(meshObject);

@@ -76,7 +76,7 @@ private: // Parser Callbacks
 	void geometric_vertex_callback(float x, float y, float z);
 	void texture_vertex_callback(float u, float v);
 	void vertex_normal_callback(float x, float y, float z);
-	
+
 	// Callbacks for faces
 	void triangular_face_geometric_vertices_callback(int v1, int v2, int v3);
 	void triangular_face_geometric_vertices_texture_vertices_callback(const obj::index_2_tuple_type& v1_vt1,

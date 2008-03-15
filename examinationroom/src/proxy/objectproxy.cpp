@@ -385,6 +385,22 @@ int ObjectProxy::rotate(lua_State *L)
 	}
 }
 
+int ObjectProxy::scale(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 4);
+		affineTransformation()->scale(toVector(L, 2));
+		lua_pop(L, 4);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::addObject(lua_State *L)
 {
 	if (affineTransformation())
@@ -492,6 +508,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "loadIdentity", &ObjectProxy::loadIdentity },
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },
+	{ "scale", &ObjectProxy::scale },
 	{ "addObject", &ObjectProxy::addObject },
 	{ "removeObject", &ObjectProxy::removeObject },
 	{ "clear", &ObjectProxy::clear },

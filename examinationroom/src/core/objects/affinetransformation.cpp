@@ -84,6 +84,16 @@ void AffineTransformation::rotate(Vector axis, double angle)
 	multMatrix(temp);
 }
 
+void AffineTransformation::scale(Tool::Vec3f scale)
+{
+	double temp[16];
+	temp[0] = scale.x;	temp[4] = 0;	temp[8] = 0;	temp[12] = 0;
+	temp[1] = 0;	temp[5] = scale.y;	temp[9] = 0;	temp[13] = 0;
+	temp[2] = 0;	temp[6] = 0;	temp[10] = scale.z;	temp[14] = 0;
+	temp[3] = 0;	temp[7] = 0;	temp[11] = 0;	temp[15] = 1;
+	multMatrix(temp);
+}
+
 // Drawing
 void AffineTransformation::draw(GLWidget * dest) const
 {

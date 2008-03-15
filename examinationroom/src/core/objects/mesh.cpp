@@ -72,10 +72,6 @@ Mesh::Mesh()
 {
 }
 
-void voidFunc()
-{
-}
-
 void Mesh::loadMesh(std::string path)
 {
 	using namespace std::tr1::placeholders;
