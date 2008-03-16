@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 
+#include "surfaces/abstracttexture.h"
 #include "glwidget.h"
 
 namespace Examination
@@ -72,7 +73,7 @@ Mesh::Mesh()
 {
 }
 
-void Mesh::loadMesh(std::string path)
+bool Mesh::loadMesh(std::string path)
 {
 	using namespace std::tr1::placeholders;
 
@@ -112,8 +113,16 @@ void Mesh::loadMesh(std::string path)
 		obj::obj_parser::polygonal_face_geometric_vertices_texture_vertices_vertex_normals_vertex_callback_type(),
 		obj::obj_parser::polygonal_face_geometric_vertices_texture_vertices_vertex_normals_end_callback_type()
 	);
-	clearMesh();
-	obj_parser.parse(path);
+	clearMesh(); // Empty the mesh to prepare for loading
+	if (!obj_parser.parse(path))
+	{
+		clearMesh(); // Empty the mesh if an error occured
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 void Mesh::clearMesh()
@@ -126,6 +135,12 @@ void Mesh::clearMesh()
 
 void Mesh::draw(GLWidget * dest) const
 {
+	// Bind the texture if it exists
+	if (texture())
+	{
+		texture()->glBindTex(dest);
+	}
+	// Draw all triangles
 	for (std::vector<Triangle>::const_iterator it = triangles_.begin();
 		 it != triangles_.end();
 		 it++)

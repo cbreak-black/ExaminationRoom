@@ -912,7 +912,10 @@ bool obj::obj_parser::parse(std::istream& istream)
         else {
           std::string group_name;
           stringstream >> group_name >> std::ws;
-          if (!stringstream || !stringstream.eof()) {
+// More than one group name per object is possible. Ignore all but the first. HACK!
+// See http://www2.cs.kuleuven.be/~ares/libobj/obj-0.1/doc/OBJ.spec
+//          if (!stringstream || !stringstream.eof()) {
+          if (!stringstream) {
             if (error_callback_) {
               error_callback_(line_number, "parse error");
             }

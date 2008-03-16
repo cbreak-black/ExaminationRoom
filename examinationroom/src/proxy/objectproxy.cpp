@@ -326,9 +326,10 @@ int ObjectProxy::loadMesh(lua_State *L)
 	if (mesh())
 	{
 		checkTop(L, 2);
-		mesh()->loadMesh(lua_tostring(L, 2));
+		bool success = mesh()->loadMesh(lua_tostring(L, 2));
 		lua_pop(L, 2);
-		return 0;
+		lua_pushboolean(L, success);
+		return 1;
 	}
 	else
 	{

@@ -57,7 +57,7 @@ public:
 	Loads the given mesh file.
 	 \param path	A path to an obj. file
 	*/
-	void loadMesh(std::string path);
+	bool loadMesh(std::string path);
 
 	/**
 	Clears the stored mesh.
