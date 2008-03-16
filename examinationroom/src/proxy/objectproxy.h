@@ -56,6 +56,7 @@ public: // Text
 
 public: // Mesh
 	int loadMesh(lua_State *L);
+	int clearMesh(lua_State *L);
 
 public: // AffineTransformation
 	int loadIdentity(lua_State *L);

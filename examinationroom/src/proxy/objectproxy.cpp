@@ -338,6 +338,22 @@ int ObjectProxy::loadMesh(lua_State *L)
 	}
 }
 
+int ObjectProxy::clearMesh(lua_State *L)
+{
+	if (mesh())
+	{
+		checkTop(L, 1);
+		mesh()->clearMesh();
+		lua_pop(L, 1);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::loadIdentity(lua_State *L)
 {
 	if (affineTransformation())
@@ -506,6 +522,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "text", &ObjectProxy::text },
 	{ "setText", &ObjectProxy::setText },
 	{ "loadMesh", &ObjectProxy::loadMesh },
+	{ "clearMesh", &ObjectProxy::clearMesh },
 	{ "loadIdentity", &ObjectProxy::loadIdentity },
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },

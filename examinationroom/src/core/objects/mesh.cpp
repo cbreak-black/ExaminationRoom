@@ -116,7 +116,9 @@ bool Mesh::loadMesh(std::string path)
 	clearMesh(); // Empty the mesh to prepare for loading
 	if (!obj_parser.parse(path))
 	{
-		clearMesh(); // Empty the mesh if an error occured
+		// Keep the mesh, some parts at least should be valid
+		// Removing was a problem when the mesh lacked the trailing newline
+		//clearMesh(); // Empty the mesh if an error occured
 		return false;
 	}
 	else
