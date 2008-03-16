@@ -1,8 +1,19 @@
 \section{Meshes}
 \paragraph{}
+An important requirement for the tool is, that it has to be able to display a wide range of stimuli. Not only the depth cues (see section \ref{Cues}) have to be individually controllable, also the possible shapes of objects have to span a wide range.
+
+The tool supports only few basic object types, such as Pixel Planes (raster image data), parallelograms, and parallelepipeds. Implementing every desired type in code is neither feasible nor desirable.
+Instead, the same approach as with textures is taken: An external tool that is familiar to the user is used to create a shape, and this shape is then loaded and displayed by the tool. By far the most commonly used method to store models is \textit{Mesh}. A mesh is a surface defined by points, which are connected by edges, to form faces. Other methods include \textit{NURBS}, \textit{Constructive Solid Geometry} and many types of \textit{Parametric Surfaces}. They are less popular, and often harder to handle than meshes.
+
+There are a number of possibilities to implement this design. A mesh library can be used to load, render and modify meshes in an easy way. A scene graph library provides not only mesh support, but also the handling of whole scene hierarchies. Mesh importer libraries make it easier to parse models into a custom data format.
+
 
 \subsection{Mesh Libraries}
 \paragraph{}
+Mesh libraries provide an API for loading, manipulating and rendering meshes. \textit{OpenMesh} is a very powerful library with a half-edge data structure. It offers a wide array of possibilities to customize storage, access and manipulation. It does not handle rendering.
+
+\paragraph{}
+
 
 \subsection{Mesh Formats}
 \paragraph{}
