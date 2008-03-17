@@ -1,4 +1,4 @@
-\section{Stereogram}
+\section{Stereogram\label{Stereogram}}
 \paragraph{}
 A stereogram is an image that contains separate data for the left and right eye. Specially crafted images can cause a binocular depth perception. The framework supports stereograms in various formats. The simplest case consists of two images, one for each eye. Several types of random dot stereograms are also available.
 
@@ -34,9 +34,11 @@ Both methods are simplified, so that the eyes are always at the same relative po
 
 \paragraph{Convex}
 The algorithm for convex shapes treats the depth map as a source to calculate the new position of pixel in a source pattern. The calculated offset is used to displace the surface into the destination image. The shape is shifted horizontally, and appears to come out of the surface. This is equivalent to tracking the surface of the object, and projecting the observed value onto the background. (figure \ref{ccRDS}, left.)
+The same effect can be achieved by tracking the background, but in border cases one eye would see the background, while the other eye sees the foreground.
 
 \paragraph{Concave}
 The algorithm for concave shapes works slightly different. It treats the depth map as a source to calculate the position of the pixel in a source pattern to place in the destination pattern. The shape is not shifted, but it's texture is. It appears to go into the surface. This is equivalent to tracking the background plane, and projecting the corresponding object pattern values onto the background. (figure \ref{ccRDS}, right.)
+It can be achieved by tracking the object, but in border cases,  a point might come from the foreground for one eye, and the background for the other.
 
 \subsection{Pattern stereogram}
 \paragraph{}

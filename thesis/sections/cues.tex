@@ -25,7 +25,7 @@ Seeing an unknown object requires comparisons with other objects in the scene. U
 Relative size only works when the perceived size of an object changes with it's distance. Using a perspective camera is an easy way to do this. When creating an artificial image, the size change can also be simulated by scaling objects based on their distance to the camera. In the case of OpenGL or most RayTracers, both parallel and perspective cameras are available.
 
 \paragraph{Non-reproduction}
-If the size of objects is not intended to change with their distance from the viewer, either choosing a parallel projection or compensating the projection based scaling by scaling the object size is needed.
+If the size of objects is not intended to change with their distance from the viewer, either choosing a parallel projection or compensating the projection based scaling by scaling the object size is needed. This causes visual distortions, if the object is embedded in a scene that is subject to relative size.
 
 
 \subsubsection{Relative density}
@@ -38,31 +38,39 @@ If a perspective projection is used, relative density changes are calculated cor
 \paragraph{Non-reproduction}
 Eliminating the relative depth cue from part of a scene that is parallel projected requires non uniform scaling of a group of objects. Both the position relative to each other, and the size relative to each other of the objects has to change.
 
+\subsubsection{Motion perspective}
+\paragraph{Description}
+Motion perspective is closely related with relative size and relative density. When moving and looking sideways, objects seem to move into the opposing direction. Objects that are far move much slower than objects that are close. When passing objects, their relative ordering can even change: A mountain that was on the right side of a tree can be seen on it's left side. This is caused by the projection into image space, which makes the space far away appear smaller, and therefore objects moving in this space slower.
+
+\paragraph{Reproduction}
+As with the other projection based clues it appears naturally if a perspective projection is used. Without this, it can still be reproduced by moving objects at a velocity scaled with the distance to the camera.
+
+\paragraph{Non-reproduction}
+Compensating motion perspective in a perspective scene requires the scaling of the embedded space, or the movement speed relative to the camera. This can lead to inconsistencies with other parts of the image.
+
 
 \subsubsection{Height in visual field}
 \paragraph{Description}
-
-
-\paragraph{Reproduction}
-
-\paragraph{Non-reproduction}
-
-
-\subsubsection{Motion perspective}
-\paragraph{Description}
+The bottom parts of objects that are touching the ground can be seen at the same place in the retina as the part of the floor they rest on. This is caused by the projection from the world into image space. The assumption are that the objects are touching the ground, that the ground is reasonably even, and that the viewer is perpendicular and above to the floor plane.
 
 \paragraph{Reproduction}
+Reproducing changes of objects in the height in visual field is fairly straight forward. The effect can be achieved by use of a projection that fulfills this property, such as a perspective projection, or some parallel projections. Or by simply translating objects in image space. Care has to be taken to not cause visual artefacts such as pinning.
 
 \paragraph{Non-reproduction}
+Eliminating the effect of the projection on the height in the visual field is straight forward. A projection that maps the floor plane on one single line in image space also maps the bottom of all objects on that plane. Objects can be shifted in image space to compensate for the projection. Raising objects so that they float above the ground is unproblematic, but moving them below ground either leads to occlusion, or depth conflicts.
 
 
 \subsubsection{Convergence}
 \paragraph{Description}
+When moving a camera in a plane, the camera has to rotate to keep an object in the center of the image. The same is the case when using two cameras, or two eyes. Keeping a real object in focus will lead to converging eyes, since they have to point inwards, or for objects at infinitely long distance have to be parallel. The amount of convergence allows judging the distance. This is similar to the method of triangulation\cite{triangulation} used in navigation. Since the eye distance of humans is about 65mm, only close objects can be judged reliable.
+
+Convergence is very closely related to height-of-field, since it is created by the same effect. The way humans perceive it is very different.
 
 \paragraph{Reproduction}
+Reproducing convergence clues requires the creation of separate images for each eye. It comes natural with perspective projections and two cameras. Alternatively, the shift of paralaxe can also be simulated just by shifting the object depending on it's distance of the camera.
 
 \paragraph{Non-reproduction}
-
+Not reproducing convergence clues either requires to not use a perspective projection, or to compensate the movement in paralaxe by moving the object in the scene depending on the camera distance.
 
 \subsubsection{Binocular disparity and stereopsis}
 \paragraph{Description}
