@@ -1,23 +1,22 @@
-\section{Stereogram\label{Stereogram}}
+\subsection{Stereogram\label{Stereogram}}
 \paragraph{}
 A stereogram is an image that contains separate data for the left and right eye. Specially crafted images can cause a binocular depth perception. The framework supports stereograms in various formats. The simplest case consists of two images, one for each eye. Several types of random dot stereograms are also available.
 
-\subsection{Random dot stereogram\label{RDS}}
+\subsubsection{Random dot stereogram\label{RDS}}
 \paragraph{}
 Random dot stereograms are a topic that has interested scientists since over a century\cite{AntRDS}. In the early 1960s they where introduced as stimuli into the modern neuroscience by Julesz\cite{BellRDS}. Unlike a normal stereogram, a RDS contains no monocular clues of the depth, or any clue about the stereoscopic image at all. This makes them the perfect tool to study binocular vision.
 
 The two images of an RDS consist of a random pattern, usually dots. Since either image on it's own is purely random, no information can be derived of it. When seen with binocular vision, depth can be seen. There are several different methods to create a random dot stereograms, but their principle is the same:
 Based on depth information, parts of the pattern in one or both eyes are shifted on the horizontal axis.
 
-\subsubsection{Simple algorithm}
-\paragraph{}
+\paragraph{Simple algorithm}
 The first and most simple algorithm implemented is based on the original technique used by Julesz\cite{BellRDS}. A random pattern for the left eye is created, and also serves as the background in the image for the right eye. A subset of this pattern, which is defined by a mask, is shifted by a fixed amount of pixel. This is enough to create a pair of images that are on their own almost completely random, but produce a perceivable depth effect.
 
 This approach does have problems: Areas who's contents are shifted have to be filled up again. The chosen solution was to not move but copy the contents, so that there are duplicate patterns in the image. Creating concave surfaces requires shifting the area in the image for the other eye, or there will be border conflicts similar to pinning.
 
 It's advantage is that it's fast and easy to both implement and execute. Memory access to the image buffers can be limited to one write per pixel, the pixel data for the shift can be cached in short ring buffer.
 
-\subsubsection{Advanced algorithm}
+\paragraph{Advanced algorithm}
 \begin{figure*}[htb]
 \begin{center}
 \includegraphics[width=15.5cm]{media/rds.pdf}
@@ -40,7 +39,7 @@ The same effect can be achieved by tracking the background, but in border cases 
 The algorithm for concave shapes works slightly different. It treats the depth map as a source to calculate the position of the pixel in a source pattern to place in the destination pattern. The shape is not shifted, but it's texture is. It appears to go into the surface. This is equivalent to tracking the background plane, and projecting the corresponding object pattern values onto the background. (figure \ref{ccRDS}, right.)
 It can be achieved by tracking the object, but in border cases,  a point might come from the foreground for one eye, and the background for the other.
 
-\subsection{Pattern stereogram}
+\subsubsection{Pattern stereogram}
 \paragraph{}
 Pattern stereograms are created similarly to random dot stereograms. Instead of a random data source, they use a pre-computed pattern as foreground and background image. This makes the shape stand out more, and allows a high customizability of the pattern. Possible sources include randomly generated noise images, photographed textures and randomly distributed shapes.
 

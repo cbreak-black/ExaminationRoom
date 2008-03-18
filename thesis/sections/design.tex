@@ -1,11 +1,24 @@
 \section{Design\label{Design}}
 \paragraph{}
+Implementing a flexible and powerful framework for user testing of stereoscopic problems requires a design that accounts for some special requirements. To find out what those requirements are, several tests where designed and executed. The design of the application was adapted to be fit for use in those and many other imaginable tests.
+
+\paragraph{Creation}
+The framework is split into three parts: The test design part aids with the construction of the test scene. A scene is a description of stimuli, possible inputs, and reactions to them. Traditional tests in this area show a series of pictures, requiring user feedback for each, while measuring the response time and the correctness. Stimuli are often precomputed and only consist of a single pixel image.
+
+The requirements for stereoscopic test are different: It is not feasible to manually prepare stimuli, especially if complexe interaction is required. A method to generate them on the fly is needed.
+Section \ref{sceneRep} describes how the look of a scene could be represented.
+
+\paragraph{Testing}
+The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
+
+\paragraph{Analysis}
 
 
-\subsection{Representation of a Scene}
+\subsection{Representation of a Scene\label{sceneRep}}
 \paragraph{}
 \textit{What makes a scene look}. Write about scene graphs.
 
-\subsection{Mechanics of a Scene}
+\subsection{Mechanics of a Scene\label{sceneMech}}
 \paragraph{}
 \textit{What makes a scene move, the code/interaction}. Write about Procedual(LUA) and Finite-state-machine(Custom)
+
