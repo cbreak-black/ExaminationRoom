@@ -12,7 +12,7 @@ Section \ref{sceneRep} describes how the look of a scene could be represented.
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
 
 \paragraph{Analysis}
-Analysing the gathered data is the third part. This is usually done in a combinataion of Microsoft\texttrademark Excel\texttrademark and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
+Analysing the gathered data is the third part. This is usually done in a combinataion of Microsoft\texttrademark\ Excel\texttrademark\ and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
 
 The easiest way to achieve compatibility with the known procedures is to produce data in a format, that is evaluatable in those tools. A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
 
@@ -33,7 +33,21 @@ Scene graphs are tree structures consisting of nodes with zero or more child nod
 \item[Rectangle] A primitive geometry node, which has the shape of a parallelogram. The node can reference a texture, which gets mapped on it's surface.
 \item[Parallelepiped] A primitive geometry node, which has the shape of a parallelepiped (parallelogram prism). As it's parent it can be textured.
 \item[Pixelplane] A primitive geometry node. It is used to draw pixel exact images at any position in space. It requires a texture to be visible. Pixelplanes are point shaped, and therefore are not influenced by scaling and rotation.
-\item[Text] A primitive geometry node. It draws text at any position in space.
+\item[Text] A primitive geometry node. It draws text at any position in space, similar to Pixelplanes.
+\item[Mesh] A primitive geometry node who's geometry is defined by a mesh. The mesh can contain vertex normals and vertex texture coordinates. A texture can be mapped on the object. It might be desirable to also include vertex color.
+\item[AffineTransformation] A group  node. It contains other nodes, which it can affine transform by directly manipulating the matrix stack.
+\item[Camera] A group node. It contains other nodes, which are rendered by this camera instead of the global camera. This is used to control projection cues in a consistent way. Has to reset the depth buffer.
+\item[DepthBuffer] A group node. Disables or enables the use of the depth buffer for all contained elements. This is used to disable occlusion clues. Can reset the depth buffer.
+\item[Lighting] A group node. Enables lighting and a light source with controllable parameters for all sub nodes. This is used to enable lighting depth cues.
+\item[Atmosphere] A group node. Enables the fog equation and controls its parameters. This is used to enable aerial depth cues.
+\end{description}
+
+\paragraph{}
+The following nodes are problematic and might be hard to use, implement and understand due to their side effects.
+
+\begin{description}
+\item[XSize] A group node that scales objects to add or remove depth cues caused by perspective projection. It can be implemented on object (scale object individually, without consider intra object depth) or space level (scale  as function of depth, which is similar to a camera projection). Either way has it's own problems.
+\item[XOffsest] A group node that moves objects it contains as function of their camera distance. Can be used to add or remove height-of-field, convergence or motion parallax cues.
 \end{description}
 
 \subsubsection{Node organisation}
