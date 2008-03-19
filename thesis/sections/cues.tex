@@ -2,7 +2,7 @@
 \paragraph{}
 Seeing stereo is not only based on binocular stereopsis.There are several aspects of the visual impression that allow the perception of depth. Common depth cues include accommodation, aerial perspective, binocular disparity, convergence, height in visual field, motion perspective, occlusion, relative size, and relative density. In addition others have been suggested, such as linear perspective, light and shading and texture gradients.%, kinetic depth, kinetic occlusion and disocclusion, and gravity.
 
-Cutting and Vishton\cite{DepthCues} analyzed nine of these depth cues to asses their relative strength. Those cues will be described in the following paragraphs, and their reproduction or elimination on screen in a digitally generated scene is discussed. The use of OpenGL or a similar technology is assumed, techniques like ray-tracing or vector based painting may require different methods.
+Cutting and Vishton\cite{DepthCues} analyzed nine of these depth cues to asses their relative strength. Those cues will be described in the following paragraphs, and their reproduction or elimination on screen in a digitally generated scene is discussed. The use of OpenGL or a similar technology is assumed, techniques like ray-tracing or vector based painting may require different methods. A summary can be found in table \ref{DepthCuesTable}.
 
 
 \subsection{Projection based cues}
@@ -66,7 +66,7 @@ Eliminating the effect of the projection on the height in the visual field is st
 \paragraph{Description}
 When moving a camera in a plane, the camera has to rotate to keep an object in the center of the image. The same is the case when using two cameras, or two eyes. Keeping a real object in focus will lead to converging eyes, since they have to point inwards, or for objects at infinitely long distance have to be parallel. The amount of convergence allows judging the distance. This is similar to the method of triangulation\cite{triangulation} used in navigation. Since the eye distance of humans is about 65mm, only close objects can be judged reliable.
 
-Convergence \textit{(Proprioception)}is very closely related to height-of-field, since it is created by the same effect. The way humans perceive it is very different.
+Convergence \textit{(Proprioception)}is very closely related to height-of-fiel, motion parallax and binocular stereopsis, since it is created by the same effect. The way humans perceive it is very different.
 
 \paragraph{Reproduction}
 Reproducing convergence clues requires the creation of separate images for each eye. It comes natural with perspective projections and two cameras. Alternatively, the shift of paralaxe can also be simulated just by shifting the object horizontally depending on it's distance of the camera.
@@ -77,7 +77,7 @@ Not reproducing convergence clues either requires to not use a perspective (or c
 
 \subsubsection{Binocular disparity and stereopsis}
 \paragraph{Description}
-Binocular stereopsis is the act of viewing with two eyes/cameras. To be effective, the cameras have to be at different positions relative to each other. Adult human eyes are separated by about 65mm. Perceiving from different points of view is closely related with motion perspective, and the same strategies can be applied to it.
+Binocular stereopsis is similar to convergence, but it is based on the perception of the same object from two viewpoints, and analyising the differences. To be effective, the cameras have to be at different positions relative to each other. Adult human eyes are separated by about 65mm. Perceiving from different points of view is also closely related with motion perspective, and the same strategies can be applied to it.
 
 \paragraph{Reproduction}
 Reproducing binocular disparities that can be fused for binocular stereopsis is easy with two parallel cameras with perspective projection, or converged cameras with parallel/perspective projection.
@@ -130,10 +130,57 @@ Not reproducing this cue is almost required. Everything seen on a screen require
 
 \subsection{Light and Shading}
 \paragraph{Description}
-Shading and lighting is a strong cue for depth inside of objects. Small shadows, or varying light intensities based on the angle to the light source
+Shading and lighting is a strong cue for depth inside of objects. Shadows, or varying light intensities based on the angle to the light source all fall in this category.
+Shadows are created by objects obstructing the light from falling onto an object. The shape depends on the position and shape of the obstructing object, the target, and the light source. Creating shadows is a hard problem in real time computer graphics.
+Shading an object is coloring it based on the amount of light that falls on it's surface. This depends on the type, distance and shape of the light source, and the angle of incident on the surface, and is easily approximated even in real time computer graphics.
 
 \paragraph{Reproduction}
-
+Shading can be enabled and disabled per object, or even per vertex.
+Shadows require more work, and it depends on the algorithm used for creating them how easy it is to add one to a scene.
+Creating shadows on planar surfaces are easier than shadows on arbitrary shapes.
 
 \paragraph{Non-reproduction}
+Removing a shadow is hard, but not creating one is easy, so this is the recommended course of action.
 
+\begin{table*}[p]\begin{center}\begin{tabular}{|p{2cm}|p{2cm}|p{5cm}|p{5cm}}Cue & Family & Created by & Removed by \\
+\hline
+Relative Size &
+Projection &
+Perspective Projection or non uniform scaling as a function of distance to camera &
+Parallel projection or non uniform scaling as a function of distance to camera \\
+Relative Density &
+Projection &
+Perspective Projection or non uniform scaling of space and objects, or translation and scaling of objects as a function of distance to camera &
+Parallel Projection or non uniform scaling of space and objects, or translation and scaling of objects as a function of distance to camera \\
+Motion Perspective &
+Projection &
+Perspective Projection, scaling of space, or adjusting velocity of objects as function of camera distance &
+Parallel Projection, scaling of space, or adjusting velocity of objects as function of camera distance \\
+Height of visual field &
+Projection &
+Perspective Projection, an angled projection, angled camera, translating/shearing as function of distance to camera &
+Parallel projection with camera parallel to ground plane, vertical translation/shearing as function of camera distance \\
+Convergence &
+Projection &
+Two cameras with separation, either converged, perspective, or both. Or horizontal translation/shearing as function of distance to camera and camera direction &
+Only one camera, parallel projection, horizontal translation/shearing as function of distance to camera and camera direction \\
+Binocular stereopsis &
+Perspective &
+Two cameras with separation, either converged, perspective, or both. Or horizontal translation/shearing as function of distance to camera and camera direction &
+Only one camera, parallel projection, horizontal translation/shearing as function of distance to camera and camera direction \\
+Occlusion &
+Physical &
+Depth ordering, Depth buffering &
+Depth ordering, Blending \\
+Aerial perspective &
+Physical &
+Fog Equation &
+Not using Fog Equation \\
+Accom\-modation &
+Optical &
+Adaptive optics, placing objects/screen at varying distances from viewer &
+Default behaviour, whole screen requires at approximately the same accommodation \\
+Light \& Shading &
+Physical &
+Light Equation, Shadow projection, shadow maps &
+Not using Light Equation, Shadow projection or shadow maps\end{tabular}\end{center}\caption{List of cues with a short summary on how to create and remove them}\label{DepthCuesTable}\end{table*}

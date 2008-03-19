@@ -12,13 +12,36 @@ Section \ref{sceneRep} describes how the look of a scene could be represented.
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
 
 \paragraph{Analysis}
+Analysing the gathered data is the third part. This is usually done in a combinataion of Microsoft\texttrademark Excel\texttrademark and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
+
+The easiest way to achieve compatibility with the known procedures is to produce data in a format, that is evaluatable in those tools. A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
+
+Some tests might not follow this pattern, and the data has to be analysed in a different way.
 
 
 \subsection{Representation of a Scene\label{sceneRep}}
 \paragraph{}
-\textit{What makes a scene look}. Write about scene graphs.
+Scene graphs are used to store scenes in a structured way. They have been continually developed since their invention\cite{scenegraph} to account for spatial, state, hierarchy and other properties. Many scene graph libraries exist, but they are usually focused on a specific field, and part of a bigger framework.
+
+To be able to control inconsistencies such as individual depth cues, it is required that the scene graph can represent these. Nodes could add or remove cues for their children, giving a maximum of control to the users. Scene graph libraries do not support those requirements. Designing a simple scene graph is required.
+
+\subsubsection{Node types}
+\paragraph{}
+Scene graphs are tree structures consisting of nodes with zero or more child nodes. The scene itself is typically the root node, while actual rendered objects often are leaves. The following nodes are planed to be implemented in the framework.
+
+\begin{description}
+\item[Rectangle] A primitive geometry node, which has the shape of a parallelogram. The node can reference a texture, which gets mapped on it's surface.
+\item[Parallelepiped] A primitive geometry node, which has the shape of a parallelepiped (parallelogram prism). As it's parent it can be textured.
+\item[Pixelplane] A primitive geometry node. It is used to draw pixel exact images at any position in space. It requires a texture to be visible. Pixelplanes are point shaped, and therefore are not influenced by scaling and rotation.
+\item[Text] A primitive geometry node. It draws text at any position in space.
+\end{description}
+
+\subsubsection{Node organisation}
+\paragraph{}
+\todo{Write about simple trees, parallel scene graphs, object soup}
+
 
 \subsection{Mechanics of a Scene\label{sceneMech}}
 \paragraph{}
-\textit{What makes a scene move, the code/interaction}. Write about Procedual(LUA) and Finite-state-machine(Custom)
+\todo{Write about what makes a scene move, the code/interaction. Write about Procedual(LUA) and Finite-state-machine(Custom)}
 
