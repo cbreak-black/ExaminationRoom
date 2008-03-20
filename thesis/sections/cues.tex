@@ -128,7 +128,7 @@ Artificially generating the requirement that the human eye changes accommodation
 Not reproducing this cue is almost required. Everything seen on a screen requires the same accommodation to be viewed as the screen itself. If a constant accommodation requirement throughout the scene exists, a screen at a huge distance, or a convex screen can be used.
 
 
-\subsection{Light and Shading}
+\subsubsection{Light and Shading}
 \paragraph{Description}
 Shading and lighting is a strong cue for depth inside of objects. Shadows, or varying light intensities based on the angle to the light source all fall in this category.
 Shadows are created by objects obstructing the light from falling onto an object. The shape depends on the position and shape of the obstructing object, the target, and the light source. Creating shadows is a hard problem in real time computer graphics.
@@ -142,7 +142,10 @@ Creating shadows on planar surfaces are easier than shadows on arbitrary shapes.
 \paragraph{Non-reproduction}
 Removing a shadow is hard, but not creating one is easy, so this is the recommended course of action.
 
-\begin{table*}[p]\begin{center}\begin{tabular}{|p{2cm}|p{2cm}|p{5cm}|p{5cm}}Cue & Family & Created by & Removed by \\
+\begin{table*}[p]
+\begin{center}
+\begin{tabular}{|p{2cm}|p{2cm}|p{5cm}|p{5cm}}
+Cue & Family & Created by & Removed by \\
 \hline
 Relative Size &
 Projection &
@@ -183,4 +186,9 @@ Default behaviour, whole screen requires at approximately the same accommodation
 Light \& Shading &
 Physical &
 Light Equation, Shadow projection, shadow maps &
-Not using Light Equation, Shadow projection or shadow maps\end{tabular}\end{center}\caption{List of cues with a short summary on how to create and remove them}\label{DepthCuesTable}\end{table*}
+Not using Light Equation, Shadow projection or shadow maps
+\end{tabular}
+\end{center}
+\caption{List of cues with a short summary on how to create and remove them}
+\label{DepthCuesTable}
+\end{table*}

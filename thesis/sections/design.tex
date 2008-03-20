@@ -52,7 +52,11 @@ The following nodes are problematic and might be hard to use, implement and unde
 
 \subsubsection{Node organisation}
 \paragraph{}
-\todo{Write about simple trees, parallel scene graphs, object soup}
+Nodes are the building blocks of a scene graph, but how they are put together is similarly important. Due to the requirements of some nodes to clear the depth buffer, and the DepthBuffer node, the order of objects in a group node has to be in the desired order of drawing, not insertion.
+
+Since most advanced functionality is designed to be in group nodes, objects have to be grouped based on their semantics. Those are drawn perspectively in the same camera node, all that have the be lit in a lighting node, and so on. For some nodes this is required for them to work, for others it is just a matter of performance.
+
+To increase performance in complex scenes it might be desirable to use a spatially organized tree. Instead of grouping by state (such as camera, lighting), grouping would be done by proximity. This allows for faster culling. To get both functionalities, parallel trees have to be built. An object would reside in both trees. But so far, scene complexity is intended to be very low, so this optimisation is unlikely to be needed.
 
 
 \subsection{Mechanics of a Scene\label{sceneMech}}
