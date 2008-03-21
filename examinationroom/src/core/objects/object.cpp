@@ -20,6 +20,8 @@ Object::Object()
 	origin_ = Point(0,0,0);
 	setScene(0);
 	setParent(0);
+	setColor(Color4(1, 1, 1, 1));
+	setWireframe(false);
 }
 
 Object::Object(float x, float y, float z)
@@ -81,6 +83,26 @@ void Object::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 std::tr1::shared_ptr<AbstractTexture> Object::texture() const
 {
 	return tex_;
+}
+
+Tool::Color4 Object::color() const
+{
+	return color_;
+}
+
+void Object::setColor(Tool::Color4 color)
+{
+	color_ = color;
+}
+
+bool Object::wireframe() const
+{
+	return wireframe_;
+}
+
+void Object::setWireframe(bool flag)
+{
+	wireframe_ = flag;
 }
 
 }

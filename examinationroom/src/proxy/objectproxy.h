@@ -39,6 +39,10 @@ public: // From LUA
 public: // Object
 	int position(lua_State *L);
 	int setPosition(lua_State *L);
+	int color(lua_State *L);
+	int setColor(lua_State *L);
+	int wireframe(lua_State *L);
+	int setWireframe(lua_State *L);
 
 public: // Textures
 	int setTexCoords(lua_State *L);

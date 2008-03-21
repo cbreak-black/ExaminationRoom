@@ -35,7 +35,15 @@ inline void pushVector(lua_State *L, Tool::Vec3f v)
 {
 	lua_pushnumber(L, v.x);
 	lua_pushnumber(L, v.y);
-	lua_pushnumber(L, v.z);	
+	lua_pushnumber(L, v.z);
+}
+
+inline void pushVector4(lua_State *L, Tool::Vec4f v)
+{
+	lua_pushnumber(L, v.x);
+	lua_pushnumber(L, v.y);
+	lua_pushnumber(L, v.z);
+	lua_pushnumber(L, v.t);
 }
 
 inline Tool::Vec3f toVector(lua_State *L, int idx)
@@ -45,6 +53,16 @@ inline Tool::Vec3f toVector(lua_State *L, int idx)
 	y = luaL_checknumber(L, idx+1);
 	z = luaL_checknumber(L, idx+2);
 	return Tool::Vec3f(x,y,z);
+}
+
+inline Tool::Vec4f toVector4(lua_State *L, int idx)
+{
+	float x, y, z, t;
+	x = luaL_checknumber(L, idx);
+	y = luaL_checknumber(L, idx+1);
+	z = luaL_checknumber(L, idx+2);
+	t = luaL_checknumber(L, idx+3);
+	return Tool::Vec4f(x,y,z,t);
 }
 
 #endif

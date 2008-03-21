@@ -46,14 +46,31 @@ void Rectangle::draw(GLWidget * dest) const
 		texture()->glBindTex(dest);
 	}
 
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
-	glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
-	glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);
-	glTexCoord2f(texD_.x, texD_.y); glVertex3fv(v4.vec);
-	glEnd();
+	glColor4fv(color().vec);
 	
-	glBindTexture(GL_TEXTURE_2D, 0);
+	if (wireframe())
+	{
+		glBegin(GL_LINE_LOOP);
+		glVertex3fv(v1.vec);
+		glVertex3fv(v2.vec);
+		glVertex3fv(v4.vec);
+		glVertex3fv(v3.vec);
+		glEnd();
+	}
+	else
+	{
+		glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
+		glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
+		glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);
+		glTexCoord2f(texD_.x, texD_.y); glVertex3fv(v4.vec);
+		glEnd();
+	}
+
+	if (texture())
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 // Accessors

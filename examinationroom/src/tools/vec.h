@@ -136,6 +136,8 @@ typedef Vec3<float> Vec3f;
 typedef Vec4<float> Vec4f;
 typedef Vec3f Point;
 typedef Vec3f Vector;
+typedef Vec3f Color3;
+typedef Vec4f Color4;
 
 // Operators Vec3f
 

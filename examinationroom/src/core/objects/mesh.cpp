@@ -142,12 +142,29 @@ void Mesh::draw(GLWidget * dest) const
 	{
 		texture()->glBindTex(dest);
 	}
+	// Render in wireframe mode if requested
+	if (wireframe())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	// Load the correct color
+	glColor4fv(color().vec);
 	// Draw all triangles
 	for (std::vector<Triangle>::const_iterator it = triangles_.begin();
 		 it != triangles_.end();
 		 it++)
 	{
 		it->draw(vertices_, textureCoordinates_, normals_);
+	}
+	// Reset wireframe state
+	if (wireframe())
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
+	// Reset texture binding
+	if (texture())
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 

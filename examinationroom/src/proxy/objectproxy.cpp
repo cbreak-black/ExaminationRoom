@@ -192,9 +192,41 @@ int ObjectProxy::position(lua_State *L)
 
 int ObjectProxy::setPosition(lua_State *L)
 {
-	checkTop(L, 4);	
+	checkTop(L, 4);
 	object()->setPosition(toVector(L,2));
 	lua_pop(L, 4);
+	return 0;
+}
+
+int ObjectProxy::color(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	pushVector4(L, object()->color());
+	return 4;
+}
+
+int ObjectProxy::setColor(lua_State *L)
+{
+	checkTop(L, 5);
+	object()->setColor(toVector4(L,2));
+	lua_pop(L, 5);
+	return 0;
+}
+
+int ObjectProxy::wireframe(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushboolean(L, object()->wireframe());
+	return 1;
+}
+
+int ObjectProxy::setWireframe(lua_State *L)
+{
+	checkTop(L, 2);
+	object()->setWireframe(lua_toboolean(L, 2));
+	lua_pop(L, 2);
 	return 0;
 }
 
@@ -532,6 +564,10 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "clear", &ObjectProxy::clear },
 	{ "position", &ObjectProxy::position },
 	{ "setPosition", &ObjectProxy::setPosition },
+	{ "color", &ObjectProxy::color },
+	{ "setColor", &ObjectProxy::setColor },
+	{ "wireframe", &ObjectProxy::wireframe },
+	{ "setWireframe", &ObjectProxy::setWireframe },
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
 	{ "setTexture", &ObjectProxy::setTexture },
 	{ "setAutoResize", &ObjectProxy::setAutoResize },

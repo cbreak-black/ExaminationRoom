@@ -42,32 +42,63 @@ void Parallelepiped::draw(GLWidget * dest) const
 		texture()->glBindTex(dest);
 	}
 
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-	glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
-	glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
-	glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
-	glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
-	glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
-	glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
-	glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
-	glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-	glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
-	glEnd();
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-	glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
-	glTexCoord2f(texB().x, texB().y); glVertex3fv(v5.vec);
-	glTexCoord2f(texD().x, texD().y); glVertex3fv(v7.vec);
-	glEnd();
-	glBegin(GL_TRIANGLE_STRIP);
-	glTexCoord2f(texA().x, texA().y); glVertex3fv(v2.vec);
-	glTexCoord2f(texC().x, texC().y); glVertex3fv(v4.vec);
-	glTexCoord2f(texB().x, texB().y); glVertex3fv(v6.vec);
-	glTexCoord2f(texD().x, texD().y); glVertex3fv(v8.vec);
-	glEnd();
+	glColor4fv(color().vec);
 	
-	glBindTexture(GL_TEXTURE_2D, 0);
+	if (wireframe())
+	{
+		glBegin(GL_LINE_STRIP);
+		glVertex3fv(v1.vec);
+		glVertex3fv(v2.vec);
+		glVertex3fv(v4.vec);
+		glVertex3fv(v3.vec);
+		glVertex3fv(v1.vec);
+		glVertex3fv(v5.vec);
+		glVertex3fv(v6.vec);
+		glVertex3fv(v8.vec);
+		glVertex3fv(v7.vec);
+		glVertex3fv(v5.vec);
+		glEnd();
+		glBegin(GL_LINES);
+		glVertex3fv(v2.vec);
+		glVertex3fv(v6.vec);
+		glVertex3fv(v3.vec);
+		glVertex3fv(v7.vec);
+		glVertex3fv(v4.vec);
+		glVertex3fv(v8.vec);
+		glEnd();
+	}
+	else
+	{
+		glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
+		glEnd();
+		glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v5.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v7.vec);
+		glEnd();
+		glBegin(GL_TRIANGLE_STRIP);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v2.vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v4.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v6.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v8.vec);
+		glEnd();
+	}
+
+	if (texture())
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 }
 
 Tool::Vector Parallelepiped::dirC() const
