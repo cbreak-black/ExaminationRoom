@@ -28,6 +28,12 @@ local targetHeight = 2;
 -- Scene Properties
 local cyclesPerBlock = 10;
 local blocksPerScene = 12;
+-- Warnings (Warning: Platform dependent)
+local audioCorrect = false;
+local voiceCorrect = false;
+local audioIncorrect = true;
+local voiceIncorrect = false;
+local voice = "Vicki"
 
 -- A perfect cycle visits all three depths/ two positions,
 -- and uses every path exactly once
@@ -37,6 +43,10 @@ local blocksPerScene = 12;
 perfectCycles = {
 	{4, 3, 2, 1, 2, 5, 2, 3, 4, 1, 6, 1, 4, 5, 6, 3, 6, 5, 4};
 	{4, 5, 6, 3, 6, 5, 4, 1, 6, 1, 5, 3, 2, 5, 2, 1, 2, 3, 4}; -- Backwards
+	{5, 4, 1, 2, 3, 6, 5, 2, 1, 6, 3, 4, 3, 2, 5, 6, 1, 4, 5};
+	{5, 4, 1, 6, 5, 2, 3, 4, 3, 6, 1, 2, 5, 6, 3, 2, 1, 4, 5}; -- Backwards
+	{1, 4, 3, 2, 5, 6, 1, 2, 3, 4, 5, 2, 1, 6, 3, 6, 5, 4, 1};
+	{1, 4, 5, 6, 3, 6, 1, 2, 5, 4, 3, 2, 1, 6, 5, 2, 3, 4, 1}; -- Backwards
 };
 
 -- Position Definition for target
@@ -250,8 +260,20 @@ parseInput = function (k)
 			d = Dir[d];
 			if d == replies[currentTest] then
 				Scene:log("Input Correct: "..d);
+				if (audioCorrect) then
+					os.execute("osascript -e \'beep 1\' &");
+				end
+				if (voiceCorrect) then
+					os.execute("say -v "..voice.." correct &");
+				end
 			else
 				Scene:log("Input Incorrect: "..d);
+				if (audioIncorrect) then
+					os.execute("osascript -e \'beep 1\' &");
+				end
+				if (voiceIncorrect) then
+					os.execute("say -v "..voice.." incorrect &");
+				end
 			end;
 			displayNextTarget();
 		elseif d == "space" then
