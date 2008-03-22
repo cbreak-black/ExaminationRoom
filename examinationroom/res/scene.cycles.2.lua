@@ -6,7 +6,7 @@ dofile("res/statistics.lua")
 -- Screen width:  1.17 meter
 -- Eye position: screen centered
 local screenHeight = 0.70;
-local viewingDistance = 2.75;
+local viewingDistance = 1.0;
 local headPosition = 0.5;
 -- Camera Position
 local camX, camY, camZ = 0, 0, 25;
