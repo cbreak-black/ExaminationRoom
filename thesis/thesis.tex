@@ -15,7 +15,9 @@
 \usepackage{graphicx}
 \fi
 
-\usepackage[utf8]{inputenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+%\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 %\usepackage{german}
 %\usepackage{longtable}
@@ -25,6 +27,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{units}
 %\usepackage{pdfsync}  % enable tex source and pdf output syncronicity
 %\usepackage[all]{xy}
 \usepackage{multicol}
@@ -89,13 +92,16 @@
 
 \input{sections/abstract.tex}
 \input{sections/introduction.tex}
+%\part{Design}
 \input{sections/design.tex}
 \input{sections/cues.tex}
+%\part{Implementation}
 \input{sections/implementation.tex}
+\input{sections/examples.tex}
 
 \end{multicols}
 
-\newpage
+\clearpage
 
 \begin{multicols}{2}
 
