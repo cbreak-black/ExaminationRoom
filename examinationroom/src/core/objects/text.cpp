@@ -25,6 +25,8 @@ Text::Text()
 void Text::draw(GLWidget * dest) const
 {
 	Point p = position();
+	// Load the correct color
+	glColor4fv(color().vec);
 	dest->renderText(p.x, p.y, p.z, text_, font_);
 }
 

@@ -1,5 +1,6 @@
 -- Load Libraries
 dofile("res/statistics.lua")
+dofile("res/questions.lua")
 
 -- Distance to screen: 1 meter
 -- Screen height: 0.70 meter
@@ -34,6 +35,9 @@ local voiceCorrect = false;
 local audioIncorrect = true;
 local voiceIncorrect = false;
 local voice = "Vicki"
+-- Questionns
+local cyclesPerQuestionnaire = 60;
+local lang = "de";
 
 -- A perfect cycle visits all three depths/ two positions,
 -- and uses every path exactly once
@@ -102,8 +106,6 @@ Scene:log("Texture Colors = "..maxColor.."(-"..exclusiveColor..")");
 Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHeight);
 Scene:log("Scene Properties = "..blocksPerScene.." blocks with "..cyclesPerBlock.." cycles per Block");
 
-Scene:setBackgroundColor(127,127,127,255);
-
 rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,26);
@@ -119,12 +121,16 @@ for i = 1, numTargets do
 	t:setAutoResize(true);
 end
 
-Scene:log("Added floor");
+marker = Object("Rectangle");
+marker:setWireframe(true);
+marker:setColor(1, 1, 0, 1);
+marker:setDirA(targetWidth, 0, 0);
+marker:setDirB(0, targetHeight, 0);
 
 -- State
 cycleNum = 0;
 blockNum = 0;
-currentBlock = 1; -- 1 = continuous depth, 2 = no continuous depth
+currentBlockType = 1; -- 1 = continuous depth, 2 = no continuous depth
 currentCycle = math.random(1, #perfectCycles);
 currentSide = math.random(1,  2); -- 1 = left, 2 = right, as defined in targetX
 currentTest = 1;
@@ -169,26 +175,17 @@ end;
 
 -- Prepares the state for the next block
 nextBlock = function ()
-	if blockNum == blocksPerScene then
-		Scene:log("Scene Completed");
-		os.exit(0);
-	end;
-	if currentBlock == 1 then
-		Scene:addObject(rectFloor);
-		Scene:log("New Block: Continuous depth");
+	currentBlockType = currentBlockType % 2 + 1;
+	if currentBlockType == 2 then
+		Scene:log("New Block: "..blockNum.." (Continuous depth)");
 	else
-		Scene:removeObject(rectFloor);
-		Scene:log("New Block: No Continuous depth");
+		Scene:log("New Block: "..blockNum.." (No Continuous depth)");
 	end
-	currentBlock = currentBlock % 2 + 1;
 	blockNum = blockNum + 1;
 end
 
 -- Prepares the state for the next cycle
 nextCycle = function ()
-	if cycleNum%cyclesPerBlock == 0 then
-		nextBlock();
-	end;
 	-- Permute the label-to-index table
 	for i, t in ipairs(labelToIndex) do
 		permuteTable(t);
@@ -205,7 +202,22 @@ end
 nextTarget = function ()
 	currentSide = currentSide%2 + 1;
 	currentTest = currentTest + 1;
+	-- Cycle has ended
 	if currentTest > #perfectCycles[currentCycle] then
+		-- Start a new block if the current one is completed
+		-- (and the cycle has ended)
+		if cycleNum%cyclesPerBlock == 0 then
+			if blockNum == blocksPerScene then
+				startQuestions(endTest);
+				return;
+			end;
+			nextBlock();
+		end;
+		-- Start questioning if the required number of cycles have completed
+		if cycleNum%cyclesPerQuestionnaire == 0 then
+			startQuestions(continueTest);
+		end;
+		-- Start a new cycle since the old one is over
 		currentTest = 1;
 		nextCycle();
 	end
@@ -213,10 +225,16 @@ nextTarget = function ()
 	local side = label%2; -- 0 for even, 1 for odd
 	local index = labelToIndex[side+1][(label+side)/2];
 	Scene:log("New Target: Label("..label..") -> Index("..index..")");
+	displayTarget();
 end
 
-displayNextTarget = function ()
-	nextTarget();
+-- Only draw if set to true
+testing = false;
+
+displayTarget = function ()
+	if not testing then
+		return;
+	end;
 	local pos = positionForTest(currentTest);
 	local sep = statistics:paralaxAtPoint(pos[1]+targetWidth/2, pos[2]+targetHeight/2, pos[3]);
 	local shape = shapes[math.random(1, #shapes)];
@@ -243,7 +261,16 @@ displayNextTarget = function ()
 	end
 	target:setTexture(texture);
 	target:setPosition(pos[1], pos[2], pos[3]);
+	marker:setPosition(pos[1], pos[2]+0.001, pos[3]+0.001);
 	Scene:addObject(target);
+	Scene:addObject(marker);
+
+	-- Floor
+	if currentBlockType == 2 then
+		Scene:addObject(rectFloor);
+	else
+		Scene:removeObject(rectFloor);
+	end
 
 	-- Extensive logging of object properties
 	local s = string.format("Target Properties: %s/%s (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
@@ -275,7 +302,7 @@ parseInput = function (k)
 					os.execute("say -v "..voice.." incorrect &");
 				end
 			end;
-			displayNextTarget();
+			nextTarget();
 		elseif d == "space" then
 			--Scene:log("Input Skipped: "..d);
 			--displayNextTarget();
@@ -285,8 +312,80 @@ parseInput = function (k)
 	end
 end;
 
-Scene:setEventListener("keyDown", parseInput);
-Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
+startTest = function ()
+	testing = true;
+	-- For constant luminance during testing
+	Scene:setBackgroundColor(127,127,127,255);
+	Scene:setEventListener("keyDown", parseInput);
+	Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
+	nextBlock();
+	nextCycle();
+	nextTarget();
+end;
 
-nextCycle();
-displayNextTarget();
+continueTest = function ()
+	testing = true;
+	-- For constant luminance during testing
+	Scene:setBackgroundColor(127,127,127,255);
+	Scene:setEventListener("keyDown", parseInput);
+	-- Restore Targets
+	displayTarget();
+end;
+
+endTest = function ()
+	Scene:log("Scene Completed");
+	os.exit(0);
+end;
+
+-- Questions
+qs = {};
+if lang == "de" then
+	table.insert(qs, questions:createQuestion("Wie stark ist die Ermuedung ihrer Augen im Moment?",
+		"gar nicht", "sehr stark", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (1)",
+		"angespannt", "gelassen", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (2)",
+		"geloest", "beklommen", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (3)",
+		"besorgt", "unbekuemmert", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (4)",
+		"entspannt", "unruhig", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (5)",
+		"skeptisch", "vertrauensvoll", 6));
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (6)",
+		"behaglich", "unwohl", 6));
+elseif lang == "en" then
+	table.insert(qs, questions:createQuestion("How strong is the fatigue of your eyes at the moment?",
+		"not at all", "very strong", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (1)",
+		"tense", "relaxed", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (2)",
+		"relaxed", "queasy", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (3)",
+		"worried", "untroubled", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (4)",
+		"calm", "nervous", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (5)",
+		"skeptically", "trustful", 6));
+	table.insert(qs, questions:createQuestion("At the moment I feel (6)",
+		"comfortable", "miserable", 6));
+else
+	Scene:log("Invalid language for questions: "..lang);
+end;
+
+-- Start the questioning
+startQuestions = function (callback)
+	testing = false;
+	-- Hide Targets
+	for i, o in ipairs(targets) do
+		Scene:removeObject(o);
+	end;
+	Scene:removeObject(marker);
+	-- Hide Floor
+	Scene:removeObject(rectFloor);
+	-- For high constrast during questions
+	Scene:setBackgroundColor(0,0,0,255);
+	questions:startQuestioning(qs, callback);
+end;
+
+startQuestions(startTest);
