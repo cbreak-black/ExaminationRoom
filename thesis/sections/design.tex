@@ -63,8 +63,23 @@ To increase performance in complex scenes it might be desirable to use a spatial
 \paragraph{}
 Having a scene with the desired visualisation is not enough. To conduct a test, the scene has to react to user input, to timers and has to be able to modify the scene graph. Logging has to be unconstrained. Randomisation and random permutations require a state.
 
-The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is turing complete\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool. Procedural languages are turing complete.
+\subsubsection{``Programming'' a scene}
+\paragraph{}
+The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is turing complete\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool.
 
+\subsubsection{Procedual API}
+\paragraph{}
+Procedural languages are turing complete, so embedding a language would give all the computational flexibility needed. The same methods to build a scene graph and change object properties within C++ code can also be used in the scene mechanics. Proxy objects can mediate between the embedded language and the C++ API.
+
+Creating scenes this way follows standard programming paradigmas, and someone who can program in a procedural language should have little problems adapting to what ever syntax the embedded language uses. The drawback of this approach is, that someone who does not have programming experience will find creating a scene rather unintuitive.
+
+\subsubsection{State API}
+\paragraph{}
+There are many computational machines that are touring complete, the selection is not limited to procedural languages. Popular in education are Finite State Machines. They are easy to describe mathematically, and are rather intuitive, compared to traditional programming languages.
+
+A finite state machine is an algorithm that is described as set of states, and state transitions. The transitions can follow various rules, but the most common are based on input. A transition can also write output, or do various other things, depending on the type of state machine.
+
+The original touring machine is a finite state machine that can also write on a so called ``tape''.
 
 \todo{Write about what makes a scene move, the code/interaction. Write about Procedual(LUA) and Finite-state-machine(Custom)}
 
