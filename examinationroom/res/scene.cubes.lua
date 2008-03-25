@@ -45,7 +45,7 @@ container.pos = {0, 0, -2};
 
 local pep2 = Object("Parallelepiped");
 pep2:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
-local d = 2;
+local d = 1;
 local l = 0.816*d;
 local s = 0.578*d;
 local s120 = math.sin(math.pi*2/3);
@@ -56,6 +56,7 @@ pep2:setPosition(0, -math.sqrt(3*d*d)/2, 0)
 container:addObject(pep2);
 
 Scene:log("Added floor and ceil");
+Scene:setBackgroundColor(127,127,127,255);
 
 -- Library
 Key = {

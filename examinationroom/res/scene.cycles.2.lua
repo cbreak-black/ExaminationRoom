@@ -133,7 +133,7 @@ blockNum = 0;
 currentBlockType = 1; -- 1 = continuous depth, 2 = no continuous depth
 currentCycle = math.random(1, #perfectCycles);
 currentSide = math.random(1,  2); -- 1 = left, 2 = right, as defined in targetX
-currentTest = 1;
+currentTest = 0;
 labelToIndex = {
 	{ 1, 2, 3}; -- first side (even)
 	{ 1, 2, 3}; -- second side (odd)
