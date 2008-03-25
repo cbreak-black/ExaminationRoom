@@ -61,5 +61,10 @@ To increase performance in complex scenes it might be desirable to use a spatial
 
 \subsection{Mechanics of a Scene\label{sceneMech}}
 \paragraph{}
+Having a scene with the desired visualisation is not enough. To conduct a test, the scene has to react to user input, to timers and has to be able to modify the scene graph. Logging has to be unconstrained. Randomisation and random permutations require a state.
+
+The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is turing complete\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool. Procedural languages are turing complete.
+
+
 \todo{Write about what makes a scene move, the code/interaction. Write about Procedual(LUA) and Finite-state-machine(Custom)}
 

@@ -366,7 +366,7 @@ elseif lang == "en" then
 	table.insert(qs, questions:createQuestion("At the moment I feel (4)",
 		"calm", "nervous", 6));
 	table.insert(qs, questions:createQuestion("At the moment I feel (5)",
-		"skeptically", "trustful", 6));
+		"skeptical", "trustful", 6));
 	table.insert(qs, questions:createQuestion("At the moment I feel (6)",
 		"comfortable", "miserable", 6));
 else

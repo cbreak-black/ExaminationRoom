@@ -28,6 +28,7 @@ The expected input is randomized, so concave and convex targets should be simila
 
 A cycle is built so that every depth change appears exactly once. This is achieved by pre-computing three cycles and their inverses that visit each of the six positions three times, once from each of the three nodes on the other side. Such a cycle has 18 steps, and 19 targets.
 Cycles are picked at random out of the pre-computed cycles, randomly permuting the depth positions of right and left.
+This gives 36 different permutations per cycle, and 216 different permutations overall.
 
 Ten cycles form a block, either with or without continuous depth plane. The start state is chosen by the tester to counterbalance it, the presence of the depth element in later blocks is alternated.
 The whole test contains 12 blocks, 2280 targets.
