@@ -12,16 +12,18 @@ Section \ref{sceneRep} describes how the look of a scene could be represented.
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
 
 \paragraph{Analysis}
-Analysing the gathered data is the third part. This is usually done in a combinataion of Microsoft\texttrademark\ Excel\texttrademark\ and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
+Analysing the gathered data is the third part. This is usually done in a combinataion of \textit{Microsoft Excel} and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
 
 The easiest way to achieve compatibility with the known procedures is to produce data in a format, that is evaluatable in those tools. A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
+For more flexible data access, it can be imported into a database, where standard \textit{SQL} queries can be used to select subsets of the data, sorted and filtered in many ways.
 
 Some tests might not follow this pattern, and the data has to be analysed in a different way.
 
 
 \subsection{Representation of a Scene\label{sceneRep}}
 \paragraph{}
-Scene graphs are used to store scenes in a structured way. They have been continually developed since their invention\cite{scenegraph} to account for spatial, state, hierarchy and other properties. Many scene graph libraries exist, but they are usually focused on a specific field, and part of a bigger framework.
+\textit{Scene graphs} are used to store scenes in a structured way. They have been continually developed since their invention\cite{scenegraph} to account for spatial, state, hierarchy and other properties.
+Many scene graph libraries exist, but they are usually focused on a specific field, and part of a bigger framework.
 
 To be able to control inconsistencies such as individual depth cues, it is required that the scene graph can represent these. Nodes could add or remove cues for their children, giving a maximum of control to the users. Scene graph libraries do not support those requirements. Designing a simple scene graph is required.
 
@@ -65,21 +67,23 @@ Having a scene with the desired visualisation is not enough. To conduct a test, 
 
 \subsubsection{``Programming'' a scene}
 \paragraph{}
-The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is turing complete\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool.
+The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is \textit{turing complete}\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool.
 
 \subsubsection{Procedual API}
 \paragraph{}
-Procedural languages are turing complete, so embedding a language would give all the computational flexibility needed. The same methods to build a scene graph and change object properties within C++ code can also be used in the scene mechanics. Proxy objects can mediate between the embedded language and the C++ API.
+\textit{Procedural languages} are turing complete, so embedding a language would give all the computational flexibility needed. The same methods to build a scene graph and change object properties within \textit{C++} code can also be used in the scene mechanics. Proxy objects can mediate between the embedded language and the \textit{C++} API.
 
 Creating scenes this way follows standard programming paradigmas, and someone who can program in a procedural language should have little problems adapting to what ever syntax the embedded language uses. The drawback of this approach is, that someone who does not have programming experience will find creating a scene rather unintuitive.
 
 \subsubsection{State API}
 \paragraph{}
-There are many computational machines that are touring complete, the selection is not limited to procedural languages. Popular in education are Finite State Machines. They are easy to describe mathematically, and are rather intuitive, compared to traditional programming languages.
+A more user friendly approach is \textit{Visual Programming}, a class of languages that are based on a visual instead of a textual representation of programs. Visual languages are used in data acquisition tools such as \textit{National Instruments}' \textit{LabVIEW}, music studio software such as \textit{Cycling '74}'s \textit{Max/MSP} or scripting tools like \textit{Apple}'s \textit{Automator}.
+The pattern used in those languages is that of \textit{Dataflow-Programming}\cite{dataflow}. Unfortunately, it does not fit into the requirements of the testing tool.
+
+Popular graphic languages in education are \textit{Finite State Machines}\cite{fsm}. They are easy to describe mathematically, and are rather intuitive, compared to traditional programming languages.
+The original \textit{LEGO} \textit{Mindstorms} used a flow chart based language that is loosely related with Finite State Machines, and managed to appeal even to young people without programming experience.
 
 A finite state machine is an algorithm that is described as set of states, and state transitions. The transitions can follow various rules, but the most common are based on input. A transition can also write output, or do various other things, depending on the type of state machine.
 
-The original touring machine is a finite state machine that can also write on a so called ``tape''.
-
-\todo{Write about what makes a scene move, the code/interaction. Write about Procedual(LUA) and Finite-state-machine(Custom)}
+The original turing machine is a finite state machine that can also write on a so called ``tape''.
 
