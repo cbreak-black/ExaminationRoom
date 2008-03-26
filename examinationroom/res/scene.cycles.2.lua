@@ -118,7 +118,7 @@ for i = 1, numTargets do
 	local t = Object("Pixelplane");
 	table.insert(targets, t);
 	t:setSize(targetWidth, targetHeight);
-	t:setAutoResize(true);
+	t:setAutoResize(false);
 end
 
 marker = Object("Rectangle");
@@ -260,9 +260,13 @@ displayTarget = function ()
 		target = targets[1];
 	end
 	target:setTexture(texture);
+	-- Resize to paralax plane size
+	Scene:addObject(target);
+	target:setPosition(0, 0, 0);
+	target:resizeToCurrent();
+	-- Move to proper position
 	target:setPosition(pos[1], pos[2], pos[3]);
 	marker:setPosition(pos[1], pos[2]+0.001, pos[3]+0.001);
-	Scene:addObject(target);
 	Scene:addObject(marker);
 
 	-- Floor
