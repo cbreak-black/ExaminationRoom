@@ -2,16 +2,25 @@
 Scene:log("Questionnaire Library loaded");
 
 questions = {
-	createQuestion = function (this, title, textLeft, textRight, numOptions)
+	createQuestion = function (this, title, param1, param2, param3)
 		if type(title) == "string" and
-			type(textLeft) == "string" and
-			type(textRight) == "string" and
-			type(numOptions) == "number" then
+			type(param1) == "string" and
+			type(param2) == "string" and
+			type(param3) == "number" then
 			return {
+				["type"] = "range";
 				["title"] = title;
-				["textL"] = textLeft;
-				["textR"] = textRight;
-				["count"] = numOptions;
+				["textL"] = param1;
+				["textR"] = param2;
+				["count"] = param3;
+			};
+		elseif type(title) == "string" and
+			type(param1) == "table" then
+			return {
+				["type"] = "bullet";
+				["title"] = title;
+				["texts"] = param1;
+				["count"] = #param1;
 			};
 		else
 			return nil;
@@ -26,27 +35,51 @@ questions = {
 			t:setText(question.title);
 			t:setPosition(1.5+xStart, 1.25, 0);
 			Scene:addObject(t);
-			-- Left Text
-			t = this:getText(2);
-			t:setText(question.textL);
-			t:setPosition(1.5+xStart, 0.75, 0);
-			Scene:addObject(t);
-			-- Right Text
-			t = this:getText(3);
-			t:setText(question.textR);
-			t:setPosition(1.5*question.count+xStart, 0.75, 0);
-			Scene:addObject(t);
-			-- Boxes
-			for i = 1, question.count do
-				local b = this:getBox(i);
-				b:setPosition(xStart + i*1.5, -0.5, 0);
-				Scene:addObject(b);
-				-- Box Labels
-				t = this:getText(3+i);
-				t:setText(i);
-				t:setPosition(xStart + i*1.5+0.25, -0.25, 0.25);
-				t:setColor(1,1,1,0.5);
+			if question.type == "range" then
+				-- Left Text
+				t = this:getText(2);
+				t:setText(question.textL);
+				t:setPosition(1.5+xStart, 0.75, 0);
 				Scene:addObject(t);
+				-- Right Text
+				t = this:getText(3);
+				t:setText(question.textR);
+				t:setPosition(1.5*question.count+xStart, 0.75, 0);
+				Scene:addObject(t);
+				-- Boxes
+				for i = 1, question.count do
+					local b = this:getBox(i);
+					b:setPosition(xStart + i*1.5, -0.5, 0);
+					Scene:addObject(b);
+					-- Box Labels
+					t = this:getText(3+i);
+					t:setText(i);
+					t:setPosition(xStart + i*1.5+0.25, -0.25, 0.5);
+					t:setColor(1,1,1,0.5);
+					Scene:addObject(t);
+				end;
+			elseif question.type == "bullet" then
+				local textNum = 2;
+				-- Boxes
+				for i, text in ipairs(question.texts) do
+					local b = this:getBox(i);
+					b:setPosition(xStart + i*1.5, -0.5, 0);
+					Scene:addObject(b);
+					-- Box Labels
+					t = this:getText(textNum);
+					t:setText(i);
+					t:setPosition(xStart + i*1.5+0.25, -0.25, 0.5);
+					t:setColor(1,1,1,0.5);
+					Scene:addObject(t);
+					textNum = textNum + 1;
+					-- Box Bullet Labels
+					t = this:getText(textNum);
+					t:setText(text);
+					t:setPosition(xStart + i*1.5, -0.75, 0.5);
+					t:setColor(1,1,1,1);
+					Scene:addObject(t);
+					textNum = textNum + 1;
+				end;
 			end;
 		end;
 	end;

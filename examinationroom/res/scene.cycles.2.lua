@@ -352,33 +352,97 @@ qs = {};
 if lang == "de" then
 	table.insert(qs, questions:createQuestion("Wie stark ist die Ermuedung ihrer Augen im Moment?",
 		"gar nicht", "sehr stark", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (1)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"angespannt", "gelassen", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (2)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"geloest", "beklommen", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (3)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"besorgt", "unbekuemmert", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (4)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"entspannt", "unruhig", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (5)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"skeptisch", "vertrauensvoll", 6));
-	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich (6)",
+	table.insert(qs, questions:createQuestion("Jetzt fuehle ich mich",
 		"behaglich", "unwohl", 6));
+	table.insert(qs, questions:createQuestion("Allgemeines Unwohlsein",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Muedigkeit",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Kopfschmerzen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Ueberanstrengte Augen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Schweirigkeiten beim Scharfsehen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Erhoehter Speichelfluss",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Schwitzen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Uebelkeit",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Konzentrationsschwierigkeiten",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Druckgefuehl im Kopf",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Verschwommenes Sehen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Schwindel bei geoeffneten Augen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Schwindel bei geschlossenen Augen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Drehschwindel",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Missempfinden im Magenbereich",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
+	table.insert(qs, questions:createQuestion("Aufstossen",
+		{"nicht vorhanden", "etwas", "deutlich", "sehr stark"}));
 elseif lang == "en" then
 	table.insert(qs, questions:createQuestion("How strong is the fatigue of your eyes at the moment?",
 		"not at all", "very strong", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (1)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"tense", "relaxed", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (2)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"relaxed", "queasy", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (3)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"worried", "untroubled", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (4)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"calm", "nervous", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (5)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"skeptical", "trustful", 6));
-	table.insert(qs, questions:createQuestion("At the moment I feel (6)",
+	table.insert(qs, questions:createQuestion("At the moment I feel",
 		"comfortable", "miserable", 6));
+	table.insert(qs, questions:createQuestion("General discomfort",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Fatigue",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Headache",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Eyestrain",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Difficulty focusing",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Increased salivation",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Sweating",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Nausea",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Difficulty concentrating",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Fullness of head",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Blurred vision",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Dizzy (eyes open)",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Dizzy (eyes closed)",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Vertigo",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Stomach awareness",
+		{"non", "slight", "moderate", "severe"}));
+	table.insert(qs, questions:createQuestion("Burping",
+		{"non", "slight", "moderate", "severe"}));
 else
 	Scene:log("Invalid language for questions: "..lang);
 end;
