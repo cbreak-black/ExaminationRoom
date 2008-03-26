@@ -260,12 +260,18 @@ displayTarget = function ()
 		target = targets[1];
 	end
 	target:setTexture(texture);
-	-- Resize to paralax plane size
+	-- Resize pixelplane to paralax plane size
 	Scene:addObject(target);
 	target:setPosition(0, 0, 0);
 	target:resizeToCurrent();
 	-- Move to proper position
 	target:setPosition(pos[1], pos[2], pos[3]);
+	-- Resize marker to paralax plane size (HACK!)
+	local pps = Scene:getUnitScreenSize(0,0,0);
+	local dps = Scene:getUnitScreenSize(pos[1], pos[2], pos[3]);
+	marker:setDirA(targetWidth*pps/dps, 0, 0);
+	marker:setDirB(0, targetHeight*pps/dps, 0);
+	-- Move to proper position
 	marker:setPosition(pos[1], pos[2]+0.001, pos[3]+0.001);
 	Scene:addObject(marker);
 
