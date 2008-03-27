@@ -35,6 +35,14 @@ union Vec2
 		y = b;
 	};
 
+	/** Normalizes the vector */
+	inline void normalize()
+	{
+		float dim = sqrt((*this)*(*this));
+		x /= dim;
+		y /= dim;
+	};
+
 	inline T& operator[](int i)
 	{
 		return vec[i];
@@ -75,6 +83,15 @@ union Vec3
 		x = a;
 		y = b;
 		z = c;
+	};
+
+	/** Normalizes the vector */
+	inline void normalize()
+	{
+		float dim = sqrt((*this)*(*this));
+		x /= dim;
+		y /= dim;
+		z /= dim;
 	};
 
 	inline T& operator[](int i)
@@ -121,6 +138,16 @@ template <typename T> union Vec4
 		t = d;
 	};
 
+	/** Normalizes the vector */
+	inline void normalize()
+	{
+		float dim = sqrt((*this)*(*this));
+		x /= dim;
+		y /= dim;
+		z /= dim;
+		t /= dim;
+	};
+
 	inline T& operator[](int i)
 	{
 		return vec[i];
@@ -139,6 +166,51 @@ typedef Vec3f Vector;
 typedef Vec3f Color3;
 typedef Vec4f Color4;
 
+// Operators Vec2f
+
+template <typename T>
+inline Vec2<T> operator+(const Vec2<T> v1, const Vec2<T> v2)
+{
+	Vec2f v;
+	v.x = v1.x + v2.x;
+	v.y = v1.y + v2.y;
+	return v;
+}
+
+template <typename T>
+inline Vec2<T> operator-(const Vec2<T> v1, const Vec2<T> v2)
+{
+	Vec2f v;
+	v.x = v1.x - v2.x;
+	v.y = v1.y - v2.y;
+	return v;
+}
+
+template <typename T>
+inline Vec2<T> operator*(const Vec2<T> v1, const T s1)
+{
+	Vec2<T> v;
+	v.x = v1.x * s1;
+	v.y = v1.y * s1;
+	return v;
+}
+
+template <typename T>
+inline Vec2<T> operator*(const T s1, const Vec2<T> v1)
+{
+	Vec2<T> v;
+	v.x = v1.x * s1;
+	v.y = v1.y * s1;
+	return v;
+}
+
+template <typename T>
+inline T operator*(const Vec2<T> v1, const Vec2<T> v2)
+{
+	return
+		v1.x * v2.x +
+		v1.y * v2.y;
+}
 // Operators Vec3f
 
 template <typename T>
@@ -188,6 +260,17 @@ inline T operator*(const Vec3<T> v1, const Vec3<T> v2)
 		v1.x * v2.x +
 		v1.y * v2.y +
 		v1.z * v2.z;
+}
+
+/** Calculates the cross product */
+template <typename T>
+inline Vec3<T> cross(const Vec3<T> v1, const Vec3<T> v2)
+{
+	Vec3<T> v;
+	v.x = v1.y * v2.z - v1.z * v2.y;
+	v.y = v1.z * v2.x - v1.x * v2.z;
+	v.z = v1.x * v2.y - v1.y * v2.x;
+	return v;
 }
 
 // Operators Vec4f
