@@ -28,19 +28,21 @@ Camera::Camera()
 
 	setPosition(Tool::Point(0, 0, -10));
 	setDirection(Tool::Vector(0,0,-1));
+	setUp(Tool::Vector(0,1,0));
 
 	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
 }
 
-Camera::Camera(Tool::Point pos, Tool::Vector dir)
+Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
 {
 	spL_ = new ScreenProject();
 	spR_ = new ScreenProject();
 
 	setPosition(pos);
 	setDirection(dir);
+	setUp(up);
 	
 	setSeparation(0.2);
 	setFieldOfView(50);
@@ -87,9 +89,12 @@ void Camera::loadMatrix(float offsetCamera)
 	glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	// TODO: Rotation of camera before adjusting eye position
-	glTranslatef(offsetCamera/nearFactor, 0, 0);
-	glTranslatef(-pos_.x, -pos_.y, -pos_.z);
+	// Rotation of camera and adjusting eye position
+	Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
+	sepVec = sepVec * (offsetCamera/nearFactor);
+	gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
+			  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
+			  up_.x, up_.y, up_.z);
 }
 
 void Camera::preLoadMatrix()
@@ -172,6 +177,14 @@ void Camera::setPosition(Tool::Point pos)
 void Camera::setDirection(Tool::Vector dir)
 {
 	dir_ = dir;
+	dir_.normalize();
+	preLoadMatrix();
+}
+
+void Camera::setUp(Tool::Vector up)
+{
+	up_ = up;
+	up_.normalize();
 	preLoadMatrix();
 }
 
@@ -201,6 +214,11 @@ Tool::Point Camera::position()
 Tool::Vector Camera::direction()
 {
 	return dir_;
+}
+
+Tool::Vector Camera::up()
+{
+	return up_;
 }
 
 float Camera::separation()

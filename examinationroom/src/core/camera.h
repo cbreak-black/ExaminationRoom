@@ -38,8 +38,9 @@ public:
 	Creates a camera at the given position with the given viewing direction.
 	 \param pos	The position of the camera in world space.
 	 \param dir	The direction of the camera in world space.
+	 \param up	The up vector of the camera in world space.
 	*/
-	Camera(Tool::Point pos, Tool::Vector dir);
+	Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up);
 
 	/**
 	Destroys the camera
@@ -67,6 +68,7 @@ public:
 public:
 	void setPosition(Tool::Point pos);
 	void setDirection(Tool::Vector dir);
+	void setUp(Tool::Vector up);
 	void setSeparation(float s);
 	void setFieldOfView(float fov);
 	void setParalaxPlane(float dist);
@@ -74,6 +76,7 @@ public:
 public:
 	Tool::Point position();
 	Tool::Vector direction();
+	Tool::Vector up();
 	float separation();
 	float fieldOfView();
 	float paralaxPlane();
@@ -112,6 +115,7 @@ public:
 private:
 	Tool::Point		pos_;
 	Tool::Vector	dir_;
+	Tool::Vector	up_;
 	float			sep_;
 	float			fov_;
 	float			ppd_;
