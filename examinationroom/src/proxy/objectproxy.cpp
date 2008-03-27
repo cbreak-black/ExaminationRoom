@@ -15,6 +15,7 @@
 #include "objects/text.h"
 #include "objects/mesh.h"
 #include "objects/affinetransformation.h"
+#include "objects/cameranode.h"
 
 #include "textureproxy.h"
 
@@ -452,14 +453,14 @@ int ObjectProxy::scale(lua_State *L)
 
 int ObjectProxy::addObject(lua_State *L)
 {
-	if (affineTransformation())
+	if (container())
 	{
 		checkTop(L, 2);
 		luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
 		lua_pushnumber(L, 0);
 		lua_gettable(L, -2);
 		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-		affineTransformation()->addObject((*r)->object());
+		container()->addObject((*r)->object());
 		lua_pop(L, 3);
 		return 0;
 	}
@@ -472,14 +473,14 @@ int ObjectProxy::addObject(lua_State *L)
 
 int ObjectProxy::removeObject(lua_State *L)
 {
-	if (affineTransformation())
+	if (container())
 	{
 		checkTop(L, 2);
 		luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
 		lua_pushnumber(L, 0);
 		lua_gettable(L, -2);
 		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-		affineTransformation()->removeObject((*r)->object());
+		container()->removeObject((*r)->object());
 		lua_pop(L, 3);
 		return 0;
 	}
@@ -492,10 +493,10 @@ int ObjectProxy::removeObject(lua_State *L)
 
 int ObjectProxy::clear(lua_State *L)
 {
-	if (affineTransformation())
+	if (container())
 	{
 		checkTop(L, 1);
-		affineTransformation()->clear();
+		container()->clear();
 		lua_pop(L, 1);
 		return 0;
 	}
@@ -534,6 +535,16 @@ shared_ptr<Mesh> ObjectProxy::mesh()
 shared_ptr<AffineTransformation> ObjectProxy::affineTransformation()
 {
 	return dynamic_pointer_cast<AffineTransformation, Object>(object_);
+}
+
+shared_ptr<CameraNode> ObjectProxy::cameraNode()
+{
+	return dynamic_pointer_cast<CameraNode, Object>(object_);
+}
+
+shared_ptr<Container> ObjectProxy::container()
+{
+	return dynamic_pointer_cast<Container, Object>(object_);
 }
 
 shared_ptr<Object> ObjectProxy::object()

@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef CONTAINER_H
+#define CONTAINER_H
+
 #include <memory>
 #include <set>
 
@@ -57,3 +60,5 @@ private:
 };
 
 }
+
+#endif

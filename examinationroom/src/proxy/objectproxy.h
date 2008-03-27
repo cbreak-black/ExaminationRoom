@@ -21,6 +21,8 @@ namespace Examination
 	class Text;
 	class Mesh;
 	class AffineTransformation;
+	class CameraNode;
+	class Container;
 	class Object;
 
 class ObjectProxy
@@ -68,7 +70,7 @@ public: // AffineTransformation
 	int rotate(lua_State *L);
 	int scale(lua_State *L);
 
-public: // Container (AffineTransformation)
+public: // Container
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);
 	int clear(lua_State *L);
@@ -80,6 +82,8 @@ public: // Dynamic Casts
 	std::tr1::shared_ptr<Text> text();
 	std::tr1::shared_ptr<Mesh> mesh();
 	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
+	std::tr1::shared_ptr<CameraNode> cameraNode();
+	std::tr1::shared_ptr<Container> container();
 	std::tr1::shared_ptr<Object> object();
 	
 private:
