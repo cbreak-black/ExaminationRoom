@@ -167,94 +167,155 @@ typedef Vec3f Color3;
 typedef Vec4f Color4;
 
 // Operators Vec2f
-
 template <typename T>
-inline Vec2<T> operator+(const Vec2<T> v1, const Vec2<T> v2)
+inline Vec2<T> & operator+=(Vec2<T> &v1, const Vec2<T> &v2)
 {
-	Vec2f v;
-	v.x = v1.x + v2.x;
-	v.y = v1.y + v2.y;
-	return v;
+	v1.x += v2.x;
+	v1.y += v2.y;
+	return v1;
 }
 
 template <typename T>
-inline Vec2<T> operator-(const Vec2<T> v1, const Vec2<T> v2)
+inline Vec2<T> & operator-=(Vec2<T> &v1, const Vec2<T> &v2)
 {
-	Vec2f v;
-	v.x = v1.x - v2.x;
-	v.y = v1.y - v2.y;
-	return v;
+	v1.x -= v2.x;
+	v1.y -= v2.y;
+	return v1;
 }
 
 template <typename T>
-inline Vec2<T> operator*(const Vec2<T> v1, const T s1)
+inline Vec2<T> & operator*=(Vec2<T> &v1, const T s1)
 {
-	Vec2<T> v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	return v;
+	v1.x *= s1;
+	v1.y *= s1;
+	return v1;
 }
 
 template <typename T>
-inline Vec2<T> operator*(const T s1, const Vec2<T> v1)
+inline Vec2<T> & operator/=(Vec2<T> &v1, const T s1)
 {
-	Vec2<T> v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	return v;
+	v1.x /= s1;
+	v1.y /= s1;
+	return v1;
 }
 
 template <typename T>
-inline T operator*(const Vec2<T> v1, const Vec2<T> v2)
+inline const Vec2<T> operator+(const Vec2<T> &v1, const Vec2<T> &v2)
+{
+	Vec2<T> v = v1;
+	return v += v2;
+}
+
+template <typename T>
+inline const Vec2<T> operator-(const Vec2<T> &v1, const Vec2<T> &v2)
+{
+	Vec2<T> v = v1;
+	return v -= v2;
+}
+
+template <typename T>
+inline const Vec2<T> operator*(const Vec2<T> &v1, const T s1)
+{
+	Vec2<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec2<T> operator*(const T s1, const Vec2<T> &v1)
+{
+	Vec2<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec2<T> operator/(const Vec2<T> &v1, const T s1)
+{
+	Vec2<T> v = v1;
+	return v /= s1;
+}
+
+template <typename T>
+inline const T operator*(const Vec2<T> &v1, const Vec2<T> &v2)
 {
 	return
 		v1.x * v2.x +
 		v1.y * v2.y;
 }
+
 // Operators Vec3f
-
 template <typename T>
-inline Vec3<T> operator+(const Vec3<T> v1, const Vec3<T> v2)
+inline Vec3<T> & operator+=(Vec3<T> &v1, const Vec3<T> &v2)
 {
-	Vec3f v;
-	v.x = v1.x + v2.x;
-	v.y = v1.y + v2.y;
-	v.z = v1.z + v2.z;
-	return v;
+	v1.x += v2.x;
+	v1.y += v2.y;
+	v1.z += v2.z;
+	return v1;
 }
 
 template <typename T>
-inline Vec3<T> operator-(const Vec3<T> v1, const Vec3<T> v2)
+inline Vec3<T> & operator-=(Vec3<T> &v1, const Vec3<T> &v2)
 {
-	Vec3f v;
-	v.x = v1.x - v2.x;
-	v.y = v1.y - v2.y;
-	v.z = v1.z - v2.z;
-	return v;
+	v1.x -= v2.x;
+	v1.y -= v2.y;
+	v1.z -= v2.z;
+	return v1;
 }
 
 template <typename T>
-inline Vec3<T> operator*(const Vec3<T> v1, const T s1)
+inline Vec3<T> & operator*=(Vec3<T> &v1, const T s1)
 {
-	Vec3<T> v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	v.z = v1.z * s1;
-	return v;
+	v1.x *= s1;
+	v1.y *= s1;
+	v1.z *= s1;
+	return v1;
 }
 
 template <typename T>
-inline Vec3<T> operator*(const T s1, const Vec3<T> v1)
+inline Vec3<T> & operator/=(Vec3<T> &v1, const T s1)
 {
-	Vec3<T> v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	v.z = v1.z * s1;
-	return v;
+	v1.x /= s1;
+	v1.y /= s1;
+	v1.z /= s1;
+	return v1;
 }
 
 template <typename T>
-inline T operator*(const Vec3<T> v1, const Vec3<T> v2)
+inline const Vec3<T> operator+(const Vec3<T> &v1, const Vec3<T> &v2)
+{
+	Vec3<T> v = v1;
+	return v += v2;
+}
+
+template <typename T>
+inline const Vec3<T> operator-(const Vec3<T> &v1, const Vec3<T> &v2)
+{
+	Vec3<T> v = v1;
+	return v -= v2;
+}
+
+template <typename T>
+inline const Vec3<T> operator*(const Vec3<T> &v1, const T s1)
+{
+	Vec3<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec3<T> operator*(const T s1, const Vec3<T> &v1)
+{
+	Vec3<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec3<T> operator/(const Vec3<T> &v1, const T s1)
+{
+	Vec3<T> v = v1;
+	return v /= s1;
+}
+
+template <typename T>
+inline const T operator*(const Vec3<T> &v1, const Vec3<T> &v2)
 {
 	return
 		v1.x * v2.x +
@@ -264,7 +325,7 @@ inline T operator*(const Vec3<T> v1, const Vec3<T> v2)
 
 /** Calculates the cross product */
 template <typename T>
-inline Vec3<T> cross(const Vec3<T> v1, const Vec3<T> v2)
+inline const Vec3<T> cross(const Vec3<T> &v1, const Vec3<T> &v2)
 {
 	Vec3<T> v;
 	v.x = v1.y * v2.z - v1.z * v2.y;
@@ -274,53 +335,83 @@ inline Vec3<T> cross(const Vec3<T> v1, const Vec3<T> v2)
 }
 
 // Operators Vec4f
-
 template <typename T>
-inline Vec4<T> operator+(const Vec4<T> v1, const Vec4<T> v2)
+inline Vec4<T> & operator+=(Vec4<T> &v1, const Vec4<T> &v2)
 {
-	Vec4<T> v;
-	v.x = v1.x + v2.x;
-	v.y = v1.y + v2.y;
-	v.z = v1.z + v2.z;
-	v.t = v1.t + v2.t;
-	return v;
+	v1.x += v2.x;
+	v1.y += v2.y;
+	v1.z += v2.z;
+	v1.t += v2.t;
+	return v1;
 }
 
 template <typename T>
-inline Vec4<T> operator-(const Vec4<T> v1, const Vec4<T> v2)
+inline Vec4<T> & operator-=(Vec4<T> &v1, const Vec4<T> &v2)
 {
-	Vec4f v;
-	v.x = v1.x - v2.x;
-	v.y = v1.y - v2.y;
-	v.z = v1.z - v2.z;
-	v.t = v1.t - v2.t;
-	return v;
+	v1.x -= v2.x;
+	v1.y -= v2.y;
+	v1.z -= v2.z;
+	v1.t -= v2.t;
+	return v1;
 }
 
 template <typename T>
-inline Vec4<T> operator*(const Vec4<T> v1, const T s1)
+inline Vec4<T> & operator*=(Vec4<T> &v1, const T s1)
 {
-	Vec4f v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	v.z = v1.z * s1;
-	v.t = v1.t * s1;
-	return v;
+	v1.x *= s1;
+	v1.y *= s1;
+	v1.z *= s1;
+	v1.t *= s1;
+	return v1;
 }
 
 template <typename T>
-inline Vec4<T> operator*(const T s1, const Vec4<T> v1)
+inline Vec4<T> & operator/=(Vec4<T> &v1, const T s1)
 {
-	Vec4f v;
-	v.x = v1.x * s1;
-	v.y = v1.y * s1;
-	v.z = v1.z * s1;
-	v.t = v1.t * s1;
-	return v;
+	v1.x /= s1;
+	v1.y /= s1;
+	v1.z /= s1;
+	v1.t /= s1;
+	return v1;
 }
 
 template <typename T>
-inline T operator*(const Vec4<T> v1, const Vec4<T> v2)
+inline const Vec4<T> operator+(const Vec4<T> &v1, const Vec4<T> &v2)
+{
+	Vec4<T> v = v1;
+	return v += v2;
+}
+
+template <typename T>
+inline const Vec4<T> operator-(const Vec4<T> &v1, const Vec4<T> &v2)
+{
+	Vec4<T> v = v1;
+	return v -= v2;
+}
+
+template <typename T>
+inline const Vec4<T> operator*(const Vec4<T> &v1, const T s1)
+{
+	Vec4<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec4<T> operator*(const T s1, const Vec4<T> &v1)
+{
+	Vec4<T> v = v1;
+	return v *= s1;
+}
+
+template <typename T>
+inline const Vec4<T> operator/(const Vec4<T> &v1, const T s1)
+{
+	Vec4<T> v = v1;
+	return v /= s1;
+}
+
+template <typename T>
+inline const T operator*(const Vec4<T> &v1, const Vec4<T> &v2)
 {
 	return
 		v1.x * v2.x +
