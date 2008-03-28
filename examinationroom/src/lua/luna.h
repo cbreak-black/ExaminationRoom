@@ -123,6 +123,16 @@ template<class T> class Luna {
       return 1;
     }
 
+	static T* extract(lua_State *L, int idx)
+	{
+		luaL_argcheck(L, lua_istable(L, idx), idx, "Not a Proxy Object");
+		lua_pushnumber(L, 0);
+		lua_gettable(L, idx); // get the class table (i.e, self)
+		T** obj = static_cast<T**>(luaL_checkudata(L, -1, T::className));
+		lua_remove(L, -1); // remove the userdata from the stack
+		return *obj;
+	}
+
     static int thunk(lua_State *L) {
       // redirect method call to the real thing
       int i = (int)lua_tonumber(L, lua_upvalueindex(1)); // which function?

@@ -262,15 +262,9 @@ int ObjectProxy::setTexCoords(lua_State *L)
 int ObjectProxy::setTexture(lua_State *L)
 {
 	checkTop(L, 2);
-
-	luaL_argcheck(L, lua_istable(L, 2), 2, "Not a Texture");
-	lua_pushnumber(L, 0);
-	lua_gettable(L, 2);
-
-	TextureProxy ** t = static_cast<TextureProxy**>(luaL_checkudata(L, -1, TextureProxy::className));
-	object()->setTexture((*t)->texture());
-	lua_pop(L, 3);
-
+	TextureProxy * t = Luna<TextureProxy>::extract(L, 2);
+	object()->setTexture(t->texture());
+	lua_pop(L, 2);
 	return 0;
 }
 
@@ -456,12 +450,9 @@ int ObjectProxy::addObject(lua_State *L)
 	if (container())
 	{
 		checkTop(L, 2);
-		luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
-		lua_pushnumber(L, 0);
-		lua_gettable(L, -2);
-		ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-		container()->addObject((*r)->object());
-		lua_pop(L, 3);
+		ObjectProxy * o = Luna<ObjectProxy>::extract(L, 2);
+		container()->addObject(o->object());
+		lua_pop(L, 2);
 		return 0;
 	}
 	else
