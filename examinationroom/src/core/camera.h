@@ -28,6 +28,17 @@ projection matrix stack.
 */
 class Camera
 {
+public: // Enums
+	/**
+	The types of projections that are supported
+	*/
+	typedef enum
+	{
+		Perspective,	/**< Perspective projection, parallel cameras */
+		Parallel,		/**< Parallel projection, converged cameras */
+		Screen			/**< Screen space, no separation */
+	}	Type;
+
 public:
 	/**
 	Creates a camera with initial values.
@@ -74,12 +85,16 @@ public:
 	void setParalaxPlane(float dist);
 
 public:
-	Tool::Point position();
-	Tool::Vector direction();
-	Tool::Vector up();
-	float separation();
-	float fieldOfView();
-	float paralaxPlane();
+	Tool::Point position() const;
+	Tool::Vector direction() const;
+	Tool::Vector up() const;
+	float separation() const;
+	float fieldOfView() const;
+	float paralaxPlane() const;
+
+public: // Type
+	Camera::Type type() const;
+	void setType(Camera::Type t);
 
 public:
 	/**
@@ -89,28 +104,28 @@ public:
 	 \param d	Distance of line to camera (projected on camera viewing direction)
 	 \return size of a line of length 1 at distance d on screen in pixel
 	*/
-	float unitScreenSize(float d);
+	float unitScreenSize(float d) const;
 
 	/**
 	Calculates and returns the size on screen in pixel of one unit at a given distance.
 	 \param p	Position of the unit measurement
 	 \return size of a line of length 1 at position p on screen in pixel
 	*/
-	float unitScreenSize(Tool::Point p);
+	float unitScreenSize(Tool::Point p) const;
 
 	/**
 	Calculates the seperation of an object on screen.
 	 \param p	Position of the separation measurement
 	 \return separation on screen of object at position p from camera in pixel.
 	*/
-	float separationAtPoint(Tool::Point p);
+	float separationAtPoint(Tool::Point p) const;
 
 public:
 	/**
 	Returns a pre-loaded screenProject object for the queried side.
 	 \return a pre-loaded screenProject object for the queried side.
 	*/
-	Tool::ScreenProject * screenProject(GLWidget::Side s);
+	Tool::ScreenProject * screenProject(GLWidget::Side s) const;
 
 private:
 	Tool::Point		pos_;
@@ -121,6 +136,7 @@ private:
 	float			ppd_;
 	Tool::ScreenProject *	spL_;
 	Tool::ScreenProject *	spR_;
+	Camera::Type	type_;
 };
 
 }

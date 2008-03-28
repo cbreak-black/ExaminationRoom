@@ -33,6 +33,7 @@ Camera::Camera()
 	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
+	setType(Perspective);
 }
 
 Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
@@ -47,6 +48,7 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
 	setSeparation(0.2);
 	setFieldOfView(50);
 	setParalaxPlane(10);
+	setType(Perspective);
 }
 
 Camera::~Camera()
@@ -69,32 +71,65 @@ void Camera::loadMatrix(GLWidget * dest)
 
 void Camera::loadMatrix(float offsetCamera)
 {
-	// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
-
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-
 	float aspect = (float)viewport[2]/viewport[3];
-	float top, bottom, left, right, near, far;
 	float fovTan = tanf((fov_/2)/180*M_PI);
-	near = ppd_*nearFactor;
-	far = ppd_*farFactor;
-	top = fovTan*near;
-	bottom = -top;
-	left = bottom*aspect;
-	right = top*aspect;
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	// Rotation of camera and adjusting eye position
-	Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
-	sepVec = sepVec * (offsetCamera/nearFactor);
-	gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
-			  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
-			  up_.x, up_.y, up_.z);
+	if (type() == Camera::Perspective)
+	{
+		// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
+
+		float top, bottom, left, right, near, far;
+		near = ppd_*nearFactor;
+		far = ppd_*farFactor;
+		top = fovTan*near;
+		bottom = -top;
+		left = bottom*aspect;
+		right = top*aspect;
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		// Rotation of camera and adjusting eye position
+		Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
+		sepVec *= offsetCamera/nearFactor;
+		gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
+				  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
+				  up_.x, up_.y, up_.z);
+	}
+	else if (type() == Camera::Parallel)
+	{
+		float top, bottom, left, right, near, far;
+		far = ppd_*farFactor;
+		near = 2*ppd_ - far; // = ppd_ - (far-ppd_);
+		top = fovTan*ppd_;
+		bottom = -top;
+		left = bottom*aspect;
+		right = top*aspect;
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		// http://wireframe.doublemv.com/2006/08/11/projections-and-opengl/
+		float theta = 90- atan(ppd_/offsetCamera*nearFactor);
+		float shearMatrix[] = {
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			-offsetCamera/nearFactor, 0, 1, 0,
+			0, 0, 0, 1
+		};
+		glMultMatrixf(shearMatrix);
+		glOrtho(left, right, bottom, top, near, far);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		// Rotation of camera and adjusting eye position
+		//Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
+		//sepVec *= offsetCamera/nearFactor;
+		gluLookAt(pos_.x, pos_.y, pos_.z,
+				  pos_.x + dir_.x, pos_.y + dir_.y, pos_.z + dir_.z,
+				  up_.x, up_.y, up_.z);
+	}
 }
 
 void Camera::preLoadMatrix()
@@ -116,7 +151,7 @@ void Camera::preLoadMatrix()
 	glPopMatrix();
 }
 
-ScreenProject * Camera::screenProject(GLWidget::Side s)
+ScreenProject * Camera::screenProject(GLWidget::Side s) const
 {
 	if (s == GLWidget::left)
 		return spL_;
@@ -124,7 +159,7 @@ ScreenProject * Camera::screenProject(GLWidget::Side s)
 		return spR_;
 }
 
-float Camera::unitScreenSize(float d)
+float Camera::unitScreenSize(float d) const
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
@@ -136,7 +171,7 @@ float Camera::unitScreenSize(float d)
 	return (float)viewport[3]/(top*2) * near/d;
 }
 
-float Camera::unitScreenSize(Point p)
+float Camera::unitScreenSize(Point p) const
 {
 	float df = fabsf((position() - p) * direction());
 	return unitScreenSize(df);
@@ -161,7 +196,7 @@ float Camera::unitScreenSize(Point p)
 //	}
 //}
 
-float Camera::separationAtPoint(Point p)
+float Camera::separationAtPoint(Point p) const
 {
 	Point pL = spL_->transformToScreenSpace(p);
 	Point pR = spR_->transformToScreenSpace(p);
@@ -206,34 +241,44 @@ void Camera::setParalaxPlane(float dist)
 	preLoadMatrix();
 }
 
-Tool::Point Camera::position()
+Tool::Point Camera::position() const
 {
 	return pos_;
 }
 
-Tool::Vector Camera::direction()
+Tool::Vector Camera::direction() const
 {
 	return dir_;
 }
 
-Tool::Vector Camera::up()
+Tool::Vector Camera::up() const
 {
 	return up_;
 }
 
-float Camera::separation()
+float Camera::separation() const
 {
 	return sep_;
 }
 
-float Camera::fieldOfView()
+float Camera::fieldOfView() const
 {
 	return fov_;
 }
 
-float Camera::paralaxPlane()
+float Camera::paralaxPlane() const
 {
 	return ppd_;
+}
+
+Camera::Type Camera::type() const
+{
+	return type_;
+}
+
+void Camera::setType(Camera::Type t)
+{
+	type_ = t;
 }
 
 }
