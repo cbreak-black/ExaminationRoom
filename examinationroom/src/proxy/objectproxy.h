@@ -70,6 +70,10 @@ public: // AffineTransformation
 	int rotate(lua_State *L);
 	int scale(lua_State *L);
 
+public: // Camera Node
+	int camera(lua_State *L);
+	int setCamera(lua_State *L);
+
 public: // Container
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);

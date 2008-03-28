@@ -35,6 +35,28 @@ rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
+local cameraBox = Object("CameraNode");
+local c2 = cameraBox:camera();
+c2:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+c2:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+c2:setFieldOfView(cameraFoV);
+c2:setSeparation(cameraSep);
+c2:setParalaxPlane(cameraPP);
+c2:setType("Parallel");
+Scene:addObject(cameraBox);
+
+local pep1 = Object("Parallelepiped");
+pep1:setTexture(Texture("Simple", "res/checkerboard.png"));
+local d = 1;
+local l = 0.816*d;
+local s = 0.578*d;
+local s120 = math.sin(math.pi*2/3);
+pep1:setDirA(0, s, l);
+pep1:setDirB(s120*l, s, -0.5*l);
+pep1:setDirC(-s120*l, s, -0.5*l);
+pep1:setPosition(-3, -math.sqrt(3*d*d)/2 + 2, 0)
+cameraBox:addObject(pep1);
+
 local container = Object("AffineTransformation");
 container:setPosition(0, 0, 0);
 Scene:addObject(container);

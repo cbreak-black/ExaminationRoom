@@ -18,6 +18,7 @@
 #include "objects/cameranode.h"
 
 #include "textureproxy.h"
+#include "cameraproxy.h"
 
 #include "luahelper.h"
 
@@ -34,6 +35,7 @@ const char * objectTypes[] =
 	"Text",
 	"Mesh",
 	"AffineTransformation",
+	"CameraNode",
 	0
 };
 
@@ -62,10 +64,14 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	case 5:
 		object_ = shared_ptr<Object>(new AffineTransformation());
 		break;
+	case 6:
+		object_ = shared_ptr<Object>(new CameraNode());
+		break;
 	}
 	lua_pop(L, 0);
 }
-	
+
+// Rectangle
 int ObjectProxy::dirA(lua_State *L)
 {
 	if (rectangle())
@@ -162,6 +168,7 @@ int ObjectProxy::setDirC(lua_State *L)
 	}
 }
 
+// Pixelplane
 int ObjectProxy::setSize(lua_State *L)
 {
 	if (pixelplane())
@@ -181,6 +188,7 @@ int ObjectProxy::setSize(lua_State *L)
 	}
 }
 
+// General Objects
 int ObjectProxy::position(lua_State *L)
 {
 	checkTop(L, 1);
@@ -268,6 +276,7 @@ int ObjectProxy::setTexture(lua_State *L)
 	return 0;
 }
 
+// Pixelplane
 int ObjectProxy::setAutoResize(lua_State *L)
 {
 	if (pixelplane())
@@ -316,6 +325,7 @@ int ObjectProxy::resizeTo(lua_State *L)
 	}
 }
 
+// Text Node
 int ObjectProxy::text(lua_State *L)
 {
 	if (text())
@@ -348,6 +358,7 @@ int ObjectProxy::setText(lua_State *L)
 	}
 }
 
+// Mesh Node
 int ObjectProxy::loadMesh(lua_State *L)
 {
 	if (mesh())
@@ -381,6 +392,7 @@ int ObjectProxy::clearMesh(lua_State *L)
 	}
 }
 
+// AffineTransformation Node
 int ObjectProxy::loadIdentity(lua_State *L)
 {
 	if (affineTransformation())
@@ -445,6 +457,42 @@ int ObjectProxy::scale(lua_State *L)
 	}
 }
 
+// Camera Node
+int ObjectProxy::camera(lua_State *L)
+{
+	if (cameraNode())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		CameraProxy * cp = new CameraProxy(cameraNode()->camera());
+		Luna<CameraProxy>::inject(L, cp);
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setCamera(lua_State *L)
+{
+	if (cameraNode())
+	{
+		checkTop(L, 2);
+		CameraProxy * cp = Luna<CameraProxy>::extract(L, 2);
+		cameraNode()->setCamera(cp->camera());
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+// Container Node
 int ObjectProxy::addObject(lua_State *L)
 {
 	if (container())
@@ -498,6 +546,7 @@ int ObjectProxy::clear(lua_State *L)
 	}
 }
 
+// Dynamic casts
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return dynamic_pointer_cast<Rectangle, Object>(object_);
@@ -561,6 +610,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },
 	{ "scale", &ObjectProxy::scale },
+	{ "camera", &ObjectProxy::camera },
+	{ "setCamera", &ObjectProxy::setCamera },
 	{ "addObject", &ObjectProxy::addObject },
 	{ "removeObject", &ObjectProxy::removeObject },
 	{ "clear", &ObjectProxy::clear },

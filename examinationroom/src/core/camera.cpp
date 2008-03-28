@@ -80,14 +80,19 @@ void Camera::loadMatrix(float offsetCamera)
 		// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
 
 		float top, bottom, left, right, near, far;
+		// Calculate near and far based on paralax plane distance hardcoded factors
 		near = ppd_*nearFactor;
 		far = ppd_*farFactor;
+		// Calculate top and bottom based on vertical field-of-view and distance
 		top = fovTan*near;
 		bottom = -top;
+		// Calculate left and right basaed on aspect ratio
 		left = bottom*aspect;
 		right = top*aspect;
 
 		glMatrixMode(GL_PROJECTION);
+		// Projection matrix is a frustum, of which left and right are not symetric
+		// to set the zero paralax plane. The cameras are parallel.
 		glLoadIdentity();
 		glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
 		glMatrixMode(GL_MODELVIEW);
@@ -95,6 +100,7 @@ void Camera::loadMatrix(float offsetCamera)
 		// Rotation of camera and adjusting eye position
 		Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
 		sepVec *= offsetCamera/nearFactor;
+		// Set camera position, direction and orientation
 		gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
 				  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
 				  up_.x, up_.y, up_.z);
@@ -102,17 +108,25 @@ void Camera::loadMatrix(float offsetCamera)
 	else if (type() == Camera::Parallel)
 	{
 		float top, bottom, left, right, near, far;
+		// Calculate near and far based on paralax plane distance and a hardcoded factor
+		// Note: the zero paralax plane is exactly in between near and far
 		far = ppd_*farFactor;
 		near = 2*ppd_ - far; // = ppd_ - (far-ppd_);
+		// Set top and bottom based on field-of-view and paralax plane distance
+		// This is done to make the scaling of the image at the paralax plane the same
+		// as in perspective mode
 		top = fovTan*ppd_;
 		bottom = -top;
+		// Set left and right baased on aspect ratio
 		left = bottom*aspect;
 		right = top*aspect;
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		// http://wireframe.doublemv.com/2006/08/11/projections-and-opengl/
-		float theta = 90- atan(ppd_/offsetCamera*nearFactor);
+		// Note: The code there is wrong, see below for correct code
+		// Create oblique projection matrix by shearing an orthographic
+		// Projection matrix. Those cameras are converged.
 		float shearMatrix[] = {
 			1, 0, 0, 0,
 			0, 1, 0, 0,
@@ -123,9 +137,10 @@ void Camera::loadMatrix(float offsetCamera)
 		glOrtho(left, right, bottom, top, near, far);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		// Rotation of camera and adjusting eye position
-		//Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
-		//sepVec *= offsetCamera/nearFactor;
+		// Rotation of camera
+		// Note: The position of both left and right camera is at the same place
+		//	because the offset is already calculated by the shearing, which also sets
+		//	the zero paralax plane.
 		gluLookAt(pos_.x, pos_.y, pos_.z,
 				  pos_.x + dir_.x, pos_.y + dir_.y, pos_.z + dir_.z,
 				  up_.x, up_.y, up_.z);
