@@ -10,15 +10,16 @@ statistics:setViewingProperties(1.0, 0.79, 0.5);
 local cameraAngle = 0;
 local cameraDistance = 25;
 local cameraPP = 25;
-local cameraDir = {0, 0, -1};
-local cameraPos = {0, 0, cameraDistance};
+local cameraDir = {0, -0.1, -1};
+local cameraPos = {0, 2.5, cameraDistance};
 local cameraFoV = 18;
 local cameraSep = 0.15;
-Scene:setCameraPos(cameraPos[1], cameraPos[2], cameraPos[3]);
-Scene:setCameraDir(cameraDir[1], cameraDir[2], cameraDir[3]);
-Scene:setCameraFoV(cameraFoV);
-Scene:setCameraSep(cameraSep);
-Scene:setCameraParalaxPlane(cameraPP);
+cam = Scene:camera();
+cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+cam:setFieldOfView(cameraFoV);
+cam:setSeparation(cameraSep);
+cam:setParalaxPlane(cameraPP);
 
 local sn = Object("Text");
 sn:setText("Watch here");
@@ -33,16 +34,6 @@ rectFloor:setPosition(-3, -2.5, -18);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
-
-local rectCeil = Object("Rectangle");
-rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,26);
-rectCeil:setPosition(-3, 2.5, -18);
-rectCeil:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
-Scene:addObject(rectCeil);
-
-Scene:log("Added floor and ceil");
 
 local container = Object("AffineTransformation");
 container:setPosition(0, 0, 0);
@@ -68,6 +59,8 @@ Key = {
 [21] = "down";
 [22] = "pgUp";
 [23] = "pgDown";
+[79] = "oblique"; -- o
+[80] = "perspective"; -- p
 }
 -- For FG/BG
 patterns = {
@@ -105,36 +98,40 @@ local parseInput = function (k)
 --		Scene:setCameraParalaxPlane(cameraDistance);
 		if d == "up" then
 			cameraSep = cameraSep + 0.01;
-			Scene:setCameraSep(cameraSep);
+			cam:setSeparation(cameraSep);
 		elseif d == "right" then
 			cameraAngle = cameraAngle + 0.1;
 			cameraDir[1] = math.sin(cameraAngle);
-			cameraDir[3] = math.cos(cameraAngle);
+			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
-			cameraPos[3] = -math.cos(cameraAngle)*cameraDistance;
-			Scene:setCameraDir(cameraDir[1], cameraDir[2], cameraDir[3]);
-			Scene:setCameraPos(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
+			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
 		elseif d == "down" then
 			cameraSep = cameraSep - 0.01;
-			Scene:setCameraSep(cameraSep);
+			cam:setSeparation(cameraSep);
 		elseif d == "left" then
 			cameraAngle = cameraAngle - 0.1;
 			cameraDir[1] = math.sin(cameraAngle);
-			cameraDir[3] = math.cos(cameraAngle);
+			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
-			cameraPos[3] = -math.cos(cameraAngle)*cameraDistance;
-			Scene:setCameraDir(cameraDir[1], cameraDir[2], cameraDir[3]);
-			Scene:setCameraPos(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
+			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
 		elseif d == "pgUp" then
 			cameraDistance = cameraDistance + 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
-			cameraPos[3] = -math.cos(cameraAngle)*cameraDistance;
-			Scene:setCameraPos(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
+			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
 		elseif d == "pgDown" then
 			cameraDistance = cameraDistance - 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
-			cameraPos[3] = -math.cos(cameraAngle)*cameraDistance;
-			Scene:setCameraPos(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
+			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+		elseif d == "perspective" then
+			cam:setType("Perspective");
+		elseif d == "oblique" then
+			cam:setType("Parallel");
 		end;
 		nextFrame();
 	end

@@ -15,6 +15,7 @@
 
 #include "objectproxy.h"
 #include "textureproxy.h"
+#include "cameraproxy.h"
 
 #include "luahelper.h"
 
@@ -40,13 +41,14 @@ LuaProxy::LuaProxy(Scene * scene)
 
 	Luna<ObjectProxy>::Register(L_);
 	Luna<TextureProxy>::Register(L_);
+	Luna<CameraProxy>::Register(L_);
 
 	QDateTime t = QDateTime::currentDateTime();
 	logOutStream_.open(t.toString(logFileFormatString).toAscii());
 
 	lastUpdate_.start();
 }
-	
+
 LuaProxy::~LuaProxy()
 {
 	onQuit();
@@ -86,15 +88,9 @@ int LuaProxy::runString(const char * code)
 int LuaProxy::addObject(lua_State *L)
 {
 	checkTop(L, 2);
-	
-	luaL_argcheck(L, lua_istable(L, 2), 2, "Not an Object");
-	lua_pushnumber(L, 0);
-	lua_gettable(L, -2);
-
-	ObjectProxy ** r = static_cast<ObjectProxy**>(luaL_checkudata(L, -1, ObjectProxy::className));
-	scene_->addObject((*r)->object());
-	lua_pop(L, 3);
-
+	ObjectProxy * o = Luna<ObjectProxy>::extract(L, 2);
+	scene_->addObject(o->object());
+	lua_pop(L, 2);
 	return 0;
 }
 
@@ -155,6 +151,18 @@ int LuaProxy::setCameraDir(lua_State *L)
 	return 0;
 }
 
+int LuaProxy::setCameraUp(lua_State *L)
+{
+	checkTop(L, 4);
+	Tool::Point p = toVector(L,2);
+	scene_->camera()->setUp(p);
+	lua_pop(L, 4);
+	char msg[80];
+	snprintf(msg, 80, "Camera Up: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
+	log(msg);
+	return 0;
+}
+
 int LuaProxy::setCameraFoV(lua_State *L)
 {
 	checkTop(L, 2);
@@ -207,6 +215,14 @@ int LuaProxy::getCameraDir(lua_State *L)
 	return 3;
 }
 
+int LuaProxy::getCameraUp(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	pushVector(L, scene_->camera()->up());
+	return 3;
+}
+
 int LuaProxy::getCameraFoV(lua_State *L)
 {
 	checkTop(L, 1);
@@ -229,6 +245,24 @@ int LuaProxy::getCameraParalaxPlane(lua_State *L)
 	lua_pop(L, 1);
 	lua_pushnumber(L, scene_->camera()->paralaxPlane());
 	return 1;
+}
+
+int LuaProxy::camera(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	CameraProxy * cp = new CameraProxy(scene_->camera());
+	Luna<CameraProxy>::inject(L, cp);
+	return 1;
+}
+
+int LuaProxy::setCamera(lua_State *L)
+{
+	checkTop(L, 2);
+	CameraProxy * cp = Luna<CameraProxy>::extract(L, 2);
+	scene_->setCamera(cp->camera());
+	lua_pop(L, 2);
+	return 0;
 }
 
 int LuaProxy::getSeparationAtPoint(lua_State *L)
@@ -435,14 +469,18 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "clearScene", &LuaProxy::clearScene },
 	{ "setCameraPos", &LuaProxy::setCameraPos },
 	{ "setCameraDir", &LuaProxy::setCameraDir },
+	{ "setCameraUp", &LuaProxy::setCameraUp },
 	{ "setCameraFoV", &LuaProxy::setCameraFoV },
 	{ "setCameraSep", &LuaProxy::setCameraSep },
 	{ "setCameraParalaxPlane", &LuaProxy::setCameraParalaxPlane },
 	{ "getCameraPos", &LuaProxy::getCameraPos },
 	{ "getCameraDir", &LuaProxy::getCameraDir },
+	{ "getCameraUp", &LuaProxy::getCameraUp },
 	{ "getCameraFoV", &LuaProxy::getCameraFoV },
 	{ "getCameraSep", &LuaProxy::getCameraSep },
 	{ "getCameraParalaxPlane", &LuaProxy::getCameraParalaxPlane },
+	{ "camera", &LuaProxy::camera },
+	{ "setCamera", &LuaProxy::setCamera },
 	{ "setBackgroundColor", &LuaProxy::setBackgroundColor },
 	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
 	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },

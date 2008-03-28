@@ -59,14 +59,19 @@ public: // Scene
 public: // Camera
 	int setCameraPos(lua_State *L);
 	int setCameraDir(lua_State *L);
+	int setCameraUp(lua_State *L);
 	int setCameraFoV(lua_State *L);
 	int setCameraSep(lua_State *L);
 	int setCameraParalaxPlane(lua_State *L);
 	int getCameraPos(lua_State *L);
 	int getCameraDir(lua_State *L);
+	int getCameraUp(lua_State *L);
 	int getCameraFoV(lua_State *L);
 	int getCameraSep(lua_State *L);
 	int getCameraParalaxPlane(lua_State *L);
+	// Access camera directly
+	int camera(lua_State *L);
+	int setCamera(lua_State *L);
 
 public: // Statistical helpers
 	int getSeparationAtPoint(lua_State *L);
@@ -79,7 +84,7 @@ public: // Misc
 	int debugLog(lua_State *L);
 	void log(const char * msg);
 	void debugLog(const char * msg);
-	
+
 public:
 	/**
 	Call to signal the lua world that the scene has to be updated.
