@@ -87,4 +87,65 @@ A finite state machine is an algorithm that is described as set of states, and s
 The original turing machine is a finite state machine that can also write on a so called ``tape'', and was of course turing complete.
 
 Creating a new language, where every state represents a change in the scene, and every transition represents something that can be easily understood, such as a key press, or the passing of time, would allow for a relatively powerful but moderately easy to use way to define scene mechanics.
+By moving interaction and memory writes and reads from the edges into the nodes, the use and implementation can be further simplified.
 
+A good compromise between power and usability could look like \textit{flowcharts}, containing nodes that describe actions, nodes that represent decisions and end states.
+
+\subsubsection{Flow types}
+\paragraph{}
+There can be several kinds of control flows in a scene: One could start with the scene, and be executed stepwise until the scene and the flow ends.
+The image would get drawn while the program waits for input, or for a timer.
+This is closest to the traditional procedural programming paradigma.
+
+An event based control flow could start each time a key is pressed, and execute the graph completely each time.
+This is closest to the event based model of the backend.
+
+A concurrent flow could be an endless loop and yield control periodically, allowing custom animation.
+
+
+\subsubsection{Flow Chart Nodes}
+\paragraph{}
+The flow chart state language contains two basic primitives: Nodes and transitions.
+Normal nodes have exactly one input and one output, only one transition can start at an output, but many can end at the same input. Start nodes have no input, end nodes no output. Decision nodes can have several outputs.
+
+Each node can  execute code, access global variables, or change parameters of the scene.
+As a tribute to data flow programming, nodes can pass a set of values to their successor.
+
+\begin{description}
+\item[Start]
+The start node is unique, only one exists in each control flow.
+As the name indicates, the program starts in this state.
+It has no inputs and one output.
+
+\item[End]
+
+\item[Input]
+Input nodes wait for keyboard or mouse input, and if it fulfills some basic properties, pass the value to their successor.
+The successor is usually a log node or a decision node.
+
+\item[Log]
+Log nodes write time stamped lines of arbitrary text to the log.
+
+\item[Raw]
+Raw nodes offer direct access to the underlying code, and should have the same power as interacting with the procedural API.
+They are more difficult to use, and not intended for inexperienced users.
+
+\item[Wait]
+Wait nodes are only useful in the main flow of a scene. They pause the flow of execution for a given amount of time.
+
+\item[Yield]
+\todo{Think about if they are needed, and what for}
+
+\end{description}
+
+Decision nodes help to guilde the flow of control.
+
+\begin{description}
+\item[If-then-else]
+Evaluates a boolean expression, and continues the flow of execution depending on the result.
+
+\item[Random]
+The random node continues execution on one randomly chosen output flow.
+Possible implementations include balanced random nodes, that only chose each path once, until each has been used once.
+
+\end{description}
