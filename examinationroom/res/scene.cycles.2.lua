@@ -2,12 +2,12 @@
 dofile("res/statistics.lua")
 dofile("res/questions.lua")
 
--- Distance to screen: 1 meter
--- Screen height: 0.70 meter
--- Screen width:  1.17 meter
+-- Distance to screen: 2 meter
+-- Screen height: 0.78 meter
+-- Screen width:  1.30 meter
 -- Eye position: screen centered
-local screenHeight = 0.70;
-local viewingDistance = 1.0;
+local screenHeight = 0.78;
+local viewingDistance = 2.0;
 local headPosition = 0.5;
 -- Camera Position
 local camX, camY, camZ = 0, 0, 25;
@@ -61,7 +61,7 @@ targetZ = { 7.5, 0, -18 };
 -- Appearance (Texture Paths)
 shapes =
 {
-"res/square.png";
+--"res/square.png";
 "res/circle.png";
 }
 patterns = {

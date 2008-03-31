@@ -1,10 +1,10 @@
 -- Load Libraries
 dofile("res/statistics.lua")
--- Distance to screen: 2.5 meter
--- Screen height: 0.79 meter
--- Screen width:  1.31 meter
+-- Distance to screen: 2.0 meter
+-- Screen height: 0.78 meter
+-- Screen width:  1.30 meter
 -- Eye position: screen centered
-statistics:setViewingProperties(1.0, 0.70, 0.5);
+statistics:setViewingProperties(2.0, 0.78, 0.5);
 
 -- Scene Construction
 Scene:setCameraPos(0, 0, 25);
