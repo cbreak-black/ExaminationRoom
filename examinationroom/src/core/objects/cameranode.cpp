@@ -2,7 +2,7 @@
  *  cameranode.cpp
  *  ExaminationRoom
  *
- *  Created by CBreak on 04.26.08.
+ *  Created by CBreak on 03.26.08.
  *  Copyright 2008 Gerhard Roethlin. All rights reserved.
  *
  */

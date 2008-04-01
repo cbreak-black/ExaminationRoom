@@ -16,6 +16,7 @@
 #include "objects/mesh.h"
 #include "objects/affinetransformation.h"
 #include "objects/cameranode.h"
+#include "objects/lightnode.h"
 
 #include "textureproxy.h"
 #include "cameraproxy.h"
@@ -36,6 +37,7 @@ const char * objectTypes[] =
 	"Mesh",
 	"AffineTransformation",
 	"CameraNode",
+	"LightNode",
 	0
 };
 
@@ -66,6 +68,9 @@ ObjectProxy::ObjectProxy(lua_State *L)
 		break;
 	case 6:
 		object_ = shared_ptr<Object>(new CameraNode());
+		break;
+	case 7:
+		object_ = shared_ptr<Object>(new LightNode());
 		break;
 	}
 	lua_pop(L, 0);
@@ -492,6 +497,8 @@ int ObjectProxy::setCamera(lua_State *L)
 	}
 }
 
+// Light Node
+
 // Container Node
 int ObjectProxy::addObject(lua_State *L)
 {
@@ -580,6 +587,11 @@ shared_ptr<AffineTransformation> ObjectProxy::affineTransformation()
 shared_ptr<CameraNode> ObjectProxy::cameraNode()
 {
 	return dynamic_pointer_cast<CameraNode, Object>(object_);
+}
+
+shared_ptr<LightNode> ObjectProxy::lightNode()
+{
+	return dynamic_pointer_cast<LightNode, Object>(object_);
 }
 
 shared_ptr<Container> ObjectProxy::container()

@@ -147,6 +147,10 @@ void Mesh::draw(GLWidget * dest) const
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
+	// Load position
+	Point p = position();
+	glPushMatrix();
+	glTranslatef(p.x, p.y, p.z);
 	// Load the correct color
 	glColor4fv(color().vec);
 	// Draw all triangles
@@ -156,6 +160,7 @@ void Mesh::draw(GLWidget * dest) const
 	{
 		it->draw(vertices_, textureCoordinates_, normals_);
 	}
+	glPopMatrix();
 	// Reset wireframe state
 	if (wireframe())
 	{

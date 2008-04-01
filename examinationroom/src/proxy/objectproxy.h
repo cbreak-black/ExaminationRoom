@@ -22,6 +22,7 @@ namespace Examination
 	class Mesh;
 	class AffineTransformation;
 	class CameraNode;
+	class LightNode;
 	class Container;
 	class Object;
 
@@ -87,6 +88,7 @@ public: // Dynamic Casts
 	std::tr1::shared_ptr<Mesh> mesh();
 	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
 	std::tr1::shared_ptr<CameraNode> cameraNode();
+	std::tr1::shared_ptr<LightNode> lightNode();
 	std::tr1::shared_ptr<Container> container();
 	std::tr1::shared_ptr<Object> object();
 	
