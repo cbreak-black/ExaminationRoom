@@ -93,15 +93,19 @@ A good compromise between power and usability could look like \textit{flowcharts
 
 \subsubsection{Flow types}
 \paragraph{}
-There can be several kinds of control flows in a scene: One could start with the scene, and be executed stepwise until the scene and the flow ends.
+There can be several types of control flows to drive a scene:
+It could start with the scene, and be executed stepwise until the scene and the flow ends.
 The image would get drawn while the program waits for input, or for a timer.
 This is closest to the traditional procedural programming paradigma.
 
 An event based control flow could start each time a key is pressed, and execute the graph completely each time.
+Other events like timers or mouse clicks can do the same.
 This is closest to the event based model of the backend.
 
 A concurrent flow could be an endless loop and yield control periodically, allowing custom animation.
+Combining several kinds does not always make sense, but using separate lines of execution for animation and IO would simplify programming.
 
+Some nodes can work differently in different flow contexts, those are actually different nodes that just share an idea and name.
 
 \subsubsection{Flow Chart Nodes}
 \paragraph{}
@@ -113,15 +117,25 @@ As a tribute to data flow programming, nodes can pass a set of values to their s
 
 \begin{description}
 \item[Start]
-The start node is unique, only one exists in each control flow.
+A basic start node is unique, only one exists in each control flow.
 As the name indicates, the program starts in this state.
+Specialised start nodes are used in event driven flows.
 It has no inputs and one output.
 
 \item[End]
+When this node is reached, the flow ends.
+In a scene global model, the scene would terminate, and the test is completed.
+In an event based model it would not be needed, but can serve as error check to ensure that all outputs are connected.
 
 \item[Input]
 Input nodes wait for keyboard or mouse input, and if it fulfills some basic properties, pass the value to their successor.
+In an event based model, input nodes would be of the type start node, in a main flow a wait node.
 The successor is usually a log node or a decision node.
+
+\item[Timer]
+A timer node continues the execution of a flow at a chosen time or time interval.
+In an event based model timer nodes would start a new ``thread of execution'',
+in a main flow it would pause the execution for the desired time.
 
 \item[Log]
 Log nodes write time stamped lines of arbitrary text to the log.
@@ -130,11 +144,9 @@ Log nodes write time stamped lines of arbitrary text to the log.
 Raw nodes offer direct access to the underlying code, and should have the same power as interacting with the procedural API.
 They are more difficult to use, and not intended for inexperienced users.
 
-\item[Wait]
-Wait nodes are only useful in the main flow of a scene. They pause the flow of execution for a given amount of time.
-
-\item[Yield]
-\todo{Think about if they are needed, and what for}
+\item[Parameter]
+A node type that sets the parameters of scene elements.
+It offers the same control as the direct API.
 
 \end{description}
 
