@@ -67,6 +67,19 @@ public:
 public:
 	virtual void draw(GLWidget * dest) const;
 
+public:
+	/**
+	Returns the mesh scale factor. The mesh gets scaled with this factor.
+	 \return the scale factor
+	*/
+	float scaleFactor() const;
+
+	/**
+	Sets the mesh scale factor.
+	 \param scaleFactor	The new scale factor
+	*/
+	void setScaleFactor(float scaleFactor);
+
 private: // Parser Callbacks
 	void info_callback(const std::string& filename, std::size_t line_number, const std::string& message);
 	void warning_callback(const std::string& filename, std::size_t line_number, const std::string& message);
@@ -94,6 +107,7 @@ private:
 	std::vector<Tool::Vec3f> normals_;
 	std::vector<Tool::Vec2f> textureCoordinates_;
 	std::vector<Triangle> triangles_;
+	float scaleFactor_;
 };
 
 }

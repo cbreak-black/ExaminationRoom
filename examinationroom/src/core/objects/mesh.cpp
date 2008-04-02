@@ -43,17 +43,26 @@ void Triangle::draw(const std::vector<Tool::Vec3f>& vertexes,
 					const std::vector<Tool::Vec2f>& textures,
 					const std::vector<Tool::Vec3f>& normals) const
 {
+	Vector n;
+	if ((type_ & normal) == 0) // normals are not set
+	{
+		Vector a = vertexes[vertexes_[0]] - vertexes[vertexes_[1]];
+		Vector b = vertexes[vertexes_[0]] - vertexes[vertexes_[2]];
+		n = cross(a, b);
+		n.normalize();
+		glNormal3fv(n.vec);
+	}
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i < 3; i++)
 	{
-		if (type_ & normal == normal) // normals are set
+		if ((type_ & normal) == normal) // normals are set
 		{
 			// Get the normal index for vertex i
 			// look it up in the normal vectors vector
 			// pass it to OpenGL
 			glNormal3fv(normals[normals_[i]].vec);
 		}
-		if (type_ & texture == texture) // texture coordinates are set
+		if ((type_ & texture) == texture) // texture coordinates are set
 		{
 			// Get the texture index for vertex i
 			// look it up in the texture coordinate vector
@@ -71,6 +80,7 @@ void Triangle::draw(const std::vector<Tool::Vec3f>& vertexes,
 // Mesh
 Mesh::Mesh()
 {
+	scaleFactor_ = 1;
 }
 
 bool Mesh::loadMesh(std::string path)
@@ -151,6 +161,7 @@ void Mesh::draw(GLWidget * dest) const
 	Point p = position();
 	glPushMatrix();
 	glTranslatef(p.x, p.y, p.z);
+	glScalef(scaleFactor_, scaleFactor_, scaleFactor_);
 	// Load the correct color
 	glColor4fv(color().vec);
 	// Draw all triangles
@@ -171,6 +182,16 @@ void Mesh::draw(GLWidget * dest) const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+}
+
+float Mesh::scaleFactor() const
+{
+	return scaleFactor_;
+}
+
+void Mesh::setScaleFactor(float scaleFactor)
+{
+	scaleFactor_ = scaleFactor;
 }
 
 // Parser Callbacks

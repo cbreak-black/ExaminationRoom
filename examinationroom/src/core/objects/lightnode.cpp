@@ -31,6 +31,7 @@ void LightNode::draw(GLWidget * dest) const
 	}
 	int glID = toGlLight(id);
 	// Set up lighting
+	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 	glEnable(glID);
 	// Set up color material (for setting material with glColor*())
@@ -47,6 +48,7 @@ void LightNode::draw(GLWidget * dest) const
 	glDisable(GL_COLOR_MATERIAL);
 	glDisable(glID);
 	glDisable(GL_LIGHTING);
+	glDisable(GL_NORMALIZE);
 	// Free the light id that was used.
 	freeLight(id);
 }

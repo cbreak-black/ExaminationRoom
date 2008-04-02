@@ -10,6 +10,8 @@
 #ifndef VEC_H
 #define VEC_H
 
+#include "platform_math.h"
+
 namespace Tool
 {
 

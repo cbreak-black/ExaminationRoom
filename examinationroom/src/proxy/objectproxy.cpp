@@ -498,6 +498,38 @@ int ObjectProxy::clearMesh(lua_State *L)
 	}
 }
 
+int ObjectProxy::scaleFactor(lua_State *L)
+{
+	if (mesh())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, mesh()->scaleFactor());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setScaleFactor(lua_State *L)
+{
+	if (mesh())
+	{
+		checkTop(L, 2);
+		mesh()->setScaleFactor(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 // AffineTransformation Node
 int ObjectProxy::loadIdentity(lua_State *L)
 {
@@ -730,6 +762,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setText", &ObjectProxy::setText },
 	{ "loadMesh", &ObjectProxy::loadMesh },
 	{ "clearMesh", &ObjectProxy::clearMesh },
+	{ "scaleFactor", &ObjectProxy::scaleFactor },
+	{ "setScaleFactor", &ObjectProxy::setScaleFactor },
 	{ "loadIdentity", &ObjectProxy::loadIdentity },
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },
