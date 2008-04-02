@@ -15,6 +15,7 @@
 
 namespace Examination
 {
+	class Sphere;
 	class Rectangle;
 	class Parallelepiped;
 	class Pixelplane;
@@ -31,7 +32,15 @@ class ObjectProxy
 public:
 	ObjectProxy(lua_State *L);
 
-public: // From LUA
+public: // Sphere
+	int radius(lua_State *L);
+	int setRadius(lua_State *L);
+	int slices(lua_State *L);
+	int setSlices(lua_State *L);
+	int stacks(lua_State *L);
+	int setStacks(lua_State *L);
+
+public: // Rectangle/Parallelepiped
 	int dirA(lua_State *L);
 	int dirB(lua_State *L);
 	int dirC(lua_State *L);
@@ -81,6 +90,7 @@ public: // Container
 	int clear(lua_State *L);
 
 public: // Dynamic Casts
+	std::tr1::shared_ptr<Sphere> sphere();
 	std::tr1::shared_ptr<Rectangle> rectangle();
 	std::tr1::shared_ptr<Parallelepiped> parallelepiped();
 	std::tr1::shared_ptr<Pixelplane> pixelplane();

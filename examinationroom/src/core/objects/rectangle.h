@@ -10,8 +10,6 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include <memory>
-
 #include "object.h"
 
 namespace Examination

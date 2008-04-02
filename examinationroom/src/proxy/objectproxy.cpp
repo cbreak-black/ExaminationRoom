@@ -9,6 +9,7 @@
 
 #include "objectproxy.h"
 
+#include "objects/sphere.h"
 #include "objects/rectangle.h"
 #include "objects/parallelepiped.h"
 #include "objects/pixelplane.h"
@@ -30,6 +31,7 @@ namespace Examination
 
 const char * objectTypes[] =
 {
+	"Sphere",
 	"Rectangle",
 	"Parallelepiped",
 	"Pixelplane",
@@ -49,31 +51,130 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	switch (opt)
 	{
 	case 0:
-		object_ = shared_ptr<Object>(new Rectangle());
+		object_ = shared_ptr<Object>(new Sphere());
 		break;
 	case 1:
-		object_ = shared_ptr<Object>(new Parallelepiped());
+		object_ = shared_ptr<Object>(new Rectangle());
 		break;
 	case 2:
-		object_ = shared_ptr<Object>(new Pixelplane());
+		object_ = shared_ptr<Object>(new Parallelepiped());
 		break;
 	case 3:
-		object_ = shared_ptr<Object>(new Text());
+		object_ = shared_ptr<Object>(new Pixelplane());
 		break;
 	case 4:
-		object_ = shared_ptr<Object>(new Mesh());
+		object_ = shared_ptr<Object>(new Text());
 		break;
 	case 5:
-		object_ = shared_ptr<Object>(new AffineTransformation());
+		object_ = shared_ptr<Object>(new Mesh());
 		break;
 	case 6:
-		object_ = shared_ptr<Object>(new CameraNode());
+		object_ = shared_ptr<Object>(new AffineTransformation());
 		break;
 	case 7:
+		object_ = shared_ptr<Object>(new CameraNode());
+		break;
+	case 8:
 		object_ = shared_ptr<Object>(new LightNode());
 		break;
 	}
 	lua_pop(L, 0);
+}
+
+// Sphere
+int ObjectProxy::radius(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, sphere()->radius());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setRadius(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 2);
+		sphere()->setRadius(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+int ObjectProxy::slices(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, sphere()->slices());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setSlices(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 2);
+		sphere()->setSlices(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::stacks(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, sphere()->stacks());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setStacks(lua_State *L)
+{
+	if (sphere())
+	{
+		checkTop(L, 2);
+		sphere()->setStacks(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
 }
 
 // Rectangle
@@ -554,6 +655,11 @@ int ObjectProxy::clear(lua_State *L)
 }
 
 // Dynamic casts
+shared_ptr<Sphere> ObjectProxy::sphere()
+{
+	return dynamic_pointer_cast<Sphere, Object>(object_);
+}
+
 shared_ptr<Rectangle> ObjectProxy::rectangle()
 {
 	return dynamic_pointer_cast<Rectangle, Object>(object_);
@@ -607,6 +713,12 @@ shared_ptr<Object> ObjectProxy::object()
 const char ObjectProxy::className[] = "Object";
 const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 {
+	{ "radius", &ObjectProxy::radius },
+	{ "setRadius", &ObjectProxy::setRadius },
+	{ "slices", &ObjectProxy::slices },
+	{ "setSlices", &ObjectProxy::setSlices },
+	{ "stacks", &ObjectProxy::stacks },
+	{ "setStacks", &ObjectProxy::setStacks },
 	{ "dirA", &ObjectProxy::dirA },
 	{ "dirB", &ObjectProxy::dirB },
 	{ "dirC", &ObjectProxy::dirC },
