@@ -80,6 +80,7 @@ void Triangle::draw(const std::vector<Tool::Vec3f>& vertexes,
 // Mesh
 Mesh::Mesh()
 {
+	displayList_ = 0;
 	scaleFactor_ = 1;
 }
 
@@ -129,10 +130,12 @@ bool Mesh::loadMesh(std::string path)
 		// Keep the mesh, some parts at least should be valid
 		// Removing was a problem when the mesh lacked the trailing newline
 		//clearMesh(); // Empty the mesh if an error occured
+		rebuildCache();
 		return false;
 	}
 	else
 	{
+		rebuildCache();
 		return true;
 	}
 }
@@ -143,7 +146,42 @@ void Mesh::clearMesh()
 	normals_.clear();
 	textureCoordinates_.clear();
 	triangles_.clear();
+	invalidateCache();
 }
+
+void Mesh::invalidateCache()
+{
+	glDeleteLists(displayList_, 1);
+	displayList_ = 0;
+}
+
+void Mesh::rebuildCache()
+{
+	if (displayList_ != 0)
+		invalidateCache();
+	displayList_ = glGenLists(1);
+	// Do not draw. Use GL_COMPILE_AND_EXECUTE for direct drawing
+	glNewList(displayList_, GL_COMPILE);
+	// Draw all triangles
+	for (std::vector<Triangle>::const_iterator it = triangles_.begin();
+		 it != triangles_.end();
+		 it++)
+	{
+		it->draw(vertices_, textureCoordinates_, normals_);
+	}
+	glEndList();
+}
+
+// Rebuild cache if needed
+//void Mesh::draw(GLWidget * dest)
+//{
+//	// Rebuild cache if needed
+//	if (displayList_ == 0)
+//	{
+//		rebuildCache();
+//	}
+//	draw(dest);
+//}
 
 void Mesh::draw(GLWidget * dest) const
 {
@@ -164,13 +202,7 @@ void Mesh::draw(GLWidget * dest) const
 	glScalef(scaleFactor_, scaleFactor_, scaleFactor_);
 	// Load the correct color
 	glColor4fv(color().vec);
-	// Draw all triangles
-	for (std::vector<Triangle>::const_iterator it = triangles_.begin();
-		 it != triangles_.end();
-		 it++)
-	{
-		it->draw(vertices_, textureCoordinates_, normals_);
-	}
+	glCallList(displayList_);
 	glPopMatrix();
 	// Reset wireframe state
 	if (wireframe())

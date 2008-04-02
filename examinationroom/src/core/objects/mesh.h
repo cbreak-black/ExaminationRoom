@@ -64,7 +64,29 @@ public:
 	*/
 	void clearMesh();
 
+protected:
+	/**
+	Invalidates the display list used for fast drawing, and deletes associated structures.
+	*/
+	void invalidateCache();
+
+	/**
+	Rebuilds the display list  used for fast drawing.
+	*/
+	void rebuildCache();
+
 public:
+	/**
+	Draw the mesh by calling the display list after setup.
+	It rebuilds the display list if needed. Not implemented.
+	 \parameter dest	Destination widget that contains the current context
+	*/
+	//virtual void draw(GLWidget * dest);
+
+	/**
+	Draw the mesh by calling the display list after setup.
+	 \parameter dest	Destination widget that contains the current context
+	*/
 	virtual void draw(GLWidget * dest) const;
 
 public:
@@ -108,6 +130,7 @@ private:
 	std::vector<Tool::Vec2f> textureCoordinates_;
 	std::vector<Triangle> triangles_;
 	float scaleFactor_;
+	int displayList_;
 };
 
 }
