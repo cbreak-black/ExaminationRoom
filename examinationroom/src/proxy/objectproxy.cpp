@@ -636,6 +636,37 @@ int ObjectProxy::setCamera(lua_State *L)
 }
 
 // Light Node
+int ObjectProxy::ambient(lua_State *L)
+{
+	if (lightNode())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		pushVector4(L, lightNode()->ambient());
+		return 4;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setAmbient(lua_State *L)
+{
+	if (lightNode())
+	{
+		checkTop(L, 5);
+		lightNode()->setAmbient(toVector4(L,2));
+		lua_pop(L, 5);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
 
 // Atmosphere Node
 char * fogModes[] = {"Exp", "Exp2", "Linear", 0};
@@ -913,6 +944,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "scale", &ObjectProxy::scale },
 	{ "camera", &ObjectProxy::camera },
 	{ "setCamera", &ObjectProxy::setCamera },
+	{ "ambient", &ObjectProxy::ambient },
+	{ "setAmbient", &ObjectProxy::setAmbient },
 	{ "mode", &ObjectProxy::mode },
 	{ "setMode", &ObjectProxy::setMode },
 	{ "density", &ObjectProxy::density },

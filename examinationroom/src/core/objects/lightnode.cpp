@@ -14,9 +14,19 @@
 namespace Examination
 {
 
-
 LightNode::LightNode()
 {
+	setAmbient(Tool::Color4(0,0,0,1));
+}
+
+Tool::Color4 LightNode::ambient() const
+{
+	return ambient_;
+}
+
+void LightNode::setAmbient(Tool::Color4 color)
+{
+	ambient_ = color;
 }
 
 // Drawing
@@ -36,9 +46,8 @@ void LightNode::draw(GLWidget * dest) const
 	glEnable(glID);
 	// Set up color material (for setting material with glColor*())
 	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 	// Set Light parameters
-	//glLightfv(glID, GL_AMBIENT, ambientLight);
+	glLightfv(glID, GL_AMBIENT, ambient().vec);
 	glLightfv(glID, GL_DIFFUSE, color().vec);
 	//glLightfv(glID, GL_SPECULAR, specularLight);
 	glLightfv(glID, GL_POSITION, position().vec);

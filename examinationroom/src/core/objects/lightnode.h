@@ -41,6 +41,21 @@ public: // Construction
 	LightNode();
 
 public:
+	/**
+	Returns the color of the ambient light.
+	 \see Object::color() for diffuse color
+	 \return the color of the ambient light
+	*/
+	Tool::Color4 ambient() const;
+
+	/**
+	Sets the color of the ambient light.
+	 \see Object::setColor() for diffuse color
+	 \param color	the new color of the ambient light
+	*/
+	void setAmbient(Tool::Color4 color);
+
+public:
 	virtual void draw(GLWidget * dest) const;
 
 public: // Object protocol
@@ -52,6 +67,7 @@ protected: // Container helpers
 	virtual Scene * getScene();
 
 private: // Light properties
+	Tool::Color4 ambient_;
 
 protected:
 	static LightID reserveLight();

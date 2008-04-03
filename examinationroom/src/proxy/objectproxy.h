@@ -88,6 +88,8 @@ public: // Camera Node
 	int setCamera(lua_State *L);
 
 public: // Light Node
+	int ambient(lua_State *L);
+	int setAmbient(lua_State *L);
 
 public: // Atmosphere Node
 	int mode(lua_State *L);

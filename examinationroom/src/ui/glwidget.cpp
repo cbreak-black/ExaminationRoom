@@ -20,6 +20,8 @@
 namespace Examination
 {
 
+const Tool::Color4 black(0,0,0,1);
+
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 {
@@ -78,13 +80,21 @@ void GLWidget::setStyle(DrawStyle s)
 
 void GLWidget::initializeGL()
 {
+	// Enable z-buffering
 	glEnable(GL_DEPTH_TEST);
 
+	// Set texture parameters
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
+	// Set blending parameters
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Set global light settings
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black.vec);
+	// and color material settings
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 }
 
 void GLWidget::paintGL()

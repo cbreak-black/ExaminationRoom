@@ -37,9 +37,17 @@ rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
+local lightBox2 = Object("LightNode");
+lightBox2:setPosition(-lightPos[1], -lightPos[2], -lightPos[3]);
+lightBox2:setColor(1.0, 0.0, 0.0, 1.0);
+lightBox2:setAmbient(0.0, 0.0, 0.0, 1.0);
+Scene:addObject(lightBox2);
+
 local lightBox = Object("LightNode");
 lightBox:setPosition(lightPos[1], lightPos[2], lightPos[3]);
-Scene:addObject(lightBox);
+lightBox:setColor(0.0, 1.0, 1.0, 1.0);
+lightBox:setAmbient(0.0, 0.0, 0.0, 1.0);
+lightBox2:addObject(lightBox);
 
 local sphere = Object("Sphere");
 --sphere:setTexture(Texture("Simple", "res/checkerboard.png"));
@@ -125,6 +133,7 @@ local parseInput = function (k)
 		if d == "up" then
 			lightPos[2] = lightPos[2] + 0.5;
 			lightBox:setPosition(lightPos[1], lightPos[2], lightPos[3]);
+			lightBox2:setPosition(-lightPos[1], lightPos[2], -lightPos[3]);
 		elseif d == "right" then
 			cameraAngle = cameraAngle + 0.1;
 			cameraDir[1] = math.sin(cameraAngle);
@@ -136,6 +145,7 @@ local parseInput = function (k)
 		elseif d == "down" then
 			lightPos[2] = lightPos[2] - 0.5;
 			lightBox:setPosition(lightPos[1], lightPos[2], lightPos[3]);
+			lightBox2:setPosition(-lightPos[1], lightPos[2], -lightPos[3]);
 		elseif d == "left" then
 			cameraAngle = cameraAngle - 0.1;
 			cameraDir[1] = math.sin(cameraAngle);

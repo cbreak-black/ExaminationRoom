@@ -39,7 +39,7 @@ float Atmosphere::density() const
 
 void Atmosphere::setDensity(float density)
 {
-	density_ = abs(density);
+	density_ = fabs(density);
 }
 
 float Atmosphere::start() const
