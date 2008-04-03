@@ -49,25 +49,31 @@ lightBox:setColor(0.0, 1.0, 1.0, 1.0);
 lightBox:setAmbient(0.0, 0.0, 0.0, 1.0);
 lightBox2:addObject(lightBox);
 
+local container = Object("AffineTransformation");
+lightBox:addObject(container);
+
 local sphere = Object("Sphere");
 --sphere:setTexture(Texture("Simple", "res/checkerboard.png"));
-sphere:setPosition(0, 1, 0);
+sphere:setPosition(3, 1, 0);
 sphere:setRadius(1);
-lightBox:addObject(sphere);
+container:addObject(sphere);
 
-local container1 = Object("AffineTransformation");
-container1:setPosition(0, 1, 0);
-container1:scale(0.005, 0.005, 0.005);
-Scene:addObject(container1);
-
-local container2 = Object("AffineTransformation");
-lightBox:addObject(container2);
+local r1 = Object("Parallelepiped");
+local d = 1;
+local l = 0.816*d;
+local s = 0.578*d;
+local s120 = math.sin(math.pi*2/3);
+r1:setDirA(0, s, l);
+r1:setDirB(s120*l, s, -0.5*l);
+r1:setDirC(-s120*l, s, -0.5*l);
+r1:setPosition(-3, -math.sqrt(3*d*d)/2, 0)
+container:addObject(r1);
 
 local m1 = Object("Mesh");
 m1:loadMesh("res/bunny_243V.obj");
 m1:setScaleFactor(12);
 m1:setPosition(0, 2, 0);
-container2:addObject(m1);
+container:addObject(m1);
 local m2 = Object("Mesh");
 -- Dolphin model, with normals
 --m2:loadMesh("res/Dolphin/Dolphin.obj");
@@ -85,7 +91,7 @@ m2:setScaleFactor(0.005);
 --m2:loadMesh("res/cube.obj");
 --m2:setScaleFactor(1);
 m2:setPosition(0, -2.5, 0);
-container2:addObject(m2);
+container:addObject(m2);
 
 -- Library
 Key = {
@@ -171,8 +177,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container1:rotate(0,1,0, delta/4);
-	container2:rotate(0,1,0, -delta/4);
+	container:rotate(0,1,0, -delta/4);
 end;
 updateListener(0);
 

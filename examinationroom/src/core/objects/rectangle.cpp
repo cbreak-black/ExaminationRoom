@@ -60,6 +60,9 @@ void Rectangle::draw(GLWidget * dest) const
 	else
 	{
 		glBegin(GL_TRIANGLE_STRIP);
+		Vector n = cross(dirA(), dirB());
+		//n.normalize(); // OpenGL will normalize
+		glNormal3fv(n.vec);
 		glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
 		glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
 		glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);

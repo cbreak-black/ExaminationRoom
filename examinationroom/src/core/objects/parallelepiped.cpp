@@ -69,25 +69,57 @@ void Parallelepiped::draw(GLWidget * dest) const
 	}
 	else
 	{
+		// Calculate normals
+		// First calculate normal directions
+		Vector n1 = cross(dirA(), dirB());
+		Vector n2 = cross(dirA(), dirC());
+		Vector n3 = cross(dirB(), dirC());
+		// Then calculate the direction the normal point in
+		n1 = n1 * -(n1 * dirC());
+		n2 = n2 * -(n2 * dirB());
+		n3 = n3 * -(n3 * dirA());
+		// Normalize (not needed at the moment since OpenGL does it anyway)
+		//n1.normalize();
+		//n2.normalize();
+		//n3.normalize();
+		// Draw faces with normals and texture coordinates
 		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv(n1.vec);
 		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
 		glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
 		glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
 		glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
+		glEnd();
+		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv((-n3).vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
 		glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
 		glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
+		glEnd();
+		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv((-n1).vec);
+		glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
+		glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
+		glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
+		glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
+		glEnd();
+		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv(n3.vec);
 		glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
 		glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
 		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
 		glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
 		glEnd();
 		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv(n2.vec);
 		glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
 		glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
 		glTexCoord2f(texB().x, texB().y); glVertex3fv(v5.vec);
 		glTexCoord2f(texD().x, texD().y); glVertex3fv(v7.vec);
 		glEnd();
 		glBegin(GL_TRIANGLE_STRIP);
+		glNormal3fv((-n2).vec);
 		glTexCoord2f(texA().x, texA().y); glVertex3fv(v2.vec);
 		glTexCoord2f(texC().x, texC().y); glVertex3fv(v4.vec);
 		glTexCoord2f(texB().x, texB().y); glVertex3fv(v6.vec);

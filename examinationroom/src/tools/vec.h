@@ -208,6 +208,14 @@ inline const Vec2<T> operator+(const Vec2<T> &v1, const Vec2<T> &v2)
 	return v += v2;
 }
 
+// Unary minus
+template <typename T>
+inline const Vec2<T> operator-(const Vec2<T> &v1)
+{
+	Vec2<T> v; // Init with (0,0);
+	return v -= v1;
+}
+
 template <typename T>
 inline const Vec2<T> operator-(const Vec2<T> &v1, const Vec2<T> &v2)
 {
@@ -286,6 +294,14 @@ inline const Vec3<T> operator+(const Vec3<T> &v1, const Vec3<T> &v2)
 {
 	Vec3<T> v = v1;
 	return v += v2;
+}
+
+// Unary minus
+template <typename T>
+inline const Vec3<T> operator-(const Vec3<T> &v1)
+{
+	Vec3<T> v; // Init with (0,0);
+	return v -= v1;
 }
 
 template <typename T>
@@ -382,6 +398,14 @@ inline const Vec4<T> operator+(const Vec4<T> &v1, const Vec4<T> &v2)
 {
 	Vec4<T> v = v1;
 	return v += v2;
+}
+
+// Unary minus
+template <typename T>
+inline const Vec4<T> operator-(const Vec4<T> &v1)
+{
+	Vec4<T> v; // Init with (0,0);
+	return v -= v1;
 }
 
 template <typename T>
