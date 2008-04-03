@@ -24,6 +24,7 @@ namespace Examination
 	class AffineTransformation;
 	class CameraNode;
 	class LightNode;
+	class Atmosphere;
 	class Container;
 	class Object;
 
@@ -86,6 +87,18 @@ public: // Camera Node
 	int camera(lua_State *L);
 	int setCamera(lua_State *L);
 
+public: // Light Node
+
+public: // Atmosphere Node
+	int mode(lua_State *L);
+	int setMode(lua_State *L);
+	int density(lua_State *L);
+	int setDensity(lua_State *L);
+	int start(lua_State *L);
+	int setStart(lua_State *L);
+	int end(lua_State *L);
+	int setEnd(lua_State *L);
+
 public: // Container
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);
@@ -101,6 +114,7 @@ public: // Dynamic Casts
 	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
 	std::tr1::shared_ptr<CameraNode> cameraNode();
 	std::tr1::shared_ptr<LightNode> lightNode();
+	std::tr1::shared_ptr<Atmosphere> atmosphere();
 	std::tr1::shared_ptr<Container> container();
 	std::tr1::shared_ptr<Object> object();
 	

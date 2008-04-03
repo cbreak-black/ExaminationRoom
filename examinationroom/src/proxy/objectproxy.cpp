@@ -18,6 +18,7 @@
 #include "objects/affinetransformation.h"
 #include "objects/cameranode.h"
 #include "objects/lightnode.h"
+#include "objects/atmosphere.h"
 
 #include "textureproxy.h"
 #include "cameraproxy.h"
@@ -40,6 +41,7 @@ const char * objectTypes[] =
 	"AffineTransformation",
 	"CameraNode",
 	"LightNode",
+	"Atmosphere",
 	0
 };
 
@@ -76,6 +78,9 @@ ObjectProxy::ObjectProxy(lua_State *L)
 		break;
 	case 8:
 		object_ = shared_ptr<Object>(new LightNode());
+		break;
+	case 9:
+		object_ = shared_ptr<Object>(new Atmosphere());
 		break;
 	}
 	lua_pop(L, 0);
@@ -632,6 +637,139 @@ int ObjectProxy::setCamera(lua_State *L)
 
 // Light Node
 
+// Atmosphere Node
+char * fogModes[] = {"Exp", "Exp2", "Linear", 0};
+
+int ObjectProxy::mode(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		int i = (int)atmosphere()->mode();
+		lua_pushstring(L,fogModes[i]);
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setMode(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 2);
+		int i = luaL_checkoption(L, 2, 0, fogModes);
+		atmosphere()->setMode((Atmosphere::FogMode)i);
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::density(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, atmosphere()->density());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setDensity(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 2);
+		atmosphere()->setDensity(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::start(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, atmosphere()->start());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setStart(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 2);
+		atmosphere()->setStart(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::end(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, atmosphere()->end());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setEnd(lua_State *L)
+{
+	if (atmosphere())
+	{
+		checkTop(L, 2);
+		atmosphere()->setEnd(lua_tonumber(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 // Container Node
 int ObjectProxy::addObject(lua_State *L)
 {
@@ -732,6 +870,11 @@ shared_ptr<LightNode> ObjectProxy::lightNode()
 	return dynamic_pointer_cast<LightNode, Object>(object_);
 }
 
+shared_ptr<Atmosphere> ObjectProxy::atmosphere()
+{
+	return dynamic_pointer_cast<Atmosphere, Object>(object_);
+}
+
 shared_ptr<Container> ObjectProxy::container()
 {
 	return dynamic_pointer_cast<Container, Object>(object_);
@@ -770,6 +913,14 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "scale", &ObjectProxy::scale },
 	{ "camera", &ObjectProxy::camera },
 	{ "setCamera", &ObjectProxy::setCamera },
+	{ "mode", &ObjectProxy::mode },
+	{ "setMode", &ObjectProxy::setMode },
+	{ "density", &ObjectProxy::density },
+	{ "setDensity", &ObjectProxy::setDensity },
+	{ "start", &ObjectProxy::start },
+	{ "setStart", &ObjectProxy::setStart },
+	{ "end", &ObjectProxy::end },
+	{ "setEnd", &ObjectProxy::setEnd },
 	{ "addObject", &ObjectProxy::addObject },
 	{ "removeObject", &ObjectProxy::removeObject },
 	{ "clear", &ObjectProxy::clear },
