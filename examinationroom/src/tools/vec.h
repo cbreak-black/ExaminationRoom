@@ -31,6 +31,11 @@ union Vec2
 	T vec[2];
 
 	Vec2() {x = y = 0; };
+	Vec2(const Vec2<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+	};
 	Vec2(T a, T b)
 	{
 		x = a;
@@ -80,6 +85,18 @@ union Vec3
 	T vec[3];
 
 	Vec3() {x = y = z = 0; };
+	Vec3(const Vec2<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = 0;
+	};
+	Vec3(const Vec3<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+	};
 	Vec3(T a, T b, T c)
 	{
 		x = a;
@@ -132,6 +149,26 @@ template <typename T> union Vec4
 	T vec[4];
 
 	Vec4() {x = y = z = t = 0; };
+	Vec4(const Vec2<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = t = 0;
+	};
+	Vec4(const Vec3<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		t = 0;
+	};
+	Vec4(const Vec4<T>& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		t = v.t;
+	};
 	Vec4(T a, T b, T c, T d)
 	{
 		x = a;
@@ -444,6 +481,15 @@ inline const T operator*(const Vec4<T> &v1, const Vec4<T> &v2)
 		v1.y * v2.y +
 		v1.z * v2.z +
 		v1.t * v2.t;
+}
+
+// Used in OpenGL
+template <typename T>
+inline Vec4<T> toHomogenous(const Vec3<T>& v)
+{
+	Vec4<T> tmp(v);
+	tmp.t = 1;
+	return tmp;
 }
 
 }
