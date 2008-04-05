@@ -30,18 +30,22 @@ rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
 local meshObject = Object("Mesh");
-meshObject:setPosition(-3, -3, 0);
-meshObject:setTexture(Texture("Simple", "res/checkerboard.png"));
+meshObject:setPosition(-3, 0, 0);
 meshObject:setWireframe(true);
 meshObject:setColor(1, 0, 0, 0.75);
+
+local meshObject2 = Object("Mesh");
+meshObject2:setPosition(3, 0, 0);
+meshObject2:setWireframe(false);
+meshObject2:setColor(0, 1, 1, 1);
 
 local container = Object("AffineTransformation");
 container:setPosition(0, 0, -2);
 Scene:addObject(container);
 container.pos = {0, 0, -2};
-container:addObject(meshObject);
 
-Scene:log("Added floor and ceil");
+container:addObject(meshObject);
+container:addObject(meshObject2);
 
 -- Library
 Key = {
@@ -70,7 +74,9 @@ meshes = {
 }
 
 meshObject:loadMesh("res/bunny_243V.obj");
-container:scale(10,10,10);
+meshObject:setScaleFactor(16);
+meshObject2:loadMesh("res/bunny_243V.obj");
+meshObject2:setScaleFactor(16);
 
 permuteTable = function (t)
 	local n = #t;
