@@ -43,10 +43,6 @@ public:
 public:
 	virtual void draw(GLWidget * dest) const;
 
-public: // Object protocol
-	virtual void setScene(Scene * s);
-	virtual void setParent(Container * c);
-
 private:
 	std::tr1::shared_ptr<Camera> cam_;
 };

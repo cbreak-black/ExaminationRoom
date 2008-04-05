@@ -94,17 +94,4 @@ void Atmosphere::draw(GLWidget * dest) const
 	}
 }
 
-void Atmosphere::setScene(Scene * s)
-{
-	Object::setScene(s);
-	setParentsAndScenes(parent(), scene());
-}
-
-void Atmosphere::setParent(Container * c)
-{
-	Object::setParent(c);
-	setParentsAndScenes(parent(), scene());
-}
-
-
 }

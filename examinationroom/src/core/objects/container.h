@@ -69,6 +69,10 @@ protected:
 	void setParentsAndScenes(Container * p, Scene * s);
 
 public:
+	virtual void setScene(Scene * s);
+	virtual void setParent(Container * c);
+
+public:
 	virtual void draw(GLWidget * dest) const;
 
 public:

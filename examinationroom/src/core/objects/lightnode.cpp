@@ -76,18 +76,6 @@ void LightNode::draw(GLWidget * dest) const
 	}
 }
 
-void LightNode::setScene(Scene * s)
-{
-	Object::setScene(s);
-	setParentsAndScenes(parent(), scene());
-}
-
-void LightNode::setParent(Container * c)
-{
-	Object::setParent(c);
-	setParentsAndScenes(parent(), scene());
-}
-
 // Static OpenGL Light management
 bool LightNode::lightActive [] = {
 	false, false, false, false,

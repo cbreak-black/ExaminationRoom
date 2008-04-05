@@ -57,16 +57,4 @@ void CameraNode::draw(GLWidget * dest) const
 	}
 }
 
-void CameraNode::setScene(Scene * s)
-{
-	Object::setScene(s);
-	setParentsAndScenes(parent(), scene());
-}
-
-void CameraNode::setParent(Container * c)
-{
-	Object::setParent(c);
-	setParentsAndScenes(parent(), scene());
-}
-
 }

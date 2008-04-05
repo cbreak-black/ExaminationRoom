@@ -108,16 +108,4 @@ void AffineTransformation::draw(GLWidget * dest) const
 	}
 }
 
-void AffineTransformation::setScene(Scene * s)
-{
-	Object::setScene(s);
-	setParentsAndScenes(parent(), scene());
-}
-
-void AffineTransformation::setParent(Container * c)
-{
-	Object::setParent(c);
-	setParentsAndScenes(parent(), scene());
-}
-
 }

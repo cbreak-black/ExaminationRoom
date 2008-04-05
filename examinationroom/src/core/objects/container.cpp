@@ -69,6 +69,18 @@ void Container::setParentsAndScenes(Container * p, Scene * s)
 	}
 }
 
+void Container::setScene(Scene * s)
+{
+	Object::setScene(s);
+	setParentsAndScenes(parent(), scene());
+}
+
+void Container::setParent(Container * c)
+{
+	Object::setParent(c);
+	setParentsAndScenes(parent(), scene());
+}
+
 // Drawing
 void Container::draw(GLWidget * dest) const
 {

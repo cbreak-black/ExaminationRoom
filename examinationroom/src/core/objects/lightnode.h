@@ -58,10 +58,6 @@ public:
 public:
 	virtual void draw(GLWidget * dest) const;
 
-public: // Object protocol
-	virtual void setScene(Scene * s);
-	virtual void setParent(Container * c);
-
 private: // Light properties
 	Tool::Color4 ambient_;
 

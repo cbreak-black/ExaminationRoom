@@ -60,10 +60,6 @@ public:
 public:
 	virtual void draw(GLWidget * dest) const;
 
-public:
-	virtual void setScene(Scene * s);
-	virtual void setParent(Container * c);
-
 private:
 	double trans_[16];
 };

@@ -88,10 +88,6 @@ public:
 public:
 	virtual void draw(GLWidget * dest) const;
 
-public: // Object protocol
-	virtual void setScene(Scene * s);
-	virtual void setParent(Container * c);
-
 private:
 	FogMode fogMode_;
 	float density_;
