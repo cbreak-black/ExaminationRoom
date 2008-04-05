@@ -22,7 +22,7 @@ namespace Examination
 /**
 This class represents a transformable group of objects.
 */
-class CameraNode : public Object, public Container
+class CameraNode : public Container
 {
 public: // Construction
 	CameraNode();
@@ -46,10 +46,6 @@ public:
 public: // Object protocol
 	virtual void setScene(Scene * s);
 	virtual void setParent(Container * c);
-
-protected: // Container helpers
-	virtual Container * getParent();
-	virtual Scene * getScene();
 
 private:
 	std::tr1::shared_ptr<Camera> cam_;

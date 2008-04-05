@@ -20,6 +20,7 @@ namespace Examination
 Scene::Scene()
 {
 	camera_ = shared_ptr<Camera>(new Camera());
+	setBackgroundColor(0,0,0,0);
 }
 
 Scene::~Scene()
@@ -39,20 +40,17 @@ std::tr1::shared_ptr<Camera> Scene::camera() const
 
 void Scene::setBackgroundColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-	backgroundColor_.r = (float)r/255;
-	backgroundColor_.g = (float)g/255;
-	backgroundColor_.b = (float)b/255;
-	backgroundColor_.a = (float)a/255;
+	setColor(Tool::Color4((float)r/255, (float)g/255, (float)b/255, (float)a/255));
 }
 
-void Scene::setBackgroundColor(Tool::Vec4f c)
+void Scene::setBackgroundColor(Tool::Color4 c)
 {
-	backgroundColor_ = c;
+	setColor(c);
 }
 
-Tool::Vec4f Scene::backgroundColor() const
+Tool::Color4 Scene::backgroundColor() const
 {
-	return backgroundColor_;
+	return color();
 }
 
 Container * Scene::getParent()

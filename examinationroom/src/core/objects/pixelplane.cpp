@@ -32,7 +32,7 @@ Pixelplane::~Pixelplane()
 // Drawing
 void Pixelplane::draw(GLWidget * dest) const
 {
-	if (texture())
+	if (shown() && texture())
 	{
 		if (autoResize())
 		{

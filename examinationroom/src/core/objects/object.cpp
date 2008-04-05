@@ -8,6 +8,7 @@
  */
 
 #include "object.h"
+#include "container.h"
 #include "surfaces/abstracttexture.h"
 
 namespace Examination
@@ -22,6 +23,7 @@ Object::Object()
 	setParent(0);
 	setColor(Color4(1, 1, 1, 1));
 	setWireframe(false);
+	setShown(true);
 }
 
 Object::Object(float x, float y, float z)
@@ -103,6 +105,29 @@ bool Object::wireframe() const
 void Object::setWireframe(bool flag)
 {
 	wireframe_ = flag;
+}
+
+// Visibility
+bool Object::shown() const
+{
+	return shown_;
+}
+
+void Object::setShown(bool shown)
+{
+	shown_ = shown;
+}
+
+bool Object::visible() const
+{
+	if (parent())
+	{
+		return shown() && parent()->visible();
+	}
+	else
+	{
+		return shown();
+	}
 }
 
 }

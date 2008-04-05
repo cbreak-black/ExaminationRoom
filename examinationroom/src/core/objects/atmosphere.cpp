@@ -65,40 +65,33 @@ void Atmosphere::setEnd(float end)
 // Drawing
 void Atmosphere::draw(GLWidget * dest) const
 {
-	// Enable fog
-	glEnable(GL_FOG);
-	// Set fog state
-	switch (mode())
+	if (shown())
 	{
-		case  Exp:
-			glFogi(GL_FOG_MODE, GL_EXP);
-			glFogf(GL_FOG_DENSITY, density_);
-			break;
-		case  Exp2:
-			glFogi(GL_FOG_MODE, GL_EXP2);
-			glFogf(GL_FOG_DENSITY, density_);
-			break;
-		case  Linear:
-			glFogi(GL_FOG_MODE, GL_LINEAR);
-			glFogf(GL_FOG_START, start_);
-			glFogf(GL_FOG_END, end_);
-			break;
+		// Enable fog
+		glEnable(GL_FOG);
+		// Set fog state
+		switch (mode())
+		{
+			case  Exp:
+				glFogi(GL_FOG_MODE, GL_EXP);
+				glFogf(GL_FOG_DENSITY, density_);
+				break;
+			case  Exp2:
+				glFogi(GL_FOG_MODE, GL_EXP2);
+				glFogf(GL_FOG_DENSITY, density_);
+				break;
+			case  Linear:
+				glFogi(GL_FOG_MODE, GL_LINEAR);
+				glFogf(GL_FOG_START, start_);
+				glFogf(GL_FOG_END, end_);
+				break;
+		}
+		glFogfv(GL_FOG_COLOR, color().vec);
+		// Draw the contents of this node
+		Container::draw(dest);
+		// Disable fog again
+		glDisable(GL_FOG);
 	}
-	glFogfv(GL_FOG_COLOR, color().vec);
-	// Draw the contents of this node
-	Container::draw(dest);
-	// Disable fog again
-	glDisable(GL_FOG);
-}
-
-Container * Atmosphere::getParent()
-{
-	return this;
-}
-
-Scene * Atmosphere::getScene()
-{
-	return scene();
 }
 
 void Atmosphere::setScene(Scene * s)

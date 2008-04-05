@@ -17,14 +17,12 @@ QT           += opengl
 HEADERS += \
 	src/ui/glwidget.h \
 	src/ui/mainwindow.h \
-	src/core/container.h \
 	src/core/scene.h \
 	src/core/camera.h
 SOURCES += \
 	src/main.cpp \
 	src/ui/glwidget.cpp \
 	src/ui/mainwindow.cpp \
-	src/core/container.cpp \
 	src/core/scene.cpp \
 	src/core/camera.cpp
 

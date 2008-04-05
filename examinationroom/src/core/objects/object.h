@@ -68,6 +68,11 @@ public: // Accessors
 	virtual void setPosition(Tool::Point p);
 
 public: // Drawing
+	/**
+	Draws the object. Implementators should check for "shown()" to return before
+	drawing itself.
+	 \param dest	The widget to draw into
+	*/
 	virtual void draw(GLWidget * dest) const = 0;
 
 	/**
@@ -107,6 +112,27 @@ public: // Color & Wireframe
 	 */
 	void setWireframe(bool flag);
 
+public: // Visibility
+	/**
+	Returns if this object is shown, that is if it would be drawn when it's parent
+	is drawn. The default is true.
+	 \return true when the object is drawn, false when it's not
+	*/
+	bool shown() const;
+
+	/**
+	Sets the object to be shown or hidden.
+	 \param shown	true to show the object, false to not show it
+	*/
+	void setShown(bool shown);
+
+	/**
+	 Returns if this object is visible. An object is visible if it's parent is visible
+	 and it is shown.
+	 \return the visibility of this object
+	 */
+	bool visible() const;
+
 public: // Nesting
 	Scene * scene() const;
 	virtual void setScene(Scene * s);
@@ -121,6 +147,7 @@ private:
 	Tool::Point origin_;
 	Tool::Color4 color_;
 	bool wireframe_;
+	bool shown_;
 };
 
 }

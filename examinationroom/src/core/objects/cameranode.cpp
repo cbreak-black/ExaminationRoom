@@ -36,32 +36,25 @@ void CameraNode::setCamera(std::tr1::shared_ptr<Camera> camera)
 // Drawing
 void CameraNode::draw(GLWidget * dest) const
 {
-	// Push the matrix stack, so that the previous camera can be restored
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	// Remove old data from depth buffer
-	glClear(GL_DEPTH_BUFFER_BIT);
-	// Set up camera
-	camera()->loadMatrix(dest);
-	// Draw the contents of this node
-	Container::draw(dest);
-	// And restore the matrix stack
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-}
-
-Container * CameraNode::getParent()
-{
-	return this;
-}
-
-Scene * CameraNode::getScene()
-{
-	return scene();
+	if (shown())
+	{
+		// Push the matrix stack, so that the previous camera can be restored
+		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		// Remove old data from depth buffer
+		glClear(GL_DEPTH_BUFFER_BIT);
+		// Set up camera
+		camera()->loadMatrix(dest);
+		// Draw the contents of this node
+		Container::draw(dest);
+		// And restore the matrix stack
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();
+	}
 }
 
 void CameraNode::setScene(Scene * s)

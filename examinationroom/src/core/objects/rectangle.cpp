@@ -36,43 +36,46 @@ Rectangle::~Rectangle()
 // Drawing
 void Rectangle::draw(GLWidget * dest) const
 {
-	Point v1 = position();
-	Point v2 = position() + dirB();
-	Point v3 = position() + dirA();
-	Point v4 = position() + dirA() + dirB();
+	if (shown())
+	{
+		Point v1 = position();
+		Point v2 = position() + dirB();
+		Point v3 = position() + dirA();
+		Point v4 = position() + dirA() + dirB();
 
-	if (texture())
-	{
-		texture()->glBindTex(dest);
-	}
+		if (texture())
+		{
+			texture()->glBindTex(dest);
+		}
 
-	glColor4fv(color().vec);
-	
-	if (wireframe())
-	{
-		glBegin(GL_LINE_LOOP);
-		glVertex3fv(v1.vec);
-		glVertex3fv(v2.vec);
-		glVertex3fv(v4.vec);
-		glVertex3fv(v3.vec);
-		glEnd();
-	}
-	else
-	{
-		glBegin(GL_TRIANGLE_STRIP);
-		Vector n = cross(dirA(), dirB());
-		//n.normalize(); // OpenGL will normalize
-		glNormal3fv(n.vec);
-		glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
-		glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
-		glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);
-		glTexCoord2f(texD_.x, texD_.y); glVertex3fv(v4.vec);
-		glEnd();
-	}
+		glColor4fv(color().vec);
 
-	if (texture())
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		if (wireframe())
+		{
+			glBegin(GL_LINE_LOOP);
+			glVertex3fv(v1.vec);
+			glVertex3fv(v2.vec);
+			glVertex3fv(v4.vec);
+			glVertex3fv(v3.vec);
+			glEnd();
+		}
+		else
+		{
+			glBegin(GL_TRIANGLE_STRIP);
+			Vector n = cross(dirA(), dirB());
+			//n.normalize(); // OpenGL will normalize
+			glNormal3fv(n.vec);
+			glTexCoord2f(texA_.x, texA_.y); glVertex3fv(v1.vec);
+			glTexCoord2f(texB_.x, texB_.y); glVertex3fv(v2.vec);
+			glTexCoord2f(texC_.x, texC_.y); glVertex3fv(v3.vec);
+			glTexCoord2f(texD_.x, texD_.y); glVertex3fv(v4.vec);
+			glEnd();
+		}
+
+		if (texture())
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 }
 

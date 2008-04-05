@@ -49,6 +49,16 @@ void Container::clear()
 	objects_.clear();
 }
 
+Container * Container::getParent()
+{
+	return this;
+}
+
+Scene * Container::getScene()
+{
+	return scene();
+}
+
 void Container::setParentsAndScenes(Container * p, Scene * s)
 {
 	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
@@ -62,10 +72,13 @@ void Container::setParentsAndScenes(Container * p, Scene * s)
 // Drawing
 void Container::draw(GLWidget * dest) const
 {
-	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
-	for (; i != objects_.end(); i++)
+	if (shown())
 	{
-		(*i)->draw(dest);
+		std::set<shared_ptr<Object> >::iterator i = objects_.begin();
+		for (; i != objects_.end(); i++)
+		{
+			(*i)->draw(dest);
+		}
 	}
 }
 

@@ -21,7 +21,7 @@ namespace Examination
 /**
 This class represents a transformable group of objects.
 */
-class AffineTransformation : public Object, public Container
+class AffineTransformation : public Container
 {
 public: // Construction
 	AffineTransformation();
@@ -63,10 +63,6 @@ public:
 public:
 	virtual void setScene(Scene * s);
 	virtual void setParent(Container * c);
-
-protected: // Container
-	virtual Container * getParent();
-	virtual Scene * getScene();
 
 private:
 	double trans_[16];

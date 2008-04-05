@@ -10,16 +10,20 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
+#include "object.h"
+
 #include <memory>
 #include <set>
 
 namespace Examination
 {
-	class Object;
 	class Scene;
 	class GLWidget;
 
-class Container
+/**
+This class is a container object. It can store and manage other objects.
+*/
+class Container : public Object
 {
 public:
 	Container();
@@ -45,8 +49,23 @@ public:
 	virtual void clear();
 
 protected:
-	virtual Container * getParent() = 0;
-	virtual Scene * getScene() = 0;
+	/**
+	Returns the container that is set as parent of all objects that are added.
+	The default implementation returns a pointer to this.
+	 \return The container that serves as parent for all the objects contained in this container
+	*/
+	virtual Container * getParent();
+
+	/**
+	Returns the scene this container is associated with
+	*/
+	virtual Scene * getScene();
+
+	/**
+	Sets the parent and scene pointers of all direct children.
+	 \param p	the new parent
+	 \param s	the new scene
+	*/
 	void setParentsAndScenes(Container * p, Scene * s);
 
 public:

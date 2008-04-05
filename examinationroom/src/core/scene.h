@@ -10,7 +10,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "container.h"
+#include "objects/container.h"
 
 #include "vec.h"
 
@@ -22,6 +22,7 @@ namespace Examination
 
 /**
 This class represents the scene. It contains references to objects.
+While it is itself an object, it should NOT be used as such.
 
 \author Gerhard Roethlin
 */
@@ -57,13 +58,13 @@ public: // BG Color
 	Sets the background color of this scene.
 	 \param c	A color vector. Each component should be in the range of [0.0f, 1.0f]
 	*/
-	void setBackgroundColor(Tool::Vec4f c);
+	void setBackgroundColor(Tool::Color4 c);
 
 	/**
 	Returns the current background color of this scene.
 	 \return The background color of this scene as vector. Each component should be in the range of [0.0f, 1.0f]
 	*/
-	Tool::Vec4f backgroundColor() const;
+	Tool::Color4 backgroundColor() const;
 
 protected:
 	virtual Container * getParent();
@@ -71,7 +72,6 @@ protected:
 
 private:
 	std::tr1::shared_ptr<Camera> camera_;
-	Tool::Vec4f backgroundColor_;
 };
 
 }

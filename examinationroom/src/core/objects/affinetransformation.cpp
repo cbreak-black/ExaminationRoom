@@ -97,22 +97,15 @@ void AffineTransformation::scale(Tool::Vec3f scale)
 // Drawing
 void AffineTransformation::draw(GLWidget * dest) const
 {
-	Point p = position();
-	glPushMatrix();
-	glTranslatef(p.x, p.y, p.z);
-	glMultMatrixd(trans_);
-	Container::draw(dest);
-	glPopMatrix();
-}
-
-Container * AffineTransformation::getParent()
-{
-	return this;
-}
-
-Scene * AffineTransformation::getScene()
-{
-	return scene();
+	if (shown())
+	{
+		Point p = position();
+		glPushMatrix();
+		glTranslatef(p.x, p.y, p.z);
+		glMultMatrixd(trans_);
+		Container::draw(dest);
+		glPopMatrix();
+	}
 }
 
 void AffineTransformation::setScene(Scene * s)

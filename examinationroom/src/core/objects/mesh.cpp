@@ -185,34 +185,37 @@ void Mesh::rebuildCache()
 
 void Mesh::draw(GLWidget * dest) const
 {
-	// Bind the texture if it exists
-	if (texture())
+	if (shown())
 	{
-		texture()->glBindTex(dest);
-	}
-	// Render in wireframe mode if requested
-	if (wireframe())
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	}
-	// Load position
-	Point p = position();
-	glPushMatrix();
-	glTranslatef(p.x, p.y, p.z);
-	glScalef(scaleFactor_, scaleFactor_, scaleFactor_);
-	// Load the correct color
-	glColor4fv(color().vec);
-	glCallList(displayList_);
-	glPopMatrix();
-	// Reset wireframe state
-	if (wireframe())
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	// Reset texture binding
-	if (texture())
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
+		// Bind the texture if it exists
+		if (texture())
+		{
+			texture()->glBindTex(dest);
+		}
+		// Render in wireframe mode if requested
+		if (wireframe())
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		// Load position
+		Point p = position();
+		glPushMatrix();
+		glTranslatef(p.x, p.y, p.z);
+		glScalef(scaleFactor_, scaleFactor_, scaleFactor_);
+		// Load the correct color
+		glColor4fv(color().vec);
+		glCallList(displayList_);
+		glPopMatrix();
+		// Reset wireframe state
+		if (wireframe())
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+		// Reset texture binding
+		if (texture())
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
+		}
 	}
 }
 

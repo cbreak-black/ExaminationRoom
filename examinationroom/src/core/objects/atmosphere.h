@@ -20,7 +20,7 @@ namespace Examination
 This class represents a group of objects that are influenced by atmospheric effects
 such as fog.
 */
-class Atmosphere : public Object, public Container
+class Atmosphere : public Container
 {
 public:
 	/**
@@ -91,10 +91,6 @@ public:
 public: // Object protocol
 	virtual void setScene(Scene * s);
 	virtual void setParent(Container * c);
-
-protected: // Container helpers
-	virtual Container * getParent();
-	virtual Scene * getScene();
 
 private:
 	FogMode fogMode_;

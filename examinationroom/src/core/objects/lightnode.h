@@ -19,7 +19,7 @@ namespace Examination
 /**
 This class represents a transformable group of objects.
 */
-class LightNode : public Object, public Container
+class LightNode : public Container
 {
 	/**
 	All available lights, corresponding in meaning to GL_LIGHT0
@@ -61,10 +61,6 @@ public:
 public: // Object protocol
 	virtual void setScene(Scene * s);
 	virtual void setParent(Container * c);
-
-protected: // Container helpers
-	virtual Container * getParent();
-	virtual Scene * getScene();
 
 private: // Light properties
 	Tool::Color4 ambient_;

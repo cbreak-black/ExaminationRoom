@@ -24,10 +24,13 @@ Text::Text()
 // Drawing
 void Text::draw(GLWidget * dest) const
 {
-	Point p = position();
-	// Load the correct color
-	glColor4fv(color().vec);
-	dest->renderText(p.x, p.y, p.z, text_, font_);
+	if (shown())
+	{
+		Point p = position();
+		// Load the correct color
+		glColor4fv(color().vec);
+		dest->renderText(p.x, p.y, p.z, text_, font_);
+	}
 }
 
 QString Text::text() const
