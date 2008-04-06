@@ -48,6 +48,8 @@ public: // Rectangle/Parallelepiped
 	int setDirA(lua_State *L);
 	int setDirB(lua_State *L);
 	int setDirC(lua_State *L);
+	int subdivision(lua_State *L);
+	int setSubdivision(lua_State *L);
 
 public: // Object
 	int position(lua_State *L);

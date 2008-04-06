@@ -43,11 +43,14 @@ union Vec2
 	};
 
 	/** Normalizes the vector */
+	inline float norm() const
+	{
+		return sqrt((*this)*(*this));
+	}
 	inline void normalize()
 	{
-		float dim = sqrt((*this)*(*this));
-		x /= dim;
-		y /= dim;
+		float dim = norm();
+		*this /= dim;
 	};
 
 	inline T& operator[](int i)
@@ -105,12 +108,14 @@ union Vec3
 	};
 
 	/** Normalizes the vector */
+	inline float norm() const
+	{
+		return sqrt((*this)*(*this));
+	}
 	inline void normalize()
 	{
-		float dim = sqrt((*this)*(*this));
-		x /= dim;
-		y /= dim;
-		z /= dim;
+		float dim = norm();
+		*this /= dim;
 	};
 
 	inline T& operator[](int i)
@@ -178,13 +183,14 @@ template <typename T> union Vec4
 	};
 
 	/** Normalizes the vector */
+	inline float norm() const
+	{
+		return sqrt((*this)*(*this));
+	}
 	inline void normalize()
 	{
-		float dim = sqrt((*this)*(*this));
-		x /= dim;
-		y /= dim;
-		z /= dim;
-		t /= dim;
+		float dim = norm();
+		*this /= dim;
 	};
 
 	inline T& operator[](int i)

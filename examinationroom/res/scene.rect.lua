@@ -10,7 +10,7 @@ rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,12);
 rectFloor:setPosition(-3, -3, -9);
 rectFloor:setTexCoords(0,0, 0,12, 6,0, 6,12);
-rectFloor:setTexture(Texture(1, "res/checkerboard.png"));
+rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 local rectCeil = Object("Rectangle");
@@ -18,18 +18,24 @@ rectCeil:setDirA(6,0,0);
 rectCeil:setDirB(0,0,12);
 rectCeil:setPosition(-3, 3, -9);
 rectCeil:setTexCoords(0,0, 0,12, 6,0, 6,12);
-rectCeil:setTexture(Texture(1, "res/checkerboard.png"));
+rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
 
 local stereogramA = Object("Rectangle");
-stereogramA:setTexture(Texture(2, "res/triangle_up.png"));
+stereogramA:setTexture(Texture("Simple", "res/e_right.png"));
 stereogramA:setDirA(2,0,0);
 stereogramA:setDirB(0,2,0);
 stereogramA:setPosition(1, 1, 2);
---stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
+
+local stereogramC = Object("Rectangle");
+stereogramC:setTexture(Texture("Simple", "res/e_up.png"));
+stereogramC:setDirA(2,0,0);
+stereogramC:setDirB(0,2,0);
+stereogramC:setPosition(1, -3, 2);
+Scene:addObject(stereogramC);
 
 local stereogramB = Object("Rectangle");
 stereogramB:setDirA(2,0,0);
@@ -87,7 +93,7 @@ local nextFrame = function ()
 		permuteTable(mountPoints);
 		permuteTable(arrowDirs);
 	end
-	stereogramB:setTexture(Texture(2, string.format(texbase, arrowDirs[testNum])));
+	stereogramB:setTexture(Texture("RandomDot", string.format(texbase, arrowDirs[testNum])));
 	local pos = mountPoints[testNum];
 	stereogramB:setPosition(pos[1], pos[2], pos[3]);
 	Scene:log("New Q: "..arrowDirs[testNum]..

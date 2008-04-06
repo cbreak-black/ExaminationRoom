@@ -25,6 +25,15 @@ public: // Construction
 public:
 	virtual void draw(GLWidget * dest) const;
 
+protected:
+	/**
+	Draws the parallelogram defined by a point and two vectors.
+	 \param o	Origin point
+	 \param v1	Vector 1
+	 \param	v2	Vector 2
+	*/
+	void drawRect(Tool::Point o, Tool::Vector v1, Tool::Vector v2) const;
+
 public:
 	/**
 	Returns the first direction of this rectangle.
@@ -67,19 +76,38 @@ public: // Textures
 	*/
 	void setTexCoords(float llx, float lly, float ulx, float uly,
 					  float lrx, float lry, float urx, float ury);
-	Tool::Point texA() const;
-	Tool::Point texB() const;
-	Tool::Point texC() const;
-	Tool::Point texD() const;
+	Tool::Vec2f texA() const;
+	Tool::Vec2f texB() const;
+	Tool::Vec2f texC() const;
+	Tool::Vec2f texD() const;
+
+public: // Subdiv
+	/**
+	Returns the number of subdivisions of the rectangle.
+	0 means no subdivision.
+	n where n is 1 or more means that the shorter side is subdivided n times.
+	The side defined by dirB is subdivided so that the subdivisions are as little skewed as possible.
+	 \return the number of subdivisions of the rectangle along the short side
+	*/
+	unsigned int subdivision() const;
+
+	/**
+	Sets the number of subdivisions of the rectangle.
+	 \see subdivision()
+	 \param subdivision	Number of desired subdivisions along the short side
+	*/
+	void setSubdivision(unsigned int subdivision);
 
 private:
 	Tool::Vector directionA_;
 	Tool::Vector directionB_;
 	
-	Tool::Point texA_;
-	Tool::Point texB_;
-	Tool::Point texC_;
-	Tool::Point texD_;
+	Tool::Vec2f texA_;
+	Tool::Vec2f texB_;
+	Tool::Vec2f texC_;
+	Tool::Vec2f texD_;
+
+	unsigned int subdivision_;
 };
 	
 }

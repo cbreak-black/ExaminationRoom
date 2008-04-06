@@ -30,105 +30,30 @@ void Parallelepiped::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		Point v1 = position();
-		Point v2 = position() + dirB();
-		Point v3 = position() + dirA();
-		Point v4 = position() + dirA() + dirB();
-		Point v5 = v1 + dirC();
-		Point v6 = v2 + dirC();
-		Point v7 = v3 + dirC();
-		Point v8 = v4 + dirC();
-
 		if (texture())
 		{
 			texture()->glBindTex(dest);
 		}
-
 		glColor4fv(color().vec);
-
+		// Set wireframe mode
 		if (wireframe())
 		{
-			glBegin(GL_LINE_STRIP);
-			glVertex3fv(v1.vec);
-			glVertex3fv(v2.vec);
-			glVertex3fv(v4.vec);
-			glVertex3fv(v3.vec);
-			glVertex3fv(v1.vec);
-			glVertex3fv(v5.vec);
-			glVertex3fv(v6.vec);
-			glVertex3fv(v8.vec);
-			glVertex3fv(v7.vec);
-			glVertex3fv(v5.vec);
-			glEnd();
-			glBegin(GL_LINES);
-			glVertex3fv(v2.vec);
-			glVertex3fv(v6.vec);
-			glVertex3fv(v3.vec);
-			glVertex3fv(v7.vec);
-			glVertex3fv(v4.vec);
-			glVertex3fv(v8.vec);
-			glEnd();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
-		else
+		glColor4fv(color().vec);
+		Tool::Point p1 = position();
+		Tool::Point p2 = p1 + dirA() + dirB() + dirC();
+		drawRect(p1, dirB(), dirA());
+		drawRect(p1, dirA(), dirC());
+		drawRect(p1, dirC(), dirB());
+		drawRect(p2, -dirA(), -dirB());
+		drawRect(p2, -dirC(), -dirA());
+		drawRect(p2, -dirB(), -dirC());
+		// Reset wireframe state
+		if (wireframe())
 		{
-			// Calculate normals
-			// First calculate normal directions
-			Vector n1 = cross(dirA(), dirB());
-			Vector n2 = cross(dirA(), dirC());
-			Vector n3 = cross(dirB(), dirC());
-			// Then calculate the direction the normal point in
-			n1 = n1 * -(n1 * dirC());
-			n2 = n2 * -(n2 * dirB());
-			n3 = n3 * -(n3 * dirA());
-			// Normalize (not needed at the moment since OpenGL does it anyway)
-			//n1.normalize();
-			//n2.normalize();
-			//n3.normalize();
-			// Draw faces with normals and texture coordinates
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv(n1.vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
-			glEnd();
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv((-n3).vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v4.vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
-			glEnd();
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv((-n1).vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v7.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v8.vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
-			glEnd();
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv(n3.vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v5.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v6.vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v2.vec);
-			glEnd();
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv(n2.vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v1.vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v3.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v5.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v7.vec);
-			glEnd();
-			glBegin(GL_TRIANGLE_STRIP);
-			glNormal3fv((-n2).vec);
-			glTexCoord2f(texA().x, texA().y); glVertex3fv(v2.vec);
-			glTexCoord2f(texC().x, texC().y); glVertex3fv(v4.vec);
-			glTexCoord2f(texB().x, texB().y); glVertex3fv(v6.vec);
-			glTexCoord2f(texD().x, texD().y); glVertex3fv(v8.vec);
-			glEnd();
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
-
 		if (texture())
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);

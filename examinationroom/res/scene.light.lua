@@ -31,11 +31,11 @@ sn:setPosition(0,0,0);
 floorPos = {-3, -2.5, -20};
 local rectFloor = Object("Rectangle");
 rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+rectFloor:setDirB(0,0,-26);
+rectFloor:setPosition(-3, -2.5, 8);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
+rectFloor:setSubdivision(16);
 rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
-Scene:addObject(rectFloor);
 
 local lightBox2 = Object("LightNode");
 lightBox2:setPosition(-lightPos[1], -lightPos[2], -lightPos[3]);
@@ -52,11 +52,20 @@ lightBox2:addObject(lightBox);
 local container = Object("AffineTransformation");
 lightBox:addObject(container);
 
+container:addObject(rectFloor);
+
 local sphere = Object("Sphere");
 --sphere:setTexture(Texture("Simple", "res/checkerboard.png"));
 sphere:setPosition(3, 1, 0);
 sphere:setRadius(1);
 container:addObject(sphere);
+
+local ee = Object("Rectangle");
+ee:setTexture(Texture("Simple", "res/e_right.png"));
+ee:setDirA(1,0,0);
+ee:setDirB(0,1,0);
+ee:setPosition(-0.5, 1, 0);
+container:addObject(ee);
 
 local r1 = Object("Parallelepiped");
 local d = 1;

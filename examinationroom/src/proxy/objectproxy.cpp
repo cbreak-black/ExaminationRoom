@@ -279,6 +279,38 @@ int ObjectProxy::setDirC(lua_State *L)
 	}
 }
 
+int ObjectProxy::subdivision(lua_State *L)
+{
+	if (rectangle())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, rectangle()->subdivision());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setSubdivision(lua_State *L)
+{
+	if (rectangle())
+	{
+		checkTop(L, 2);
+		rectangle()->setSubdivision(lua_tonumber(L,2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 // Pixelplane
 int ObjectProxy::setSize(lua_State *L)
 {
@@ -931,6 +963,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setDirA", &ObjectProxy::setDirA },
 	{ "setDirB", &ObjectProxy::setDirB },
 	{ "setDirC", &ObjectProxy::setDirC },
+	{ "subdivision", &ObjectProxy::subdivision },
+	{ "setSubdivision", &ObjectProxy::setSubdivision },
 	{ "setSize", &ObjectProxy::setSize },
 	{ "text", &ObjectProxy::text },
 	{ "setText", &ObjectProxy::setText },
