@@ -13,7 +13,7 @@
 #include "object.h"
 
 #include <memory>
-#include <set>
+#include <list>
 
 namespace Examination
 {
@@ -32,6 +32,7 @@ public:
 public:
 	/**
 	Adds an object to the container. An object can only be added once.
+	This method also removes the object from it's old container, if there was one.
 	 \param object	A shared pointer to an object
 	 \return true if the object was inserted, false if it already was in the scene.
 	*/
@@ -47,6 +48,12 @@ public:
 	Removes all objects.
 	*/
 	virtual void clear();
+
+	/**
+	Sorts the list of contained objects according their prefered draw ordering.
+	This method is called by objects on their parent, when their drawPriority changes.
+	*/
+	void sortObjects();
 
 protected:
 	/**
@@ -76,10 +83,10 @@ public:
 	virtual void draw(GLWidget * dest) const;
 
 public:
-	std::set< std::tr1::shared_ptr<Object> > objects();
+	const std::list< std::tr1::shared_ptr<Object> > objects();
 
 private:
-	std::set< std::tr1::shared_ptr<Object> > objects_;	
+	std::list< std::tr1::shared_ptr<Object> > objects_;
 };
 
 }

@@ -54,6 +54,12 @@ public:
 	*/
 	virtual ~Object();
 
+private: // Initialisation
+	/**
+	Sets default values.
+	*/
+	void init();
+
 public: // Accessors
 	/**
 	Returns the position of this object.
@@ -134,10 +140,57 @@ public: // Visibility
 	bool visible() const;
 
 public: // Nesting
+	/**
+	Returns a pointer to the scene this object is in.
+	This pointer should not be stored externaly.
+	 \todo Change to use std:tr1:weak_ptr if possible
+	 \return a pointer to the scene of this object
+	*/
 	Scene * scene() const;
+
+	/**
+	Sets the scene pointer of this object. This should only be called by the
+	Container this object is stored in. The container is responsible for maintaining
+	the pointer.
+	 \todo Change to use std:tr1:weak_ptr if possible
+	 \param s	Scene pointer
+	*/
 	virtual void setScene(Scene * s);
+
+	/**
+	Returns a pointer to the parent container this object is in.
+	This poionter should not be stored externaly.
+	 \todo Change to use std:tr1:weak_ptr if possible
+	 \return a pointer to the container of this object
+	*/
 	Container * parent() const;
+
+	/**
+	Sets the parent pointer of this object. This should only be called by the Container
+	this object is stored in. The container is responsible for mantaining the pointer.
+	When a new container pointer is set, the object has to be removed from the old container.
+	This ensures that it is both only stored once in a container (by removing itself even if it gets
+	inserted into the same) and that it is only inserted in one container. Keeping the data structure
+	in order is the responsibility of the container class.
+	 \todo Change to use std:tr1:weak_ptr if possible
+	 \param c	Container pointer
+	*/
 	virtual void setParent(Container * c);
+
+public: // Drawing priority
+	/**
+	Returns the drawing priority of this class. The default is 0. A positive number means prefering to
+	be drawn late, negative numbers means to prefer to be drawn early.
+	This method also re-sorts the parent container.
+	 \return The draw priority of this object instance.
+	*/
+	int drawPriority() const;
+
+	/**
+	Sets the drawing priority of this class. Positive numbers give less priority, negative numbers more.
+	 \param priority	The new priority.
+	*/
+	void setDrawPriority(int priority);
 
 private:
 	Scene * scene_;
@@ -148,7 +201,14 @@ private:
 	Tool::Color4 color_;
 	bool wireframe_;
 	bool shown_;
+	int drawPriority_;
 };
+
+/**
+Returns true if the drawing priority of a is smaller than b.
+ \return true if the drawing priority of a is smaller than b.
+*/
+bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b);
 
 }
 

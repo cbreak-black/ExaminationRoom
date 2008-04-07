@@ -21,6 +21,7 @@ namespace Examination
 CameraNode::CameraNode()
 {
 	cam_ = shared_ptr<Camera>(new Camera());
+	setDrawPriority(128);
 }
 
 std::tr1::shared_ptr<Camera> CameraNode::camera() const

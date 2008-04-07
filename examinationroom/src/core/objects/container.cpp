@@ -27,26 +27,61 @@ Container::~Container()
 
 bool Container::addObject(shared_ptr<Object> object)
 {
-	if (objects_.insert(object).second)
+	std::list< shared_ptr<Object> >::iterator it = objects_.begin();
+	std::list< shared_ptr<Object> >::iterator end = objects_.end();
+	// Check for duplicate insert. Return false if the object is already stored
+	while (it != end)
 	{
-		object->setParent(getParent());
-		object->setScene(getScene());
-		return true;
+		if ((*it) == object)
+		{
+			return false;
+		}
+		it++;
 	}
-	return false;
+	// Search insert position.
+	it = objects_.begin();
+	while (it != end && (*it) < object)
+	{
+		it++;
+	}
+	// Insert either in front of the first object that is larger or equal
+	// Or at the end, if it is the largest
+	// Preserving sorted state
+	objects_.insert(it, object);
+	// Sorting is not needed since we never insert anything that violates sorting
+	//objects_.sort();
+	// Removing non unique objects is not needed since we test for uniqueness before inserting
+	//objects_.unique();
+	Container * p = object->parent();
+	// If the object had a valid parent, and the parent was not us
+	// We should not reach this place if the parent was us... due to the guard
+	if (p && (p != this))
+	{
+		// remove it
+		p->removeObject(object);
+	}
+	// Set new parent and scene
+	object->setParent(getParent());
+	object->setScene(getScene());
+	return true;
 }
 
 void Container::removeObject(shared_ptr<Object> object)
 {
 	object->setParent(0);
 	object->setScene(0);
-	objects_.erase(object);
+	objects_.remove(object);
 }
 
 void Container::clear()
 {
 	setParentsAndScenes(0,0);
 	objects_.clear();
+}
+
+void Container::sortObjects()
+{
+	objects_.sort();
 }
 
 Container * Container::getParent()
@@ -61,7 +96,7 @@ Scene * Container::getScene()
 
 void Container::setParentsAndScenes(Container * p, Scene * s)
 {
-	std::set<shared_ptr<Object> >::iterator i = objects_.begin();
+	std::list<shared_ptr<Object> >::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
 	{
 		(*i)->setParent(p);
@@ -86,7 +121,7 @@ void Container::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		std::set<shared_ptr<Object> >::iterator i = objects_.begin();
+		std::list<shared_ptr<Object> >::const_iterator i = objects_.begin();
 		for (; i != objects_.end(); i++)
 		{
 			(*i)->draw(dest);

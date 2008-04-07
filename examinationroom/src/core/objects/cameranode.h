@@ -25,6 +25,10 @@ This class represents a transformable group of objects.
 class CameraNode : public Container
 {
 public: // Construction
+	/**
+	Constructs a default camera node with a default camera.
+	Default draw priority is 128.
+	*/
 	CameraNode();
 
 public:

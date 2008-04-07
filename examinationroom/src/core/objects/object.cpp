@@ -19,11 +19,7 @@ namespace Examination
 Object::Object()
 {
 	origin_ = Point(0,0,0);
-	setScene(0);
-	setParent(0);
-	setColor(Color4(1, 1, 1, 1));
-	setWireframe(false);
-	setShown(true);
+	init();
 }
 
 Object::Object(float x, float y, float z)
@@ -31,15 +27,23 @@ Object::Object(float x, float y, float z)
 	origin_.x = x;
 	origin_.y = y;
 	origin_.z = z;
-	setScene(0);
-	setParent(0);
+	init();
 }
 
 Object::Object(Point o)
 {
 	origin_ = o;
+	init();
+}
+
+void Object::init()
+{
 	setScene(0);
 	setParent(0);
+	setColor(Color4(1, 1, 1, 1));
+	setWireframe(false);
+	setShown(true);
+	setDrawPriority(0);
 }
 
 Object::~Object()
@@ -128,6 +132,23 @@ bool Object::visible() const
 	{
 		return shown();
 	}
+}
+
+// Drawing priority
+int Object::drawPriority() const
+{
+	return drawPriority_;
+}
+
+void Object::setDrawPriority(int priority)
+{
+	drawPriority_ = priority;
+	parent()->sortObjects();
+}
+
+bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b)
+{
+	return a->drawPriority() < b->drawPriority();
 }
 
 }
