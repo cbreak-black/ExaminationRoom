@@ -19,6 +19,7 @@
 #include "objects/cameranode.h"
 #include "objects/lightnode.h"
 #include "objects/atmosphere.h"
+#include "objects/depthbuffer.h"
 
 #include "textureproxy.h"
 #include "cameraproxy.h"
@@ -42,6 +43,7 @@ const char * objectTypes[] =
 	"CameraNode",
 	"LightNode",
 	"Atmosphere",
+	"DepthBuffer",
 	0
 };
 
@@ -82,6 +84,8 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	case 9:
 		object_ = shared_ptr<Object>(new Atmosphere());
 		break;
+	case 10:
+		object_ = shared_ptr<Object>(new DepthBuffer());
 	}
 	lua_pop(L, 0);
 }
@@ -382,6 +386,23 @@ int ObjectProxy::setWireframe(lua_State *L)
 	return 0;
 }
 
+int ObjectProxy::drawPriority(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushnumber(L, object()->drawPriority());
+	return 1;
+}
+
+int ObjectProxy::setDrawPriority(lua_State *L)
+{
+	checkTop(L, 2);
+	object()->setDrawPriority(lua_tonumber(L, 2));
+	lua_pop(L, 2);
+	return 0;
+}
+
+// Textures
 int ObjectProxy::setTexCoords(lua_State *L)
 {
 	if (rectangle())
@@ -833,6 +854,39 @@ int ObjectProxy::setEnd(lua_State *L)
 	}
 }
 
+// DepthBuffer Node
+int ObjectProxy::depthBufferState(lua_State *L)
+{
+	if (depthBuffer())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, depthBuffer()->depthBufferState());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setDepthBufferState(lua_State *L)
+{
+	if (depthBuffer())
+	{
+		checkTop(L, 2);
+		depthBuffer()->setDepthBufferState(lua_toboolean(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 // Container Node
 int ObjectProxy::addObject(lua_State *L)
 {
@@ -938,6 +992,11 @@ shared_ptr<Atmosphere> ObjectProxy::atmosphere()
 	return dynamic_pointer_cast<Atmosphere, Object>(object_);
 }
 
+std::tr1::shared_ptr<DepthBuffer> ObjectProxy::depthBuffer()
+{
+	return dynamic_pointer_cast<DepthBuffer, Object>(object_);
+}
+
 shared_ptr<Container> ObjectProxy::container()
 {
 	return dynamic_pointer_cast<Container, Object>(object_);
@@ -988,6 +1047,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setStart", &ObjectProxy::setStart },
 	{ "end", &ObjectProxy::end },
 	{ "setEnd", &ObjectProxy::setEnd },
+	{ "depthBufferState", &ObjectProxy::depthBufferState },
+	{ "setDepthBufferState", &ObjectProxy::setDepthBufferState },
 	{ "addObject", &ObjectProxy::addObject },
 	{ "removeObject", &ObjectProxy::removeObject },
 	{ "clear", &ObjectProxy::clear },

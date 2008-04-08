@@ -143,7 +143,10 @@ int Object::drawPriority() const
 void Object::setDrawPriority(int priority)
 {
 	drawPriority_ = priority;
-	parent()->sortObjects();
+	if (parent())
+	{
+		parent()->sortObjects();
+	}
 }
 
 bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b)

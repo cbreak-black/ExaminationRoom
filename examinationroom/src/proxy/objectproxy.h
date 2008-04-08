@@ -25,6 +25,7 @@ namespace Examination
 	class CameraNode;
 	class LightNode;
 	class Atmosphere;
+	class DepthBuffer;
 	class Container;
 	class Object;
 
@@ -58,6 +59,8 @@ public: // Object
 	int setColor(lua_State *L);
 	int wireframe(lua_State *L);
 	int setWireframe(lua_State *L);
+	int drawPriority(lua_State *L);
+	int setDrawPriority(lua_State *L);
 
 public: // Textures
 	int setTexCoords(lua_State *L);
@@ -103,6 +106,10 @@ public: // Atmosphere Node
 	int end(lua_State *L);
 	int setEnd(lua_State *L);
 
+public: // DepthBuffer Node
+	int depthBufferState(lua_State *L);
+	int setDepthBufferState(lua_State *L);
+
 public: // Container
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);
@@ -119,6 +126,7 @@ public: // Dynamic Casts
 	std::tr1::shared_ptr<CameraNode> cameraNode();
 	std::tr1::shared_ptr<LightNode> lightNode();
 	std::tr1::shared_ptr<Atmosphere> atmosphere();
+	std::tr1::shared_ptr<DepthBuffer> depthBuffer();
 	std::tr1::shared_ptr<Container> container();
 	std::tr1::shared_ptr<Object> object();
 	

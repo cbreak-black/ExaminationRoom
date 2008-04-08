@@ -17,7 +17,7 @@ namespace Examination
 {
 
 /**
-This class represents a transformable group of objects.
+This class represents a lightable group of objects.
 */
 class LightNode : public Container
 {
