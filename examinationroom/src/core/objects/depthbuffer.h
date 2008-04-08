@@ -18,7 +18,8 @@ namespace Examination
 
 /**
 This class represents a group of objects, which are drawn with their own depth
-buffer state. This allows the manual ordering of drawing, which can lead to incorrect
+buffer state. Also, after drawing each object, the depth buffer is reset.
+This allows the manual ordering of drawing, which can lead to incorrect
 occlusion.
 */
 class DepthBuffer : public Container
@@ -28,15 +29,15 @@ public: // Construction
 
 public:
 	/**
-	Returns the depth buffer state. True enables the depth buffer for all contained
-	objects. False (the default) disables the depth buffer.
+	Returns the depth buffer state. True (the default) enables the depth buffer
+	for all contained objects. False disables the depth buffer.
 	 \return true if the depth buffer is enabled, false otherwise
 	*/
 	bool depthBufferState() const;
 
 	/**
-	Sets the depth buffer state. True enables the depth buffer for all contained
-	objects. False (the default) disables the depth buffer.
+	Sets the depth buffer state. True (the default) enables the depth buffer
+	for all contained objects. False disables the depth buffer.
 	 \param enabled	The new depth buffer state
 	*/
 	void setDepthBufferState(bool enabled);
@@ -44,6 +45,7 @@ public:
 public:
 	/**
 	Draws all contained objects with the given depth buffer state.
+	Before each individual sub object, the depth buffer is cleared.
 	 \warn Drawing this node clears the depth buffer
 	*/
 	virtual void draw(GLWidget * dest) const;

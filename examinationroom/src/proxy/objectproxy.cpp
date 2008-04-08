@@ -1058,6 +1058,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setColor", &ObjectProxy::setColor },
 	{ "wireframe", &ObjectProxy::wireframe },
 	{ "setWireframe", &ObjectProxy::setWireframe },
+	{ "drawPriority", &ObjectProxy::drawPriority },
+	{ "setDrawPriority", &ObjectProxy::setDrawPriority },
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
 	{ "setTexture", &ObjectProxy::setTexture },
 	{ "setAutoResize", &ObjectProxy::setAutoResize },

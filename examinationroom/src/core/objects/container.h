@@ -25,6 +25,9 @@ This class is a container object. It can store and manage other objects.
 */
 class Container : public Object
 {
+public: // Types
+	typedef std::list< std::tr1::shared_ptr<Object> > ObjectList;
+
 public:
 	Container();
 	virtual ~Container();
@@ -83,10 +86,10 @@ public:
 	virtual void draw(GLWidget * dest) const;
 
 public:
-	const std::list< std::tr1::shared_ptr<Object> > objects();
+	const ObjectList & objects() const;
 
 private:
-	std::list< std::tr1::shared_ptr<Object> > objects_;
+	ObjectList objects_;
 };
 
 }

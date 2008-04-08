@@ -129,4 +129,9 @@ void Container::draw(GLWidget * dest) const
 	}
 }
 
+const Container::ObjectList & Container::objects() const
+{
+	return objects_;
+}
+
 }

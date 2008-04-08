@@ -16,7 +16,7 @@ namespace Examination
 
 DepthBuffer::DepthBuffer()
 {
-	setDepthBufferState(false);
+	setDepthBufferState(true);
 	setDrawPriority(128);
 }
 
@@ -25,8 +25,6 @@ void DepthBuffer::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		// Clear depth buffer state
-		glClear(GL_DEPTH_BUFFER_BIT);
 		// Store and set the depth buffer state
 		bool currentState = glIsEnabled(GL_DEPTH_TEST);
 		if (depthBufferState())
@@ -38,7 +36,17 @@ void DepthBuffer::draw(GLWidget * dest) const
 			glDisable(GL_DEPTH_TEST);
 		}
 		// Draw the contents of this node
-		Container::draw(dest);
+		//Container::draw(dest);
+		const Container::ObjectList & ol = Container::objects();
+		Container::ObjectList::const_iterator it = ol.begin();
+		Container::ObjectList::const_iterator end = ol.end();
+		for (; it != end; it++)
+		{
+			// Clear depth buffer if it's enabled
+			if (depthBufferState())
+				glClear(GL_DEPTH_BUFFER_BIT);
+			(*it)->draw(dest);
+		}
 		if (currentState)
 		{
 			glEnable(GL_DEPTH_TEST);
