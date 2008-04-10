@@ -12,6 +12,8 @@
 
 #include <QGLWidget>
 
+#include <memory>
+
 namespace Examination
 {
 	class Scene;
@@ -36,8 +38,8 @@ public:
     QSize sizeHint() const;
 
 public:
-	Scene * scene();
-	void setScene(Scene * s);
+	std::tr1::shared_ptr<Scene> scene();
+	void setScene(std::tr1::shared_ptr<Scene> s);
 	
 	Side side();
 	void setSide(Side s);
@@ -51,7 +53,7 @@ protected:
     void resizeGL(int width, int height);
 
 private:
-	Scene * scene_;
+	std::tr1::shared_ptr<Scene> scene_;
 	Side side_;
 	DrawStyle style_;
 };

@@ -14,6 +14,7 @@
 
 #include <QTime>
 #include <fstream>
+#include <memory>
 
 namespace Examination
 {
@@ -29,7 +30,7 @@ public:
 	/**
 	Creates the proxy and initializes lua.
 	*/
-	LuaProxy(Scene * scene);
+	LuaProxy(std::tr1::shared_ptr<Scene> scene);
 	
 	/**
 	Cleans up the lua environment.
@@ -78,6 +79,9 @@ public: // Statistical helpers
 	int getUnitScreenSize(lua_State *L);
 	int getViewport(lua_State *L);
 
+public: // Low Level Wrapper
+	int exit(lua_State *L);
+
 public: // Misc
 	int setEventListener(lua_State *L);
 	int log(lua_State *L);
@@ -120,7 +124,7 @@ private:
 private:
 	lua_State * L_;
 
-	Scene * scene_;
+	std::tr1::shared_ptr<Scene> scene_;
 
 	QTime lastUpdate_;
 

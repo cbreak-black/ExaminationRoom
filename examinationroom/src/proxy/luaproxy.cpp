@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <QDateTime>
+#include <QCoreApplication>
 
 namespace Examination
 {
@@ -29,7 +30,7 @@ static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
 static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
 
 // Creation & Destruction	
-LuaProxy::LuaProxy(Scene * scene)
+LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 {
 	scene_ = scene;
 	
@@ -296,6 +297,20 @@ int LuaProxy::getViewport(lua_State *L)
 	return 4;
 }
 
+// Low level wrapper
+int LuaProxy::exit(lua_State *L)
+{
+	int res = 0;
+	if (lua_isnumber(L, 2))
+	{
+		res = lua_tonumber(L, 2);
+	}
+	QCoreApplication::exit(res);
+	lua_settop(L, 0);
+	return 0;
+}
+
+// Event Stuff
 const char * eventIdx[] =
 {
 	"update",
@@ -485,6 +500,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
 	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },
 	{ "getViewport", &LuaProxy::getViewport },
+	{ "exit", &LuaProxy::exit },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
 	{ "debugLog", &LuaProxy::debugLog },

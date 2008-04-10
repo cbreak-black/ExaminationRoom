@@ -25,7 +25,6 @@ const Tool::Color4 black(0,0,0,1);
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 {
-	scene_ = 0;
 	side_ = left;
 	style_ = sidebyside;
 	this->setCursor(Qt::BlankCursor);
@@ -45,16 +44,13 @@ QSize GLWidget::sizeHint() const
     return QSize(800, 600);
 }
 
-Scene * GLWidget::scene()
+std::tr1::shared_ptr<Scene> GLWidget::scene()
 {
 	return scene_;
 }
 
-void GLWidget::setScene(Scene * s)
+void GLWidget::setScene(std::tr1::shared_ptr<Scene> s)
 {
-//	if (scene_ && scene_ != s)
-//		delete scene_;
-	// Weak reference
 	scene_ = s;
 }
 

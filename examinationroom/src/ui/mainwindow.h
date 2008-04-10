@@ -13,6 +13,8 @@
 #include <QWidget>
 #include <QTimer>
 
+#include <memory>
+
 namespace Examination
 {
 	class Scene;
@@ -52,9 +54,9 @@ private:
 	GLWidget * outGlWidget_;
 	QTimer *timer_;
 
-	Scene * scene_;
+	std::tr1::shared_ptr<Scene> scene_;
 
-	LuaProxy * luaProxy_;
+	std::tr1::shared_ptr<LuaProxy> luaProxy_;
 };
 
 }

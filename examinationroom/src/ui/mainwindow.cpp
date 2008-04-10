@@ -34,7 +34,7 @@ MainWindow::MainWindow()
 	
 	outGlWidget_ = new GLWidget(0, mainGlWidget_);
 
-	scene_ = new Scene();
+	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
 	mainGlWidget_->setScene(scene_);
 	outGlWidget_->setScene(scene_);
 	
@@ -69,7 +69,7 @@ MainWindow::MainWindow()
 		//this->setGeometry(QApplication::desktop()->screenGeometry(0));
 	}
 
-	luaProxy_ = new LuaProxy(scene_);
+	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
 	timer_->start(33); // 30 fps
@@ -87,8 +87,6 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 	delete timer_;
-	delete luaProxy_;
-	delete scene_;
 	delete outGlWidget_;
 	delete mainGlWidget_;
 }
