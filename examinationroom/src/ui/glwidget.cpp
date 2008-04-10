@@ -150,16 +150,4 @@ void GLWidget::resizeGL(int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event)
-{
-}
-
-void GLWidget::mouseMoveEvent(QMouseEvent *event)
-{
-}
-
-void GLWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-}
-
 }

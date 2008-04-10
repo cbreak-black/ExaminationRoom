@@ -126,6 +126,7 @@ marker:setWireframe(true);
 marker:setColor(1, 1, 0, 1);
 marker:setDirA(targetWidth, 0, 0);
 marker:setDirB(0, targetHeight, 0);
+marker:setSubdivision(0);
 
 -- State
 cycleNum = 0;

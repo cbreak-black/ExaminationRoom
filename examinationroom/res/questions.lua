@@ -175,6 +175,7 @@ questions = {
 			this.boxes[idx] = b;
 		end
 		b:setWireframe(true);
+		b:setSubdivision(0);
 		b:setColor(1,1,1,1);
 		b:setDirA(1, 0, 0);
 		b:setDirB(0, 1, 0);
