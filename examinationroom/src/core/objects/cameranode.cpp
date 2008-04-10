@@ -42,8 +42,10 @@ void CameraNode::draw(GLWidget * dest) const
 		// Push the matrix stack, so that the previous camera can be restored
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
+		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
+		glLoadIdentity();
 		// Remove old data from depth buffer
 		glClear(GL_DEPTH_BUFFER_BIT);
 		// Set up camera

@@ -73,6 +73,36 @@ pep2:setDirC(-s120*l, s, -0.5*l);
 pep2:setPosition(0, -math.sqrt(3*d*d)/2, 0)
 container:addObject(pep2);
 
+local camScreen = Object("CameraNode");
+camScreen:camera():setType("Screen");
+camScreen:setDrawPriority(256);
+Scene:addObject(camScreen);
+
+local r1 = Object("Rectangle");
+r1:setDirA(512, 0, 0);
+r1:setDirB(0, 512, 0);
+r1:setPosition(0, -256, 0);
+r1:setColor(0, 1, 1, 0.5);
+r1:setWireframe(true);
+r1:setSubdivision(8);
+camScreen:addObject(r1);
+
+local r2 = Object("Rectangle");
+r2:setDirA(1024, 0, 0);
+r2:setDirB(0, 768, 0);
+r2:setPosition(-512, -384, 0);
+r2:setColor(1, 1, 0, 0.5);
+r2:setWireframe(true);
+r2:setSubdivision(4);
+camScreen:addObject(r2);
+
+local s1 = Object("Sphere");
+s1:setRadius(256);
+s1:setPosition(-256, 0, 0);
+s1:setColor(1, 1, 1, 0.25);
+s1:setWireframe(true);
+camScreen:addObject(s1);
+
 -- Library
 Key = {
 [18] = "left";

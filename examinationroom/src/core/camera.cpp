@@ -127,7 +127,7 @@ void Camera::loadMatrix(float offsetCamera)
 		// Note: The code there is wrong, see below for correct code
 		// Create oblique projection matrix by shearing an orthographic
 		// Projection matrix. Those cameras are converged.
-		float shearMatrix[] = {
+		const float shearMatrix[] = {
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			-offsetCamera/nearFactor, 0, 1, 0,
@@ -144,6 +144,19 @@ void Camera::loadMatrix(float offsetCamera)
 		gluLookAt(pos_.x, pos_.y, pos_.z,
 				  pos_.x + dir_.x, pos_.y + dir_.y, pos_.z + dir_.z,
 				  up_.x, up_.y, up_.z);
+	}
+	else if (type() == Camera::Screen)
+	{
+		// Ignore separation
+		// Ignore camera directin
+		// Ignore everything else too
+		// Projection: Screen space coordinate system, 0 in center, width/height as
+		// specified by viewport
+		const float right = viewport[2]/2;
+		const float left = -right;
+		const float top = viewport[3]/2;
+		const float bottom = -top;
+		glOrtho(left,right,bottom,top, top, bottom);
 	}
 }
 
