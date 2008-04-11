@@ -27,12 +27,13 @@ which is drawn into the view.
 class GLWidget : public QGLWidget
 {
 public: // Enums
-	typedef enum {single, anaglyph, sidebyside} DrawStyle;
+	typedef enum {single, anaglyph, matrix, sidebyside, quad } DrawStyle;
 	typedef enum {left = 1, right = 2} Side;
 
 public:
-    GLWidget(QWidget *parent = 0, QGLWidget *shareWidget = 0);
-    virtual ~GLWidget();
+	GLWidget(QWidget *parent = 0, QGLWidget *shareWidget = 0);
+	GLWidget(const QGLFormat & format, QWidget *parent = 0, QGLWidget *shareWidget = 0);
+	virtual ~GLWidget();
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;

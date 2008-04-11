@@ -10,6 +10,8 @@
 #include <QtGui>
 #include <QtOpenGL>
 
+#include <iostream>
+
 #include "platform_math.h"
 
 #include "glwidget.h"
@@ -22,8 +24,29 @@ namespace Examination
 
 const Tool::Color4 black(0,0,0,1);
 
+static const float colorMatrixLeft[16] = {
+	1, 0, 0, 0,
+	0, 0, 0, 0,
+	0, 0, 0.5, 0,
+	0, 0, 0, 1
+};
+static const float colorMatrixRight[16] = {
+	0, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 0.5, 0,
+	0, 0, 0, 1
+};
+
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
+{
+	side_ = left;
+	style_ = sidebyside;
+	this->setCursor(Qt::BlankCursor);
+}
+
+GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWidget)
+	: QGLWidget(format, parent, shareWidget)
 {
 	side_ = left;
 	style_ = sidebyside;
@@ -72,6 +95,23 @@ GLWidget::DrawStyle GLWidget::style()
 void GLWidget::setStyle(DrawStyle s)
 {
 	style_ = s;
+	// Some capability testing
+	if (style_ == matrix)
+	{
+		GLint auxNum;
+		glGetIntegerv(GL_AUX_BUFFERS, &auxNum);
+		if (auxNum < 2)
+		{
+			std::cerr << "Not enough aux buffers support found. Matrix stereo will not work." << std::endl;
+		}
+	}
+	else if (style_ == quad)
+	{
+		if (!format().stereo())
+		{
+			std::cerr << "No Stereo support found. Quad Buffer mode will not work" << std::endl;
+		}
+	}
 }
 
 void GLWidget::initializeGL()
@@ -110,10 +150,20 @@ void GLWidget::paintGL()
 			//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 			glColorMask(1, 0, 0, 1);
 		}
+		else if (style_ == matrix)
+		{
+			setSide(left);
+			glDrawBuffer(GL_AUX0);
+		}
 		else if (style_ == sidebyside)
 		{
 			setSide(left);
 			glViewport(0,0, s.width()/2, s.height());
+		}
+		else if (style_ == quad)
+		{
+			setSide(left);
+			glDrawBuffer(GL_BACK_LEFT);
 		}
 
 		scene_->camera()->loadMatrix(this);
@@ -130,6 +180,33 @@ void GLWidget::paintGL()
 			scene_->draw(this);
 			glColorMask(1, 1, 1, 1);
 		}
+		else if (style_ == matrix)
+		{
+			// Prepare for drawing into the right aux buffer
+			setSide(right);
+			glDrawBuffer(GL_AUX1);
+			// Draw
+			scene_->camera()->loadMatrix(this);
+			scene_->draw(this);
+			// Write composite into the back buffer
+			glDrawBuffer(GL_BACK);
+			// From left aux buffer with left color transform
+			glReadBuffer(GL_AUX0);
+			glMatrixMode(GL_COLOR);
+			glLoadMatrixf(colorMatrixLeft);
+			glMatrixMode(GL_MODELVIEW);
+			glCopyPixels(0,0,s.width(),s.height(),GL_COLOR);
+			// From right aux buffer with right color transform
+			glReadBuffer(GL_AUX1);
+			glMatrixMode(GL_COLOR);
+			glLoadMatrixf(colorMatrixRight);
+			glMatrixMode(GL_MODELVIEW);
+			glCopyPixels(0,0,s.width(),s.height(),GL_COLOR);
+			// Restore color matrix
+			glMatrixMode(GL_COLOR);
+			glLoadIdentity();
+			glMatrixMode(GL_MODELVIEW);
+		}
 		else if (style_ == sidebyside)
 		{
 			setSide(right);
@@ -137,6 +214,15 @@ void GLWidget::paintGL()
 			scene_->camera()->loadMatrix(this);
 			scene_->draw(this);
 			glViewport(0,0, s.width(), s.height());
+		}
+		else if (style_ == quad)
+		{
+			setSide(right);
+			glDrawBuffer(GL_BACK_RIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			scene_->camera()->loadMatrix(this);
+			scene_->draw(this);
+			glDrawBuffer(GL_BACK_LEFT);
 		}
 	}
 }

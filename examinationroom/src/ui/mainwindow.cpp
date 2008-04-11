@@ -16,6 +16,8 @@
 
 #include "luaproxy.h"
 
+#include <qgl.h>
+
 namespace Examination
 {
 
@@ -25,14 +27,17 @@ MainWindow::MainWindow()
 	mainLayout->setContentsMargins(0,0,0,0);
 	mainLayout->setSpacing(0);
 	
-	mainGlWidget_ = new GLWidget(this);
+	QGLFormat glFormat;
+	glFormat.setStereo(true);
+
+	mainGlWidget_ = new GLWidget(glFormat, this);
 	mainLayout->addWidget(mainGlWidget_, 0, 0);
 
 	setLayout(mainLayout);
 
 	setFocusPolicy(Qt::StrongFocus);
 	
-	outGlWidget_ = new GLWidget(0, mainGlWidget_);
+	outGlWidget_ = new GLWidget(glFormat, 0, mainGlWidget_);
 
 	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
 	mainGlWidget_->setScene(scene_);
@@ -64,7 +69,7 @@ MainWindow::MainWindow()
 	}
 	if (numScreens == 1)
 	{
-		mainGlWidget_->setStyle(GLWidget::anaglyph);
+		mainGlWidget_->setStyle(GLWidget::matrix);
 		this->showFullScreen();
 		//this->setGeometry(QApplication::desktop()->screenGeometry(0));
 	}
