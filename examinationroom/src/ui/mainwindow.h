@@ -21,6 +21,7 @@ namespace Examination
 	class Scene;
 	class GLWidget;
 	class LuaProxy;
+	class DesignWidget;
 
 /**
 The main window. It contains only the GLWidget. It also creates most of the other
@@ -62,7 +63,7 @@ private:
 	GLWidget * outGlWidget_;
 	QTimer *timer_;
 
-	QDockWidget * dockDesign_;
+	DesignWidget * dockDesign_;
 	QDockWidget * dockProgram_;
 	QDockWidget * dockCode_;
 

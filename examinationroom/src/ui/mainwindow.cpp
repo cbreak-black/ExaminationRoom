@@ -14,9 +14,9 @@
 #include "glwidget.h"
 #include "scene.h"
 
-#include "luaproxy.h"
+#include "designwidget.h"
 
-#include <qgl.h>
+#include "luaproxy.h"
 
 namespace Examination
 {
@@ -39,9 +39,12 @@ MainWindow::MainWindow()
 //	outGlWidget_->setStyle(GLWidget::single);
 
 	// Add Dock Widgets
-	dockDesign_ = new QDockWidget("Scene Design", this);
+	dockDesign_ = new DesignWidget("Scene Design", this);
 	dockProgram_ = new QDockWidget("Scene Program", this);
 	dockCode_ = new QDockWidget("Code", this);
+	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockProgram_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	addDockWidget(Qt::RightDockWidgetArea, dockDesign_);
 	addDockWidget(Qt::RightDockWidgetArea, dockProgram_);
 	addDockWidget(Qt::RightDockWidgetArea, dockCode_);
@@ -73,6 +76,8 @@ MainWindow::MainWindow()
 	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
 	mainGlWidget_->setScene(scene_);
 	//outGlWidget_->setScene(scene_);
+
+	dockDesign_->setScene(scene_);
 
 	// Set up redraw timer
 	timer_ = new QTimer(this);

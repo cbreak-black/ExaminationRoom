@@ -15,14 +15,14 @@ QT           += opengl
 
 # Input
 HEADERS += \
-	src/ui/glwidget.h \
-	src/ui/mainwindow.h \
+	src/ui/*.h \
+	src/ui/helper/*.h \
 	src/core/scene.h \
 	src/core/camera.h
 SOURCES += \
 	src/main.cpp \
-	src/ui/glwidget.cpp \
-	src/ui/mainwindow.cpp \
+	src/ui/*.cpp \
+	src/ui/helper/*.cpp \
 	src/core/scene.cpp \
 	src/core/camera.cpp
 
