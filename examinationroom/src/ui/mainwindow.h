@@ -10,7 +10,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QWidget>
+#include <QMainWindow>
+#include <QDockWidget>
 #include <QTimer>
 
 #include <memory>
@@ -27,7 +28,7 @@ objects of the program. A seperate application class was found unnecessary. So f
  
  \author Gerhard Roethlin
 */
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
@@ -46,6 +47,13 @@ protected:
 	virtual void keyPressEvent(QKeyEvent * event);
 	virtual void keyReleaseEvent(QKeyEvent * event);
 
+public slots:
+	/**
+	Opens a file open dialog and loads the selected file as lua script with a new
+	environment.
+	*/
+	void loadLuaFile();
+
 private slots:
 	void onTimeout();
 
@@ -53,6 +61,10 @@ private:
     GLWidget * mainGlWidget_;
 	GLWidget * outGlWidget_;
 	QTimer *timer_;
+
+	QDockWidget * dockDesign_;
+	QDockWidget * dockProgram_;
+	QDockWidget * dockCode_;
 
 	std::tr1::shared_ptr<Scene> scene_;
 

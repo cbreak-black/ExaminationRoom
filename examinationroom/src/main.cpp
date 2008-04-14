@@ -30,6 +30,8 @@ int main (int argc, char** argv)
     QApplication app(argc, argv);
 	
 	Examination::MainWindow mw;
+	mw.show();
+	mw.loadLuaFile();
 	
     return app.exec();
 }

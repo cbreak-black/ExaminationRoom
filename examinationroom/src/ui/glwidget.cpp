@@ -153,7 +153,10 @@ void GLWidget::paintGL()
 		else if (style_ == matrix)
 		{
 			setSide(left);
+			glDrawBuffer(GL_AUX1);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glDrawBuffer(GL_AUX0);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		}
 		else if (style_ == sidebyside)
 		{
@@ -163,7 +166,8 @@ void GLWidget::paintGL()
 		else if (style_ == quad)
 		{
 			setSide(left);
-			glDrawBuffer(GL_BACK_LEFT);
+			// Should be GL_BACK_LEFT from last pass
+			//glDrawBuffer(GL_BACK_LEFT);
 		}
 
 		scene_->camera()->loadMatrix(this);
@@ -190,6 +194,9 @@ void GLWidget::paintGL()
 			scene_->draw(this);
 			// Write composite into the back buffer
 			glDrawBuffer(GL_BACK);
+			glDisable(GL_DEPTH_TEST);
+			glBlendFunc(GL_ONE, GL_ONE);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// From left aux buffer with left color transform
 			glReadBuffer(GL_AUX0);
 			glMatrixMode(GL_COLOR);
@@ -203,6 +210,8 @@ void GLWidget::paintGL()
 			glMatrixMode(GL_MODELVIEW);
 			glCopyPixels(0,0,s.width(),s.height(),GL_COLOR);
 			// Restore color matrix
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_DEPTH_TEST);
 			glMatrixMode(GL_COLOR);
 			glLoadIdentity();
 			glMatrixMode(GL_MODELVIEW);
