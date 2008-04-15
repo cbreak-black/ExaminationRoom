@@ -88,6 +88,16 @@ public:
 public:
 	const ObjectList & objects() const;
 
+protected:
+	/**
+	Calls layoutWillChange on the scene that contains this container, if it exists.
+	*/
+	void layoutWillChange() const;
+	/**
+	Calls layoutDidChange on the scene that contains this container, if it exists.
+	*/
+	void layoutDidChange() const;
+
 private:
 	ObjectList objects_;
 };

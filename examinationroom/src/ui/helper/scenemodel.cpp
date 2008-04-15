@@ -19,8 +19,11 @@ namespace Examination
 SceneModel::SceneModel(std::tr1::shared_ptr<Scene> scene)
 {
 	scene_ = scene;
+	scene_->addCallbackLayoutWillChange(std::tr1::bind(&SceneModel::layoutWillChange, this, _1));
+	scene_->addCallbackLayoutDidChange(std::tr1::bind(&SceneModel::layoutDidChange, this, _1));
 }
 
+// Item Model API
 QModelIndex SceneModel::index(int row, int column, const QModelIndex &parent) const
 {
 	if (parent.isValid())
@@ -89,7 +92,7 @@ int SceneModel::rowCount(const QModelIndex &parent) const
 {
 	if (!parent.isValid())
 	{
-		return 0;
+		return scene_->objects().size();
 	}
 	else
 	{
@@ -127,6 +130,25 @@ Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 	if (!index.isValid())
 		return 0;
 	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+// Callbacks
+void SceneModel::objectWillChange(const Object *)
+{
+}
+
+void SceneModel::objectDidChange(const Object *)
+{
+}
+
+void SceneModel::layoutWillChange(const Object *)
+{
+	layoutAboutToBeChanged();
+}
+
+void SceneModel::layoutDidChange(const Object *)
+{
+	layoutChanged();
 }
 
 }

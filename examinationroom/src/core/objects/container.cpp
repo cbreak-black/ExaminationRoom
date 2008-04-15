@@ -9,6 +9,7 @@
 
 #include "container.h"
 
+#include "scene.h"
 #include "objects/object.h"
 
 using namespace std::tr1;
@@ -38,6 +39,7 @@ bool Container::addObject(shared_ptr<Object> object)
 		}
 		it++;
 	}
+	layoutWillChange();
 	// Search insert position.
 	it = objects_.begin();
 	while (it != end && (*it) < object)
@@ -63,25 +65,32 @@ bool Container::addObject(shared_ptr<Object> object)
 	// Set new parent and scene
 	object->setParent(getParent());
 	object->setScene(getScene());
+	layoutDidChange();
 	return true;
 }
 
 void Container::removeObject(shared_ptr<Object> object)
 {
+	layoutWillChange();
 	object->setParent(0);
 	object->setScene(0);
 	objects_.remove(object);
+	layoutDidChange();
 }
 
 void Container::clear()
 {
+	layoutWillChange();
 	setParentsAndScenes(0,0);
 	objects_.clear();
+	layoutDidChange();
 }
 
 void Container::sortObjects()
 {
+	layoutWillChange();
 	objects_.sort();
+	layoutDidChange();
 }
 
 Container * Container::getParent()
@@ -133,5 +142,18 @@ const Container::ObjectList & Container::objects() const
 {
 	return objects_;
 }
+
+void Container::layoutWillChange() const
+{
+	if (scene())
+		scene()->layoutWillChange(this);
+}
+
+void Container::layoutDidChange() const
+{
+	if (scene())
+		scene()->layoutDidChange(this);
+}
+
 
 }

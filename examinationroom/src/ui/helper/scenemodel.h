@@ -17,6 +17,7 @@
 namespace Examination
 {
 	class Scene;
+	class Object;
 
 /**
 This class wrapps a scene so that it can be used as data source for
@@ -34,6 +35,12 @@ public: // ItemModel API
 	virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 	virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
+public: // Bindable callbacks for events
+	void objectWillChange(const Object *);
+	void objectDidChange(const Object *);
+	void layoutWillChange(const Object *);
+	void layoutDidChange(const Object *);
 
 private:
 	std::tr1::shared_ptr<Scene> scene_;

@@ -9,6 +9,7 @@
 
 #include "object.h"
 #include "container.h"
+#include "scene.h"
 #include "surfaces/abstracttexture.h"
 
 namespace Examination
@@ -153,5 +154,19 @@ bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & 
 {
 	return a->drawPriority() < b->drawPriority();
 }
+
+// Signals
+void Object::objectWillChange() const
+{
+	if (scene())
+		scene()->objectWillChange(this);
+}
+
+void Object::objectDidChange() const
+{
+	if (scene())
+		scene()->objectDidChange(this);
+}
+
 
 }

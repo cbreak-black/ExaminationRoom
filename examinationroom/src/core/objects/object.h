@@ -192,6 +192,17 @@ public: // Drawing priority
 	*/
 	void setDrawPriority(int priority);
 
+protected:
+	/**
+	Calls objectWillChange on the scene that contains this container, if it exists.
+	*/
+	void objectWillChange() const;
+
+	/**
+	Calls objectDidChange on the scene that contains this container, if it exists.
+	*/
+	void objectDidChange() const;
+
 private:
 	Scene * scene_;
 	Container * parent_;

@@ -14,6 +14,9 @@
 
 #include "vec.h"
 
+#include <list>
+#include <functional>
+
 namespace Examination
 {
 	class Object;
@@ -66,12 +69,103 @@ public: // BG Color
 	*/
 	Tool::Color4 backgroundColor() const;
 
+public: // Signals: Called by sub objects
+	/**
+	Called by objects that are about to change. Changes include attributes and data.
+	 \param obj	The object that is about to change
+	*/
+	void objectWillChange(const Object * obj) const;
+
+	/**
+	Called by objects that have changed. Changes include attributes and data.
+	 \param obj	The object that has changed
+	*/
+	void objectDidChange(const Object * obj) const;
+
+	/**
+	Called by containers that are about to change. Changes include the adding and
+	removing of objects, the reordering.
+	 \param cont	The container that is about to change
+	*/
+	void layoutWillChange(const Container * cont) const;
+
+	/**
+	Called by containers that are have changed. Changes include the adding and
+	removing of objects, the reordering.
+	 \param cont	The container that has changed
+	*/
+	void layoutDidChange(const Container * cont) const;
+
+public: // Signals: Observed by clients
+	/**
+	The type of the callbacks. Use bind() to create.
+	Do NOT rely on the Object * to stay valid after the callback returns, don't
+	store it.
+	*/
+	typedef std::tr1::function<void (const Object *)> SignalCallbackType;
+
+	/**
+	Adds a callback to be informed when an object did change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void addCallbackObjectWillChange(const SignalCallbackType & cb);
+	/**
+	Adds a callback to be informed when an object did change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void addCallbackObjectDidChange(const SignalCallbackType & cb);
+	/**
+		Adds a callback to be informed when the scene layout will change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void addCallbackLayoutWillChange(const SignalCallbackType & cb);
+	/**
+	Adds a callback to be informed when the scene layout did change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void addCallbackLayoutDidChange(const SignalCallbackType & cb);
+	/**
+	Removes a callback that was added to be informed when an object will change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void removeCallbackObjectWillChange(const SignalCallbackType & cb);
+	/**
+	Removes a callback that was added to be informed when an object did change.
+	 \param cb	A callback functional/functor thing
+	 */
+	void removeCallbackObjectDidChange(const SignalCallbackType & cb);
+	/**
+	Removes a callback that was added to be informed when the scene layout will change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void removeCallbackLayoutWillChange(const SignalCallbackType & cb);
+	/**
+	Removes a callback that was added to be informed when the scene layout did change.
+	 \param cb	A callback functional/functor thing
+	*/
+	void removeCallbackLayoutDidChange(const SignalCallbackType & cb);
+
+private: // Signals: Internal data and methods
+	/**
+	Calls all contained functions with the passed object as argument.
+	 \param list	A list of Signal callbacks
+	 \param obj		A pointer to an object to pass to the callbacks
+	*/
+	void callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj) const;
+
+	// Lists with callbacks
+	std::list<SignalCallbackType> objWillChangeCallbacks_;
+	std::list<SignalCallbackType> objDidChangeCallbacks_;
+	std::list<SignalCallbackType> layoutWillChangeCallbacks_;
+	std::list<SignalCallbackType> layoutDidChangeCallbacks_;
+
 protected:
 	virtual Container * getParent();
 	virtual Scene * getScene();
 
 private:
 	std::tr1::shared_ptr<Camera> camera_;
+
 };
 
 }

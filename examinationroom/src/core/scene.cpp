@@ -21,11 +21,15 @@ Scene::Scene()
 {
 	camera_ = shared_ptr<Camera>(new Camera());
 	setBackgroundColor(0,0,0,0);
+	setScene(this);
 }
 
 Scene::~Scene()
 {
-	clear();
+	objWillChangeCallbacks_.clear();
+	objDidChangeCallbacks_.clear();
+	layoutWillChangeCallbacks_.clear();
+	layoutDidChangeCallbacks_.clear();
 }
 
 void Scene::setCamera(std::tr1::shared_ptr<Camera> camera)
@@ -61,6 +65,78 @@ Container * Scene::getParent()
 Scene * Scene::getScene()
 {
 	return this;
+}
+
+// Signals
+
+void Scene::objectWillChange(const Object * obj) const
+{
+	callCallbacks(objWillChangeCallbacks_, obj);
+}
+
+void Scene::objectDidChange(const Object * obj) const
+{
+	callCallbacks(objDidChangeCallbacks_, obj);
+}
+
+void Scene::layoutWillChange(const Container * cont) const
+{
+	callCallbacks(layoutWillChangeCallbacks_, cont);
+}
+
+void Scene::layoutDidChange(const Container * cont) const
+{
+	callCallbacks(layoutDidChangeCallbacks_, cont);
+}
+
+void Scene::callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj) const
+{
+	std::list<SignalCallbackType>::const_iterator it = list.begin();
+	std::list<SignalCallbackType>::const_iterator end = list.end();
+	for (; it != end; it++)
+	{
+		(*it)(obj);
+	}
+}
+
+void Scene::addCallbackObjectWillChange(const SignalCallbackType & cb)
+{
+	objWillChangeCallbacks_.push_back(cb);
+}
+
+void Scene::addCallbackObjectDidChange(const SignalCallbackType & cb)
+{
+	objDidChangeCallbacks_.push_back(cb);
+}
+
+void Scene::addCallbackLayoutWillChange(const SignalCallbackType & cb)
+{
+	layoutWillChangeCallbacks_.push_back(cb);
+}
+
+void Scene::addCallbackLayoutDidChange(const SignalCallbackType & cb)
+{
+	layoutDidChangeCallbacks_.push_back(cb);
+}
+
+void Scene::removeCallbackObjectWillChange(const SignalCallbackType & cb)
+{
+	//objWillChangeCallbacks_.remove(cb);
+}
+
+void Scene::removeCallbackObjectDidChange(const SignalCallbackType & cb)
+{
+	//objDidChangeCallbacks_.remove(cb);
+}
+
+void Scene::removeCallbackLayoutWillChange(const SignalCallbackType & cb)
+{
+	//layoutWillChangeCallbacks_.remove(cb);
+}
+
+void Scene::removeCallbackLayoutDidChange(const SignalCallbackType & cb)
+{
+	//layoutDidChangeCallbacks_.remove(cb);
 }
 
 
