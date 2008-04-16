@@ -82,6 +82,7 @@ Mesh::Mesh()
 {
 	displayList_ = 0;
 	scaleFactor_ = 1;
+	setName("Mesh");
 }
 
 bool Mesh::loadMesh(std::string path)
@@ -136,6 +137,7 @@ bool Mesh::loadMesh(std::string path)
 	else
 	{
 		rebuildCache();
+		setName(path);
 		return true;
 	}
 }
@@ -147,6 +149,7 @@ void Mesh::clearMesh()
 	textureCoordinates_.clear();
 	triangles_.clear();
 	invalidateCache();
+	setName("Mesh");
 }
 
 void Mesh::invalidateCache()

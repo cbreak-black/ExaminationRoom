@@ -19,6 +19,7 @@ namespace Examination
 Text::Text()
 {
 	font_ = QFont("Helvetica", 20);
+	setName("Text");
 }
 
 // Drawing

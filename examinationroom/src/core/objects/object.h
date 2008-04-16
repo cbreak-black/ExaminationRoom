@@ -13,6 +13,7 @@
 #include "vec.h"
 
 #include <memory>
+#include <string>
 
 namespace Examination
 {
@@ -192,6 +193,19 @@ public: // Drawing priority
 	*/
 	void setDrawPriority(int priority);
 
+public: // Name
+	/**
+	Returns the name of this object.
+	 \return the name of this object
+	*/
+	const std::string & name() const;
+
+	/**
+	Sets the name of this object.
+	 \param name	The new name of this object
+	*/
+	void setName(const std::string & name);
+
 protected:
 	/**
 	Calls objectWillChange on the scene that contains this container, if it exists.
@@ -206,6 +220,8 @@ protected:
 private:
 	Scene * scene_;
 	Container * parent_;
+
+	std::string name_;
 
 	std::tr1::shared_ptr<AbstractTexture> tex_;
 	Tool::Point origin_;

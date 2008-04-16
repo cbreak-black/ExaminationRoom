@@ -20,6 +20,7 @@ Atmosphere::Atmosphere()
 	setStart(0);
 	setEnd(100);
 	setDensity(1);
+	setName("Atmosphere");
 }
 
 Atmosphere::FogMode Atmosphere::mode() const

@@ -22,6 +22,7 @@ Scene::Scene()
 	camera_ = shared_ptr<Camera>(new Camera());
 	setBackgroundColor(0,0,0,0);
 	setScene(this);
+	setName("Scene");
 }
 
 Scene::~Scene()

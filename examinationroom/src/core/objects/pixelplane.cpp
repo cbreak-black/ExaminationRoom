@@ -23,6 +23,7 @@ Pixelplane::Pixelplane()
 {
 	setAutoResize(false);
 	setSize(1,1);
+	setName("Pixel Plane");
 }
 
 Pixelplane::~Pixelplane()

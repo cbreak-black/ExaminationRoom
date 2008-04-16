@@ -22,6 +22,7 @@ CameraNode::CameraNode()
 {
 	cam_ = shared_ptr<Camera>(new Camera());
 	setDrawPriority(128);
+	setName("Camera");
 }
 
 std::tr1::shared_ptr<Camera> CameraNode::camera() const

@@ -20,6 +20,7 @@ Sphere::Sphere()
 	radius_ = 1;
 	slices_ = 24;
 	stacks_ = 12;
+	setName("Sphere");
 }
 
 // Drawing

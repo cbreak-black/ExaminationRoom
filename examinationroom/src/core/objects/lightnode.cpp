@@ -17,6 +17,7 @@ namespace Examination
 LightNode::LightNode()
 {
 	setAmbient(Tool::Color4(0,0,0,1));
+	setName("Light");
 }
 
 Tool::Color4 LightNode::ambient() const

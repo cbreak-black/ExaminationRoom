@@ -19,6 +19,7 @@ namespace Examination
 
 Container::Container()
 {
+	setName("Container");
 }
 
 Container::~Container()

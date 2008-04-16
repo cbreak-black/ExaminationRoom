@@ -45,6 +45,7 @@ void Object::init()
 	setWireframe(false);
 	setShown(true);
 	setDrawPriority(0);
+	setName("Object");
 }
 
 Object::~Object()
@@ -153,6 +154,19 @@ void Object::setDrawPriority(int priority)
 bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b)
 {
 	return a->drawPriority() < b->drawPriority();
+}
+
+// Name
+const std::string & Object::name() const
+{
+	return name_;
+}
+
+void Object::setName(const std::string & name)
+{
+	objectWillChange();
+	name_ = name;
+	objectDidChange();
 }
 
 // Signals

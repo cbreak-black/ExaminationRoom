@@ -18,6 +18,7 @@ DepthBuffer::DepthBuffer()
 {
 	setDepthBufferState(true);
 	setDrawPriority(128);
+	setName("Depth");
 }
 
 // Drawing

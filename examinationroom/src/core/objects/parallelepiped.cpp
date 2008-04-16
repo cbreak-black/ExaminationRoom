@@ -23,6 +23,7 @@ namespace Examination
 Parallelepiped::Parallelepiped()
 {
 	directionC_.z = 1;
+	setName("Parallelepiped");
 }
 
 // Drawing

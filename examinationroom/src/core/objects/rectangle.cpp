@@ -28,6 +28,7 @@ Rectangle::Rectangle()
 	
 	setTexCoords(0,0, 0,1, 1,0, 1,1);
 	setSubdivision(2);
+	setName("Rectangle");
 }
 
 Rectangle::~Rectangle()
