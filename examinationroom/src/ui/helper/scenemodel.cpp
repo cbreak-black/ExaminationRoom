@@ -26,42 +26,44 @@ SceneModel::SceneModel(std::tr1::shared_ptr<Scene> scene)
 // Item Model API
 QModelIndex SceneModel::index(int row, int column, const QModelIndex &parent) const
 {
+	Container * c;
 	if (parent.isValid())
 	{
 		// Get an object pointer
 		Object * o = static_cast<Object*>(parent.internalPointer());
 		// Check if this is a container object
-		Container * c = dynamic_cast<Container*>(o);
-		if (c)
+		c = dynamic_cast<Container*>(o);
+	}
+	else
+	{
+		// Use scene as parent if an invalid index is specified as parent
+		c = scene_.get();
+	}
+	if (c)
+	{
+		// Get the specified sub object
+		Container::ObjectList ol = c->objects();
+		if (row >= 0 && row < (int)ol.size())
 		{
-			// Get the specified sub object
-			Container::ObjectList ol = c->objects();
-			if (row >= 0 && row < (int)ol.size())
+			Container::ObjectList::const_iterator it = ol.begin();
+			int itCounter = 0;
+			while (itCounter < row)
 			{
-				Container::ObjectList::const_iterator it = ol.begin();
-				int itCounter = 0;
-				while (itCounter < row)
-				{
-					itCounter++;
-					it++;
-				}
-				return createIndex(row, column, (*it).get());
+				itCounter++;
+				it++;
 			}
-			else
-			{
-				// Out of child list index
-				return QModelIndex();
-			}
+			return createIndex(row, column, (*it).get());
 		}
 		else
 		{
-			// Not a container
+			// Out of child list index
 			return QModelIndex();
 		}
 	}
 	else
 	{
-		return createIndex(row, column, scene_.get());
+		// Not a container
+		return QModelIndex();
 	}
 }
 
@@ -78,8 +80,16 @@ QModelIndex SceneModel::parent(const QModelIndex &child) const
 		}
 		else
 		{
-			// TODO: Find real row and column
-			return createIndex(0, 0, o->parent());
+			Container * c = o->parent();
+			Container::ObjectList::const_iterator it = c->objects().begin();
+			Container::ObjectList::const_iterator end = c->objects().end();
+			int i = 0;
+			while (it != end && (*it).get() != o)
+			{
+				i++;
+				it++;
+			}
+			return createIndex(i, 0, o->parent());
 		}
 	}
 	else
@@ -120,9 +130,31 @@ int SceneModel::columnCount(const QModelIndex &parent) const
 QVariant SceneModel::data(const QModelIndex &index, int role) const
 {
 	if (index.isValid())
-		return QVariant();
+	{
+		if (index.column() == 0)
+		{
+			if (role == Qt::DisplayRole)
+			{
+				Object * o = static_cast<Object*>(index.internalPointer());
+				return QVariant(QString::fromStdString(o->name()));
+			}
+			else
+			{
+				// Not used role
+				return QVariant();
+			}
+		}
+		else
+		{
+			// Not used column
+			return QVariant();
+		}
+	}
 	else
+	{
+		// Not valid
 		return QVariant();
+	}
 }
 
 Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
