@@ -119,6 +119,11 @@ void GLWidget::initializeGL()
 	// Enable z-buffering
 	glEnable(GL_DEPTH_TEST);
 
+	// Stencil
+	glClearStencil(0);
+	glStencilFunc(GL_EQUAL, 0x01, 0x01);
+	glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+
 	// Set texture parameters
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -168,6 +173,13 @@ void GLWidget::paintGL()
 			setSide(left);
 			// Should be GL_BACK_LEFT from last pass
 			//glDrawBuffer(GL_BACK_LEFT);
+		}
+		else if (style_ == line)
+		{
+			setSide(left);
+			lineStencil();
+			glEnable(GL_STENCIL_TEST);
+			glStencilFunc(GL_NOTEQUAL, 0x01, 0x01);
 		}
 
 		scene_->camera()->loadMatrix(this);
@@ -233,7 +245,72 @@ void GLWidget::paintGL()
 			scene_->draw(this);
 			glDrawBuffer(GL_BACK_LEFT);
 		}
+		else if (style_ == line)
+		{
+			setSide(right);
+			glStencilFunc(GL_EQUAL, 0x01, 0x01);
+			scene_->camera()->loadMatrix(this);
+			scene_->draw(this);
+			glDisable(GL_STENCIL_TEST);
+		}
 	}
+}
+
+static const GLubyte stipplePattern[] = {
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff,
+	0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff
+};
+
+void GLWidget::lineStencil()
+{
+	// Prepare projection
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0,1,0,1);
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	// Prepare stencil
+	glEnable(GL_STENCIL_TEST);
+	glClear(GL_STENCIL_BUFFER_BIT);
+	glStencilFunc(GL_ALWAYS, 0x01, 0x01);
+	glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+	// Lock buffers
+	glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
+	glDepthMask(GL_FALSE);
+	// Draw The pattern into the stencil buffer
+	glColor4f(1,1,1,1);
+	glEnable(GL_POLYGON_STIPPLE);
+	glPolygonStipple(stipplePattern);
+	glRectf(0,0,1,1);
+	glDisable(GL_POLYGON_STIPPLE);
+	// Unlock buffers
+	glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
+	glDepthMask(GL_TRUE);
+	// Disable stencil
+	glStencilFunc(GL_EQUAL, 0x01, 0x01);
+	glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+	glDisable(GL_STENCIL_TEST);
+	// Restore projection
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 }
 
 void GLWidget::resizeGL(int width, int height)

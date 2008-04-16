@@ -27,7 +27,7 @@ which is drawn into the view.
 class GLWidget : public QGLWidget
 {
 public: // Enums
-	typedef enum {single, anaglyph, matrix, sidebyside, quad } DrawStyle;
+	typedef enum {single, anaglyph, matrix, sidebyside, quad, line } DrawStyle;
 	typedef enum {left = 1, right = 2} Side;
 
 public:
@@ -52,6 +52,7 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
+	void lineStencil();
 
 private:
 	std::tr1::shared_ptr<Scene> scene_;
