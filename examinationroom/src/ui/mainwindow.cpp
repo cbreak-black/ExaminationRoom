@@ -38,6 +38,42 @@ MainWindow::MainWindow()
 	mainGlWidget_->setStyle(GLWidget::single);
 //	outGlWidget_->setStyle(GLWidget::single);
 
+	// Add menu
+	QMenu *menu = menuBar()->addMenu(tr("&File"));
+	QAction *action = menu->addAction(tr("&Open Scene..."));
+	connect(action, SIGNAL(triggered()), this, SLOT(loadLuaFile()));
+	action = menu->addAction(tr("Close Scene"));
+	connect(action, SIGNAL(triggered()), this, SLOT(loadLuaFile()));
+#ifndef Q_WS_MACX
+	menu->addSeparator();
+	menu->addAction(tr("&Quit"), this, SLOT(close()));
+#endif
+
+	// Signal mapper for display types
+	signalMapper_ = new QSignalMapper(this);
+
+	menu = menuBar()->addMenu(tr("&Output Mode"));
+	action = menu->addAction(tr("&Anaglyph"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::anaglyph);
+	action = menu->addAction(tr("&Side by Side"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::sidebyside);
+	action = menu->addAction(tr("&Line interlacing (Experimental)"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::line);
+	action = menu->addAction(tr("Quad Buffering (Experimental)"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::quad);
+	action = menu->addAction(tr("Matrix Anaglyph (Experimental)"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::matrix);
+	action = menu->addAction(tr("Si&ngle"));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::single);
+
+	connect(signalMapper_, SIGNAL(mapped(int)), this, SLOT(setDrawStyle(int)));
+
 	// Add Dock Widgets
 	dockDesign_ = new DesignWidget("Scene Design", this);
 	dockProgram_ = new QDockWidget("Scene Program", this);
@@ -92,6 +128,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 	delete timer_;
+	delete signalMapper_;
 	delete dockDesign_;
 	delete dockProgram_;
 	delete dockCode_;
@@ -130,15 +167,26 @@ void MainWindow::onTimeout()
 void MainWindow::loadLuaFile()
 {
 	// Set up lua engine and bindings
-	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 	QString fileName = QFileDialog::getOpenFileName(this, "Open Log File",
 													"res/scene.lua",
 													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
+		scene_->clear();
+		luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 		luaProxy_->runFile(fileName.toAscii());
 	}
 }
 
+void MainWindow::closeScene()
+{
+	scene_->clear();
+	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+}
+
+void MainWindow::setDrawStyle(int t)
+{
+	mainGlWidget_->setStyle((GLWidget::DrawStyle)t);
+}
 
 }

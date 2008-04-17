@@ -12,6 +12,7 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QSignalMapper>
 #include <QTimer>
 
 #include <memory>
@@ -55,6 +56,17 @@ public slots:
 	*/
 	void loadLuaFile();
 
+	/**
+	Closes the current scene.
+	*/
+	void closeScene();
+
+	/**
+	Sets the draw type of the main window output view.
+	 \param t	A valid GLWidget::DrawStyle integer
+	*/
+	void setDrawStyle(int t);
+
 private slots:
 	void onTimeout();
 
@@ -62,6 +74,7 @@ private:
     GLWidget * mainGlWidget_;
 	GLWidget * outGlWidget_;
 	QTimer *timer_;
+	QSignalMapper * signalMapper_;
 
 	DesignWidget * dockDesign_;
 	QDockWidget * dockProgram_;
