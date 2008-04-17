@@ -9,6 +9,8 @@
 
 #include "scenemodel.h"
 
+#include <QSize>
+
 #include "object.h"
 #include "container.h"
 #include "scene.h"
@@ -80,16 +82,26 @@ QModelIndex SceneModel::parent(const QModelIndex &child) const
 		}
 		else
 		{
-			Container * c = o->parent();
-			Container::ObjectList::const_iterator it = c->objects().begin();
-			Container::ObjectList::const_iterator end = c->objects().end();
-			int i = 0;
-			while (it != end && (*it).get() != o)
+			Container * p = o->parent();
+			Container * c = p->parent(); // Parent of the parent, to find parent's coordinates
+			// c should always be valid, since every object has a parent besides the scene
+			// and objects that have scene as parent were rejected above
+			if (c)
 			{
-				i++;
-				it++;
+				Container::ObjectList::const_iterator it = c->objects().begin();
+				Container::ObjectList::const_iterator end = c->objects().end();
+				int i = 0;
+				while (it != end && (*it).get() != p)
+				{
+					i++;
+					it++;
+				}
+				return createIndex(i, 0, o->parent());
 			}
-			return createIndex(i, 0, o->parent());
+			else
+			{
+				return QModelIndex();
+			}
 		}
 	}
 	else
@@ -138,6 +150,27 @@ QVariant SceneModel::data(const QModelIndex &index, int role) const
 				Object * o = static_cast<Object*>(index.internalPointer());
 				return QVariant(QString::fromStdString(o->name()));
 			}
+			else if (role == Qt::SizeHintRole)
+			{
+				return QVariant(QSize(192,18));
+			}
+			else
+			{
+				// Not used role
+				return QVariant();
+			}
+		}
+		else if (index.column() == 1)
+		{
+			if (role == Qt::CheckStateRole)
+			{
+				Object * o = static_cast<Object*>(index.internalPointer());
+				return QVariant(o->shown() ? Qt::Checked : Qt::Unchecked);
+			}
+			else if (role == Qt::SizeHintRole)
+			{
+				return QVariant(QSize(28,18));
+			}
 			else
 			{
 				// Not used role
@@ -157,11 +190,68 @@ QVariant SceneModel::data(const QModelIndex &index, int role) const
 	}
 }
 
+bool SceneModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+	if (index.isValid() && value.isValid())
+	{
+		if (index.column() == 1 && role == Qt::CheckStateRole)
+		{
+			Object * o = static_cast<Object*>(index.internalPointer());
+			bool flag = value.toInt() == Qt::Checked;
+			o->setShown(flag);
+			dataChanged(index, index);
+			return true;
+		}
+	}
+	return false;
+}
+
 Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
 		return 0;
-	return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+	if (index.column() == 0)
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	}
+	else if (index.column() == 1)
+	{
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+QVariant SceneModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	if (orientation == Qt::Horizontal)
+	{
+		if (role == Qt::DisplayRole)
+		{
+			switch (section)
+			{
+				case 0:
+					return QVariant("Name");
+					break;
+				case 1:
+					return QVariant("Shown");
+					break;
+				default:
+					return QVariant();
+			}
+		}
+		else
+		{
+			return QVariant();
+		}
+	}
+	else
+	{
+		return QVariant();
+	}
 }
 
 // Callbacks

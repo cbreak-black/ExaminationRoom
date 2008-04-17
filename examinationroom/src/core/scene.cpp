@@ -60,7 +60,7 @@ Tool::Color4 Scene::backgroundColor() const
 
 Container * Scene::getParent()
 {
-	return 0;
+	return this;
 }
 
 Scene * Scene::getScene()

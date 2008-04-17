@@ -18,6 +18,7 @@ DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlag
 	: QDockWidget(title, parent, flags)
 {
 	treeView_ = new QTreeView();
+	treeView_->setUniformRowHeights(true);
 	setWidget(treeView_);
 }
 
@@ -39,6 +40,10 @@ void DesignWidget::setScene(std::tr1::shared_ptr<Scene> scene)
 	SceneModel * sm = new SceneModel(scene);
 	treeView_->setModel(sm);
 	sceneModel_ = std::tr1::shared_ptr<SceneModel>(sm);
+	treeView_->setColumnWidth(0, 192);
+	treeView_->setColumnWidth(1, 32);
+//	treeView_->resizeColumnToContents(0);
+//	treeView_->resizeColumnToContents(1);
 }
 
 
