@@ -23,6 +23,7 @@ Pixelplane::Pixelplane()
 {
 	setAutoResize(false);
 	setSize(1,1);
+	setZoom(1,1);
 	setName("Pixel Plane");
 }
 
@@ -68,8 +69,8 @@ void Pixelplane::resizeToCurrent() const
 		std::tr1::shared_ptr<Camera> cam = scene()->camera();
 		int w, h, cw, ch;
 		float uss = cam->unitScreenSize(position());
-		w = uss*width_;
-		h = uss*height_;
+		w = uss*width_/zoomFactorX_;
+		h = uss*height_/zoomFactorY_;
 		cw = texture()->width();
 		ch = texture()->height();
 		if (cw != w || ch != h)
@@ -87,5 +88,33 @@ void Pixelplane::resizeTo(int w, int h) const
 	}
 }
 
-	
+float Pixelplane::zoomX()
+{
+	return zoomFactorX_;
+}
+
+float Pixelplane::zoomY()
+{
+	return zoomFactorY_;
+}
+
+void Pixelplane::setZoom(float zx, float zy)
+{
+	zoomFactorX_ = zx;
+	zoomFactorY_ = zy;
+	if (texture())
+	{
+		texture()->setZoom(zoomFactorX_, zoomFactorY_);
+	}
+}
+
+void Pixelplane::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
+{
+	Object::setTexture(t);
+	if (texture())
+	{
+		texture()->setZoom(zoomFactorX_, zoomFactorY_);
+	}
+}
+
 }

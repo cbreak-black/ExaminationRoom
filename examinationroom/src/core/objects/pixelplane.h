@@ -45,10 +45,18 @@ public:
 	void resizeToCurrent() const;
 	void resizeTo(int w, int h) const;
 
+	float zoomX();
+	float zoomY();
+	void setZoom(float zx, float zy);
+
+	virtual void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
+
 private:
 	bool autoresize_;
 	float width_;
 	float height_;
+	float zoomFactorX_;
+	float zoomFactorY_;
 };
 	
 }

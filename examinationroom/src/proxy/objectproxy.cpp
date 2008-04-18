@@ -489,6 +489,39 @@ int ObjectProxy::resizeTo(lua_State *L)
 	}
 }
 
+int ObjectProxy::zoom(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushnumber(L, pixelplane()->zoomX());
+		lua_pushnumber(L, pixelplane()->zoomY());
+		return 2;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setZoom(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 3);
+		pixelplane()->setZoom(lua_tonumber(L, 2), lua_tonumber(L, 3));
+		lua_pop(L, 3);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
 // Text Node
 int ObjectProxy::text(lua_State *L)
 {
@@ -1065,6 +1098,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setAutoResize", &ObjectProxy::setAutoResize },
 	{ "resizeToCurrent", &ObjectProxy::resizeToCurrent },
 	{ "resizeTo", &ObjectProxy::resizeTo },
+	{ "zoom", &ObjectProxy::zoom },
+	{ "setZoom", &ObjectProxy::setZoom },
 	{ 0, 0 }
 };
 

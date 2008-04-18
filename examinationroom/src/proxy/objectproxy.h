@@ -71,6 +71,8 @@ public: // Pixelplane
 	int setAutoResize(lua_State *L);
 	int resizeToCurrent(lua_State *L);
 	int resizeTo(lua_State *L);
+	int zoom(lua_State *L);
+	int setZoom(lua_State *L);
 
 public: // Text
 	int text(lua_State *L);

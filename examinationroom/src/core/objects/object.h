@@ -86,7 +86,7 @@ public: // Drawing
 	Sets the texture for this object.
 	 \param t	Texture for left camera
 	*/
-	void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
+	virtual void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
 
 	/**
 	Returns the texture of this object.
