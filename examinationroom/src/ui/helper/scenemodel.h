@@ -20,8 +20,8 @@ namespace Examination
 	class Object;
 
 /**
-This class wrapps a scene so that it can be used as data source for
-a QTreeView.
+This class wrapps a scene so that it can be used as data source for a QTreeView.
+If the visual representation has to be changed, it has to be done here.
 */
 class SceneModel : public QAbstractItemModel
 {

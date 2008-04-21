@@ -20,6 +20,7 @@ namespace Examination
 Container::Container()
 {
 	setName("Container");
+	setEnabled(true);
 }
 
 Container::~Container()
@@ -139,6 +140,18 @@ void Container::draw(GLWidget * dest) const
 	}
 }
 
+// Transformation status
+bool Container::enabled() const
+{
+	return enabled_;
+}
+
+void Container::setEnabled(bool enabled)
+{
+	enabled_ = enabled;
+}
+
+// Object accessor
 const Container::ObjectList & Container::objects() const
 {
 	return objects_;

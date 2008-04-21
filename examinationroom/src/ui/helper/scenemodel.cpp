@@ -134,9 +134,9 @@ int SceneModel::rowCount(const QModelIndex &parent) const
 int SceneModel::columnCount(const QModelIndex &parent) const
 {
 	if (parent.isValid())
-		return 2; // Could query the real object
+		return 3; // Could query the real object
 	else
-		return 2; // Scene itself
+		return 3; // Scene itself
 }
 
 QVariant SceneModel::data(const QModelIndex &index, int role) const
@@ -177,6 +177,31 @@ QVariant SceneModel::data(const QModelIndex &index, int role) const
 				return QVariant();
 			}
 		}
+		else if (index.column() == 2)
+		{
+			if (role == Qt::CheckStateRole)
+			{
+				Object * o = static_cast<Object*>(index.internalPointer());
+				Container * c = dynamic_cast<Container*>(o);
+				if (c)
+				{
+					return QVariant(c->enabled() ? Qt::Checked : Qt::Unchecked);
+				}
+				else
+				{
+					return QVariant();
+				}
+			}
+			else if (role == Qt::SizeHintRole)
+			{
+				return QVariant(QSize(28,18));
+			}
+			else
+			{
+				// Not used role
+				return QVariant();
+			}
+		}
 		else
 		{
 			// Not used column
@@ -202,6 +227,18 @@ bool SceneModel::setData(const QModelIndex & index, const QVariant & value, int 
 			dataChanged(index, index);
 			return true;
 		}
+		if (index.column() == 2 && role == Qt::CheckStateRole)
+		{
+			Object * o = static_cast<Object*>(index.internalPointer());
+			Container * c = dynamic_cast<Container*>(o);
+			if (c)
+			{
+				bool flag = value.toInt() == Qt::Checked;
+				c->setEnabled(flag);
+				dataChanged(index, index);
+				return true;
+			}
+		}
 	}
 	return false;
 }
@@ -218,6 +255,18 @@ Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 	else if (index.column() == 1)
 	{
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+	}
+	else if (index.column() == 2)
+	{
+		Object * o = static_cast<Object*>(index.internalPointer());
+		if (dynamic_cast<Container*>(o))
+		{
+			return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+		}
+		else
+		{
+			return Qt::ItemIsSelectable;
+		}
 	}
 	else
 	{
@@ -238,6 +287,9 @@ QVariant SceneModel::headerData(int section, Qt::Orientation orientation, int ro
 					break;
 				case 1:
 					return QVariant("Shown");
+					break;
+				case 2:
+					return QVariant("Enabled");
 					break;
 				default:
 					return QVariant();

@@ -43,7 +43,7 @@ MainWindow::MainWindow()
 	QAction *action = menu->addAction(tr("&Open Scene..."));
 	connect(action, SIGNAL(triggered()), this, SLOT(loadLuaFile()));
 	action = menu->addAction(tr("Close Scene"));
-	connect(action, SIGNAL(triggered()), this, SLOT(loadLuaFile()));
+	connect(action, SIGNAL(triggered()), this, SLOT(closeScene()));
 #ifndef Q_WS_MACX
 	menu->addSeparator();
 	menu->addAction(tr("&Quit"), this, SLOT(close()));

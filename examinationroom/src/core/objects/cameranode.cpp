@@ -40,24 +40,32 @@ void CameraNode::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		// Push the matrix stack, so that the previous camera can be restored
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		// Remove old data from depth buffer
-		glClear(GL_DEPTH_BUFFER_BIT);
-		// Set up camera
-		camera()->loadMatrix(dest);
-		// Draw the contents of this node
-		Container::draw(dest);
-		// And restore the matrix stack
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
-		glPopMatrix();
+		// If not enabled, just draw children and return
+		if (!enabled())
+		{
+			Container::draw(dest);
+		}
+		else
+		{
+			// Push the matrix stack, so that the previous camera can be restored
+			glMatrixMode(GL_PROJECTION);
+			glPushMatrix();
+			glLoadIdentity();
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
+			// Remove old data from depth buffer
+			glClear(GL_DEPTH_BUFFER_BIT);
+			// Set up camera
+			camera()->loadMatrix(dest);
+			// Draw the contents of this node
+			Container::draw(dest);
+			// And restore the matrix stack
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+		}
 	}
 }
 

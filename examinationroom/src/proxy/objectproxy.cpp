@@ -402,6 +402,30 @@ int ObjectProxy::setDrawPriority(lua_State *L)
 	return 0;
 }
 
+int ObjectProxy::shown(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushboolean(L, object()->shown());
+	return 1;
+}
+
+int ObjectProxy::setShown(lua_State *L)
+{
+	checkTop(L, 2);
+	object()->setShown(lua_toboolean(L, 2));
+	lua_pop(L, 2);
+	return 0;
+}
+
+int ObjectProxy::visible(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushboolean(L, object()->visible());
+	return 1;
+}
+
 // Textures
 int ObjectProxy::setTexCoords(lua_State *L)
 {
@@ -974,6 +998,38 @@ int ObjectProxy::clear(lua_State *L)
 	}
 }
 
+int ObjectProxy::enabled(lua_State *L)
+{
+	if (container())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushboolean(L, container()->enabled());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
+int ObjectProxy::setEnabled(lua_State *L)
+{
+	if (container())
+	{
+		checkTop(L, 2);
+		container()->setEnabled(lua_toboolean(L, 2));
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 // Dynamic casts
 shared_ptr<Sphere> ObjectProxy::sphere()
 {
@@ -1085,6 +1141,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "addObject", &ObjectProxy::addObject },
 	{ "removeObject", &ObjectProxy::removeObject },
 	{ "clear", &ObjectProxy::clear },
+	{ "enabled", &ObjectProxy::enabled },
+	{ "setEnabled", &ObjectProxy::setEnabled },
 	{ "position", &ObjectProxy::position },
 	{ "setPosition", &ObjectProxy::setPosition },
 	{ "color", &ObjectProxy::color },
@@ -1093,6 +1151,9 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setWireframe", &ObjectProxy::setWireframe },
 	{ "drawPriority", &ObjectProxy::drawPriority },
 	{ "setDrawPriority", &ObjectProxy::setDrawPriority },
+	{ "shown", &ObjectProxy::shown },
+	{ "setShown", &ObjectProxy::setShown },
+	{ "visible", &ObjectProxy::visible },
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
 	{ "setTexture", &ObjectProxy::setTexture },
 	{ "setAutoResize", &ObjectProxy::setAutoResize },

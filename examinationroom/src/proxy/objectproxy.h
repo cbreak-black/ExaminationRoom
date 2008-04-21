@@ -61,6 +61,9 @@ public: // Object
 	int setWireframe(lua_State *L);
 	int drawPriority(lua_State *L);
 	int setDrawPriority(lua_State *L);
+	int shown(lua_State *L);
+	int setShown(lua_State *L);
+	int visible(lua_State *L);
 
 public: // Textures
 	int setTexCoords(lua_State *L);
@@ -116,6 +119,8 @@ public: // Container
 	int addObject(lua_State *L);
 	int removeObject(lua_State *L);
 	int clear(lua_State *L);
+	int enabled(lua_State *L);
+	int setEnabled(lua_State *L);
 
 public: // Dynamic Casts
 	std::tr1::shared_ptr<Sphere> sphere();

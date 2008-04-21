@@ -83,7 +83,27 @@ public:
 	virtual void setParent(Container * c);
 
 public:
+	/**
+	Draw the container, while applying it's function. Containers modify their contents
+	in specific ways.
+	 \param dest	The destination widget
+	*/
 	virtual void draw(GLWidget * dest) const;
+
+	/**
+	Returns true if the container is enabled.
+	Being enabled means to apply the transformation of the container to the subobjects.
+	When not enabled, the subobjects are drawn without change.
+	The default is enabled.
+	 \return the enable state
+	*/
+	bool enabled() const;
+
+	/**
+	Controlls if the container applies it's transformation.
+	 \param enabled	True to enable the container, false to disable it.
+	*/
+	void setEnabled(bool enabled);
 
 public:
 	const ObjectList & objects() const;
@@ -100,6 +120,7 @@ protected:
 
 private:
 	ObjectList objects_;
+	bool enabled_;
 };
 
 }

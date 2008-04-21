@@ -100,12 +100,20 @@ void AffineTransformation::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		Point p = position();
-		glPushMatrix();
-		glTranslatef(p.x, p.y, p.z);
-		glMultMatrixd(trans_);
-		Container::draw(dest);
-		glPopMatrix();
+		// If not enabled, just draw children and return
+		if (!enabled())
+		{
+			Container::draw(dest);
+		}
+		else
+		{
+			Point p = position();
+			glPushMatrix();
+			glTranslatef(p.x, p.y, p.z);
+			glMultMatrixd(trans_);
+			Container::draw(dest);
+			glPopMatrix();
+		}
 	}
 }
 

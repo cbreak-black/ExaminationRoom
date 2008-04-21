@@ -35,45 +35,53 @@ void LightNode::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		// Reserve a light id
-		LightID id = reserveLight();
-		if (id == Invalid)
+		// If not enabled, just draw children and return
+		if (!enabled())
 		{
-			// No light free
-			return;
+			Container::draw(dest);
 		}
-		int glID = toGlLight(id);
-		// Store the old enabled state
-		GLboolean isEnabled[4];
-		glGetBooleanv(GL_NORMALIZE, isEnabled+0);
-		glGetBooleanv(GL_LIGHTING, isEnabled+1);
-		glGetBooleanv(glID, isEnabled+2);
-		glGetBooleanv(GL_COLOR_MATERIAL, isEnabled+3);
-		// Set up lighting
-		glEnable(GL_NORMALIZE);
-		glEnable(GL_LIGHTING);
-		glEnable(glID);
-		// Set up color material (for setting material with glColor*())
-		glEnable(GL_COLOR_MATERIAL);
-		// Set Light parameters
-		glLightfv(glID, GL_AMBIENT, ambient().vec);
-		glLightfv(glID, GL_DIFFUSE, color().vec);
-		//glLightfv(glID, GL_SPECULAR, specularLight);
-		// GL_POSITION expects homogenous coordinates (4 floats)
-		glLightfv(glID, GL_POSITION, toHomogenous(position()).vec);
-		// Draw the contents of this node
-		Container::draw(dest);
-		// Disable lighting and misc stuff (if it was not already enabled)
-		if (!isEnabled[3])
-			glDisable(GL_COLOR_MATERIAL);
-		if (!isEnabled[2])
-			glDisable(glID);
-		if (!isEnabled[1])
-			glDisable(GL_LIGHTING);
-		if (!isEnabled[0])
-			glDisable(GL_NORMALIZE);
-		// Free the light id that was used.
-		freeLight(id);
+		else
+		{
+			// Reserve a light id
+			LightID id = reserveLight();
+			if (id == Invalid)
+			{
+				// No light free
+				return;
+			}
+			int glID = toGlLight(id);
+			// Store the old enabled state
+			GLboolean isEnabled[4];
+			glGetBooleanv(GL_NORMALIZE, isEnabled+0);
+			glGetBooleanv(GL_LIGHTING, isEnabled+1);
+			glGetBooleanv(glID, isEnabled+2);
+			glGetBooleanv(GL_COLOR_MATERIAL, isEnabled+3);
+			// Set up lighting
+			glEnable(GL_NORMALIZE);
+			glEnable(GL_LIGHTING);
+			glEnable(glID);
+			// Set up color material (for setting material with glColor*())
+			glEnable(GL_COLOR_MATERIAL);
+			// Set Light parameters
+			glLightfv(glID, GL_AMBIENT, ambient().vec);
+			glLightfv(glID, GL_DIFFUSE, color().vec);
+			//glLightfv(glID, GL_SPECULAR, specularLight);
+			// GL_POSITION expects homogenous coordinates (4 floats)
+			glLightfv(glID, GL_POSITION, toHomogenous(position()).vec);
+			// Draw the contents of this node
+			Container::draw(dest);
+			// Disable lighting and misc stuff (if it was not already enabled)
+			if (!isEnabled[3])
+				glDisable(GL_COLOR_MATERIAL);
+			if (!isEnabled[2])
+				glDisable(glID);
+			if (!isEnabled[1])
+				glDisable(GL_LIGHTING);
+			if (!isEnabled[0])
+				glDisable(GL_NORMALIZE);
+			// Free the light id that was used.
+			freeLight(id);
+		}
 	}
 }
 
