@@ -35,6 +35,18 @@
 %\usepackage{wrapfig}
 %\usepackage{subfigure}
 %\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{eso-pic}
+
+\AddToShipoutPicture{
+\AtTextCenter{
+       \makebox(0,0)[c]{\resizebox{\textwidth}{!}{
+               \rotatebox{45}{
+                       \color{lightgray}
+                       \textsf{\textbf{DRAFT}}}}
+               }
+       }
+}
 
 \usepackage{geometry} % to change the page dimensions
 \geometry{a4paper}
@@ -55,7 +67,7 @@
 
 \renewcommand{\labelitemi}{-}
 
-\newcommand{\todo}[1]{{\large TODO: #1}}
+\newcommand{\todo}[1]{{\large\color{red!50} TODO: #1}}
 
 % Depth of the TOC
 %\setcounter{secnumdepth}{3}
