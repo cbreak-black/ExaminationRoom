@@ -20,7 +20,10 @@ namespace Examination
 	class Camera;
 
 /**
-This class represents a transformable group of objects.
+This class represents a group of objects that are viewn with it's own camera.
+The result is an image which consists of objects seen through different cameras,
+with potentialy different parameters.
+ \see Camera
 */
 class CameraNode : public Container
 {
@@ -45,6 +48,10 @@ public:
 	void setCamera(std::tr1::shared_ptr<Camera> camera);
 
 public:
+	/**
+	Draws the contained objects with the local camera.
+	The depth buffer reset for this to work consistently.
+	*/
 	virtual void draw(GLWidget * dest) const;
 
 private:

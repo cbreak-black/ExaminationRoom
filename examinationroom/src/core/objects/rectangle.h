@@ -15,11 +15,26 @@
 namespace Examination
 {
 	class AbstractTexture;
-	
+
+/**
+The rectangle class represents a 2D parallelogram object. It is defined by it's
+origin, and two vectors.
+*/
 class Rectangle : public Object
 {
 public: // Construction
+	/**
+	Creates a default rectangle with side length 1, parallel to x and y axis.
+	The default texture coordinates map the lower left corner of the texture to
+	the origin, the lower right to the point at dirA, and the upper left to dirB.
+	By default, it is subdivided in two segments.
+	The default name is "Rectangle".
+	*/
 	Rectangle();
+
+	/**
+	Destroys a rectangle.
+	*/
 	~Rectangle();
 
 public:
@@ -86,7 +101,7 @@ public: // Subdiv
 	Returns the number of subdivisions of the rectangle.
 	0 means no subdivision.
 	n where n is 1 or more means that the shorter side is subdivided n times.
-	The side defined by dirB is subdivided so that the subdivisions are as little skewed as possible.
+	The longer side is subdivided so that the subdivisions are as little skewed as possible.
 	 \return the number of subdivisions of the rectangle along the short side
 	*/
 	unsigned int subdivision() const;

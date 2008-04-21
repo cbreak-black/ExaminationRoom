@@ -14,10 +14,19 @@
 
 namespace Examination
 {
-	
+
+/**
+This class represents a sphere.
+The drawing subdivision is parametrized.
+*/
 class Sphere : public Object
 {
 public: // Construction
+	/**
+	Creates a scene with origin at the scene origin, and radius 1.
+	The default subdivision uses 24 slices and 12 stacks.
+	The default name is "Sphere".
+	*/
 	Sphere();
 
 public:

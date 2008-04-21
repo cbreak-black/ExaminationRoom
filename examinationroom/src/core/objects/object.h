@@ -24,6 +24,7 @@ namespace Examination
 
 /**
 A generic object, which can be placed in a scene.
+Everything in a scene is a subclass of this class.
 
 \author Gerhard Roethlin
 */

@@ -26,10 +26,23 @@ This class is a container object. It can store and manage other objects.
 class Container : public Object
 {
 public: // Types
+	/**
+	The type of the internal data structure that is used to contain objects.
+	The most common operations is iterating over all objects.
+	*/
 	typedef std::list< std::tr1::shared_ptr<Object> > ObjectList;
 
 public:
+	/**
+	Creates a default container.
+	*/
 	Container();
+
+	/**
+	Destroys the container.
+	All contained objects will be cleared, so if they are not referenced by an other
+	shared_ptr, they are deleted.
+	*/
 	virtual ~Container();
 	
 public:
@@ -78,7 +91,7 @@ protected:
 	*/
 	void setParentsAndScenes(Container * p, Scene * s);
 
-public:
+public: // From Object
 	virtual void setScene(Scene * s);
 	virtual void setParent(Container * c);
 
@@ -106,6 +119,11 @@ public:
 	void setEnabled(bool enabled);
 
 public:
+	/**
+	Returns the internal object list.
+	It should only be used to access individual objects, not to change the list itself.
+	 \return ObjectList of all contained objects
+	*/
 	const ObjectList & objects() const;
 
 protected:

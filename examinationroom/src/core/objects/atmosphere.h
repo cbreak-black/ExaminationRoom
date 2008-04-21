@@ -32,6 +32,11 @@ public:
 	typedef enum { Exp, Exp2, Linear } FogMode;
 
 public: // Construction
+	/**
+	Creates a standard atmosphere object.
+	The default settings are an exponential fog with density 1.
+	The default range for linear fog is from 0 to 100.
+	*/
 	Atmosphere();
 
 public:

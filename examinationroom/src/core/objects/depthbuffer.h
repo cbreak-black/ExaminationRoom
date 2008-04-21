@@ -25,6 +25,11 @@ occlusion.
 class DepthBuffer : public Container
 {
 public: // Construction
+	/**
+	Constructs a DepthBuffer object with default settings.
+	The depht buffer is enabled by default, but is reset before each sub object
+	is drawn.
+	*/
 	DepthBuffer();
 
 public:
