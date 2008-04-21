@@ -109,19 +109,12 @@ MainWindow::MainWindow()
 //	}
 
 	// Create Scene
-	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
-	mainGlWidget_->setScene(scene_);
-	//outGlWidget_->setScene(scene_);
-
-	dockDesign_->setScene(scene_);
+	newScene();
 
 	// Set up redraw timer
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
 	timer_->start(33); // 30 fps
-
-	// Empty lua proxy
-	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 }
 
 
@@ -172,21 +165,40 @@ void MainWindow::loadLuaFile()
 													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
-		scene_->clear();
-		luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+		newScene();
 		luaProxy_->runFile(fileName.toAscii());
 	}
 }
 
 void MainWindow::closeScene()
 {
-	scene_->clear();
-	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+	newScene();
 }
 
 void MainWindow::setDrawStyle(int t)
 {
 	mainGlWidget_->setStyle((GLWidget::DrawStyle)t);
 }
+
+void MainWindow::newScene()
+{
+	std::tr1::shared_ptr<Scene> scene = std::tr1::shared_ptr<Scene>(new Scene());
+	setScene(scene);
+}
+
+std::tr1::shared_ptr<Scene> MainWindow::scene() const
+{
+	return scene_;
+}
+
+void MainWindow::setScene(std::tr1::shared_ptr<Scene> scene)
+{
+	mainGlWidget_->setScene(scene);
+	//outGlWidget_->setScene(scene);
+	dockDesign_->setScene(scene);
+	scene_ = scene;
+	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+}
+
 
 }

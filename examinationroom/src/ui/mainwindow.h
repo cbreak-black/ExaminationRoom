@@ -71,6 +71,25 @@ private slots:
 	void onTimeout();
 
 private:
+	/**
+	Creates a new scene and sets it as current scene.
+	Also creates a new LUA Proxy.
+	*/
+	void newScene();
+
+	/**
+	Returns a shared pointer to the current scene.
+	*/
+	std::tr1::shared_ptr<Scene> scene() const;
+
+	/**
+	Sets the current scene.
+	This also resets the current lua environment. Setting a new scene only makes
+	sense when discarding everything associated with the old.
+	*/
+	void setScene(std::tr1::shared_ptr<Scene> scene);
+
+private:
     GLWidget * mainGlWidget_;
 	GLWidget * outGlWidget_;
 	QTimer *timer_;

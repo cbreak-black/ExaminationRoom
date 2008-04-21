@@ -36,12 +36,13 @@ std::tr1::shared_ptr<Scene> DesignWidget::scene() const
 
 void DesignWidget::setScene(std::tr1::shared_ptr<Scene> scene)
 {
-	scene_ = scene;
 	SceneModel * sm = new SceneModel(scene);
 	treeView_->setModel(sm);
 	sceneModel_ = std::tr1::shared_ptr<SceneModel>(sm);
+	scene_ = scene;
 	treeView_->setColumnWidth(0, 192);
-	treeView_->setColumnWidth(1, 32);
+	treeView_->setColumnWidth(1, 48);
+	treeView_->setColumnWidth(2, 48);
 //	treeView_->resizeColumnToContents(0);
 //	treeView_->resizeColumnToContents(1);
 }
