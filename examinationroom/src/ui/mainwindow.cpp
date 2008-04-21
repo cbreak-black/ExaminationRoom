@@ -40,35 +40,52 @@ MainWindow::MainWindow()
 
 	// Add menu
 	QMenu *menu = menuBar()->addMenu(tr("&File"));
-	QAction *action = menu->addAction(tr("&Open Scene..."));
-	connect(action, SIGNAL(triggered()), this, SLOT(loadLuaFile()));
-	action = menu->addAction(tr("Close Scene"));
-	connect(action, SIGNAL(triggered()), this, SLOT(closeScene()));
+	menu->addAction(tr("&Open Scene..."),
+					this, SLOT(loadLuaFile()),
+					QKeySequence(QKeySequence::Open));
+	menu->addAction(tr("Close Scene"),
+					this, SLOT(closeScene()),
+					QKeySequence(QKeySequence::Close));
 #ifndef Q_WS_MACX
 	menu->addSeparator();
-	menu->addAction(tr("&Quit"), this, SLOT(close()));
+	menu->addAction(tr("&Quit"), this, SLOT(close())
+					QKeySequence(tr("ctrl-Q")));
 #endif
 
 	// Signal mapper for display types
 	signalMapper_ = new QSignalMapper(this);
 
+	QAction * action;
 	menu = menuBar()->addMenu(tr("&Output Mode"));
 	action = menu->addAction(tr("&Anaglyph"));
+	action->setShortcut(QKeySequence(Qt::Key_1 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::anaglyph);
+
 	action = menu->addAction(tr("&Side by Side"));
+	action->setShortcut(QKeySequence(Qt::Key_2 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::sidebyside);
+
 	action = menu->addAction(tr("&Line interlacing (Experimental)"));
+	action->setShortcut(QKeySequence(Qt::Key_3 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::line);
+
 	action = menu->addAction(tr("Quad Buffering (Experimental)"));
+	action->setShortcut(QKeySequence(Qt::Key_4 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::quad);
+
 	action = menu->addAction(tr("Matrix Anaglyph (Experimental)"));
+	action->setShortcut(QKeySequence(Qt::Key_5 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::matrix);
+
+	menu->addSeparator();
+
 	action = menu->addAction(tr("Si&ngle"));
+	action->setShortcut(QKeySequence(Qt::Key_0 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::single);
 
