@@ -23,6 +23,7 @@ namespace Examination
 /**
 A proxy class to interface LUA and C++ AbsstractTexture objects.
  \author Gerhard Roethlin
+ \ingroup LUA
 */
 class TextureProxy
 {

@@ -23,10 +23,18 @@ namespace Examination
 	class AbstractTexture;
 
 /**
+\defgroup Objects	Scene Contents
+Objects are the basis of a scene. They give it visual representation, which is ultimately
+the goal of this tool. The object class and it's children can be inserted in a scene hierarchy
+and positioned in space.
+*/
+
+/**
 A generic object, which can be placed in a scene.
 Everything in a scene is a subclass of this class.
 
-\author Gerhard Roethlin
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class Object
 {

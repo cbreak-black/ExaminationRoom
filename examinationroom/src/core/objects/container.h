@@ -22,6 +22,8 @@ namespace Examination
 
 /**
 This class is a container object. It can store and manage other objects.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class Container : public Object
 {

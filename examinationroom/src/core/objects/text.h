@@ -20,6 +20,7 @@ namespace Examination
 
 /**
 This class represents a renderable piece of text.
+ \ingroup Objects
 */
 class Text : public Object
 {
@@ -31,6 +32,12 @@ public: // Construction
 	Text();
 
 public:
+	/**
+	Draws the text to the passed widget.
+	 \warning	This method uses Qt's draw method, which in turn uses the Stencil Buffer.
+				This is incompatible with some rendering methods.
+	 \param dest	a GLWidget to draw into
+	*/
 	virtual void draw(GLWidget * dest) const;
 
 public:

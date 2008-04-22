@@ -17,16 +17,39 @@
 namespace Examination
 {
 	class AbstractTexture;
-	
+
+/**
+A Pixelplane is an object that only consists of a texture. The texture is drawn
+at a raster position in space. It obeys depth testing but not any kind of transformation.
+Only the raster position itself is transformed.
+ \author Gerhard Roethlin
+ \ingroup Objects
+*/
 class Pixelplane : public Object
 {
 public: // Construction
+	/**
+	Creates a Pixelplane.
+	Default size is 1 by 1 unit, default zoom factors are 1 by 1, default name
+	is "Pixelplane". autoResize() is disabled.
+	*/
 	Pixelplane();
+
+	/**
+	Destroys a Pixelplane.
+	*/
 	~Pixelplane();
 
 public:
 	virtual void draw(GLWidget * dest) const;
 
+	/**
+	Sets the intended size of the pixelplane. This is used to rescales the associated
+	Texture object according to perspective projection, if autoResize() is enabled
+	or resizeToCurrent() is called.
+	 \param w	Width of the pixel plane in world space units
+	 \param h	Height of the pixel plane in world space units
+	*/
 	void setSize(float w, float h);
 
 	/**
@@ -42,11 +65,42 @@ public:
 	 */
 	virtual bool autoResize() const;
 
+	/**
+	Resizes the pixel plane to have the correct size according to the current position
+	and projection matrix. This might not work well when called on an object in a
+	CameraNode, since the it uses the projection and modelview matrix of the scene.
+	 \todo Use camera of parent if needed
+	*/
 	void resizeToCurrent() const;
+
+	/**
+	Resizes the pixel plane to the given size. This is equivalent to calling
+	the same function on the contained texture.
+	 \see AbstractTexture::resizeTo(int,int)
+	 \param w	Width in pixel
+	 \param h	Height in pixel
+	*/
 	void resizeTo(int w, int h) const;
 
+	/**
+	Returns the zoom factor of the Pixelplane in x direction.
+	 \return the zoom factor of the Pixelplane in x direction.
+	*/
 	float zoomX();
+
+	/**
+	Returns the zoom factor of the Pixelplane in x direction.
+	 \return the zoom factor of the Pixelplane in x direction.
+	*/
 	float zoomY();
+
+	/**
+	Changes the zoom factor of the Pixelplane. This also changes the zoom factor
+	of associated textures. When new textures are set, they are zoomed as well.
+	 \see	AbstractTexture::setZoom(float,float)
+	 \param zx	Zoom factor in x direction
+	 \param zy	Zoom factor in y direction
+	*/
 	void setZoom(float zx, float zy);
 
 	virtual void setTexture(std::tr1::shared_ptr<AbstractTexture> t);

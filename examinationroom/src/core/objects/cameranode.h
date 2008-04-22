@@ -24,6 +24,8 @@ This class represents a group of objects that are viewn with it's own camera.
 The result is an image which consists of objects seen through different cameras,
 with potentialy different parameters.
  \see Camera
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class CameraNode : public Container
 {

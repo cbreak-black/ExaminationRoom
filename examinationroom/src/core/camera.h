@@ -61,13 +61,13 @@ public:
 public:
 	/**
 	Loads the camera for the side of the view into the OpenGL matrix stack.
-	 \parm dest	Destination view, used to determine left or right
+	 \param dest	Destination view, used to determine left or right
 	*/
 	void loadMatrix(GLWidget * dest);
 
 	/**
 	Loads the camera with that offset into the OpenGL matrix stack.
-	 \parm offsetCamera
+	 \param offsetCamera the distance by which the camera is offset
 	 */
 	void loadMatrix(float offsetCamera);
 
@@ -77,23 +77,109 @@ public:
 	void preLoadMatrix();
 
 public:
+	/**
+	Sets the position of the camera.
+	 \see position()
+	 \param pos	New position vector
+	*/
 	void setPosition(Tool::Point pos);
+
+	/**
+	Sets the direction of the camera.
+	 \see direction()
+	 \param dir	New direction vector
+	*/
 	void setDirection(Tool::Vector dir);
+
+	/**
+	Sets the up vector of the camera.
+	The up vector decides which way of the picture points up.
+	 \warning	Make sure that this vector does not lie on the direction vector
+	 \see up()
+	 \param up	The new up vector
+	*/
 	void setUp(Tool::Vector up);
+
+	/**
+	Sets the separation of the cameras in the stereo set
+	 \see separation()
+	 \param s	Camera Separation
+	*/
 	void setSeparation(float s);
+
+	/**
+	Sets the field of view of the camera. The default is 50.
+	In parallel mode, this is used to set the size of the image.
+	 \see fieldOfView()
+	 \param fov	Field of view in degrees
+	*/
 	void setFieldOfView(float fov);
+
+	/**
+	Sets the paralax plane distance.
+	 \see paralaxPlane()
+	 \param dist	Distance of the paralax plane to the camera
+	*/
 	void setParalaxPlane(float dist);
 
 public:
+	/**
+	Returns the position of the camera.
+	 \see setPosition()
+	 \return the position of the camera
+	*/
 	Tool::Point position() const;
+
+	/**
+	Returns the direction of the camera.
+	 \see setDirection()
+	 \return the direction of the camera
+	*/
 	Tool::Vector direction() const;
+
+	/**
+	Returns the up vector of the camera.
+	 \see setUp()
+	 \return the up vector of the camera
+	*/
 	Tool::Vector up() const;
+
+	/**
+	Returns the separation of the cameras
+	 \see setSeparation()
+	 \return the separation of the cameras
+	*/
 	float separation() const;
+
+	/**
+	Returns the field of view of the cameras.
+	In parallel mode, this is used to set the size of the image. The size of objects
+	at the paralax plane are held constant when switching from parallel to perspective
+	or vice versa.
+	 \return the field of view of the cameras in degrees
+	*/
 	float fieldOfView() const;
+
+	/**
+	Returns the paralax plane distance.
+	 \see setParalaxPlane()
+	 \return the paralax plane distance
+	*/
 	float paralaxPlane() const;
 
 public: // Type
+	/**
+	Returns the camera type.
+	 \see Camera::Type
+	 \return the camera type
+	*/
 	Camera::Type type() const;
+
+	/**
+	Sets the camera type.
+	 \see Camera::Type
+	 \param t	The new camera type
+	*/
 	void setType(Camera::Type t);
 
 public:

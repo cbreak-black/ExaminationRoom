@@ -17,10 +17,21 @@
 namespace Examination
 {
 	class AbstractTexture;
-	
+
+/**
+The Parallelepiped class is a generalisation of the Rectangle class into 3D.
+It is defined by three vectors and an origin.
+ \author Gerhard Roethlin
+ \ingroup Objects
+*/
 class Parallelepiped : public Rectangle
 {
 public: // Construction
+	/**
+	Creates a default parallelepiped.
+	It defaults to the unit cube from (0,0,0) to (1,1,1).
+	The default name is "Parallelepiped".
+	*/
 	Parallelepiped();
 
 public:

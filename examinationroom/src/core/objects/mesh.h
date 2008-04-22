@@ -25,6 +25,8 @@ namespace Examination
 This class is a helper object. It represents a triangle consisting of three
 indexes for vertexes, three indexes for textures, and three indexes for normals.
 It is a value type, and can easily be copied.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class Triangle
 {
@@ -79,13 +81,13 @@ public:
 	/**
 	Draw the mesh by calling the display list after setup.
 	It rebuilds the display list if needed. Not implemented.
-	 \parameter dest	Destination widget that contains the current context
+	 \param dest	Destination widget that contains the current context
 	*/
 	//virtual void draw(GLWidget * dest);
 
 	/**
 	Draw the mesh by calling the display list after setup.
-	 \parameter dest	Destination widget that contains the current context
+	 \param dest	Destination widget that contains the current context
 	*/
 	virtual void draw(GLWidget * dest) const;
 

@@ -29,6 +29,13 @@ namespace Examination
 	class Container;
 	class Object;
 
+/**
+This class binds Objects from C++ to the LUA world.
+Most functions here are a 1 to 1 mapping from C++ to LUA, only when C++ Vec objects
+are required, the individual numbers are used. Some accessors were simplified since
+LUA is able to return multiple values.
+ \ingroup LUA
+*/
 class ObjectProxy
 {
 public:

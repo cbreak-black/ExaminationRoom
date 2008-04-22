@@ -21,6 +21,8 @@ This class represents a group of objects, which are drawn with their own depth
 buffer state. Also, after drawing each object, the depth buffer is reset.
 This allows the manual ordering of drawing, which can lead to incorrect
 occlusion.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class DepthBuffer : public Container
 {
@@ -51,7 +53,7 @@ public:
 	/**
 	Draws all contained objects with the given depth buffer state.
 	Before each individual sub object, the depth buffer is cleared.
-	 \warn Drawing this node clears the depth buffer
+	 \warning Drawing this node clears the depth buffer
 	*/
 	virtual void draw(GLWidget * dest) const;
 

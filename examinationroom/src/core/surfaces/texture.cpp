@@ -128,6 +128,13 @@ QImage Texture::transformColorSpace(QImage image)
 	return tm;
 }
 
+/**
+If the texture is not bound, create a new texture ID and load the pixel data into
+GPU memory. Also set up parameters so that the texture repeats and is scaled with
+Linear filter.
+If it is already loaded into memory, just bind the texture.
+ \param w	The GLWidget to draw into
+*/
 void Texture::glBindTex(GLWidget * w)
 {
 	if (imageGLID_ == 0)

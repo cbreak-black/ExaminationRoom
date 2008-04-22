@@ -17,17 +17,36 @@
 
 namespace Examination
 {
-	class Texture;
 
 /**
-This is a class for textures. It contains static factory methods to load image
-files from disc.
+This is a class for textures.
+It can load it's image data from a file on disk (via the QImage class).
+While OpenGL originally required power-of-two textures, this restriction was relaxed
+with the use of Extensions and finally with the newest OpenGL release, it might or
+might not work.
 */
 class Texture : public AbstractTexture
 {
 public: // Constructors and Destructor
+	/**
+	Loads an image from a path to use as texture.
+	Since this uses QImage, only formats supported by it can be loaded.
+	 \see QImage
+	 \param path	C String to a file containing image data
+	*/
 	Texture(const char * path);
+
+	/**
+	Loads an image from a path to use as texture.
+	Since this uses QImage, only formats supported by it can be loaded.
+	 \see QImage
+	 \param path	STD String to a file containing image data
+	*/
 	Texture(std::string path);
+	/**
+	Creates a texture with an internal copy of a passed QImage as texture.
+	 \param image	A QImage object containing texture data
+	*/
 	Texture(QImage image);
 	~Texture();
 

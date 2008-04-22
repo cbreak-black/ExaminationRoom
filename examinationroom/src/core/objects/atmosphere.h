@@ -19,17 +19,21 @@ namespace Examination
 /**
 This class represents a group of objects that are influenced by atmospheric effects
 such as fog.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class Atmosphere : public Container
 {
 public:
 	/**
 	The fog mode of this atmosphere.
-	Exp: Exponential fog, $f=e^{-(density.z)}$
-	Exp2: Bi-Exponential fog, $f=e^{-(density.z)^2}$
-	Linear: Linear fog, $f=\frac{end-z}{end-start}$
+	The different modes are taken from OpenGL.
 	*/
-	typedef enum { Exp, Exp2, Linear } FogMode;
+	typedef enum {
+		Exp,	/**< Exponential fog, \f$f=e^{-(density.z)}\f$ */
+		Exp2,	/**< Bi-Exponential fog, \f$f=e^{-(density.z)^2}\f$ */
+		Linear	/**< Linear fog, \f$f=\frac{end-z}{end-start}\f$ */
+	} FogMode;
 
 public: // Construction
 	/**

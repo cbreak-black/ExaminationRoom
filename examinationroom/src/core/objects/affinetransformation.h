@@ -21,6 +21,8 @@ namespace Examination
 /**
 This class represents a transformable group of objects.
 It internaly represents the transformations as 4x4 matrix with OpenGL ordering.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class AffineTransformation : public Container
 {

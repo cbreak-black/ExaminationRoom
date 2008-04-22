@@ -18,6 +18,7 @@ namespace Examination
 /**
 This class represents a sphere.
 The drawing subdivision is parametrized.
+ \ingroup Objects
 */
 class Sphere : public Object
 {

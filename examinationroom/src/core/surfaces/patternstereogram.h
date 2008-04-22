@@ -21,6 +21,7 @@ namespace Examination
 This is a class for stereogram textures. It contains one texture for the left
 camera and one for the right camera. It is able to create stereograms
 from a depth map texture and a source pattern.
+ \ingroup Surfaces
 */
 class PatternStereogram : public Stereogram
 {

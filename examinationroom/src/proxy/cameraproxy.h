@@ -19,6 +19,7 @@ namespace Examination
 
 /**
 A proxy class to interface LUA and C++ Camera objects.
+ \ingroup LUA
  \author Gerhard Roethlin
 */
 class CameraProxy

@@ -21,8 +21,16 @@ namespace Examination
 	class Scene;
 
 /**
+\defgroup LUA	LUA Bindings
+LUA is the embedded scripting language that drives this tool. While all the functionality
+of the tool is coded in C++/C, the scenes themselfs are interpreted code. Several classes
+bind the two systems together.
+*/
+
+/**
 This proxy class offers an interface between lua and C++. It also represents
 The Scene in LUA.
+ \ingroup LUA
 */
 class LuaProxy
 {

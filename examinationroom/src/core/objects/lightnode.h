@@ -21,6 +21,8 @@ This class represents a lightable group of objects.
 The contained objects are all lit with the defined light.
 The number of lights that can be active at the same time is dependent on OpenGL,
 and should always be at least 8.
+ \author Gerhard Roethlin
+ \ingroup Objects
 */
 class LightNode : public Container
 {

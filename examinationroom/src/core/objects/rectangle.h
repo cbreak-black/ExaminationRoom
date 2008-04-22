@@ -19,6 +19,7 @@ namespace Examination
 /**
 The rectangle class represents a 2D parallelogram object. It is defined by it's
 origin, and two vectors.
+ \ingroup Objects
 */
 class Rectangle : public Object
 {
@@ -64,14 +65,12 @@ public:
 
 	/**
 	Sets the first direction of the rectangle.
-	 \warn	Make sure that both vectors are normal to each other
 	 \param v	the new direction
 	*/	
 	void setDirA(Tool::Vector v);
 	
 	/**
 	Sets the first direction of the rectangle.
-	 \warn	Make sure that both vectors are normal to each other
 	 \param v	the new direction
 	*/
 	void setDirB(Tool::Vector v);
