@@ -1,0 +1,167 @@
+\section{LUA API}
+\paragraph{}
+The LUA API is the interface with which the experiments are controlled from LUA.
+LUA is the embedded scripting language used in the Tool.
+
+The API of the framework is strongly based on the C++ API, almost all methods correspond directly to it.
+The lua manual\cite{lua} describes the language and it's constructs and standard libraries.
+This chapter gives an introduction on the ideas behind the API, and then details some of the most important classes and methods. For more details, refer to the C++ Doxygen documentation.
+
+
+\subsection{LUA Crash Course}
+\paragraph{}
+The lua language is simple, but to understand it's details, reading the manual\cite{lua} is recommended.
+Here the basic constructs:
+
+\paragraph{Expression with assignments}
+\begin{verbatim}x,y = math.cos(a)*r, math.sin(a)*r
+\end{verbatim}
+
+\paragraph{Method call}
+\begin{verbatim}
+Scene:addObject(Object("Sphere"))
+\end{verbatim}
+On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Object(<String>)}, which is the Object constructor.
+
+\paragraph{table construction and access}
+\begin{verbatim}
+local t = {
+    [1] = "First item";
+    [2] = 2;
+    ["three"] = x;
+}
+t.three = 3;
+\end{verbatim}
+LUA supports number indexes like a sparse array, and key based lookup like a map.
+With string indexes tables can be treated like accessing structs in C.
+The convention is to use 1 based arrays.
+\paragraph{for loop}\begin{verbatim}
+for i = 1,10,2 do
+    Scene:log("Number :"..i);
+end
+for idx,obj in ipairs(objectArray) do
+    Scene:log(obj:name());
+end
+\end{verbatim}
+For loops can iterate over a number sequence or over the content of a table.
+
+\paragraph{function declaration}
+\begin{verbatim}
+isPrime = function (num, div)
+    if num%div == 0 then
+        return false, div;
+    else
+        if divisor > math.sqrt(num) then
+            return true;
+        else
+            return isPrime(num,
+                div+1);
+        end
+end;
+\end{verbatim}
+Neither type, nor amount of parameters or return values is declared.
+A function is flexible in what can deliver, but has to be flexible with what it gets.
+Unused parameters are nil.
+Functions are first class objects, they can be referenced with variables, but also passed around.
+
+
+\subsection{General Ideas}
+\paragraph{}
+Scenes can be built, animated and controlled from lua.
+A scene is built by setting up a scene graph, and controlled by adding event handlers that change the scene graph.
+
+\subsubsection{Building}
+\paragraph{}
+The visual part of a scene is a tree of objects.
+Objects have a visual representation that is defined by their internal state.
+Container objects can also influence how everything inside them is drawn (See \ref{sceneRep}).
+Building a hierarchy of objects is therefore not done based on object relationship,
+but on the modifiers that should be applied to them.
+
+Scenes are built by instantiating objects, setting their parameters, and adding them to a scene hierarchy.
+Objects can later be removed or moved inside the hierarchy.
+Textures and Cameras are helper classes that can not be directly added to a scene,
+but instead are added to objects that support them.
+
+\subsubsection{Animating and Controlling}
+\paragraph{}
+In LUA there is no continuous flow of control, no run loop. Instead the code only runs when it is loaded and after that to handle events.
+Four types of events are currently available: Key input can be received for both key-down and key-up. An update event is fired every time a new frame is about to be drawn. And finally, a quit event is fired when the application is about to be terminated.
+
+\subsubsection{Differences from C++}
+\paragraph{}
+The main difference between the C++ and the corresponding LUA methods is for Vec parameters. The Vec family of union structs represents 2, 3 or 4 element vectors. In lua, the contained values are simply passed directly.
+
+Since lua allows more than one return value, some of the accessors could be merged into one, instead of an accessor for zoomX and one for zoomY, a single method zoom returns both values.
+
+Enumerators do not exist in LUA, string constants are used instead.
+
+\subsection{The Scene}
+\paragraph{}
+The scene object exists once in every LUA context, accessible by the global variable \texttt{Scene}. It should not be overwritten.
+The main function of this class is to serve as representation of the current Scene Object instance.
+It also offers some global camera control and most importantly event triggers.
+It's C++ proxy class is \texttt{LuaProxy}.
+
+\subsubsection{Adding and removing}
+\paragraph{}
+Like all containers, the scene has the methods \texttt{addObject(<Object>)} and \texttt{removeObject(<Object>)} to add or remove objects respectively.
+\texttt{clearScene()} removes all objects from the scene.
+
+\subsubsection{Camera Control}
+\paragraph{}
+The camera of a scene can be accessed directly with \texttt{camera()}, and replaced with other camera instances through \texttt{setCamera(<Camera>)}.
+For legacy reasons, there also exist direct camera modifiers.
+
+\subsubsection{Logging}
+\paragraph{}
+Logging is important in many tests. To give easy access to a log file, combined with high accuracy timestamps, this is done in C++.
+The scene provides functions to write those messages to the log file with \texttt{log(<String>)} or the standard output with \texttt{debugLog(<String>)}.
+
+\subsubsection{Events}
+\paragraph{}
+To be register event handler, the method \texttt{setEventListener(<String>, <Function>)} is used.
+The strings \texttt{"update"}, \texttt{"keyDown"}, \texttt{"keyUp"} and \texttt{"quit"} are valid, and correspond with the associated events.
+
+The update event function gets the time in seconds that passed since the last invocation of the update event as argument.
+The key down and key up functions get the pressed or released key as string as argument.
+The quit function gets zero as argument.
+
+\subsection{The Objects}
+\paragraph{}
+The LUA bindings are implemented in the Class \texttt{ObjectProxy}, it represents all object types.
+Methods that are not supported by an object are silently ignored.
+
+\subsubsection{Creation}
+\paragraph{}
+The object constructor \texttt{Object(<String>)} accepts the following constants: \texttt{"Sphere"}, \texttt{"Rectangle"}, \texttt{"Parallelepiped"}, \texttt{"Pixelplane"}, \texttt{"Text"}, \texttt{"Mesh"}, \texttt{"AffineTransformation"}, \texttt{"CameraNode"}, \texttt{"LightNode"}, \texttt{"Atmosphere"}, \texttt{"DepthBuffer"}, each corresponding with the class with the same name.
+
+\subsubsection{Base}
+\paragraph{}
+Every object has a position, a color, a draw priority, visibility and a few other attributes.
+Attributes can be queried like \texttt{<attribute>()} and changed like \texttt{set<Attribute>(<newValue>)}.
+
+\subsubsection{Container}
+\paragraph{}
+Containers have the purpose of applying something to everything they contain.
+Like the scene object, they support adding and removing objects with \texttt{addObject(<Object>)} and \texttt{removeObject(<Object>)}.
+The functionality of containers can be enabled independently of the visibility of their sub objects with \texttt{setEnabled(<bool>)}
+
+\subsection{The Rest}
+\subsubsection{Camera}
+\paragraph{}
+Cameras represent a transformation from 3D to 2D space.
+They can use perspective projection, parallel projection and screen space projection, which is chosen with \texttt{setType(<String>)}, valid strings are \texttt{"Perspective"}, \texttt{"Parallel"} and \texttt{"Screen"}.
+
+The other camera properties can also be changed with accessors.
+
+\subsubsection{Texture}
+\paragraph{}
+Textures are created by loading image data from a file.
+The first parameter of the constructor \texttt{Texture(<String>,...)} is the name of the desired texture class, one of the following strings: \texttt{"Simple"}, \texttt{"Stereogram"}, \texttt{"RandomDot"}, \texttt{"Pattern"}.
+
+Simple textures take one additional argument, the string to an image file.
+Stereogram textures take two image paths as argument, and load the left and right eye view directly.
+RandomDot textures take one path as argument, and use this as depth map to construct a random dot stereogram.
+Pattern textures work similar, but they take a second and optional third argument containing the path to a pattern for background and foreground.
+

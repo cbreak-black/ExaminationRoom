@@ -101,27 +101,43 @@
 \end{center}
 
 \begin{multicols}{2}
-
 \input{sections/abstract.tex}
-\input{sections/introduction.tex}
-%\part{Design}
-\input{sections/design.tex}
-\input{sections/cues.tex}
-%\part{Implementation}
-\input{sections/implementation.tex}
-\input{sections/examples.tex}
-
 \end{multicols}
-
 \clearpage
 
 \begin{multicols}{2}
-
 \tableofcontents
-
 \end{multicols}
+\clearpage
+
+\begin{multicols}{2}
+\input{sections/introduction.tex}
+\end{multicols}
+\clearpage
+
+\part{Program Design}
+\begin{multicols}{2}
+\input{sections/design.tex}
+\input{sections/cues.tex}
+\end{multicols}
+\clearpage
+
+\part{Implementation}
+\begin{multicols}{2}
+\input{sections/implementation.tex}
+\input{sections/examples.tex}
+\end{multicols}
+\clearpage
+
+\part{Documentation}
+\begin{multicols}{2}
+\input{sections/cppapi.tex}
+\input{sections/luaapi.tex}
+\end{multicols}
+\clearpage
 
 \appendix
+\part{Appendix}
 
 \input{sections/appendix.tex}
 
