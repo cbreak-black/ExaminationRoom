@@ -12,10 +12,15 @@
 
 #include "platform.h"
 
+#ifdef WINDOWS
+	#define _USE_MATH_DEFINES
+#endif
+
 #include <math.h>
 
 #ifdef WINDOWS
-	#define roundf(f)	floorf(f+0.5)
+	#define roundf(f)	(floorf(f+0.5))
+	#define log2(f)		(log((float)f)/log(2.0))
 #endif
 
 #endif

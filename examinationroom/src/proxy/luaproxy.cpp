@@ -23,6 +23,8 @@
 #include <QDateTime>
 #include <QCoreApplication>
 
+#include "platform_string.h"
+
 namespace Examination
 {
 

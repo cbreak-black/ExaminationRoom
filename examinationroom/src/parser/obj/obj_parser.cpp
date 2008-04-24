@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <ctype.h>
 
 bool obj::obj_parser::parse(std::istream& istream)
 {
@@ -37,7 +38,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         float_type x, y, z;
         char whitespace_v_x, whitespace_x_y, whitespace_y_z;
         stringstream >> whitespace_v_x >> std::ws >> x >> whitespace_x_y >> std::ws >> y >> whitespace_y_z >> std::ws >> z >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_v_x) || !std::isspace(whitespace_x_y) || !std::isspace(whitespace_y_z)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_v_x) || !isspace(whitespace_x_y) || !isspace(whitespace_y_z)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -58,7 +59,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         if (!stringstream.eof()) {
           stringstream >> whitespace_v_w >> std::ws;
         }
-        if (!stringstream || !std::isspace(whitespace_vt_u) || !std::isspace(whitespace_u_v) || !std::isspace(whitespace_v_w)) {
+        if (!stringstream || !isspace(whitespace_vt_u) || !isspace(whitespace_u_v) || !isspace(whitespace_v_w)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -99,7 +100,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         float_type x, y, z;
         char whitespace_vn_x, whitespace_x_y, whitespace_y_z;
         stringstream >> whitespace_vn_x >> std::ws >> x >> whitespace_x_y >> std::ws >> y >> whitespace_y_z >> std::ws >> z >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_vn_x) || !std::isspace(whitespace_x_y) || !std::isspace(whitespace_y_z)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_vn_x) || !isspace(whitespace_x_y) || !isspace(whitespace_y_z)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -116,7 +117,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         index_type v1;
         char whitespace_f_v1;
         stringstream >> whitespace_f_v1 >> std::ws >> v1;
-        if (std::isspace(stringstream.peek())) {
+        if (isspace(stringstream.peek())) {
           // f v
           index_type v2, v3;
           char whitespace_v1_v2, whitespace_v2_v3;
@@ -125,7 +126,7 @@ bool obj::obj_parser::parse(std::istream& istream)
           if (!stringstream.eof()) {
             stringstream >> whitespace_v3_v4 >> std::ws;
           }
-          if (!stringstream || !std::isspace(whitespace_f_v1) || !std::isspace(whitespace_v1_v2) || !std::isspace(whitespace_v2_v3) || !std::isspace(whitespace_v3_v4)) {
+          if (!stringstream || !isspace(whitespace_f_v1) || !isspace(whitespace_v1_v2) || !isspace(whitespace_v2_v3) || !isspace(whitespace_v3_v4)) {
             if (error_callback_) {
               error_callback_(line_number, "parse error");
             }
@@ -163,7 +164,7 @@ bool obj::obj_parser::parse(std::istream& istream)
             if (!stringstream.eof()) {
               stringstream >> whitespace_v4_v5 >> std::ws;
             }
-            if (!stringstream || !std::isspace(whitespace_v4_v5)) {
+            if (!stringstream || !isspace(whitespace_v4_v5)) {
               if (error_callback_) {
                 error_callback_(line_number, "parse error");
               }
@@ -208,7 +209,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                   if (!stringstream.eof()) {
                     stringstream >> whitespace_v_v >> std::ws;
                   }
-                  if (stringstream && std::isspace(whitespace_v_v)) {
+                  if (stringstream && isspace(whitespace_v_v)) {
                     if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))) {
                       if (error_callback_) {
                         error_callback_(line_number, "index out of bounds");
@@ -249,7 +250,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                   if (!stringstream.eof()) {
                     stringstream >> whitespace_v_v >> std::ws;
                   }
-                  if (stringstream && std::isspace(whitespace_v_v)) {
+                  if (stringstream && isspace(whitespace_v_v)) {
                     if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))) {
                       if (error_callback_) {
                         error_callback_(line_number, "index out of bounds");
@@ -287,7 +288,7 @@ bool obj::obj_parser::parse(std::istream& istream)
           if (stringstream.peek() != '/') {
             index_type vt1;
             stringstream >> vt1;
-            if (std::isspace(stringstream.peek())) {
+            if (isspace(stringstream.peek())) {
               // f v/vt
               index_type v2, vt2, v3, vt3;
               char whitespace_vt1_v2, slash_v2_vt2, whitespace_vt2_v3, slash_v3_vt3;
@@ -296,7 +297,7 @@ bool obj::obj_parser::parse(std::istream& istream)
               if (!stringstream.eof()) {
                 stringstream >> whitespace_vt3_v4 >> std::ws;
               }
-              if (!stringstream || !std::isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !std::isspace(whitespace_vt1_v2) || !(slash_v2_vt2 == '/') || !std::isspace(whitespace_vt2_v3) || !(slash_v3_vt3 == '/') || !std::isspace(whitespace_vt3_v4)) {
+              if (!stringstream || !isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !isspace(whitespace_vt1_v2) || !(slash_v2_vt2 == '/') || !isspace(whitespace_vt2_v3) || !(slash_v3_vt3 == '/') || !isspace(whitespace_vt3_v4)) {
                 if (error_callback_) {
                   error_callback_(line_number, "parse error");
                 }
@@ -347,7 +348,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                 if (!stringstream.eof()) {
                   stringstream >> whitespace_vt4_v5 >> std::ws;
                 }
-                if (!stringstream || !(slash_v4_vt4 == '/') || !std::isspace(whitespace_vt4_v5)) {
+                if (!stringstream || !(slash_v4_vt4 == '/') || !isspace(whitespace_vt4_v5)) {
                   if (error_callback_) {
                     error_callback_(line_number, "parse error");
                   }
@@ -397,7 +398,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                       if (!stringstream.eof()) {
                         stringstream >> whitespace_vt_v >> std::ws;
                       }
-                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && std::isspace(whitespace_vt_v)) {
+                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && isspace(whitespace_vt_v)) {
                         if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vt < -index_type(number_of_texture_vertices)) || (-1 < vt)) && ((vt < 1) || (index_type(number_of_texture_vertices) < vt))) {
                           if (error_callback_) {
@@ -443,7 +444,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                       if (!stringstream.eof()) {
                         stringstream >> whitespace_vt_v >> std::ws;
                       }
-                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && std::isspace(whitespace_vt_v)) {
+                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && isspace(whitespace_vt_v)) {
                         if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vt < -index_type(number_of_texture_vertices)) || (-1 < vt)) && ((vt < 1) || (index_type(number_of_texture_vertices) < vt))) {
                           if (error_callback_) {
@@ -488,7 +489,7 @@ bool obj::obj_parser::parse(std::istream& istream)
               if (!stringstream.eof()) {
                 stringstream >> whitespace_vn3_v4 >> std::ws;
               }
-              if (!stringstream || !std::isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !(slash_vt1_vn1 == '/') || !std::isspace(whitespace_vn1_v2) || !(slash_v2_vt2 == '/') || !(slash_vt2_vn2 == '/') || !std::isspace(whitespace_vn2_v3) || !(slash_v3_vt3 == '/') || !(slash_vt3_vn3 == '/') || !std::isspace(whitespace_vn3_v4)) {
+              if (!stringstream || !isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !(slash_vt1_vn1 == '/') || !isspace(whitespace_vn1_v2) || !(slash_v2_vt2 == '/') || !(slash_vt2_vn2 == '/') || !isspace(whitespace_vn2_v3) || !(slash_v3_vt3 == '/') || !(slash_vt3_vn3 == '/') || !isspace(whitespace_vn3_v4)) {
                 if (error_callback_) {
                   error_callback_(line_number, "parse error");
                 }
@@ -551,7 +552,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                 if (!stringstream.eof()) {
                   stringstream >> whitespace_vn4_v5 >> std::ws;
                 }
-                if (!stringstream || !(slash_v4_vt4 == '/') || !(slash_vt4_vn4 == '/') || !std::isspace(whitespace_vn4_v5)) {
+                if (!stringstream || !(slash_v4_vt4 == '/') || !(slash_vt4_vn4 == '/') || !isspace(whitespace_vn4_v5)) {
                   if (error_callback_) {
                     error_callback_(line_number, "parse error");
                   }
@@ -605,7 +606,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                       if (!stringstream.eof()) {
                         stringstream >> whitespace_vn_v >> std::ws;
                       }
-                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && std::isspace(whitespace_vn_v)) {
+                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && isspace(whitespace_vn_v)) {
                         if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vt < -index_type(number_of_texture_vertices)) || (-1 < vt)) && ((vt < 1) || (index_type(number_of_texture_vertices) < vt))
                         || ((vn < -index_type(number_of_vertex_normals)) || (-1 < vn)) && ((vn < 1) || (index_type(number_of_vertex_normals) < vn))) {
@@ -655,7 +656,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                       if (!stringstream.eof()) {
                         stringstream >> whitespace_vn_v >> std::ws;
                       }
-                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && std::isspace(whitespace_vn_v)) {
+                      if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && isspace(whitespace_vn_v)) {
                         if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vt < -index_type(number_of_texture_vertices)) || (-1 < vt)) && ((vt < 1) || (index_type(number_of_texture_vertices) < vt))
                         || ((vn < -index_type(number_of_vertex_normals)) || (-1 < vn)) && ((vn < 1) || (index_type(number_of_vertex_normals) < vn))) {
@@ -705,7 +706,7 @@ bool obj::obj_parser::parse(std::istream& istream)
             if (!stringstream.eof()) {
               stringstream >> whitespace_vn3_v4 >> std::ws;
             }
-            if (!stringstream || !std::isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !(slash_vt1_vn1 == '/') || !std::isspace(whitespace_vn1_v2) || !(slash_v2_vt2 == '/') || !(slash_vt2_vn2 == '/') || !std::isspace(whitespace_vn2_v3) || !(slash_v3_vt3 == '/') || !(slash_vt3_vn3 == '/') || !std::isspace(whitespace_vn3_v4)) {
+            if (!stringstream || !isspace(whitespace_f_v1) || !(slash_v1_vt1 == '/') || !(slash_vt1_vn1 == '/') || !isspace(whitespace_vn1_v2) || !(slash_v2_vt2 == '/') || !(slash_vt2_vn2 == '/') || !isspace(whitespace_vn2_v3) || !(slash_v3_vt3 == '/') || !(slash_vt3_vn3 == '/') || !isspace(whitespace_vn3_v4)) {
               if (error_callback_) {
                 error_callback_(line_number, "parse error");
               }
@@ -756,7 +757,7 @@ bool obj::obj_parser::parse(std::istream& istream)
               if (!stringstream.eof()) {
                 stringstream >> whitespace_vn4_v5 >> std::ws;
               }
-              if (!stringstream || !(slash_v4_vt4 == '/') || !(slash_vt4_vn4 == '/') || !std::isspace(whitespace_vn4_v5)) {
+              if (!stringstream || !(slash_v4_vt4 == '/') || !(slash_vt4_vn4 == '/') || !isspace(whitespace_vn4_v5)) {
                 if (error_callback_) {
                   error_callback_(line_number, "parse error");
                 }
@@ -806,7 +807,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                     if (!stringstream.eof()) {
                       stringstream >> whitespace_vn_v >> std::ws;
                     }
-                    if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && std::isspace(whitespace_vn_v)) {
+                    if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && isspace(whitespace_vn_v)) {
                       if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vn < -index_type(number_of_vertex_normals)) || (-1 < vn)) && ((vn < 1) || (index_type(number_of_vertex_normals) < vn))) {
                         if (error_callback_) {
@@ -852,7 +853,7 @@ bool obj::obj_parser::parse(std::istream& istream)
                     if (!stringstream.eof()) {
                       stringstream >> whitespace_vn_v >> std::ws;
                     }
-                    if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && std::isspace(whitespace_vn_v)) {
+                    if (stringstream && (slash_geometric_vertices_texture_vertices == '/') && (slash_vt_vn == '/') && isspace(whitespace_vn_v)) {
                       if (((v < index_type(-number_of_geometric_vertices)) || (-1 < v)) && ((v < 1) || (index_type(number_of_geometric_vertices) < v))
                         || ((vn < index_type(-number_of_vertex_normals)) || (-1 < vn)) && ((vn < 1) || (index_type(number_of_vertex_normals) < vn))) {
                         if (error_callback_) {
@@ -897,7 +898,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         if (!stringstream.eof()) {
           stringstream >> whitespace_mtllib_group_name >> std::ws;
         }
-        if (!stringstream || !std::isspace(whitespace_mtllib_group_name)) {
+        if (!stringstream || !isspace(whitespace_mtllib_group_name)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -933,7 +934,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         std::string group_number_string;
         char whitespace_mtllib_group_number;
         stringstream >> whitespace_mtllib_group_number >> std::ws >> group_number_string >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_mtllib_group_number)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_mtllib_group_number)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -964,7 +965,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         std::string object_name;
         char whitespace_mtllib_object_name;
         stringstream >> whitespace_mtllib_object_name >> std::ws >> object_name >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_mtllib_object_name)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_mtllib_object_name)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -981,7 +982,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         std::string filename;
         char whitespace_mtllib_filename;
         stringstream >> whitespace_mtllib_filename >> std::ws >> filename >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_mtllib_filename)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_mtllib_filename)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }
@@ -998,7 +999,7 @@ bool obj::obj_parser::parse(std::istream& istream)
         std::string material_name;
         char whitespace_mtllib_material_name;
         stringstream >> whitespace_mtllib_material_name >> std::ws >> material_name >> std::ws;
-        if (!stringstream || !stringstream.eof() || !std::isspace(whitespace_mtllib_material_name)) {
+        if (!stringstream || !stringstream.eof() || !isspace(whitespace_mtllib_material_name)) {
           if (error_callback_) {
             error_callback_(line_number, "parse error");
           }

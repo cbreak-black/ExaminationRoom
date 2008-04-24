@@ -5,7 +5,7 @@
 #include <istream>
 #include <string>
 
-#include <tr1/functional>
+#include <functional>
 
 #include <obj/obj.hpp>
 

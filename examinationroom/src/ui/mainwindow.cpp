@@ -48,7 +48,7 @@ MainWindow::MainWindow()
 					QKeySequence(QKeySequence::Close));
 #ifndef Q_WS_MACX
 	menu->addSeparator();
-	menu->addAction(tr("&Quit"), this, SLOT(close())
+	menu->addAction(tr("&Quit"), this, SLOT(close()),
 					QKeySequence(tr("ctrl-Q")));
 #endif
 

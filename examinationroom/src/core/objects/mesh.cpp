@@ -248,19 +248,19 @@ void Mesh::error_callback(const std::string& filename, std::size_t line_number, 
 	std::cerr << "Parser Error: " << filename << ":" << line_number << "\t" << message;
 }
 
-void Mesh::geometric_vertex_callback(float x, float y, float z)
+void Mesh::geometric_vertex_callback(obj::float_type x, obj::float_type y, obj::float_type z)
 {
-	vertices_.push_back(Tool::Point(x, y, z));
+	vertices_.push_back(Tool::Point((float)x, (float)y, (float)z));
 }
 
-void Mesh::texture_vertex_callback(float u, float v)
+void Mesh::texture_vertex_callback(obj::float_type u, obj::float_type v)
 {
-	textureCoordinates_.push_back(Tool::Vec2f(u, v));
+	textureCoordinates_.push_back(Tool::Vec2f((float)u, (float)v));
 }
 
-void Mesh::vertex_normal_callback(float x, float y, float z)
+void Mesh::vertex_normal_callback(obj::float_type x, obj::float_type y, obj::float_type z)
 {
-	normals_.push_back(Tool::Vector(x, y, z));
+	normals_.push_back(Tool::Vector((float)x, (float)y, (float)z));
 }
 
 void Mesh::triangular_face_geometric_vertices_callback(int v1, int v2, int v3)

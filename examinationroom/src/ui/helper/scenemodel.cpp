@@ -11,8 +11,8 @@
 
 #include <QSize>
 
-#include "object.h"
-#include "container.h"
+#include "objects/object.h"
+#include "objects/container.h"
 #include "scene.h"
 
 namespace Examination

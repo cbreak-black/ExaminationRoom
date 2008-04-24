@@ -110,9 +110,9 @@ private: // Parser Callbacks
 	void error_callback(const std::string& filename, std::size_t line_number, const std::string& message);
 
 	// Callbacks for primitives
-	void geometric_vertex_callback(float x, float y, float z);
-	void texture_vertex_callback(float u, float v);
-	void vertex_normal_callback(float x, float y, float z);
+	void geometric_vertex_callback(obj::float_type x, obj::float_type y, obj::float_type z);
+	void texture_vertex_callback(obj::float_type u, obj::float_type v);
+	void vertex_normal_callback(obj::float_type x, obj::float_type y, obj::float_type z);
 
 	// Callbacks for faces
 	void triangular_face_geometric_vertices_callback(int v1, int v2, int v3);

@@ -30,7 +30,7 @@ Camera::Camera()
 	setDirection(Tool::Vector(0,0,-1));
 	setUp(Tool::Vector(0,1,0));
 
-	setSeparation(0.2);
+	setSeparation(0.2f);
 	setFieldOfView(50);
 	setParalaxPlane(10);
 	setType(Perspective);
@@ -45,7 +45,7 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
 	setDirection(dir);
 	setUp(up);
 	
-	setSeparation(0.2);
+	setSeparation(0.2f);
 	setFieldOfView(50);
 	setParalaxPlane(10);
 	setType(Perspective);
@@ -79,22 +79,22 @@ void Camera::loadMatrix(float offsetCamera)
 	{
 		// http://local.wasp.uwa.edu.au/~pbourke/projection/stereorender/
 
-		float top, bottom, left, right, near, far;
-		// Calculate near and far based on paralax plane distance hardcoded factors
-		near = ppd_*nearFactor;
-		far = ppd_*farFactor;
-		// Calculate top and bottom based on vertical field-of-view and distance
-		top = fovTan*near;
-		bottom = -top;
-		// Calculate left and right basaed on aspect ratio
-		left = bottom*aspect;
-		right = top*aspect;
+		float fTop, fBottom, fLeft, fRight, fNear, fFar;
+		// Calculate fNear and fFar based on paralax plane distance hardcoded factors
+		fNear = ppd_*nearFactor;
+		fFar = ppd_*farFactor;
+		// Calculate fTop and fBottom based on vertical field-of-view and distance
+		fTop = fovTan*fNear;
+		fBottom = -fTop;
+		// Calculate fLeft and fRight basaed on aspect ratio
+		fLeft = fBottom*aspect;
+		fRight = fTop*aspect;
 
 		glMatrixMode(GL_PROJECTION);
-		// Projection matrix is a frustum, of which left and right are not symetric
+		// Projection matrix is a frustum, of which fLeft and fRight are not symetric
 		// to set the zero paralax plane. The cameras are parallel.
 		glLoadIdentity();
-		glFrustum(left+offsetCamera, right+offsetCamera, bottom, top, near, far);
+		glFrustum(fLeft+offsetCamera, fRight+offsetCamera, fBottom, fTop, fNear, fFar);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		// Rotation of camera and adjusting eye position
@@ -107,19 +107,19 @@ void Camera::loadMatrix(float offsetCamera)
 	}
 	else if (type() == Camera::Parallel)
 	{
-		float top, bottom, left, right, near, far;
-		// Calculate near and far based on paralax plane distance and a hardcoded factor
+		float fTop, fBottom, fLeft, fRight, fNear, fFar;
+		// Calculate fNear and fFar based on paralax plane distance and a hardcoded factor
 		// Note: the zero paralax plane is exactly in between near and far
-		far = ppd_*farFactor;
-		near = 2*ppd_ - far; // = ppd_ - (far-ppd_);
-		// Set top and bottom based on field-of-view and paralax plane distance
+		fFar = ppd_*farFactor;
+		fNear = 2*ppd_ - fFar; // = ppd_ - (fFar-ppd_);
+		// Set fTop and fBottom based on field-of-view and paralax plane distance
 		// This is done to make the scaling of the image at the paralax plane the same
 		// as in perspective mode
-		top = fovTan*ppd_;
-		bottom = -top;
+		fTop = fovTan*ppd_;
+		fBottom = -fTop;
 		// Set left and right baased on aspect ratio
-		left = bottom*aspect;
-		right = top*aspect;
+		fLeft = fBottom*aspect;
+		fRight = fTop*aspect;
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -134,7 +134,7 @@ void Camera::loadMatrix(float offsetCamera)
 			0, 0, 0, 1
 		};
 		glMultMatrixf(shearMatrix);
-		glOrtho(left, right, bottom, top, near, far);
+		glOrtho(fLeft, fRight, fBottom, fTop, fNear, fFar);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		// Rotation of camera
@@ -152,11 +152,11 @@ void Camera::loadMatrix(float offsetCamera)
 		// Ignore everything else too
 		// Projection: Screen space coordinate system, 0 in center, width/height as
 		// specified by viewport
-		const float right = viewport[2]/2;
-		const float left = -right;
-		const float top = viewport[3]/2;
-		const float bottom = -top;
-		glOrtho(left,right,bottom,top, top, bottom);
+		const float fRight = viewport[2]/2;
+		const float fLeft = -fRight;
+		const float fTop = viewport[3]/2;
+		const float fBottom = -fTop;
+		glOrtho(fLeft,fRight,fBottom,fTop, fTop, fBottom);
 	}
 }
 
@@ -191,12 +191,12 @@ float Camera::unitScreenSize(float d) const
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	float near, top;
+	float fNear, fTop;
 	float fovTan = tanf((fov_/2)/180*M_PI);
-	near = ppd_*nearFactor;
-	top = fovTan*near;
+	fNear = ppd_*nearFactor;
+	fTop = fovTan*fNear;
 	// heightInPix / heightInUnits
-	return (float)viewport[3]/(top*2) * near/d;
+	return (float)viewport[3]/(fTop*2) * fNear/d;
 }
 
 float Camera::unitScreenSize(Point p) const
