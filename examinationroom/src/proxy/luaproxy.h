@@ -88,6 +88,7 @@ public: // Statistical helpers
 	int getViewport(lua_State *L);
 
 public: // Low Level Wrapper
+	int beep(lua_State *L);
 	int exit(lua_State *L);
 
 public: // Misc

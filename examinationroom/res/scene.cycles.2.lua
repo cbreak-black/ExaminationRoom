@@ -299,7 +299,7 @@ parseInput = function (k)
 			if d == replies[currentTest] then
 				Scene:log("Input Correct: "..d);
 				if (audioCorrect) then
-					os.execute("osascript -e \'beep 1\' &");
+					Scene:beep();
 				end
 				if (voiceCorrect) then
 					os.execute("say -v "..voice.." correct &");
@@ -307,7 +307,7 @@ parseInput = function (k)
 			else
 				Scene:log("Input Incorrect: "..d);
 				if (audioIncorrect) then
-					os.execute("osascript -e \'beep 1\' &");
+					Scene:beep();
 				end
 				if (voiceIncorrect) then
 					os.execute("say -v "..voice.." incorrect &");

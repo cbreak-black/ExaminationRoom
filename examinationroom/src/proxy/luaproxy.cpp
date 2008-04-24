@@ -21,7 +21,7 @@
 
 #include <iostream>
 #include <QDateTime>
-#include <QCoreApplication>
+#include <QApplication>
 
 #include "platform_string.h"
 
@@ -388,6 +388,21 @@ int LuaProxy::getViewport(lua_State *L)
 }
 
 // Low level wrapper
+/**
+Signature: beep()
+*/
+int LuaProxy::beep(lua_State *L)
+{
+	QApplication::beep();
+	lua_settop(L, 0);
+	return 0;
+}
+
+/**
+Signature: exit()
+Signature: exit(<Number:result>)
+Exits the application with the given result value
+*/
 int LuaProxy::exit(lua_State *L)
 {
 	int res = 0;
@@ -401,6 +416,9 @@ int LuaProxy::exit(lua_State *L)
 }
 
 // Event Stuff
+/**
+The supported events that lua code can be triggered by.
+*/
 const char * eventIdx[] =
 {
 	"update",
@@ -590,6 +608,7 @@ const Luna<LuaProxy>::RegType LuaProxy::Register[] =
 	{ "getSeparationAtPoint", &LuaProxy::getSeparationAtPoint },
 	{ "getUnitScreenSize", &LuaProxy::getUnitScreenSize },
 	{ "getViewport", &LuaProxy::getViewport },
+	{ "beep", &LuaProxy::beep },
 	{ "exit", &LuaProxy::exit },
 	{ "setEventListener", &LuaProxy::setEventListener },
 	{ "log", &LuaProxy::log },
