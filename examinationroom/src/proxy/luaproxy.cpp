@@ -29,7 +29,7 @@ namespace Examination
 static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
 static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
 
-// Creation & Destruction	
+// Creation & Destruction
 LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 {
 	scene_ = scene;
@@ -86,6 +86,10 @@ int LuaProxy::runString(const char * code)
 }
 
 // From LUA
+/**
+Signature: addObject(<Object>)
+ \see	Scene::addObject()
+*/
 int LuaProxy::addObject(lua_State *L)
 {
 	checkTop(L, 2);
@@ -95,6 +99,10 @@ int LuaProxy::addObject(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: removeObject(<Object>)
+ \see	Scene::removeObject()
+*/
 int LuaProxy::removeObject(lua_State *L)
 {
 	checkTop(L, 2);
@@ -110,6 +118,10 @@ int LuaProxy::removeObject(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: clearScene()
+ \see	Scene::clearScene()
+*/
 int LuaProxy::clearScene(lua_State *L)
 {
 	scene_->clear();
@@ -117,6 +129,11 @@ int LuaProxy::clearScene(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setBackground(<red>, <green>, <blue>, <alpha>)
+Each component can have values ranging from 0 to 255.
+ \see	Scene::setBackgroundColor()
+*/
 int LuaProxy::setBackgroundColor(lua_State *L)
 {
 	checkTop(L, 5);
@@ -128,6 +145,10 @@ int LuaProxy::setBackgroundColor(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraPos(<Number:x>, <Number:y>, <Number:z>)
+ \see	Camera::setPosition()
+*/
 int LuaProxy::setCameraPos(lua_State *L)
 {
 	checkTop(L, 4);
@@ -140,6 +161,10 @@ int LuaProxy::setCameraPos(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraDir(<Number:x>, <Number:y>, <Number:z>)
+ \see	Camera::setDirection()
+*/
 int LuaProxy::setCameraDir(lua_State *L)
 {
 	checkTop(L, 4);
@@ -152,6 +177,10 @@ int LuaProxy::setCameraDir(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraUp(<Number:x>, <Number:y>, <Number:z>)
+ \see	Camera::setUp()
+*/
 int LuaProxy::setCameraUp(lua_State *L)
 {
 	checkTop(L, 4);
@@ -164,6 +193,10 @@ int LuaProxy::setCameraUp(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraFov(<Number:fov>)
+ \see	Camera::setFieldOfView()
+*/
 int LuaProxy::setCameraFoV(lua_State *L)
 {
 	checkTop(L, 2);
@@ -176,6 +209,10 @@ int LuaProxy::setCameraFoV(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraSeparation(<Number:sep>)
+ \see	Camera::setSeparation()
+*/
 int LuaProxy::setCameraSep(lua_State *L)
 {
 	checkTop(L, 2);
@@ -188,6 +225,10 @@ int LuaProxy::setCameraSep(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: setCameraParalaxPlane(<Number:dist>)
+ \see	Camera::setParalaxPlane()
+*/
 int LuaProxy::setCameraParalaxPlane(lua_State *L)
 {
 	checkTop(L, 2);
@@ -200,6 +241,10 @@ int LuaProxy::setCameraParalaxPlane(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: x, y, z = getCameraPos()
+ \see	Camera::position()
+*/
 int LuaProxy::getCameraPos(lua_State *L)
 {
 	checkTop(L, 1);
@@ -208,6 +253,10 @@ int LuaProxy::getCameraPos(lua_State *L)
 	return 3;
 }
 
+/**
+Signature: x, y, z = getCameraDir()
+ \see	Camera::direction()
+*/
 int LuaProxy::getCameraDir(lua_State *L)
 {
 	checkTop(L, 1);
@@ -216,6 +265,10 @@ int LuaProxy::getCameraDir(lua_State *L)
 	return 3;
 }
 
+/**
+Signature: x, y, z = getCameraUp()
+ \see	Camera::up()
+*/
 int LuaProxy::getCameraUp(lua_State *L)
 {
 	checkTop(L, 1);
@@ -224,6 +277,10 @@ int LuaProxy::getCameraUp(lua_State *L)
 	return 3;
 }
 
+/**
+Signature: fov = getCameraFoV()
+ \see	Camera::fieldOfView()
+*/
 int LuaProxy::getCameraFoV(lua_State *L)
 {
 	checkTop(L, 1);
@@ -232,6 +289,10 @@ int LuaProxy::getCameraFoV(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: sep = getCameraSep()
+ \see	Camera::separation()
+*/
 int LuaProxy::getCameraSep(lua_State *L)
 {
 	checkTop(L, 1);
@@ -240,6 +301,10 @@ int LuaProxy::getCameraSep(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: dist = getCameraParalaxPlane()
+ \see	Camera::paralaxPlane()
+*/
 int LuaProxy::getCameraParalaxPlane(lua_State *L)
 {
 	checkTop(L, 1);
@@ -248,6 +313,11 @@ int LuaProxy::getCameraParalaxPlane(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: cam = camera()
+ \see	Camera
+ \see	Scene::camera()
+*/
 int LuaProxy::camera(lua_State *L)
 {
 	checkTop(L, 1);
@@ -257,6 +327,11 @@ int LuaProxy::camera(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: setCamera(<Camera>)
+ \see	Camera
+ \see	Camera::setCamera()
+*/
 int LuaProxy::setCamera(lua_State *L)
 {
 	checkTop(L, 2);
@@ -266,6 +341,10 @@ int LuaProxy::setCamera(lua_State *L)
 	return 0;
 }
 
+/**
+Signature: sep = getSeparationAtPoint(<Number:x>, <Number:y>, <Number:z>)
+ \see	Camera::separationAtPoint()
+*/
 int LuaProxy::getSeparationAtPoint(lua_State *L)
 {
 	checkTop(L, 4);
@@ -275,6 +354,10 @@ int LuaProxy::getSeparationAtPoint(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: uss = getUnitScreenSize(<Number:x>, <Number:y>, <Number:z>)
+ \see	Camera::unitScreenSize()
+*/
 int LuaProxy::getUnitScreenSize(lua_State *L)
 {
 	checkTop(L, 4);
@@ -284,6 +367,11 @@ int LuaProxy::getUnitScreenSize(lua_State *L)
 	return 1;
 }
 
+/**
+Signature: x, y, w, h = getViewport()
+ \see	Camera::screenProject()
+ \see	ScreenProject::viewport()
+*/
 int LuaProxy::getViewport(lua_State *L)
 {
 	checkTop(L, 1);
