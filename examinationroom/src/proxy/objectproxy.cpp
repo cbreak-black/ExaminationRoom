@@ -31,7 +31,7 @@ using namespace std::tr1;
 namespace Examination
 {
 
-const char * objectTypes[] =
+const char * ObjectProxy::objectTypes[] =
 {
 	"Sphere",
 	"Rectangle",

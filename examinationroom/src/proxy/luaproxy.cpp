@@ -428,6 +428,10 @@ const char * eventIdx[] =
 	0
 };
 
+/**
+Signature: setEventListener(<String:eventIdx>, <Function:handler>)
+ \see	eventIdx
+*/
 int LuaProxy::setEventListener(lua_State *L)
 {
 	checkTop(L, 3);

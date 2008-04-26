@@ -39,6 +39,14 @@ LUA is able to return multiple values.
 class ObjectProxy
 {
 public:
+	/**
+	The constructor of the ObjectProxy. It expects a valid Class Name as argument.
+	If a valid name is passed, the class is instanciated and associated with the new
+	proxy instance.
+	If the name is not valid, bad things such as memory leaks might happen.
+	 \param L	The LUA stack containing the argument
+	 \see objectTypes
+	*/
 	ObjectProxy(lua_State *L);
 
 public: // Sphere
@@ -130,18 +138,94 @@ public: // Container
 	int setEnabled(lua_State *L);
 
 public: // Dynamic Casts
+	/**
+	Returns the associated object as Sphere,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Sphere> sphere();
+
+	/**
+	Returns the associated object as Rectangle,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Rectangle> rectangle();
+
+	/**
+	Returns the associated object as Parallelepiped,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Parallelepiped> parallelepiped();
+
+	/**
+	Returns the associated object as Pixelplane,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Pixelplane> pixelplane();
+
+	/**
+	Returns the associated object as Text,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Text> text();
+
+	/**
+	Returns the associated object as Mesh,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Mesh> mesh();
+
+	/**
+	Returns the associated object as AffineTransformation,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<AffineTransformation> affineTransformation();
+
+	/**
+	Returns the associated object as CameraNode,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<CameraNode> cameraNode();
+
+	/**
+	Returns the associated object as LightNode,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<LightNode> lightNode();
+
+	/**
+	Returns the associated object as Atmosphere,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Atmosphere> atmosphere();
+
+	/**
+	Returns the associated object as DepthBuffer,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<DepthBuffer> depthBuffer();
+
+	/**
+	Returns the associated object as Container,
+	or 0 if it can not be dynamically cast.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Container> container();
+
+	/**
+	Returns the associated object as Object.
+	 \return	A shared_ptr to the associated object
+	*/
 	std::tr1::shared_ptr<Object> object();
 	
 private:
@@ -150,6 +234,11 @@ private:
 public: // LUNA
 	static const char className[];
 	static const Luna<ObjectProxy>::RegType Register[];
+
+	/**
+	Null terminated list of valid object names.
+	*/
+	static const char * objectTypes[];
 };
 
 }

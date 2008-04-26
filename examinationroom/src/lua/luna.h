@@ -80,8 +80,18 @@ extern "C" {
 #include "lauxlib.h"
 }
 
+/**
+A template class that offers convenient C++ LUA binding with very little code.
+ \author nornagon
+ \param T	The class that is to be wrapped for LUA
+ \ingroup LUA
+*/
 template<class T> class Luna {
   public:
+	/**
+	Registers a C++ class, so that it can be instanciated and used from LUA.
+	 \param L	A LUA state
+	*/
     static void Register(lua_State *L) {
       lua_pushcfunction(L, &Luna<T>::constructor);
       lua_setglobal(L, T::className); // T() in lua will make a new instance.
@@ -89,7 +99,12 @@ template<class T> class Luna {
       RegisterMetatable(L);
     }
 
-    // register the metatable without registering the class constructor
+    /**
+	Register the metatable without registering the class constructor.
+	Classes like this can be used if they are manualy instanciated. It is usualy
+	not called from C++ directly, but as part of Register() or inject().
+	 \param L	A LUA state
+	*/
     static void RegisterMetatable(lua_State *L) {
       luaL_newmetatable(L, T::className); // create a metatable in the registry
       lua_pushstring(L, "__gc");
@@ -98,10 +113,28 @@ template<class T> class Luna {
       lua_pop(L, 1);
     }
 
+	/**
+	The constructor function that is called by LUA. This method is registered
+	as part of Register(). It creates a new instance of the class and pushes
+	the object on the stack. It is usualy not called by users from C++.
+	 \param L	A LUA state
+	 \see	inject()
+	 \see	Register()
+	 \return the number of objects pushed on the stack, which is 1.
+	*/
     static int constructor(lua_State *L) {
       return inject(L, new T(L));
     }
 
+	/**
+	Injects an existing instance into the passed LUA state. The object is pushed
+	on the stack. The garbage collector method is not registered. If the class
+	was registered already, instances injected will be collected, otherwise
+	they are not.
+	 \param L	A LUA stat
+	 \param obj	The object instance to push on top of the stack
+	 \return the number of objects pushed on the stack, which is 1.
+	*/
     static int inject(lua_State *L, T* obj) {
       lua_newtable(L); // create a new table for the class object ('self')
 
@@ -123,6 +156,14 @@ template<class T> class Luna {
       return 1;
     }
 
+	/**
+	Returns an object that is on top of the stack. This method should only be called
+	from a protected path. This is always the case in a LUA handler. Otherwise use
+	lua_pcall() or lua_cpcall().
+	 \param L	The lua state that contains the stack
+	 \param idx	The index of the class that is to be extracted
+	 \return The object that is on top of the stack.
+	*/
 	static T* extract(lua_State *L, int idx)
 	{
 		luaL_argcheck(L, lua_istable(L, idx), idx, "Not a Proxy Object");
@@ -133,6 +174,13 @@ template<class T> class Luna {
 		return *obj;
 	}
 
+	/**
+	This method is registered to handle method calls. It looks up the correct
+	function in the table of the class and calls it. It is not intended to be
+	called directly from C++ code.
+	 \param L	The lua state that is used in the function call. It contains the function arguments
+	 \return	The number of values that were pushed on top of the stack by the function
+	*/
     static int thunk(lua_State *L) {
       // redirect method call to the real thing
       int i = (int)lua_tonumber(L, lua_upvalueindex(1)); // which function?
@@ -145,6 +193,12 @@ template<class T> class Luna {
       return ((*obj)->*(T::Register[i].mfunc))(L); // execute the thunk
     }
 
+	/**
+	The garbage collection function. It just deletes the instance, therefore freeing it's memory.
+	This method is registered as lua function, and not intended to be called directly from C++.
+	 \param L	The current lua state.
+	 \return	The number 0
+	*/
     static int gc_obj(lua_State *L) {
       // clean up
       //printf("GC called: %s\n", T::className);
@@ -153,9 +207,15 @@ template<class T> class Luna {
       return 0;
     }
 
+	/**
+	The type of the table that contains methods that are to be registered to LUA.
+	Methods have to take only a LUA state as parameter, and return the number of
+	values they pushed on top of the stack. Well behaved methods remove the
+	arguments that are passed to them.
+	*/
     struct RegType {
-      const char *name;
-      int(T::*mfunc)(lua_State*);
+      const char *name; /**< The name of the method as seen from LUA */
+      int(T::*mfunc)(lua_State*); /**< The method pointer */
     };
 };
 

@@ -248,6 +248,7 @@ void GLWidget::paintGL()
 		else if (style_ == line)
 		{
 			setSide(right);
+			glClear(GL_DEPTH_BUFFER_BIT);
 			glStencilFunc(GL_EQUAL, 0x01, 0x01);
 			scene_->camera()->loadMatrix(this);
 			scene_->draw(this);

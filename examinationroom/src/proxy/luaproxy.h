@@ -123,7 +123,18 @@ protected:
 	void onQuit();
 
 protected:
+	/**
+	Called by high level event triggers to invoke an event with double parameter.
+	 \param event	A string identifier of an event.
+	 \param param	A double that is passed to the event handler
+	*/
 	void onEvent(const char * event, double param);
+
+	/**
+	Called by high level event triggers to invoke an event with string parameter.
+	 \param event	A string identifier of an event.
+	 \param param	A c string that is passed to the event handler
+	*/
 	void onEvent(const char * event, char * param);
 
 private:
