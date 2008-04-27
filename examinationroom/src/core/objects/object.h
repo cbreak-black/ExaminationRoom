@@ -14,6 +14,8 @@
 
 #include <memory>
 #include <string>
+#include <list>
+#include <functional>
 
 namespace Examination
 {
@@ -215,21 +217,49 @@ public: // Name
 	*/
 	void setName(const std::string & name);
 
-protected:
+public: // Signals
 	/**
-	Calls objectWillChange on the scene that contains this container, if it exists.
+	The type of the callbacks. Use bind() to create.
+	Do NOT rely on the Object * to stay valid after the callback returns, don't
+	store it.
+	*/
+	typedef std::tr1::function<void (const Object *)> SignalCallbackType;
+
+	/**
+	This method adds a parameterChanged callback. It is called every time the
+	object's parametrisation changes.
+	 \param cb	A callback, created with std::tr1::bind
+	*/
+	void addCallbackParameterChanged(const SignalCallbackType & cb);
+
+protected: // Signals: Internal data and methods
+	/**
+	Helper Method: Calls all contained functionals with the passed object as argument.
+	 \param list	A list of Signal callbacks
+	 \param obj		A pointer to an object to pass to the callbacks, traditionaly "this"
+	*/
+	static void callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj);
+
+protected: // Notify scene/observers of changes
+	/**
+	Calls objectWillChange on the scene that contains this object, if it exists.
 	*/
 	void objectWillChange() const;
 
 	/**
-	Calls objectDidChange on the scene that contains this container, if it exists.
+	Calls objectDidChange on the scene that contains this object, if it exists.
+	Also calls the callbacks registered with addCallbackParameterChanged.
 	*/
 	void objectDidChange() const;
 
-private:
+private: // State (not exported)
 	Scene * scene_;
 	Container * parent_;
 
+	// List with callbacks
+	std::list<SignalCallbackType> parameterChanged_;
+
+private: // Parameters (exported)
 	std::string name_;
 
 	std::tr1::shared_ptr<AbstractTexture> tex_;

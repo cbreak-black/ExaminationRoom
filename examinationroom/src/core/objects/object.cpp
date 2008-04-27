@@ -169,6 +169,22 @@ void Object::setName(const std::string & name)
 	objectDidChange();
 }
 
+// Callbacks
+void Object::callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj)
+{
+	std::list<SignalCallbackType>::const_iterator it = list.begin();
+	std::list<SignalCallbackType>::const_iterator end = list.end();
+	for (; it != end; it++)
+	{
+		(*it)(obj);
+	}
+}
+
+void Object::addCallbackParameterChanged(const SignalCallbackType & cb)
+{
+	parameterChanged_.push_back(cb);
+}
+
 // Signals
 void Object::objectWillChange() const
 {
@@ -180,6 +196,7 @@ void Object::objectDidChange() const
 {
 	if (scene())
 		scene()->objectDidChange(this);
+	callCallbacks(parameterChanged_, this);
 }
 
 

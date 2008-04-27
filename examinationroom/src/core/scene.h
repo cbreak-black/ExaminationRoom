@@ -14,9 +14,6 @@
 
 #include "vec.h"
 
-#include <list>
-#include <functional>
-
 namespace Examination
 {
 	class Object;
@@ -98,13 +95,6 @@ public: // Signals: Called by sub objects
 
 public: // Signals: Observed by clients
 	/**
-	The type of the callbacks. Use bind() to create.
-	Do NOT rely on the Object * to stay valid after the callback returns, don't
-	store it.
-	*/
-	typedef std::tr1::function<void (const Object *)> SignalCallbackType;
-
-	/**
 	Adds a callback to be informed when an object did change.
 	 \param cb	A callback functional/functor thing
 	*/
@@ -126,33 +116,30 @@ public: // Signals: Observed by clients
 	void addCallbackLayoutDidChange(const SignalCallbackType & cb);
 	/**
 	Removes a callback that was added to be informed when an object will change.
+	 \warning	Not implemented since callbacks are not comparable
 	 \param cb	A callback functional/functor thing
 	*/
 	void removeCallbackObjectWillChange(const SignalCallbackType & cb);
 	/**
 	Removes a callback that was added to be informed when an object did change.
+	 \warning	Not implemented since callbacks are not comparable
 	 \param cb	A callback functional/functor thing
 	 */
 	void removeCallbackObjectDidChange(const SignalCallbackType & cb);
 	/**
 	Removes a callback that was added to be informed when the scene layout will change.
+	 \warning	Not implemented since callbacks are not comparable
 	 \param cb	A callback functional/functor thing
 	*/
 	void removeCallbackLayoutWillChange(const SignalCallbackType & cb);
 	/**
 	Removes a callback that was added to be informed when the scene layout did change.
+	 \warning	Not implemented since callbacks are not comparable
 	 \param cb	A callback functional/functor thing
 	*/
 	void removeCallbackLayoutDidChange(const SignalCallbackType & cb);
 
 private: // Signals: Internal data and methods
-	/**
-	Calls all contained functions with the passed object as argument.
-	 \param list	A list of Signal callbacks
-	 \param obj		A pointer to an object to pass to the callbacks
-	*/
-	void callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj) const;
-
 	// Lists with callbacks
 	std::list<SignalCallbackType> objWillChangeCallbacks_;
 	std::list<SignalCallbackType> objDidChangeCallbacks_;

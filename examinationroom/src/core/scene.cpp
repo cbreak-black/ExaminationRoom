@@ -90,16 +90,6 @@ void Scene::layoutDidChange(const Container * cont) const
 	callCallbacks(layoutDidChangeCallbacks_, cont);
 }
 
-void Scene::callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj) const
-{
-	std::list<SignalCallbackType>::const_iterator it = list.begin();
-	std::list<SignalCallbackType>::const_iterator end = list.end();
-	for (; it != end; it++)
-	{
-		(*it)(obj);
-	}
-}
-
 void Scene::addCallbackObjectWillChange(const SignalCallbackType & cb)
 {
 	objWillChangeCallbacks_.push_back(cb);
