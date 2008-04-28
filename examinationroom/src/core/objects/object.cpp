@@ -12,6 +12,8 @@
 #include "scene.h"
 #include "surfaces/abstracttexture.h"
 
+#include <sstream>
+
 namespace Examination
 {
 	using namespace Tool;
@@ -50,6 +52,7 @@ void Object::init()
 
 Object::~Object()
 {
+	unregisterUniqueName(name_);
 }
 
 Tool::Point Object::position() const
@@ -162,12 +165,71 @@ const std::string & Object::name() const
 	return name_;
 }
 
-void Object::setName(const std::string & name)
+bool Object::setName(const std::string & name)
 {
 	objectWillChange();
-	name_ = name;
+	unregisterUniqueName(name_);
+	bool result = checkUniqueName(name);
+	name_ = registerUniqueName(name);
 	objectDidChange();
+	return result;
 }
+
+// Unique Name Management (Static)
+std::set<std::string> Object::uniqueNames_ = std::set<std::string>();
+
+bool Object::checkUniqueName(const std::string & name)
+{
+	return uniqueNames_.find(name) == uniqueNames_.end();
+}
+
+std::string Object::registerUniqueName(const std::string & name)
+{
+	if (checkUniqueName(name))
+	{
+		// If the name is free, register it
+		uniqueNames_.insert(name);
+		return name;
+	}
+	else
+	{
+		// Search a free name
+		int i = 1;
+		std::string tempName = name;
+		while (!checkUniqueName(tempName))
+		{
+			std::stringstream ss(name, std::ios_base::out | std::ios_base::app);
+			ss << i;
+			tempName = ss.str();
+			i++;
+		}
+		// If the name is free, register it
+		uniqueNames_.insert(tempName);
+		return tempName;
+	}
+}
+
+void Object::unregisterUniqueName(const std::string & name)
+{
+	uniqueNames_.erase(name);
+}
+
+// Serialisation
+std::string Object::className() const
+{
+	return "Object";
+}
+
+std::string Object::toLua(std::ostream outStream) const
+{
+	return className();
+}
+
+std::string Object::toLuaCreate(std::ostream outStream) const
+{
+	return className();
+}
+
 
 // Callbacks
 void Object::callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj)

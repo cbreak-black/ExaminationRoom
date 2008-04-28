@@ -15,7 +15,9 @@
 #include <memory>
 #include <string>
 #include <list>
+#include <set>
 #include <functional>
+#include <iostream>
 
 namespace Examination
 {
@@ -212,10 +214,57 @@ public: // Name
 	const std::string & name() const;
 
 	/**
-	Sets the name of this object.
+	Sets the name of this object. Note that the name might be changed to a derivate
+	of the passed name to fulfill uniqueness constraints.
+	 \note	Satisfies uniqueness constraints
 	 \param name	The new name of this object
+	 \return True if the name was set as passed, false if it had to be changed.
 	*/
-	void setName(const std::string & name);
+	bool setName(const std::string & name);
+
+	/**
+	Checks if the passed name is available.
+	 \param name	The desired name
+	 \return True if the passed name is available, false if it would have to be changed
+	*/
+	static bool checkUniqueName(const std::string & name);
+
+protected:
+	/**
+	Registers a unique name with the object class. If the passed name is unique,
+	it is registered at is and returned unchanged.
+	If the passed name is not unique, a unique version is built by appending
+	numbers.
+	 \param name	The desired base name
+	 \return a unique version of a passed name
+	*/
+	static std::string registerUniqueName(const std::string & name);
+
+	/**
+	Unregisters a name from the object class.
+	 \param name	The actual name
+	*/
+	static void unregisterUniqueName(const std::string & name);
+
+public: // Serialisastion
+	/**
+	Returns the name of the class of this object. This can be used in LUA
+	object creation.
+	 \return The name of this object's class as c++ string
+	*/
+	virtual std::string className() const;
+
+	/**
+	Writes the LUA commands to set parameters of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream outStream) const;
+
+	/**
+	Writes the LUA creation command of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	std::string toLuaCreate(std::ostream outStream) const;
 
 public: // Signals
 	/**
@@ -258,6 +307,9 @@ private: // State (not exported)
 
 	// List with callbacks
 	std::list<SignalCallbackType> parameterChanged_;
+
+	// Name management
+	static std::set<std::string> uniqueNames_;
 
 private: // Parameters (exported)
 	std::string name_;
