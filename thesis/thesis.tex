@@ -40,12 +40,12 @@
 
 \AddToShipoutPicture{
 \AtTextCenter{
-       \makebox(0,0)[c]{\resizebox{\textwidth}{!}{
-               \rotatebox{45}{
-                       \color{lightgray}
-                       \textsf{\textbf{DRAFT}}}}
-               }
-       }
+	\makebox(0,0)[c]{\resizebox{\textwidth}{!}{
+		\rotatebox{45}{
+			\color[rgb]{.85,.85,.85}
+			\textsf{\textbf{DRAFT}}}}
+		}
+	}
 }
 
 \usepackage{geometry} % to change the page dimensions
@@ -68,6 +68,8 @@
 \renewcommand{\labelitemi}{-}
 
 \newcommand{\todo}[1]{{\large\color{red!50} TODO: #1}}
+
+\newcommand{\ER}[0]{ExaminationRoom}
 
 % Depth of the TOC
 %\setcounter{secnumdepth}{3}
@@ -125,6 +127,7 @@
 \part{Implementation}
 \begin{multicols}{2}
 \input{sections/implementation.tex}
+\input{sections/compiling.tex}
 \input{sections/examples.tex}
 \end{multicols}
 \clearpage
