@@ -246,7 +246,7 @@ protected:
 	*/
 	static void unregisterUniqueName(const std::string & name);
 
-public: // Serialisastion
+public: // Serialisation
 	/**
 	Returns the name of the class of this object. This can be used in LUA
 	object creation.
@@ -258,13 +258,13 @@ public: // Serialisastion
 	Writes the LUA commands to set parameters of this object to the output stream.
 	 \param outStream	A stream that accepts writing
 	*/
-	virtual std::string toLua(std::ostream outStream) const;
+	virtual std::string toLua(std::ostream & outStream) const;
 
 	/**
 	Writes the LUA creation command of this object to the output stream.
 	 \param outStream	A stream that accepts writing
 	*/
-	std::string toLuaCreate(std::ostream outStream) const;
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
 public: // Signals
 	/**

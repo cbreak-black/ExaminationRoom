@@ -220,14 +220,25 @@ std::string Object::className() const
 	return "Object";
 }
 
-std::string Object::toLua(std::ostream outStream) const
+std::string Object::toLua(std::ostream & outStream) const
 {
-	return className();
+	toLuaCreate(outStream);
+	outStream << name() << ":" << "setName(\"" << name() << "\");\n";
+	outStream << name() << ":" << "setPosition("
+		<< position().x << ", " << position().y << ", " << position().z << ");\n";
+	outStream << name() << ":" << "setColor("
+		<< color().r << ", " << color().g << ", " << color().b << ", " << color().a << ");\n";
+	outStream << name() << ":" << "setWireframe(" << (wireframe() ? "true" : "false") << ");\n";
+	outStream << name() << ":" << "setShown(" << (shown() ? "true" : "false") << ");\n";
+	outStream << name() << ":" << "setDrawPriority(" << drawPriority() << ");\n";
+	return name();
 }
 
-std::string Object::toLuaCreate(std::ostream outStream) const
+std::string Object::toLuaCreate(std::ostream & outStream) const
 {
-	return className();
+	outStream << std::endl << "-- Create " << name() << " of type " << className() << std::endl;
+	outStream << name() << " = Object(\"" << className() << "\");\n";
+	return name();
 }
 
 

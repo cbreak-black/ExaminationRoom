@@ -95,6 +95,22 @@ void AffineTransformation::scale(Tool::Vec3f scale)
 	multMatrix(temp);
 }
 
+// Serialisation
+std::string AffineTransformation::className() const
+{
+	return "AffineTransformation";
+}
+
+/**
+\todo Add support of 4x4 import/export
+*/
+std::string AffineTransformation::toLua(std::ostream & outStream) const
+{
+	Container::toLua(outStream);
+	outStream << "-- Export of AffineTransformation nodes not supported yet\n";
+	return name();
+}
+
 // Drawing
 void AffineTransformation::draw(GLWidget * dest) const
 {

@@ -316,6 +316,24 @@ int ObjectProxy::setSubdivision(lua_State *L)
 }
 
 // Pixelplane
+int ObjectProxy::size(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		Tool::Vec2f size = pixelplane()->size();
+		lua_pushnumber(L, size.x);
+		lua_pushnumber(L, size.y);
+		return 2;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::setSize(lua_State *L)
 {
 	if (pixelplane())
@@ -325,7 +343,7 @@ int ObjectProxy::setSize(lua_State *L)
 		w = luaL_checknumber(L, 2);
 		h = luaL_checknumber(L, 3);
 		pixelplane()->setSize(w, h);
-		lua_pop(L, 4);
+		lua_pop(L, 3);
 		return 0;
 	}
 	else
@@ -336,6 +354,22 @@ int ObjectProxy::setSize(lua_State *L)
 }
 
 // General Objects
+int ObjectProxy::name(lua_State *L)
+{
+	checkTop(L, 1);
+	lua_pop(L, 1);
+	lua_pushstring(L, object()->name().c_str());
+	return 1;
+}
+
+int ObjectProxy::setName(lua_State *L)
+{
+	checkTop(L, 2);
+	object()->setName(lua_tostring(L, 2));
+	lua_pop(L, 2);
+	return 0;
+}
+
 int ObjectProxy::position(lua_State *L)
 {
 	checkTop(L, 1);
@@ -465,6 +499,22 @@ int ObjectProxy::setTexture(lua_State *L)
 }
 
 // Pixelplane
+int ObjectProxy::autoResize(lua_State *L)
+{
+	if (pixelplane())
+	{
+		checkTop(L, 1);
+		lua_pop(L, 1);
+		lua_pushboolean(L, pixelplane()->autoResize());
+		return 1;
+	}
+	else
+	{
+		lua_settop(L, 0);
+		return 0;
+	}
+}
+
 int ObjectProxy::setAutoResize(lua_State *L)
 {
 	if (pixelplane())
@@ -519,8 +569,9 @@ int ObjectProxy::zoom(lua_State *L)
 	{
 		checkTop(L, 1);
 		lua_pop(L, 1);
-		lua_pushnumber(L, pixelplane()->zoomX());
-		lua_pushnumber(L, pixelplane()->zoomY());
+		Tool::Vec2f zoom = pixelplane()->zoom();
+		lua_pushnumber(L, zoom.x);
+		lua_pushnumber(L, zoom.y);
 		return 2;
 	}
 	else
@@ -1113,6 +1164,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "setDirC", &ObjectProxy::setDirC },
 	{ "subdivision", &ObjectProxy::subdivision },
 	{ "setSubdivision", &ObjectProxy::setSubdivision },
+	{ "size", &ObjectProxy::size },
 	{ "setSize", &ObjectProxy::setSize },
 	{ "text", &ObjectProxy::text },
 	{ "setText", &ObjectProxy::setText },
@@ -1143,6 +1195,8 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "clear", &ObjectProxy::clear },
 	{ "enabled", &ObjectProxy::enabled },
 	{ "setEnabled", &ObjectProxy::setEnabled },
+	{ "name", &ObjectProxy::name },
+	{ "setName", &ObjectProxy::setName },
 	{ "position", &ObjectProxy::position },
 	{ "setPosition", &ObjectProxy::setPosition },
 	{ "color", &ObjectProxy::color },
@@ -1156,6 +1210,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "visible", &ObjectProxy::visible },
 	{ "setTexCoords", &ObjectProxy::setTexCoords },
 	{ "setTexture", &ObjectProxy::setTexture },
+	{ "autoResize", &ObjectProxy::autoResize },
 	{ "setAutoResize", &ObjectProxy::setAutoResize },
 	{ "resizeToCurrent", &ObjectProxy::resizeToCurrent },
 	{ "resizeTo", &ObjectProxy::resizeTo },

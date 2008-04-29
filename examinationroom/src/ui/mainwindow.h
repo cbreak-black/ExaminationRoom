@@ -62,6 +62,12 @@ public slots:
 	void closeScene();
 
 	/**
+	Opens a file save dialog and stores sthe current scene as the selected file
+	as lua script. If the original was loades from a file, information WILL be lost.
+	*/
+	void storeLuaFile();
+
+	/**
 	Sets the draw type of the main window output view.
 	 \param t	A valid GLWidget::DrawStyle integer
 	*/

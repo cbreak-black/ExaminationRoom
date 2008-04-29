@@ -66,6 +66,26 @@ public: // BG Color
 	*/
 	Tool::Color4 backgroundColor() const;
 
+public: // Serialisation
+	/**
+	Returns the name of the class of this object. This can be used in LUA
+	object creation.
+	 \return The name of this object's class as c++ string
+	*/
+	virtual std::string className() const;
+
+	/**
+	Writes the LUA commands to set parameters of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream & outStream) const;
+
+	/**
+	The scene object is not constructed in LUA, so this method does nothing.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
+
 public: // Signals: Called by sub objects
 	/**
 	Called by objects that are about to change. Changes include attributes and data.

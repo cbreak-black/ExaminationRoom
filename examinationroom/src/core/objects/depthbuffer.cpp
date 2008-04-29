@@ -77,4 +77,17 @@ void DepthBuffer::setDepthBufferState(bool enabled)
 	depthBufferState_ = enabled;
 }
 
+// Serialisation
+std::string DepthBuffer::className() const
+{
+	return "DepthBuffer";
+}
+
+std::string DepthBuffer::toLua(std::ostream & outStream) const
+{
+	Container::toLua(outStream);
+	outStream << name() << ":" << "setDepthBufferState(" << (depthBufferState() ? "true" : "false") << ");\n";
+	return name();
+}
+
 }

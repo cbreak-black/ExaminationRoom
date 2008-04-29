@@ -120,6 +120,20 @@ public:
 	*/
 	void setEnabled(bool enabled);
 
+public: // Serialisation
+	/**
+	Returns the name of the class of this object. This can be used in LUA
+	object creation.
+	 \return The name of this object's class as c++ string
+	*/
+	virtual std::string className() const;
+
+	/**
+	Writes the LUA commands to set parameters of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream & outStream) const;
+
 public:
 	/**
 	Returns the internal object list.

@@ -199,5 +199,25 @@ void Rectangle::setSubdivision(unsigned int subdivision)
 	subdivision_ = subdivision;
 }
 
+// Serialisation
+std::string Rectangle::className() const
+{
+	return "Rectangle";
+}
+
+std::string Rectangle::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "setSubdivision(" << subdivision() << ");\n";
+	outStream << name() << ":" << "setTexCoords("
+		<< texA().x << ", " << texA().y << ", "
+		<< texB().x << ", " << texB().y << ", "
+		<< texC().x << ", " << texC().y << ", "
+		<< texD().x << ", " << texD().y << ");\n";
+	outStream << name() << ":" << "setDirA(" << dirA().x << ", " << dirA().y << ", " << dirA().z << ");\n";
+	outStream << name() << ":" << "setDirB(" << dirB().x << ", " << dirB().y << ", " << dirB().z << ");\n";
+	return name();
+}
+
 
 }

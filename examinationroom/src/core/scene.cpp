@@ -58,6 +58,40 @@ Tool::Color4 Scene::backgroundColor() const
 	return color();
 }
 
+// Serialisation
+std::string Scene::className() const
+{
+	return "Scene";
+}
+
+/**
+\todo	Add Camera export
+*/
+std::string Scene::toLua(std::ostream & outStream) const
+{
+	outStream << "Scene:" << "setBackgroundColor("
+		<< (int)(color().r*255) << ", "
+		<< (int)(color().g*255) << ", "
+		<< (int)(color().b*255) << ", "
+		<< (int)(color().a*255) << ");\n";
+	outStream << "-- Scene Camera export not supported yet\n";
+	// Store all sub objects
+	outStream << "-- Start sub-objects of " << name() << std::endl;
+	std::list<shared_ptr<Object> >::const_reverse_iterator i = objects().rbegin();
+	for (; i != objects().rend(); i++)
+	{
+		std::string itemName = (*i)->toLua(outStream);
+		outStream << "Scene:" << "addObject(" << itemName << ");\n";
+	}
+	outStream << "-- End sub-objects of " << name() << std::endl;
+	return name();
+}
+
+std::string Scene::toLuaCreate(std::ostream & outStream) const
+{
+	return name();
+}
+
 Container * Scene::getParent()
 {
 	return this;

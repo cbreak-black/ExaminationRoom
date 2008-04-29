@@ -104,6 +104,20 @@ public:
 	*/
 	void setScaleFactor(float scaleFactor);
 
+public: // Serialisation
+	/**
+	Returns the name of the class of this object. This can be used in LUA
+	object creation.
+	 \return The name of this object's class as c++ string
+	*/
+	virtual std::string className() const;
+
+	/**
+	Writes the LUA commands to set parameters of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream & outStream) const;
+
 private: // Parser Callbacks
 	void info_callback(const std::string& filename, std::size_t line_number, const std::string& message);
 	void warning_callback(const std::string& filename, std::size_t line_number, const std::string& message);
@@ -131,6 +145,7 @@ private:
 	std::vector<Tool::Vec3f> normals_;
 	std::vector<Tool::Vec2f> textureCoordinates_;
 	std::vector<Triangle> triangles_;
+	std::string meshPath_;
 	float scaleFactor_;
 	int displayList_;
 };

@@ -118,13 +118,13 @@ void Container::setParentsAndScenes(Container * p, Scene * s)
 void Container::setScene(Scene * s)
 {
 	Object::setScene(s);
-	setParentsAndScenes(parent(), scene());
+	setParentsAndScenes(getParent(), getScene());
 }
 
 void Container::setParent(Container * c)
 {
 	Object::setParent(c);
-	setParentsAndScenes(parent(), scene());
+	setParentsAndScenes(getParent(), getScene());
 }
 
 // Drawing
@@ -149,6 +149,29 @@ bool Container::enabled() const
 void Container::setEnabled(bool enabled)
 {
 	enabled_ = enabled;
+}
+
+// Serialisation
+std::string Container::className() const
+{
+	return "Container";
+}
+
+std::string Container::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "setEnabled(" << (enabled() ? "true" : "false") << ");\n";
+	// Store all sub objects
+	outStream << "-- Start sub-objects of " << name() << std::endl;
+	std::list<shared_ptr<Object> >::const_reverse_iterator i = objects_.rbegin();
+	for (; i != objects_.rend(); i++)
+	{
+		std::string itemName = (*i)->toLua(outStream);
+		outStream << name() << ":" << "addObject(" << itemName << ");\n";
+	}
+	outStream << "-- End sub-objects of " << name() << std::endl;
+
+	return name();
 }
 
 // Object accessor

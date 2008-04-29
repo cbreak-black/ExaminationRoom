@@ -22,6 +22,19 @@ Text::Text()
 	setName("Text");
 }
 
+// Serialisation
+std::string Text::className() const
+{
+	return "Text";
+}
+
+std::string Text::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "setText(\"" << text().toAscii().data() << "\");\n";
+	return name();
+}
+
 // Drawing
 void Text::draw(GLWidget * dest) const
 {

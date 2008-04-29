@@ -86,4 +86,20 @@ void Sphere::setStacks(int stacks)
 	stacks_ = stacks;
 }
 
+// Serialisation
+std::string Sphere::className() const
+{
+	return "Sphere";
+}
+
+std::string Sphere::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "setRadius(" << radius() << ");\n";
+	outStream << name() << ":" << "setSlices(" << slices() << ");\n";
+	outStream << name() << ":" << "setStacks(" << stacks() << ");\n";
+	return name();
+}
+
+
 }

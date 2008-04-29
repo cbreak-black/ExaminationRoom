@@ -43,6 +43,14 @@ public: // Construction
 public:
 	virtual void draw(GLWidget * dest) const;
 
+public:
+	/**
+	Returns the size of the pixelplane.
+	 \see setSize()
+	 \return	A Vec2f containing the size of the Pixelplane
+	 */
+	Tool::Vec2f size() const;
+
 	/**
 	Sets the intended size of the pixelplane. This is used to rescales the associated
 	Texture object according to perspective projection, if autoResize() is enabled
@@ -83,16 +91,10 @@ public:
 	void resizeTo(int w, int h) const;
 
 	/**
-	Returns the zoom factor of the Pixelplane in x direction.
-	 \return the zoom factor of the Pixelplane in x direction.
+	Returns the zoom factors of the Pixelplane.
+	 \return the zoom factors of the Pixelplane.
 	*/
-	float zoomX();
-
-	/**
-	Returns the zoom factor of the Pixelplane in x direction.
-	 \return the zoom factor of the Pixelplane in x direction.
-	*/
-	float zoomY();
+	Tool::Vec2f zoom() const;
 
 	/**
 	Changes the zoom factor of the Pixelplane. This also changes the zoom factor
@@ -104,6 +106,20 @@ public:
 	void setZoom(float zx, float zy);
 
 	virtual void setTexture(std::tr1::shared_ptr<AbstractTexture> t);
+
+public: // Serialisation
+	/**
+	Returns the name of the class of this object. This can be used in LUA
+	object creation.
+	 \return The name of this object's class as c++ string
+	*/
+	virtual std::string className() const;
+
+	/**
+	Writes the LUA commands to set parameters of this object to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream & outStream) const;
 
 private:
 	bool autoresize_;

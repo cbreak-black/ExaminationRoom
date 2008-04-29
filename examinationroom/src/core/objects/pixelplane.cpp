@@ -46,6 +46,11 @@ void Pixelplane::draw(GLWidget * dest) const
 	}
 }
 
+Vec2f Pixelplane::size() const
+{
+	return Vec2f(width_, height_);
+}
+
 void Pixelplane::setSize(float w, float h)
 {
 	width_ = w;
@@ -88,14 +93,9 @@ void Pixelplane::resizeTo(int w, int h) const
 	}
 }
 
-float Pixelplane::zoomX()
+Vec2f Pixelplane::zoom() const
 {
-	return zoomFactorX_;
-}
-
-float Pixelplane::zoomY()
-{
-	return zoomFactorY_;
+	return Vec2f(zoomFactorX_, zoomFactorY_);
 }
 
 void Pixelplane::setZoom(float zx, float zy)
@@ -115,6 +115,21 @@ void Pixelplane::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 	{
 		texture()->setZoom(zoomFactorX_, zoomFactorY_);
 	}
+}
+
+// Serialisation
+std::string Pixelplane::className() const
+{
+	return "Pixelplane";
+}
+
+std::string Pixelplane::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "setAutoResize(" << (autoResize() ? "true" : "false") << ");\n";
+	outStream << name() << ":" << "setSize(" << size().x << ", " << size().y << ");\n";
+	outStream << name() << ":" << "setZoom(" << zoom().x << ", " << zoom().y << ");\n";
+	return name();
 }
 
 }

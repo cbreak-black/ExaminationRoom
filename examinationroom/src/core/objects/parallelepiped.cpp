@@ -71,5 +71,18 @@ void Parallelepiped::setDirC(Tool::Vector v)
 {
 	directionC_ = v;
 }
-	
+
+// Serialisation
+std::string Parallelepiped::className() const
+{
+	return "Parallelepiped";
+}
+
+std::string Parallelepiped::toLua(std::ostream & outStream) const
+{
+	Rectangle::toLua(outStream);
+	outStream << name() << ":" << "setDirC(" << dirC().x << ", " << dirC().y << ", " << dirC().z << ");\n";
+	return name();
+}
+
 }

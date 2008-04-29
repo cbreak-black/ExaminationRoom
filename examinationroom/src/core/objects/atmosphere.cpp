@@ -63,6 +63,35 @@ void Atmosphere::setEnd(float end)
 	end_ = end;
 }
 
+// Serialisation
+std::string Atmosphere::className() const
+{
+	return "Atmosphere";
+}
+
+std::string Atmosphere::toLua(std::ostream & outStream) const
+{
+	Container::toLua(outStream);
+	outStream << name() << ":" << "setMode(\"";
+	switch (mode())
+	{
+		case Atmosphere::Exp:
+			outStream << "Exp";
+			break;
+		case Atmosphere::Exp2:
+			outStream << "Exp2";
+			break;
+		case Atmosphere::Linear:
+			outStream << "Linear";
+			break;
+	}
+	outStream << "\");\n";
+	outStream << name() << ":" << "setDensity(" << density() << ");\n";
+	outStream << name() << ":" << "setStart(" << start() << ");\n";
+	outStream << name() << ":" << "setEnd(" << end() << ");\n";
+	return name();
+}
+
 // Drawing
 void Atmosphere::draw(GLWidget * dest) const
 {

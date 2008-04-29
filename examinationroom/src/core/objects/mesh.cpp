@@ -89,6 +89,8 @@ bool Mesh::loadMesh(std::string path)
 {
 	using namespace std::tr1::placeholders;
 
+	meshPath_ = path;
+
 	obj::obj_parser::flags_type obj_parser_flags = 0;
 	obj_parser_flags |= obj::obj_parser::triangulate_faces;
 	obj_parser_flags |= obj::obj_parser::translate_negative_indices;
@@ -137,7 +139,6 @@ bool Mesh::loadMesh(std::string path)
 	else
 	{
 		rebuildCache();
-		setName(path);
 		return true;
 	}
 }
@@ -230,6 +231,20 @@ float Mesh::scaleFactor() const
 void Mesh::setScaleFactor(float scaleFactor)
 {
 	scaleFactor_ = scaleFactor;
+}
+
+// Serialisation
+std::string Mesh::className() const
+{
+	return "Mesh";
+}
+
+std::string Mesh::toLua(std::ostream & outStream) const
+{
+	Object::toLua(outStream);
+	outStream << name() << ":" << "loadMesh(\"" << meshPath_ << "\");\n";
+	outStream << name() << ":" << "setScaleFactor(" << scaleFactor() << ");\n";
+	return name();
 }
 
 // Parser Callbacks

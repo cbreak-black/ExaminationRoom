@@ -18,6 +18,8 @@
 
 #include "luaproxy.h"
 
+#include <iostream>
+
 namespace Examination
 {
 
@@ -46,6 +48,9 @@ MainWindow::MainWindow()
 	menu->addAction(tr("Close Scene"),
 					this, SLOT(closeScene()),
 					QKeySequence(QKeySequence::Close));
+	menu->addAction(tr("&Save Scene..."),
+					this, SLOT(storeLuaFile()),
+					QKeySequence(QKeySequence::Save));
 #ifndef Q_WS_MACX
 	menu->addSeparator();
 	menu->addAction(tr("&Quit"), this, SLOT(close()),
@@ -177,13 +182,26 @@ void MainWindow::onTimeout()
 void MainWindow::loadLuaFile()
 {
 	// Set up lua engine and bindings
-	QString fileName = QFileDialog::getOpenFileName(this, "Open Log File",
+	QString fileName = QFileDialog::getOpenFileName(this, "Open LUA File",
 													"res/scene.lua",
 													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
 		newScene();
 		luaProxy_->runFile(fileName.toAscii());
+	}
+}
+
+void MainWindow::storeLuaFile()
+{
+	QString fileName = QFileDialog::getSaveFileName(this, "Save LUA File",
+													"res/",
+													"Lua Scene File (*.lua)");
+	if (!fileName.isNull())
+	{
+		std::ofstream of;
+		of.open(fileName.toAscii(), std::ios_base::out);
+		scene_->toLua(of);
 	}
 }
 
@@ -201,6 +219,7 @@ void MainWindow::newScene()
 {
 	std::tr1::shared_ptr<Scene> scene = std::tr1::shared_ptr<Scene>(new Scene());
 	setScene(scene);
+	scene->setName("Scene"); // Scene was taken before old scene is destroyed
 }
 
 std::tr1::shared_ptr<Scene> MainWindow::scene() const

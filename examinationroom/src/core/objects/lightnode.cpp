@@ -30,6 +30,23 @@ void LightNode::setAmbient(Tool::Color4 color)
 	ambient_ = color;
 }
 
+// Serialisation
+std::string LightNode::className() const
+{
+	return "LightNode";
+}
+
+std::string LightNode::toLua(std::ostream & outStream) const
+{
+	Container::toLua(outStream);
+	outStream << name() << ":" << "setAmbient("
+		<< ambient().r << ", "
+		<< ambient().g << ", "
+		<< ambient().b << ", "
+		<< ambient().a << ");\n";
+	return name();
+}
+
 // Drawing
 void LightNode::draw(GLWidget * dest) const
 {

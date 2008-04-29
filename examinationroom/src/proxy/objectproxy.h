@@ -68,6 +68,8 @@ public: // Rectangle/Parallelepiped
 	int setSubdivision(lua_State *L);
 
 public: // Object
+	int name(lua_State *L);
+	int setName(lua_State *L);
 	int position(lua_State *L);
 	int setPosition(lua_State *L);
 	int color(lua_State *L);
@@ -85,7 +87,9 @@ public: // Textures
 	int setTexture(lua_State *L);
 
 public: // Pixelplane
+	int size(lua_State *L);
 	int setSize(lua_State *L);
+	int autoResize(lua_State *L);
 	int setAutoResize(lua_State *L);
 	int resizeToCurrent(lua_State *L);
 	int resizeTo(lua_State *L);

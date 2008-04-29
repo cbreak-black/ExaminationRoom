@@ -35,6 +35,22 @@ void CameraNode::setCamera(std::tr1::shared_ptr<Camera> camera)
 	cam_ = camera;
 }
 
+// Serialisation
+std::string CameraNode::className() const
+{
+	return "CameraNode";
+}
+
+/**
+\todo	Add support for camera export
+*/
+std::string CameraNode::toLua(std::ostream & outStream) const
+{
+	Container::toLua(outStream);
+	outStream << "-- Camera Write not supported yet\n";
+	return name();
+}
+
 // Drawing
 void CameraNode::draw(GLWidget * dest) const
 {
