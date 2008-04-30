@@ -47,7 +47,11 @@ std::string CameraNode::className() const
 std::string CameraNode::toLua(std::ostream & outStream) const
 {
 	Container::toLua(outStream);
-	outStream << "-- Camera Write not supported yet\n";
+	// Localy scoped variable c points to camera
+	std::string c = "cam";
+	outStream << "do -- cam\nlocal " << c << " = " << name() << ":camera();\n";
+	camera()->toLua(outStream, c);
+	outStream << "end --cam\n";
 	return name();
 }
 

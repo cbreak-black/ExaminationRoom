@@ -213,6 +213,16 @@ public:
 	*/
 	Tool::ScreenProject * screenProject(GLWidget::Side s) const;
 
+public: // Serialisation
+	/**
+	Writes the LUA commands to set parameters of the camera to the output stream.
+	The parameters are set on a camera with the passed name, it is considered to
+	be a lua variable containing a camera.
+	 \param outStream	A stream that accepts writing
+	 \param name		The variable name of the camera that is to be set
+	*/
+	std::string toLua(std::ostream & outStream, const std::string & name) const;
+
 private:
 	Tool::Point		pos_;
 	Tool::Vector	dir_;

@@ -11,10 +11,7 @@
 
 #include "surfaces/abstracttexture.h"
 #include "glwidget.h"
-#include "scene.h"
-#include "camera.h"
 
-#include "screenproject.h"
 #include "platform_math.h"
 
 namespace Examination

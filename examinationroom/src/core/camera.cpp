@@ -309,4 +309,32 @@ void Camera::setType(Camera::Type t)
 	type_ = t;
 }
 
+std::string Camera::toLua(std::ostream & outStream, const std::string & name) const
+{
+	outStream << name << ":" << "setType(\"";
+	switch (type())
+	{
+		case Camera::Perspective:
+			outStream << "Perspective";
+			break;
+		case Camera::Parallel:
+			outStream << "Parallel";
+			break;
+		case Camera::Screen:
+			outStream << "Screen";
+			break;
+	}
+	outStream << "\");\n";
+	outStream << name << ":" << "setPosition("
+		<< position().x << ", " << position().y << ", " << position().z << ");\n";
+	outStream << name << ":" << "setDirection("
+		<< direction().x << ", " << direction().y << ", " << direction().z << ");\n";
+	outStream << name << ":" << "setUp("
+		<< up().x << ", " << up().y << ", " << up().z << ");\n";
+	outStream << name << ":" << "setSeparation(" << separation() << ");\n";
+	outStream << name << ":" << "setFieldOfView(" << fieldOfView() << ");\n";
+	outStream << name << ":" << "setParalaxPlane(" << paralaxPlane() << ");\n";
+	return name;
+}
+
 }

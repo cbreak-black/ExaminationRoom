@@ -28,11 +28,11 @@ const char * cameraTypes[] =
 
 CameraProxy::CameraProxy(lua_State *L)
 {
-	checkTop(L, 2);
+	checkTop(L, 1);
 	int opt = luaL_checkoption(L, 1, 0, cameraTypes);
 	camera_ = shared_ptr<Camera>(new Camera());
 	camera_->setType((Camera::Type)opt);
-	lua_pop(L, 2);
+	lua_pop(L, 1);
 }
 
 CameraProxy::CameraProxy(std::tr1::shared_ptr<Camera> camera)

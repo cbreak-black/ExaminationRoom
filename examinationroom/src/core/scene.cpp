@@ -69,12 +69,16 @@ std::string Scene::className() const
 */
 std::string Scene::toLua(std::ostream & outStream) const
 {
+	// Localy scoped variable c points to camera
+	std::string c = "cam";
+	outStream << "do -- cam\nlocal " << c << " = " << name() << ":camera();\n";
+	camera()->toLua(outStream, c);
+	outStream << "end --cam\n";
 	outStream << "Scene:" << "setBackgroundColor("
 		<< (int)(color().r*255) << ", "
 		<< (int)(color().g*255) << ", "
 		<< (int)(color().b*255) << ", "
 		<< (int)(color().a*255) << ");\n";
-	outStream << "-- Scene Camera export not supported yet\n";
 	// Store all sub objects
 	outStream << "-- Start sub-objects of " << name() << std::endl;
 	std::list<shared_ptr<Object> >::const_reverse_iterator i = objects().rbegin();
@@ -83,7 +87,7 @@ std::string Scene::toLua(std::ostream & outStream) const
 		std::string itemName = (*i)->toLua(outStream);
 		outStream << "Scene:" << "addObject(" << itemName << ");\n";
 	}
-	outStream << "-- End sub-objects of " << name() << std::endl;
+	outStream << "-- End sub-objects of Scene\n";
 	return name();
 }
 
