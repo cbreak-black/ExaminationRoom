@@ -9,9 +9,8 @@
 
 #include "texture.h"
 
-#include "glwidget.h"
+#include <qgl.h>
 
-#include <iostream>
 #include "platform_math.h"
 
 namespace Examination

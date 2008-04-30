@@ -14,8 +14,6 @@
 
 #include <QImage>
 
-#include <cstdlib>
-
 #include "platform_math.h" // for roundf
 
 using namespace std::tr1;

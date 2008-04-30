@@ -3,9 +3,6 @@
 
 #include "vec.h"
 
-#include <vector>
-#include <memory>
-
 #include <qgl.h>
 
 namespace Tool

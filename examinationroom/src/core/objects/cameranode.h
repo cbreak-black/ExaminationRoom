@@ -10,7 +10,6 @@
 #ifndef CAMERA_NODE_H
 #define CAMERA_NODE_H
 
-#include "object.h"
 #include "container.h"
 
 #include <memory>

@@ -14,7 +14,8 @@
 #include <iostream>
 
 #include "surfaces/abstracttexture.h"
-#include "glwidget.h"
+
+#include <qgl.h>
 
 namespace Examination
 {

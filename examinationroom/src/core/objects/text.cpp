@@ -9,7 +9,6 @@
 
 #include "text.h"
 
-#include "vec.h"
 #include "glwidget.h"
 
 namespace Examination

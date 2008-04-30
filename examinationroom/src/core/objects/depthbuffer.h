@@ -10,7 +10,6 @@
 #ifndef DEPTHBUFFER_NODE_H
 #define DEPTHBUFFER_NODE_H
 
-#include "object.h"
 #include "container.h"
 
 namespace Examination

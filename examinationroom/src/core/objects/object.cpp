@@ -8,7 +8,6 @@
  */
 
 #include "object.h"
-#include "container.h"
 #include "scene.h"
 #include "surfaces/abstracttexture.h"
 

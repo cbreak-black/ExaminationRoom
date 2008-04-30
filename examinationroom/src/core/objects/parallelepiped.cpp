@@ -10,11 +10,8 @@
 #include "parallelepiped.h"
 
 #include "surfaces/abstracttexture.h"
-#include "glwidget.h"
-#include "scene.h"
 
-#include "screenproject.h"
-#include "platform_math.h"
+#include <qgl.h>
 
 namespace Examination
 {

@@ -93,6 +93,7 @@ std::string Scene::toLua(std::ostream & outStream) const
 
 std::string Scene::toLuaCreate(std::ostream & outStream) const
 {
+	outStream << "-- The Scene object exists from the Start\n";
 	return name();
 }
 

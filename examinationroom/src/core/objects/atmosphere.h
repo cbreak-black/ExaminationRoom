@@ -10,7 +10,6 @@
 #ifndef ATMOSPHERE_H
 #define ATMOSPHERE_H
 
-#include "object.h"
 #include "container.h"
 
 namespace Examination

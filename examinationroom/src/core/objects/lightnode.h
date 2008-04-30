@@ -10,7 +10,6 @@
 #ifndef LIGHT_NODE_H
 #define LIGHT_NODE_H
 
-#include "object.h"
 #include "container.h"
 
 namespace Examination

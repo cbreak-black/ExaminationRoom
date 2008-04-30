@@ -10,9 +10,8 @@
 #include "rectangle.h"
 
 #include "surfaces/abstracttexture.h"
-#include "glwidget.h"
 
-#include "platform_math.h"
+#include <qgl.h>
 
 namespace Examination
 {

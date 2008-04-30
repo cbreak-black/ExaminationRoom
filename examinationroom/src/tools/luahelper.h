@@ -14,15 +14,13 @@
 #include "vec.h"
 
 extern const char * errArgN;
-extern const char * errArgT;
 
 inline bool checkTop(lua_State *L, int num)
 {
 	int n = lua_gettop(L);
 	if (n != num)
 	{
-		lua_pushstring(L, errArgN);
-		lua_error(L);
+		luaL_error(L, errArgN, n, num);
 		return false;
 	}
 	else

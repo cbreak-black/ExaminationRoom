@@ -9,5 +9,4 @@
 
 #include "luahelper.h"
 
-const char * errArgN = "incorrect number of arguments";
-const char * errArgT = "incorrect type of arguments";
+const char * errArgN = "Incorrect number of arguments: %d passed, %d expected.";

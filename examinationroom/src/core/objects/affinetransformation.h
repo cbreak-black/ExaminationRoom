@@ -10,7 +10,6 @@
 #ifndef AFFINE_TRANSFORMATION_H
 #define AFFINE_TRANSFORMATION_H
 
-#include "object.h"
 #include "container.h"
 
 #include "vec.h"

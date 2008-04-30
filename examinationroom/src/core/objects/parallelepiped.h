@@ -10,8 +10,6 @@
 #ifndef PARALLELEPIPED_H
 #define PARALLELEPIPED_H
 
-#include <memory>
-
 #include "rectangle.h"
 
 namespace Examination
