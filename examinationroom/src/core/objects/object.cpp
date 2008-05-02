@@ -188,20 +188,16 @@ bool Object::checkUniqueName(const std::string & name)
 std::string Object::sanitizeName(const std::string & name)
 {
 	std::string saneName = name;
-	unsigned int pos = saneName.size()-1;
-	unsigned int res;
-	for (; pos > 0; pos--)
+	unsigned int pos = saneName.find_last_not_of(saneCharacters);
+	while (pos != std::string::npos)
 	{
-		res = saneName.find_last_not_of(saneCharacters, pos);
-		if (res != std::string::npos)
-		{
-			saneName[res] = '_';
-		}
+		saneName[pos] = '_';
+		pos = saneName.find_last_not_of(saneCharacters, pos);
 	}
-	res = saneName.find_last_not_of(saneCharactersFirst, 0);
-	if (res != std::string::npos)
+	pos = saneName.find_last_not_of(saneCharactersFirst, 0);
+	if (pos != std::string::npos)
 	{
-		saneName[res] = '_';
+		saneName[0] = '_';
 	}
 	return saneName;
 }
