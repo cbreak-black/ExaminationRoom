@@ -108,6 +108,7 @@ public: // Mesh
 
 public: // AffineTransformation
 	int loadIdentity(lua_State *L);
+	int multMatrix(lua_State *L);
 	int translate(lua_State *L);
 	int rotate(lua_State *L);
 	int scale(lua_State *L);

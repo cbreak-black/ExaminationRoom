@@ -101,13 +101,13 @@ std::string AffineTransformation::className() const
 	return "AffineTransformation";
 }
 
-/**
-\todo Add support of 4x4 import/export
-*/
 std::string AffineTransformation::toLua(std::ostream & outStream) const
 {
 	Container::toLua(outStream);
-	outStream << "-- Export of AffineTransformation nodes not supported yet\n";
+	outStream << name() << ":" << "multMatrix({";
+	for (int i = 0; i<15; i++)
+		outStream << trans_[i] << ", ";
+	outStream << trans_[15] << "});\n";
 	return name();
 }
 

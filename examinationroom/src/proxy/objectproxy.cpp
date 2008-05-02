@@ -713,6 +713,31 @@ int ObjectProxy::loadIdentity(lua_State *L)
 	}
 }
 
+int ObjectProxy::multMatrix(lua_State *L)
+{
+	if (affineTransformation())
+	{
+		checkTop(L, 2);
+		luaL_checktype(L, 2, LUA_TTABLE);
+		double mat[16];
+		for (int i = 1; i <= 16; i++)
+		{
+			lua_pushnumber(L, i);
+			lua_gettable(L, 2);
+			mat[i-1] = lua_tonumber(L, 3);
+			lua_pop(L, 1);
+		}
+		affineTransformation()->multMatrix(mat);
+		lua_pop(L, 2);
+		return 0;
+	}
+	else
+	{
+		lua_settop(L,0);
+		return 0;
+	}
+}
+
 int ObjectProxy::translate(lua_State *L)
 {
 	if (affineTransformation())
@@ -1173,6 +1198,7 @@ const Luna<ObjectProxy>::RegType ObjectProxy::Register[] =
 	{ "scaleFactor", &ObjectProxy::scaleFactor },
 	{ "setScaleFactor", &ObjectProxy::setScaleFactor },
 	{ "loadIdentity", &ObjectProxy::loadIdentity },
+	{ "multMatrix", &ObjectProxy::multMatrix },
 	{ "translate", &ObjectProxy::translate },
 	{ "rotate", &ObjectProxy::rotate },
 	{ "scale", &ObjectProxy::scale },
