@@ -40,6 +40,11 @@ public: // Constructors and Destructor
 	 */
 	PatternStereogram(std::tr1::shared_ptr<Texture> d, std::tr1::shared_ptr<Texture> p, std::tr1::shared_ptr<Texture> q);
 
+public: // Serialisation
+	virtual std::string className() const;
+	virtual std::string toLua(std::ostream & outStream) const;
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
+
 private:
 	virtual void recreateStereogram();
 

@@ -69,22 +69,31 @@ public:
 	Returns the stored image that is used as texture.
 	 \return the stored image that is used as texture.
 	*/
-	QImage image();
+	QImage image() const;
 
 	/**
 	Returns true if the image is valid, false otherwise.
 	 \return true if the image is valid, false otherwise.
 	*/
-	bool valid();
+	bool valid() const;
+
+	/**
+	Returns the path the image was loaded from, or an empty string if it was created
+	in an other way.
+	 \return path the image was loaded from
+	*/
+	std::string path() const;
 
 public: // Resizing
 	virtual void resizeTo(int width, int height);
 	virtual void resizeToOriginal();
-	virtual int width();
-	virtual int height();
-	virtual float zoomX();
-	virtual float zoomY();
-	virtual void setZoom(float zx, float zy);
+	virtual int width() const;
+	virtual int height() const;
+
+public: // Serialisation
+	virtual std::string className() const;
+	virtual std::string toLua(std::ostream & outStream) const;
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
 private:
 	void loadPixelMap(QImage image);
@@ -94,9 +103,9 @@ private:
 	QImage image_;
 	QImage original_;
 
+	std::string imagePath_;
+
 	GLuint imageGLID_;
-	float zoomFactorX_;
-	float zoomFactorY_;
 };
 
 }

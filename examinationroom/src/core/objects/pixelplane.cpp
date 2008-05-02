@@ -24,7 +24,7 @@ Pixelplane::Pixelplane()
 	setAutoResize(false);
 	setSize(1,1);
 	setZoom(1,1);
-	setName("Pixel Plane");
+	setName("Pixelplane");
 }
 
 Pixelplane::~Pixelplane()

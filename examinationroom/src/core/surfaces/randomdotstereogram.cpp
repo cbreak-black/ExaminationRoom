@@ -182,4 +182,35 @@ void RandomdotStereogram::applyColorPalette()
 	}
 }
 
+// Serialisation
+std::string RandomdotStereogram::className() const
+{
+	return "RandomDot";
+}
+
+std::string RandomdotStereogram::toLua(std::ostream & outStream) const
+{
+	// Let parent create an instance and set parent parameters
+	std::string name = Stereogram::toLua(outStream);
+	// Set own parameters
+	outStream << name << ":" << "setMaxColor(" << maxColor_ << ");\n";
+	outStream << name << ":" << "setExclusiveColor(" << excColor_ << ");\n";
+	for (unsigned int i = 0; i < colors_.size(); i++)
+	{
+		outStream << name << ":" << "setColor(" << i << ", "
+			<< qRed(colors_[i]) << ", " << qGreen(colors_[i]) << ", " << qBlue(colors_[i]) << ");\n";
+	}
+	return name;
+}
+
+/**
+ \todo	Remove evil global variable name usage once the program/namemanager are implemented
+*/
+std::string RandomdotStereogram::toLuaCreate(std::ostream & outStream) const
+{
+	std::string name = "tex";
+	outStream << name << " = Texture(\"" << className() << "\", \"" << texDepth()->path() << "\");\n";
+	return name;
+}
+
 }

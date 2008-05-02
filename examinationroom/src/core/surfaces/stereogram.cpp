@@ -24,8 +24,6 @@ Stereogram::Stereogram()
 	texDepth_.reset();
 	texLeft_.reset();
 	texRight_.reset();
-	zoomFactorX_ = 1.0f;
-	zoomFactorY_ = 1.0f;
 	offset_ = 6;
 	style_ = convex;
 }
@@ -35,8 +33,6 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	texDepth_.reset();
 	texLeft_ = l;
 	texRight_ = r;
-	zoomFactorX_ = 1.0f;
-	zoomFactorY_ = 1.0f;
 	offset_ = 6;
 	style_ = convex;
 }
@@ -78,7 +74,7 @@ void Stereogram::resizeToOriginal()
 	}
 }
 
-int Stereogram::width()
+int Stereogram::width() const
 {
 	if (texLeft_)
 		return texLeft_->width();
@@ -86,7 +82,7 @@ int Stereogram::width()
 		return 0;
 }
 
-int Stereogram::height()
+int Stereogram::height() const
 {
 	if (texLeft_)
 		return texLeft_->height();
@@ -94,20 +90,9 @@ int Stereogram::height()
 		return 0;
 }
 
-float Stereogram::zoomX()
-{
-	return zoomFactorX_;
-}
-
-float Stereogram::zoomY()
-{
-	return zoomFactorY_;
-}
-
 void Stereogram::setZoom(float zx, float zy)
 {
-	zoomFactorX_ = zx;
-	zoomFactorY_ = zy;
+	AbstractTexture::setZoom(zx, zy);
 	if (texDepth_)
 		texDepth_->setZoom(zx, zy);
 	recreateStereogram();
@@ -117,7 +102,7 @@ void Stereogram::setZoom(float zx, float zy)
 		texRight_->setZoom(zx, zy);
 }
 
-int Stereogram::offset()
+int Stereogram::offset() const
 {
 	return offset_;
 }
@@ -131,7 +116,7 @@ void Stereogram::setOffset(int o)
 	}
 }
 
-Stereogram::Style Stereogram::style()
+Stereogram::Style Stereogram::style() const
 {
 	return style_;
 }
@@ -166,17 +151,17 @@ void Stereogram::draw(GLWidget * w)
 	}
 }
 
-std::tr1::shared_ptr<Texture> Stereogram::texDepth()
+std::tr1::shared_ptr<Texture> Stereogram::texDepth() const
 {
 	return texDepth_;
 }
 
-std::tr1::shared_ptr<Texture> Stereogram::texLeft()
+std::tr1::shared_ptr<Texture> Stereogram::texLeft() const
 {
 	return texLeft_;
 }
 
-std::tr1::shared_ptr<Texture> Stereogram::texRight()
+std::tr1::shared_ptr<Texture> Stereogram::texRight() const
 {
 	return texRight_;
 }
@@ -185,7 +170,7 @@ void Stereogram::setTexDepth(std::tr1::shared_ptr<Texture> t)
 {
 	texDepth_ = t;
 	if (texDepth_)
-		texDepth_->setZoom(zoomFactorX_, zoomFactorY_);
+		texDepth_->setZoom(zoom());
 	recreateStereogram();
 }
 
@@ -193,14 +178,53 @@ void Stereogram::setTexLeft(std::tr1::shared_ptr<Texture> t)
 {
 	texLeft_ = t;
 	if (texLeft_)
-		texLeft_->setZoom(zoomFactorX_, zoomFactorY_);
+		texLeft_->setZoom(zoom());
 }
 
 void Stereogram::setTexRight(std::tr1::shared_ptr<Texture> t)
 {
 	texRight_ = t;
 	if (texRight_)
-		texRight_->setZoom(zoomFactorX_, zoomFactorY_);
+		texRight_->setZoom(zoom());
+}
+
+// Serialisation
+std::string Stereogram::className() const
+{
+	return "Stereogram";
+}
+
+std::string Stereogram::toLua(std::ostream & outStream) const
+{
+	// Create an instance
+	std::string name = toLuaCreate(outStream);
+	// Set parameters
+	Tool::Vec2f z = zoom();
+	outStream << name << ":" << "setZoom(" << z.x << ", " << z.y << ");\n";
+	outStream << name << ":" << "setOffset(" << offset() << ");\n";
+	outStream << name << ":" << "setStyle(\"";
+	switch (style())
+	{
+		case convex:
+			outStream << "convex";
+			break;
+		case concave:
+			outStream << "concave";
+			break;
+	}
+	outStream << "\");\n";
+	return name;
+}
+
+/**
+ \todo	Remove evil global variable name usage once the program/namemanager are implemented
+*/
+std::string Stereogram::toLuaCreate(std::ostream & outStream) const
+{
+	std::string name = "tex";
+	outStream << name << " = Texture(\"" << className() << "\", \""
+		<< texLeft()->path() << "\", \"" << texRight()->path() << "\");\n";
+	return name;
 }
 
 }

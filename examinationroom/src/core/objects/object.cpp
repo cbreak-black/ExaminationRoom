@@ -168,18 +168,42 @@ bool Object::setName(const std::string & name)
 {
 	objectWillChange();
 	unregisterUniqueName(name_);
-	bool result = checkUniqueName(name);
-	name_ = registerUniqueName(name);
+	std::string saneName = sanitizeName(name);
+	bool result = checkUniqueName(saneName);
+	name_ = registerUniqueName(saneName);
 	objectDidChange();
 	return result;
 }
 
 // Unique Name Management (Static)
 std::set<std::string> Object::uniqueNames_ = std::set<std::string>();
+const char saneCharacters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
+const char saneCharactersFirst[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
 
 bool Object::checkUniqueName(const std::string & name)
 {
 	return uniqueNames_.find(name) == uniqueNames_.end();
+}
+
+std::string Object::sanitizeName(const std::string & name)
+{
+	std::string saneName = name;
+	unsigned int pos = saneName.size()-1;
+	unsigned int res;
+	for (; pos > 0; pos--)
+	{
+		res = saneName.find_last_not_of(saneCharacters, pos);
+		if (res != std::string::npos)
+		{
+			saneName[res] = '_';
+		}
+	}
+	res = saneName.find_last_not_of(saneCharactersFirst, 0);
+	if (res != std::string::npos)
+	{
+		saneName[res] = '_';
+	}
+	return saneName;
 }
 
 std::string Object::registerUniqueName(const std::string & name)
@@ -230,6 +254,11 @@ std::string Object::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setWireframe(" << (wireframe() ? "true" : "false") << ");\n";
 	outStream << name() << ":" << "setShown(" << (shown() ? "true" : "false") << ");\n";
 	outStream << name() << ":" << "setDrawPriority(" << drawPriority() << ");\n";
+	if (texture())
+	{
+		std::string texName = texture()->toLua(outStream);
+		outStream << name() << ":" << "setTexture(" << texName << ");\n";
+	}
 	return name();
 }
 

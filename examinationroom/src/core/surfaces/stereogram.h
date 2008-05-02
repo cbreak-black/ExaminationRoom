@@ -67,10 +67,8 @@ public:
 public: // Resizing (Implemented from parent)
 	virtual void resizeTo(int width, int height);
 	virtual void resizeToOriginal();
-	virtual int width();
-	virtual int height();
-	virtual float zoomX();
-	virtual float zoomY();
+	virtual int width() const;
+	virtual int height() const;
 	virtual void setZoom(float zx, float zy);
 
 public:
@@ -81,7 +79,7 @@ public:
 	The default value is six pixel.
 	 \return the current pixel offset value.
 	*/
-	virtual int offset();
+	virtual int offset() const;
 
 	/**
 	Sets the offset value.
@@ -95,7 +93,7 @@ public:
 	The default is convex.
 	 \return the current stereogram style.
 	*/
-	virtual Style style();
+	virtual Style style() const;
 
 	/**
 	Sets the style of the stereogram. The choices are convex and concave
@@ -104,9 +102,12 @@ public:
 	*/
 	virtual void setStyle(Style s);
 
+public: // Serialisation
+	virtual std::string className() const;
+	virtual std::string toLua(std::ostream & outStream) const;
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
+
 private:
-	float zoomFactorX_;
-	float zoomFactorY_;
 	int offset_;	/**< Horizontal pixel offset between max and min depth */
 	Style style_;
 
@@ -123,21 +124,21 @@ protected:
 	for stereograms.
 	 \return the depth map texture
 	*/
-	std::tr1::shared_ptr<Texture> texDepth();
+	std::tr1::shared_ptr<Texture> texDepth() const;
 
 	/**
 	The left texture is the image seen by the left eye.
 	Subclasses create their own texture data from the depth map.
 	 \return the left eye texture
 	*/
-	std::tr1::shared_ptr<Texture> texLeft();
+	std::tr1::shared_ptr<Texture> texLeft() const;
 
 	/**
 	The left texture is the image seen by the right eye.
 	Subclasses create their own texture data from the depth map.
 	 \return the right eye texture
 	*/
-	std::tr1::shared_ptr<Texture> texRight();
+	std::tr1::shared_ptr<Texture> texRight() const;
 
 	/**
 	Set the depth map texture.

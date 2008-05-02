@@ -10,6 +10,11 @@
 #ifndef ABSTRACTTEXTURE_H
 #define ABSTRACTTEXTURE_H
 
+#include "vec.h"
+
+#include <string>
+#include <iostream>
+
 namespace Examination
 {
 	class GLWidget;
@@ -29,6 +34,7 @@ for clients to use all kinds of textures easily.
 class AbstractTexture
 {
 public:
+	AbstractTexture();
 	virtual ~AbstractTexture();
 public:
 	/**
@@ -65,39 +71,65 @@ public: // Resizing
 	Returns the texture width.
 	 \return the texture width
 	*/
-	virtual int width() = 0;
+	virtual int width() const = 0;
 
 	/**
 	Returns the texture height.
 	 \return the texture height
 	*/
-	virtual int height() = 0;
+	virtual int height() const = 0;
 
 	/**
-	Returns the x zoom factor. Zooming does not change the internal size of a texture, but
+	Returns the zoom factor. Zooming does not change the internal size of a texture, but
 	it's drawing resolution. When drawing it directly, it wil be coarser resolved. Mapping
 	as texture is not influenced. Default is 1.0f;
-	 \return the x zoom factor
+	 \return the zoom factor as Vec2f
 	*/
-	virtual float zoomX() = 0;
-
-	/**
-	Returns the y zoom factor. Zooming does not change the internal size of a texture, but
-	it's drawing resolution. When drawing it directly, it wil be coarser resolved. Mapping
-	as texture is not influenced. Default is 1.0f;
-	 \return the y zoom factor
-	*/
-	virtual float zoomY() = 0;
+	virtual Tool::Vec2f zoom() const;
 
 	/**
 	Sets the zoom factor.
 	Negative values flip the texture.
-	This only applies when the texture is drawn as pixel data
+	This only applies when the texture is drawn as pixel data.
 	 \see draw()
 	 \param zx	the new zoom factor in x direction
 	 \param zy	the new zoom factor in y direction
 	*/
-	virtual void setZoom(float zx, float zy) = 0;
+	virtual void setZoom(float zx, float zy);
+
+	/**
+	Sets the zoom factor.
+	Negative values flip the texture.
+	This only applies when the texture is drawn as pixel data.
+	This method calls setZoom(float, float), overwrite that method if needed.
+	 \overload setZoom(float, float)
+	 \param z	A Vec2f object containing the x and y zoom factors
+	*/
+	void setZoom(const Tool::Vec2f & z);
+
+public: // Serialisation
+	/**
+	Returns the name of the "class" of this texture. This can be used in LUA
+	object creation. Note that this is not the C++ class name, but the LUA type name.
+	 \return The name of this object's type as c++ string
+	*/
+	virtual std::string className() const = 0;
+
+	/**
+	Writes the LUA commands to set parameters of this texture to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLua(std::ostream & outStream) const = 0;
+
+	/**
+	Writes the LUA creation command of this texture to the output stream.
+	 \param outStream	A stream that accepts writing
+	*/
+	virtual std::string toLuaCreate(std::ostream & outStream) const = 0;
+
+private:
+	float zoomFactorX_;
+	float zoomFactorY_;
 };
 
 }

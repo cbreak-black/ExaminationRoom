@@ -19,21 +19,19 @@ namespace Examination
 Texture::Texture(const char * path)
 {
 	image_ = QImage(path);
+	imagePath_ = path;
 	original_ = image_;
 	
 	imageGLID_ = 0;
-	zoomFactorX_ = 1.0f;
-	zoomFactorY_ = 1.0f;
 }
 
 Texture::Texture(std::string path)
 {
 	image_ = QImage(path.c_str());
+	imagePath_ = path;
 	original_ = image_;
 	
 	imageGLID_ = 0;
-	zoomFactorX_ = 1.0f;
-	zoomFactorY_ = 1.0f;
 }
 
 Texture::Texture(QImage image)
@@ -42,8 +40,6 @@ Texture::Texture(QImage image)
 	original_ = image;
 	
 	imageGLID_ = 0;
-	zoomFactorX_ = 1.0f;
-	zoomFactorY_ = 1.0f;
 }
 
 Texture::~Texture()
@@ -198,7 +194,8 @@ void Texture::draw(GLWidget * w)
 	{
 		loadPixelMap(image_);
 		GLubyte * t =  image_.bits();
-		glPixelZoom(zoomFactorX_,zoomFactorY_);
+		Tool::Vec2f z = zoom();
+		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
 	}
@@ -206,20 +203,26 @@ void Texture::draw(GLWidget * w)
 	{
 		QImage tx = transformColorSpace(image_);
 		GLubyte * t =  tx.bits();
-		glPixelZoom(zoomFactorX_,zoomFactorY_);
+		Tool::Vec2f z = zoom();
+		glPixelZoom(z.x,z.y);
 		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
 	}
 }
 
-QImage Texture::image()
+QImage Texture::image() const
 {
 	return image_;
 }
 
-bool Texture::valid()
+bool Texture::valid() const
 {
 	return image_.isNull();
+}
+
+std::string Texture::path() const
+{
+	return imagePath_;
 }
 
 void Texture::resizeTo(int width, int height)
@@ -236,30 +239,35 @@ void Texture::resizeToOriginal()
 	image_ = original_;
 }
 
-int Texture::width()
+int Texture::width() const
 {
 	return image().width();
 }
 
-int Texture::height()
+int Texture::height() const
 {
 	return image().height();
 }
 
-float Texture::zoomX()
+std::string Texture::className() const
 {
-	return zoomFactorX_;
+	return "Simple";
 }
 
-float Texture::zoomY()
+std::string Texture::toLua(std::ostream & outStream) const
 {
-	return zoomFactorY_;
+	std::string name = toLuaCreate(outStream);
+	return name;
 }
 
-void Texture::setZoom(float zx, float zy)
+/**
+ \todo	Remove evil global variable name usage once the program/namemanager are implemented
+*/
+std::string Texture::toLuaCreate(std::ostream & outStream) const
 {
-	zoomFactorX_ = zx;
-	zoomFactorY_ = zy;
+	std::string name = "tex";
+	outStream << name << " = Texture(\"" << className() << "\", \"" << imagePath_ << "\");\n";
+	return name;
 }
 
 }

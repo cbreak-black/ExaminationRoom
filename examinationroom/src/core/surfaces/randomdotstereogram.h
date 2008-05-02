@@ -39,6 +39,11 @@ public:
 	void setColor(int idx, unsigned int color);
 	void resetColor();
 
+public: // Serialisation
+	virtual std::string className() const;
+	virtual std::string toLua(std::ostream & outStream) const;
+	virtual std::string toLuaCreate(std::ostream & outStream) const;
+
 private:
 	virtual void recreateStereogram();
 	void applyColorPalette();

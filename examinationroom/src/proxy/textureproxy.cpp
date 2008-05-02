@@ -118,8 +118,9 @@ int TextureProxy::zoom(lua_State *L)
 {
 	checkTop(L, 1);
 	lua_pop(L, 1);
-	lua_pushnumber(L, texture()->zoomX());
-	lua_pushnumber(L, texture()->zoomY());
+	Tool::Vec2f z = texture()->zoom();
+	lua_pushnumber(L, z.x);
+	lua_pushnumber(L, z.y);
 	return 2;
 }
 

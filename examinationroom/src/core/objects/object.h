@@ -229,6 +229,13 @@ public: // Name
 	*/
 	static bool checkUniqueName(const std::string & name);
 
+	/**
+	Sanitizes a name, removing evil characters.
+	 \param name	A name containing potentially evil characters
+	 \return	The name without those characters
+	*/
+	static std::string sanitizeName(const std::string & name);
+
 protected:
 	/**
 	Registers a unique name with the object class. If the passed name is unique,

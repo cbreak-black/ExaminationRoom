@@ -12,9 +12,30 @@
 namespace Examination
 {
 
+AbstractTexture::AbstractTexture()
+{
+	zoomFactorX_ = 1.0f;
+	zoomFactorY_ = 1.0f;
+}
+
 AbstractTexture::~AbstractTexture()
 {
 }
 
+Tool::Vec2f AbstractTexture::zoom() const
+{
+	return Tool::Vec2f(zoomFactorX_, zoomFactorY_);
+}
+
+void AbstractTexture::setZoom(float zx, float zy)
+{
+	zoomFactorX_ = zx;
+	zoomFactorY_ = zy;
+}
+
+void AbstractTexture::setZoom(const Tool::Vec2f & z)
+{
+	setZoom(z.x, z.y);
+}
 
 }

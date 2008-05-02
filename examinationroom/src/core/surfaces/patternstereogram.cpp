@@ -115,4 +115,36 @@ void PatternStereogram::recreateStereogram()
 	setTexRight(texRight);
 }
 
+// Serialisation
+std::string PatternStereogram::className() const
+{
+	return "Pattern";
+}
+
+std::string PatternStereogram::toLua(std::ostream & outStream) const
+{
+	// Let parent create an instance and set parent parameters
+	std::string name = Stereogram::toLua(outStream);
+	// Set own parameters
+	return name;
+}
+
+/**
+ \todo	Remove evil global variable name usage once the program/namemanager are implemented
+*/
+std::string PatternStereogram::toLuaCreate(std::ostream & outStream) const
+{
+	std::string name = "tex";
+	outStream << name << " = Texture(\"" << className() << "\", \"" << texDepth()->path() << "\",\n\"";
+	if (fgPattern_->path() == bgPattern_->path())
+	{
+		outStream << bgPattern_->path() << ");\n";
+	}
+	else
+	{
+		outStream << bgPattern_->path() << "\", \"" << fgPattern_->path() << "\");\n";
+	}
+	return name;
+}
+
 }
