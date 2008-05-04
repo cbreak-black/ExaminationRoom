@@ -9,7 +9,12 @@
 
 #include "designwidget.h"
 
+#include <QTreeView>
+#include <QSplitter>
+#include <QScrollArea>
+
 #include "helper/scenemodel.h"
+#include "parameter/parameterobject.h"
 
 namespace Examination
 {
@@ -17,13 +22,25 @@ namespace Examination
 DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags)
 	: QDockWidget(title, parent, flags)
 {
+	QSplitter * splitter = new QSplitter(Qt::Vertical, this);
+	setWidget(splitter);
+
 	treeView_ = new QTreeView();
 	treeView_->setUniformRowHeights(true);
-	setWidget(treeView_);
+	splitter->addWidget(treeView_);
+	scrollArea_ = new QScrollArea(this);
+	scrollArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	scrollArea_->setWidgetResizable(true);
+	scrollArea_->setMaximumWidth(512);
+	splitter->addWidget(scrollArea_);
+	currentDialog_ = new ParameterObject(std::tr1::shared_ptr<Object>());
+	scrollArea_->setWidget(currentDialog_);
 }
 
 DesignWidget::~DesignWidget()
 {
+	currentDialog_ = 0; // Ownership resides with object
+	scrollArea_->takeWidget(); // Prevent scrollArea_ from deleting the widget
 	delete treeView_;
 }
 

@@ -11,14 +11,17 @@
 #define DESIGNWIDGET_H
 
 #include <QDockWidget>
-#include <QTreeView>
 
 #include <memory>
+
+class QTreeView;
+class QScrollArea;
 
 namespace Examination
 {
 	class Scene;
 	class SceneModel;
+	class Parameterdialog;
 
 class DesignWidget : public QDockWidget
 {
@@ -35,6 +38,8 @@ private:
 	std::tr1::shared_ptr<SceneModel> sceneModel_;
 
 	QTreeView * treeView_;
+	QScrollArea * scrollArea_;
+	Parameterdialog * currentDialog_;
 };
 
 

@@ -15,16 +15,22 @@ QT           += opengl
 
 # Input
 HEADERS += \
-	src/ui/*.h \
-	src/ui/helper/*.h \
 	src/core/scene.h \
 	src/core/camera.h
 SOURCES += \
 	src/main.cpp \
-	src/ui/*.cpp \
-	src/ui/helper/*.cpp \
 	src/core/scene.cpp \
 	src/core/camera.cpp
+
+# UI
+HEADERS += \
+	src/ui/*.h \
+	src/ui/helper/*.h \
+	src/ui/parameter/*.h
+SOURCES += \
+	src/ui/*.cpp \
+	src/ui/helper/*.cpp \
+	src/ui/parameter/*.cpp
 
 # Surfaces
 HEADERS += src/core/surfaces/*.h
