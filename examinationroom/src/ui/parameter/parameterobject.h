@@ -27,8 +27,11 @@ public:
 	ParameterObject(std::tr1::shared_ptr<Object> object);
 	~ParameterObject();
 
+public: // Callbacks
+	void objectDidChange();
+
 private:
-	std::tr1::shared_ptr<Object> object_;
+	std::tr1::weak_ptr<Object> object_;
 
 	QLineEdit * lineName_;
 	QLineEdit * linePosX_;

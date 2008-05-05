@@ -55,37 +55,37 @@ ObjectProxy::ObjectProxy(lua_State *L)
 	switch (opt)
 	{
 	case 0:
-		object_ = shared_ptr<Object>(new Sphere());
+		object_ = Object::Create<Sphere>();
 		break;
 	case 1:
-		object_ = shared_ptr<Object>(new Rectangle());
+		object_ = Object::Create<Rectangle>();
 		break;
 	case 2:
-		object_ = shared_ptr<Object>(new Parallelepiped());
+		object_ = Object::Create<Parallelepiped>();
 		break;
 	case 3:
-		object_ = shared_ptr<Object>(new Pixelplane());
+		object_ = Object::Create<Pixelplane>();
 		break;
 	case 4:
-		object_ = shared_ptr<Object>(new Text());
+		object_ = Object::Create<Text>();
 		break;
 	case 5:
-		object_ = shared_ptr<Object>(new Mesh());
+		object_ = Object::Create<Mesh>();
 		break;
 	case 6:
-		object_ = shared_ptr<Object>(new AffineTransformation());
+		object_ = Object::Create<AffineTransformation>();
 		break;
 	case 7:
-		object_ = shared_ptr<Object>(new CameraNode());
+		object_ = Object::Create<CameraNode>();
 		break;
 	case 8:
-		object_ = shared_ptr<Object>(new LightNode());
+		object_ = Object::Create<LightNode>();
 		break;
 	case 9:
-		object_ = shared_ptr<Object>(new Atmosphere());
+		object_ = Object::Create<Atmosphere>();
 		break;
 	case 10:
-		object_ = shared_ptr<Object>(new DepthBuffer());
+		object_ = Object::Create<DepthBuffer>();
 	}
 	lua_pop(L, 0);
 }

@@ -39,6 +39,8 @@ public: // Construction
 	Creates a standard atmosphere object.
 	The default settings are an exponential fog with density 1.
 	The default range for linear fog is from 0 to 100.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Atmosphere();
 

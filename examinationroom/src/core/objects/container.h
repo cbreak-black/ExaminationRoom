@@ -12,9 +12,6 @@
 
 #include "object.h"
 
-#include <memory>
-#include <list>
-
 namespace Examination
 {
 	class Scene;
@@ -37,9 +34,12 @@ public: // Types
 public:
 	/**
 	Creates a default container.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Container();
 
+public:
 	/**
 	Destroys the container.
 	All contained objects will be cleared, so if they are not referenced by an other

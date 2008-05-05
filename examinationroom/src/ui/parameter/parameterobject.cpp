@@ -15,6 +15,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 
+#include "objects/object.h"
+
 namespace Examination
 {
 
@@ -44,10 +46,29 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	g->addWidget(colorLabel_, 2, 2, 1, 2);
 	g->setRowStretch(3, 1);
 	addWidget(b);
+
+	if (object)
+	{
+		object->addCallbackParameterChanged(std::tr1::bind(&ParameterObject::objectDidChange, this));
+	}
 }
 
 ParameterObject::~ParameterObject()
 {
+	std::tr1::shared_ptr<Object> o = object_.lock();
+	if (o)
+	{
+		o->removeCallbackParameterChanged(this);
+	}
+}
+
+void ParameterObject::objectDidChange()
+{
+	std::tr1::shared_ptr<Object> o = object_.lock();
+	if (o)
+	{
+		lineName_->setText(QString::fromStdString(o->name()));
+	}
 }
 
 }

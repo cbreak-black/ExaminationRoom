@@ -32,6 +32,8 @@ public: // Construction
 	/**
 	Constructs a default camera node with a default camera.
 	Default draw priority is 128.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	CameraNode();
 

@@ -42,37 +42,41 @@ Everything in a scene is a subclass of this class.
 */
 class Object
 {
-
 public:
 	/**
 	Creator of Objects.
 	*/
     Object();
-    
-	/**
-	Creator of Objects.
-	\param x	X Coordinate of the object
-	\param y	Y Coordinate of the object
-	\param z	Z Coordinate of the object
-	*/
-    Object(float x, float y, float z);
 
-	/**
-	Creator of Objects.
-	 \param o	Origin  of the object
-	 */
-    Object(Tool::Point o);
-
+public:
 	/**
 	Destructor of Objects
 	*/
 	virtual ~Object();
 
-private: // Initialisation
+public: // Shared Pointers
 	/**
-	Sets default values.
+	Creates a new Object instance and returns a shared pointer to it.
+	Internaly also stores a weak_ptr to this for later use.
+	 \return A shared_ptr to the new object instance
 	*/
-	void init();
+	template <typename O>
+	static std::tr1::shared_ptr<O> Create()
+	{
+		std::tr1::shared_ptr<O> sharedPtr(new O());
+		sharedPtr->this_ = sharedPtr;
+		return sharedPtr;
+	}
+
+	/**
+	Returns the shared_ptr to this object.
+	This method only works if the object was created with Object::Create(),
+	which is recommended.
+	If the shared_ptr could not be locked, an invalid shared_ptr is returned.
+	To casat it to a subclass, use std::tr1::dynamic_pointer_cast()
+	 \return A shared_ptr to this object
+	*/
+	std::tr1::shared_ptr<Object> sharedPtr() const;
 
 public: // Accessors
 	/**
@@ -288,6 +292,16 @@ public: // Signals
 	*/
 	void addCallbackParameterChanged(const SignalCallbackType & cb);
 
+	/**
+	Removes all callbacks with the passed target.
+	 \param target	An object used as target of a callback
+	*/
+	template <typename T>
+	void removeCallbackParameterChanged(const T * target)
+	{
+		removeCallbacks(parameterChanged_, target);
+	}
+
 protected: // Signals: Internal data and methods
 	/**
 	Helper Method: Calls all contained functionals with the passed object as argument.
@@ -301,9 +315,9 @@ protected: // Signals: Internal data and methods
 	 \param list	A list of Signal callbacks
 	 \param target	A reference wrapper to the target of the callbacks to be removed
 	*/
-	template <typename Functor>
+	template <typename T>
 	static void removeCallbacks(std::list<SignalCallbackType> & list,
-								const Functor * target)
+								const T * target)
 	{
 		std::list<SignalCallbackType>::iterator it = list.begin();
 		std::list<SignalCallbackType>::iterator end = list.end();
@@ -329,6 +343,8 @@ protected: // Notify scene/observers of changes
 	void objectDidChange() const;
 
 private: // State (not exported)
+	std::tr1::weak_ptr<Object> this_;
+
 	Scene * scene_;
 	Container * parent_;
 

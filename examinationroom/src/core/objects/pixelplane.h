@@ -10,8 +10,6 @@
 #ifndef PIXELPLANE_H
 #define PIXELPLANE_H
 
-#include <memory>
-
 #include "object.h"
 
 namespace Examination
@@ -32,13 +30,10 @@ public: // Construction
 	Creates a Pixelplane.
 	Default size is 1 by 1 unit, default zoom factors are 1 by 1, default name
 	is "Pixelplane". autoResize() is disabled.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Pixelplane();
-
-	/**
-	Destroys a Pixelplane.
-	*/
-	~Pixelplane();
 
 public:
 	virtual void draw(GLWidget * dest) const;

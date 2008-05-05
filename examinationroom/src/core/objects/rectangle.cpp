@@ -27,10 +27,6 @@ Rectangle::Rectangle()
 	setName("Rectangle");
 }
 
-Rectangle::~Rectangle()
-{
-}
-
 // Drawing
 void Rectangle::drawRect(Tool::Point o, Tool::Vector v1, Tool::Vector v2) const
 {

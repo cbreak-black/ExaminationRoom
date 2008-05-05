@@ -29,6 +29,8 @@ public: // Construction
 	Creates a default parallelepiped.
 	It defaults to the unit cube from (0,0,0) to (1,1,1).
 	The default name is "Parallelepiped".
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Parallelepiped();
 

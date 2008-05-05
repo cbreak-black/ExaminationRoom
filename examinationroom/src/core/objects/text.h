@@ -28,6 +28,8 @@ public: // Construction
 	/**
 	Creates an empty text at the origin.
 	The default name is "Text".
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Text();
 

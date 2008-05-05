@@ -30,13 +30,10 @@ public: // Construction
 	the origin, the lower right to the point at dirA, and the upper left to dirB.
 	By default, it is subdivided in two segments.
 	The default name is "Rectangle".
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Rectangle();
-
-	/**
-	Destroys a rectangle.
-	*/
-	~Rectangle();
 
 public:
 	virtual void draw(GLWidget * dest) const;

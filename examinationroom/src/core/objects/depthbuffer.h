@@ -30,6 +30,8 @@ public: // Construction
 	Constructs a DepthBuffer object with default settings.
 	The depht buffer is enabled by default, but is reset before each sub object
 	is drawn.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	DepthBuffer();
 

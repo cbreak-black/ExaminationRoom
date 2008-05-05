@@ -21,25 +21,6 @@ namespace Examination
 Object::Object()
 {
 	origin_ = Point(0,0,0);
-	init();
-}
-
-Object::Object(float x, float y, float z)
-{
-	origin_.x = x;
-	origin_.y = y;
-	origin_.z = z;
-	init();
-}
-
-Object::Object(Point o)
-{
-	origin_ = o;
-	init();
-}
-
-void Object::init()
-{
 	setScene(0);
 	setParent(0);
 	setColor(Color4(1, 1, 1, 1));
@@ -52,6 +33,11 @@ void Object::init()
 Object::~Object()
 {
 	unregisterUniqueName(name_);
+}
+
+std::tr1::shared_ptr<Object> Object::sharedPtr() const
+{
+	return this_.lock();
 }
 
 Tool::Point Object::position() const

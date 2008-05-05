@@ -42,6 +42,12 @@ class LightNode : public Container
 	} LightID;
 
 public: // Construction
+	/**
+	Creates a light node with default parameters.
+	The default name is "Light", the default ambient color is (0,0,0,1).
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
+	*/
 	LightNode();
 
 public:

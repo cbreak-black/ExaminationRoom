@@ -27,10 +27,6 @@ Pixelplane::Pixelplane()
 	setName("Pixelplane");
 }
 
-Pixelplane::~Pixelplane()
-{
-}
-
 // Drawing
 void Pixelplane::draw(GLWidget * dest) const
 {

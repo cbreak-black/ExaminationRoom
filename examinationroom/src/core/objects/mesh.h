@@ -52,6 +52,13 @@ This class represents a mesh object. It can draw itself in space.
 class Mesh : public Object
 {
 public:
+	/**
+	Creates a mesh with default parameters.
+	The default name is "Mesh", the default scale factor is 1.
+	No mesh data is loaded.
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
+	*/
 	Mesh();
 
 public:

@@ -27,6 +27,8 @@ public: // Construction
 	Creates a scene with origin at the scene origin, and radius 1.
 	The default subdivision uses 24 slices and 12 stacks.
 	The default name is "Sphere".
+	 \warning Don't create instances of this class directly, use Object::Create()
+	 \see Object::Create()
 	*/
 	Sphere();
 
