@@ -296,6 +296,26 @@ protected: // Signals: Internal data and methods
 	*/
 	static void callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj);
 
+	/**
+	Helper Method: Removes all callbacks with the given target.
+	 \param list	A list of Signal callbacks
+	 \param target	A reference wrapper to the target of the callbacks to be removed
+	*/
+	template <typename Functor>
+	static void removeCallbacks(std::list<SignalCallbackType> & list,
+								const Functor * target)
+	{
+		std::list<SignalCallbackType>::iterator it = list.begin();
+		std::list<SignalCallbackType>::iterator end = list.end();
+		for (; it != end; it++)
+		{
+			if (target == *it)
+			{
+				list.erase(it);
+			}
+		}
+	}
+
 protected: // Notify scene/observers of changes
 	/**
 	Calls objectWillChange on the scene that contains this object, if it exists.

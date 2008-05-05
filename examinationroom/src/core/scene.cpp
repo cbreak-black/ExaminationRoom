@@ -149,25 +149,4 @@ void Scene::addCallbackLayoutDidChange(const SignalCallbackType & cb)
 	layoutDidChangeCallbacks_.push_back(cb);
 }
 
-void Scene::removeCallbackObjectWillChange(const SignalCallbackType & cb)
-{
-	//objWillChangeCallbacks_.remove(cb);
-}
-
-void Scene::removeCallbackObjectDidChange(const SignalCallbackType & cb)
-{
-	//objDidChangeCallbacks_.remove(cb);
-}
-
-void Scene::removeCallbackLayoutWillChange(const SignalCallbackType & cb)
-{
-	//layoutWillChangeCallbacks_.remove(cb);
-}
-
-void Scene::removeCallbackLayoutDidChange(const SignalCallbackType & cb)
-{
-	//layoutDidChangeCallbacks_.remove(cb);
-}
-
-
 }

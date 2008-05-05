@@ -136,28 +136,44 @@ public: // Signals: Observed by clients
 	void addCallbackLayoutDidChange(const SignalCallbackType & cb);
 	/**
 	Removes a callback that was added to be informed when an object will change.
-	 \warning	Not implemented since callbacks are not comparable
-	 \param cb	A callback functional/functor thing
+	 \warning	Not tested
+	 \param target	A reference_wrapper to a target
 	*/
-	void removeCallbackObjectWillChange(const SignalCallbackType & cb);
+	template <typename T>
+	void removeCallbackObjectWillChange(const T * target)
+	{
+		removeCallbacks(objWillChangeCallbacks_, target);
+	}
 	/**
 	Removes a callback that was added to be informed when an object did change.
-	 \warning	Not implemented since callbacks are not comparable
-	 \param cb	A callback functional/functor thing
+	 \warning	Not tested
+	 \param target	A reference_wrapper to a target
 	 */
-	void removeCallbackObjectDidChange(const SignalCallbackType & cb);
+	template <typename T>
+	void removeCallbackObjectDidChange(const T * target)
+	{
+		removeCallbacks(objDidChangeCallbacks_, target);
+	}
 	/**
 	Removes a callback that was added to be informed when the scene layout will change.
-	 \warning	Not implemented since callbacks are not comparable
-	 \param cb	A callback functional/functor thing
+	 \warning	Not tested
+	 \param target	A reference_wrapper to a target
 	*/
-	void removeCallbackLayoutWillChange(const SignalCallbackType & cb);
+	template <typename T>
+	void removeCallbackLayoutWillChange(const T * target)
+	{
+		removeCallbacks(layoutWillChangeCallbacks_, target);
+	}
 	/**
 	Removes a callback that was added to be informed when the scene layout did change.
-	 \warning	Not implemented since callbacks are not comparable
-	 \param cb	A callback functional/functor thing
+	 \warning	Not tested
+	 \param target	A reference_wrapper to a target
 	*/
-	void removeCallbackLayoutDidChange(const SignalCallbackType & cb);
+	template <typename T>
+	void removeCallbackLayoutDidChange(const T * target)
+	{
+		removeCallbacks(layoutDidChangeCallbacks_, target);
+	}
 
 private: // Signals: Internal data and methods
 	// Lists with callbacks

@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef PARAMETEROBJECT_H
+#define PARAMETEROBJECT_H
+
 #include "parameterdialog.h"
 
 #include <memory>
@@ -36,3 +39,5 @@ private:
 
 
 }
+
+#endif

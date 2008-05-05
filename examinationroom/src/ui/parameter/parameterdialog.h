@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef PARAMETERDIALOG_H
+#define PARAMETERDIALOG_H
+
 #include <QWidget>
 
 class QLayout;
@@ -40,3 +43,5 @@ private:
 
 
 }
+
+#endif
