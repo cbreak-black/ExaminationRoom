@@ -16,6 +16,7 @@
 
 class QLineEdit;
 class QLabel;
+class QCheckBox;
 
 namespace Examination
 {
@@ -23,6 +24,8 @@ namespace Examination
 
 class ParameterObject : public Parameterdialog
 {
+	Q_OBJECT
+
 public:
 	ParameterObject(std::tr1::shared_ptr<Object> object);
 	~ParameterObject();
@@ -47,6 +50,15 @@ protected:
 	*/
 	std::tr1::shared_ptr<Object> object() const;
 
+public slots: // From the UI
+	void nameEdited();
+	void posXEdited();
+	void posYEdited();
+	void posZEdited();
+	void priorityEdited();
+	void wireframeStateChanged(int state);
+	void setColor();
+
 private:
 	std::tr1::weak_ptr<Object> object_;
 
@@ -54,7 +66,9 @@ private:
 	QLineEdit * linePosX_;
 	QLineEdit * linePosY_;
 	QLineEdit * linePosZ_;
+	QLineEdit * linePriority_;
 	QLabel * colorLabel_;
+	QCheckBox * checkboxWireframe_;
 };
 
 
