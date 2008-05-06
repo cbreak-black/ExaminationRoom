@@ -53,11 +53,12 @@ This process only has to be repeated when the project file changes.
 
 \paragraph{MinGW}
 On Windows, the free compiler MinGW was tested.
-Executing \texttt{createWin32.bat} creates a make file that can be built with the tool-chain by invoking \texttt{make}.
+Executing \texttt{qmake} creates a make file that can be built with the tool-chain by invoking \texttt{make}.
 
 \paragraph{Visual Studio}
 Microsofts Visual Studio can compile \ER, sometimes.
 A visual studio project is created with the file \texttt{createVS.bat}.
+A visual studio makefile is created with \texttt{createWin32.bat}.
 Note that the project structure is not preserved, and that the Visual Studio project file has to be regenerated every time the QT Project file is changed.
 
 \paragraph{Linux}
