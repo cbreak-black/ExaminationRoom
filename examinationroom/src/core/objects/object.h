@@ -25,6 +25,7 @@ namespace Examination
 	class Scene;
 	class Container;
 	class AbstractTexture;
+	class ParameterObject;
 
 /**
 \defgroup Objects	Scene Contents
@@ -277,6 +278,29 @@ public: // Serialisation
 	*/
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
+public: // Parameter Dialog
+	/**
+	Returns a ParameterDialog subclass instance associated with this object.
+	If none is cached, it is created and returned, otherwise a cached instance
+	is returned.
+	*/
+	std::tr1::shared_ptr<ParameterObject> dialog();
+
+	/**
+	Creates a parameter dialog and stores it internally.
+	Subclasses can overwrite this method to create their own instances.
+	*/
+	virtual void createDialog();
+
+protected:
+	/**
+	Sets the associated ParameterDialog instance. This method does not check if
+	the dialog is really associated with this object.
+	This method is used by subclasses that want to create their own dialog instances.
+	 \param dialog	A dialog that is associated with this object.
+	*/
+	void setDialog(std::tr1::shared_ptr<ParameterObject> dialog);
+
 public: // Signals
 	/**
 	The type of the callbacks. Use bind() to create.
@@ -350,6 +374,9 @@ private: // State (not exported)
 
 	// List with callbacks
 	std::list<SignalCallbackType> parameterChanged_;
+
+	// Parameter Dialog
+	std::tr1::shared_ptr<ParameterObject> dialog_;
 
 	// Name management
 	static std::set<std::string> uniqueNames_;

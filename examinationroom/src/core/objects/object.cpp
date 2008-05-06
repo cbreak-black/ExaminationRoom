@@ -11,6 +11,8 @@
 #include "scene.h"
 #include "surfaces/abstracttexture.h"
 
+#include "parameter/parameterobject.h"
+
 #include <sstream>
 
 namespace Examination
@@ -47,7 +49,9 @@ Tool::Point Object::position() const
 
 void Object::setPosition(Tool::Point p)
 {
+	objectWillChange();
 	origin_ = p;
+	objectDidChange();
 }
 
 Scene * Object::scene() const
@@ -73,7 +77,9 @@ void Object::setParent(Container * c)
 // Textures
 void Object::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 {
+	objectWillChange();
 	tex_ = t;
+	objectDidChange();
 }
 
 std::tr1::shared_ptr<AbstractTexture> Object::texture() const
@@ -88,7 +94,9 @@ Tool::Color4 Object::color() const
 
 void Object::setColor(Tool::Color4 color)
 {
+	objectWillChange();
 	color_ = color;
+	objectDidChange();
 }
 
 bool Object::wireframe() const
@@ -98,7 +106,9 @@ bool Object::wireframe() const
 
 void Object::setWireframe(bool flag)
 {
+	objectWillChange();
 	wireframe_ = flag;
+	objectDidChange();
 }
 
 // Visibility
@@ -109,7 +119,9 @@ bool Object::shown() const
 
 void Object::setShown(bool shown)
 {
+	objectWillChange();
 	shown_ = shown;
+	objectDidChange();
 }
 
 bool Object::visible() const
@@ -132,11 +144,13 @@ int Object::drawPriority() const
 
 void Object::setDrawPriority(int priority)
 {
+	objectWillChange();
 	drawPriority_ = priority;
 	if (parent())
 	{
 		parent()->sortObjects();
 	}
+	objectDidChange();
 }
 
 bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b)
@@ -251,6 +265,25 @@ std::string Object::toLuaCreate(std::ostream & outStream) const
 	return name();
 }
 
+// Parameter Dialog
+std::tr1::shared_ptr<ParameterObject> Object::dialog()
+{
+	if (!dialog_)
+	{
+		createDialog();
+	}
+	return dialog_;
+}
+
+void Object::createDialog()
+{
+	setDialog(std::tr1::shared_ptr<ParameterObject>(new ParameterObject(sharedPtr())));
+}
+
+void Object::setDialog(std::tr1::shared_ptr<ParameterObject> dialog)
+{
+	dialog_ = dialog;
+}
 
 // Callbacks
 void Object::callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj)

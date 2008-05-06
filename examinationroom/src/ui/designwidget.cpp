@@ -15,6 +15,7 @@
 
 #include "helper/scenemodel.h"
 #include "parameter/parameterobject.h"
+#include "objects/object.h"
 
 namespace Examination
 {
@@ -33,15 +34,32 @@ DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlag
 	scrollArea_->setWidgetResizable(true);
 	scrollArea_->setMaximumWidth(512);
 	splitter->addWidget(scrollArea_);
-	currentDialog_ = new ParameterObject(std::tr1::shared_ptr<Object>());
-	scrollArea_->setWidget(currentDialog_);
+	connect(treeView_,SIGNAL(clicked(const QModelIndex &)),
+			this, SLOT(editObject(const QModelIndex &)));
+	connect(treeView_,SIGNAL(activated(const QModelIndex &)),
+			this, SLOT(editObject(const QModelIndex &)));
 }
 
 DesignWidget::~DesignWidget()
 {
-	currentDialog_ = 0; // Ownership resides with object
 	scrollArea_->takeWidget(); // Prevent scrollArea_ from deleting the widget
 	delete treeView_;
+}
+
+void DesignWidget::editObject(const QModelIndex & index)
+{
+	Object * o = static_cast<Object*>(index.internalPointer());
+	editObject(o->sharedPtr());
+}
+
+void DesignWidget::editObject(std::tr1::shared_ptr<Object> object)
+{
+	if (object)
+	{
+		scrollArea_->takeWidget(); // Prevent scrollArea_ from deleting the widget
+		currentDialog_ = object->dialog();
+		scrollArea_->setWidget(currentDialog_.get());
+	}
 }
 
 // Accessors

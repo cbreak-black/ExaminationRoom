@@ -30,6 +30,23 @@ public:
 public: // Callbacks
 	void objectDidChange();
 
+protected:
+	/**
+	Reload the data from the data source (the object).
+	This method can be reimplemented by subclasses to reload their own data.
+	Do not forget to call the super class implementaton.
+	 \return A shared_ptr to the data source object
+	*/
+	virtual void reloadData();
+
+	/**
+	Returns a shared pointer to the associated data source object.
+	If the object does not exist anymore (the internal weak pointer is invalid)
+	an invalid shared pointer is returned.
+	 \return shared_ptr to the data source object
+	*/
+	std::tr1::shared_ptr<Object> object() const;
+
 private:
 	std::tr1::weak_ptr<Object> object_;
 
