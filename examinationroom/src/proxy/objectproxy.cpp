@@ -604,7 +604,7 @@ int ObjectProxy::text(lua_State *L)
 	{
 		checkTop(L, 1);
 		lua_pop(L, 1);
-		lua_pushstring(L, qPrintable(text()->text()));
+		lua_pushstring(L, text()->text().c_str());
 		return 1;
 	}
 	else

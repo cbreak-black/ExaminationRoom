@@ -38,7 +38,6 @@ protected:
 	Reload the data from the data source (the object).
 	This method can be reimplemented by subclasses to reload their own data.
 	Do not forget to call the super class implementaton.
-	 \return A shared_ptr to the data source object
 	*/
 	virtual void reloadData();
 

@@ -9,6 +9,8 @@
 
 #include "text.h"
 
+#include "parameter/parametertext.h"
+
 #include "glwidget.h"
 
 namespace Examination
@@ -30,7 +32,7 @@ std::string Text::className() const
 std::string Text::toLua(std::ostream & outStream) const
 {
 	Object::toLua(outStream);
-	outStream << name() << ":" << "setText(\"" << text().toAscii().data() << "\");\n";
+	outStream << name() << ":" << "setText(\"" << text().c_str() << "\");\n";
 	return name();
 }
 
@@ -42,16 +44,16 @@ void Text::draw(GLWidget * dest) const
 		Point p = position();
 		// Load the correct color
 		glColor4fv(color().vec);
-		dest->renderText(p.x, p.y, p.z, text_, font_);
+		dest->renderText(p.x, p.y, p.z, QString::fromStdString(text_), font_);
 	}
 }
 
-QString Text::text() const
+std::string Text::text() const
 {
 	return text_;
 }
 
-void Text::setText(QString t)
+void Text::setText(std::string t)
 {
 	text_ = t;
 }
@@ -59,6 +61,11 @@ void Text::setText(QString t)
 void Text::setText(const char * c)
 {
 	text_ = c;
+}
+
+std::tr1::shared_ptr<ParameterObject> Text::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterText(sharedPtr()));
 }
 
 }

@@ -290,16 +290,7 @@ public: // Parameter Dialog
 	Creates a parameter dialog and stores it internally.
 	Subclasses can overwrite this method to create their own instances.
 	*/
-	virtual void createDialog();
-
-protected:
-	/**
-	Sets the associated ParameterDialog instance. This method does not check if
-	the dialog is really associated with this object.
-	This method is used by subclasses that want to create their own dialog instances.
-	 \param dialog	A dialog that is associated with this object.
-	*/
-	void setDialog(std::tr1::shared_ptr<ParameterObject> dialog);
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
 
 public: // Signals
 	/**

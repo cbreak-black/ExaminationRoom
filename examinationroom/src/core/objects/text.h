@@ -12,7 +12,6 @@
 
 #include "object.h"
 
-#include <QString>
 #include <QFont>
 
 namespace Examination
@@ -47,14 +46,14 @@ public:
 	Returns the text this object displays.
 	 \return the text this object displays.
 	*/
-	QString text() const;
+	std::string text() const;
 
 	/**
 	Sets the text this object displays.
 	This method also changes the name to the passed text
-	 \param t	A QString object
+	 \param t	A std::string object
 	*/
-	void setText(QString t);
+	void setText(std::string t);
 
 	/**
 	Sets the text this object displays from a c string (char array).
@@ -76,8 +75,11 @@ public: // Serialisation
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
 
+protected: // Parameter Dialog
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
+
 private:
-	QString text_;
+	std::string text_;
 	QFont font_;
 };
 	

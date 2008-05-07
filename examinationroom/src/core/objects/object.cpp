@@ -270,19 +270,14 @@ std::tr1::shared_ptr<ParameterObject> Object::dialog()
 {
 	if (!dialog_)
 	{
-		createDialog();
+		dialog_ = createDialog();
 	}
 	return dialog_;
 }
 
-void Object::createDialog()
+std::tr1::shared_ptr<ParameterObject> Object::createDialog()
 {
-	setDialog(std::tr1::shared_ptr<ParameterObject>(new ParameterObject(sharedPtr())));
-}
-
-void Object::setDialog(std::tr1::shared_ptr<ParameterObject> dialog)
-{
-	dialog_ = dialog;
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterObject(sharedPtr()));
 }
 
 // Callbacks
