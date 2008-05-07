@@ -11,6 +11,8 @@
 
 #include "surfaces/abstracttexture.h"
 
+#include "parameter/parameterrectangle.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -161,6 +163,27 @@ Tool::Vec2f Rectangle::texD() const
 	return texD_;
 }
 
+void Rectangle::setTexA(const Tool::Vec2f & v)
+{
+	texA_ = v;
+}
+
+void Rectangle::setTexB(const Tool::Vec2f & v)
+{
+	texB_ = v;
+}
+
+void Rectangle::setTexC(const Tool::Vec2f & v)
+{
+	texC_ = v;
+}
+
+void Rectangle::setTexD(const Tool::Vec2f & v)
+{
+	texD_ = v;
+}
+
+
 Tool::Vector Rectangle::dirA() const
 {
 	return directionA_;
@@ -211,5 +234,9 @@ std::string Rectangle::toLua(std::ostream & outStream) const
 	return name();
 }
 
+std::tr1::shared_ptr<ParameterObject> Rectangle::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterRectangle(sharedPtr()));
+}
 
 }

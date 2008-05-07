@@ -91,6 +91,10 @@ public: // Textures
 	Tool::Vec2f texB() const;
 	Tool::Vec2f texC() const;
 	Tool::Vec2f texD() const;
+	void setTexA(const Tool::Vec2f & v);
+	void setTexB(const Tool::Vec2f & v);
+	void setTexC(const Tool::Vec2f & v);
+	void setTexD(const Tool::Vec2f & v);
 
 public: // Subdiv
 	/**
@@ -122,6 +126,9 @@ public: // Serialisation
 	 \param outStream	A stream that accepts writing
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
+
+protected: // Parameter Dialog
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
 
 private:
 	Tool::Vector directionA_;
