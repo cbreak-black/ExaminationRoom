@@ -43,9 +43,9 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	linePosY_ = new QLineEdit();
 	linePosZ_ = new QLineEdit();
 	linePriority_ = new QLineEdit();
-	linePosX_->setAlignment(Qt::AlignLeft);
-	linePosY_->setAlignment(Qt::AlignLeft);
-	linePosZ_->setAlignment(Qt::AlignLeft);
+	linePosX_->setAlignment(Qt::AlignRight);
+	linePosY_->setAlignment(Qt::AlignRight);
+	linePosZ_->setAlignment(Qt::AlignRight);
 	linePriority_->setAlignment(Qt::AlignLeft);
 	colorLabel_ = new QLabel();
 	colorLabel_->setText("color");

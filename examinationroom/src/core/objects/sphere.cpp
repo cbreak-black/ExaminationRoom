@@ -11,6 +11,8 @@
 
 #include "surfaces/abstracttexture.h"
 
+#include "parameter/parametersphere.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -102,5 +104,9 @@ std::string Sphere::toLua(std::ostream & outStream) const
 	return name();
 }
 
+std::tr1::shared_ptr<ParameterObject> Sphere::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterSphere(sharedPtr()));
+}
 
 }

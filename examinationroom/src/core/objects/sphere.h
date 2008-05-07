@@ -88,6 +88,9 @@ public: // Serialisation
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
 
+protected: // Parameter Dialog
+		virtual std::tr1::shared_ptr<ParameterObject> createDialog();
+
 private:
 	float radius_;
 	int slices_;
