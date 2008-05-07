@@ -11,6 +11,8 @@
 
 #include "surfaces/abstracttexture.h"
 
+#include "parameter/parameterparallelepiped.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -80,6 +82,11 @@ std::string Parallelepiped::toLua(std::ostream & outStream) const
 	Rectangle::toLua(outStream);
 	outStream << name() << ":" << "setDirC(" << dirC().x << ", " << dirC().y << ", " << dirC().z << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> Parallelepiped::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterParallelepiped(sharedPtr()));
 }
 
 }
