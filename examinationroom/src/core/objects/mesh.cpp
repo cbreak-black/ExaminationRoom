@@ -15,6 +15,8 @@
 
 #include "surfaces/abstracttexture.h"
 
+#include "parameter/parametermesh.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -90,8 +92,6 @@ bool Mesh::loadMesh(std::string path)
 {
 	using namespace std::tr1::placeholders;
 
-	meshPath_ = path;
-
 	obj::obj_parser::flags_type obj_parser_flags = 0;
 	obj_parser_flags |= obj::obj_parser::triangulate_faces;
 	obj_parser_flags |= obj::obj_parser::translate_negative_indices;
@@ -129,29 +129,41 @@ bool Mesh::loadMesh(std::string path)
 		obj::obj_parser::polygonal_face_geometric_vertices_texture_vertices_vertex_normals_end_callback_type()
 	);
 	clearMesh(); // Empty the mesh to prepare for loading
+	objectWillChange();
 	if (!obj_parser.parse(path))
 	{
+		meshPath_ = "";
 		// Keep the mesh, some parts at least should be valid
 		// Removing was a problem when the mesh lacked the trailing newline
 		//clearMesh(); // Empty the mesh if an error occured
 		rebuildCache();
+		objectDidChange();
 		return false;
 	}
 	else
 	{
+		meshPath_ = path;
 		rebuildCache();
+		objectDidChange();
 		return true;
 	}
 }
 
 void Mesh::clearMesh()
 {
+	objectWillChange();
 	vertices_.clear();
 	normals_.clear();
 	textureCoordinates_.clear();
 	triangles_.clear();
 	invalidateCache();
 	setName("Mesh");
+	objectDidChange();
+}
+
+std::string Mesh::getMeshPath() const
+{
+	return meshPath_;
 }
 
 void Mesh::invalidateCache()
@@ -176,17 +188,6 @@ void Mesh::rebuildCache()
 	}
 	glEndList();
 }
-
-// Rebuild cache if needed
-//void Mesh::draw(GLWidget * dest)
-//{
-//	// Rebuild cache if needed
-//	if (displayList_ == 0)
-//	{
-//		rebuildCache();
-//	}
-//	draw(dest);
-//}
 
 void Mesh::draw(GLWidget * dest) const
 {
@@ -231,7 +232,9 @@ float Mesh::scaleFactor() const
 
 void Mesh::setScaleFactor(float scaleFactor)
 {
+	objectWillChange();
 	scaleFactor_ = scaleFactor;
+	objectDidChange();
 }
 
 // Serialisation
@@ -246,6 +249,11 @@ std::string Mesh::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "loadMesh(\"" << meshPath_ << "\");\n";
 	outStream << name() << ":" << "setScaleFactor(" << scaleFactor() << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> Mesh::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterMesh(sharedPtr()));
 }
 
 // Parser Callbacks

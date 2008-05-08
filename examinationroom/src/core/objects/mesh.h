@@ -69,6 +69,12 @@ public:
 	bool loadMesh(std::string path);
 
 	/**
+	Returns the path of the currently loaded mesh, if available.
+	 \return The path to the currently loaded mesh, or an empty string
+	*/
+	std::string getMeshPath() const;
+
+	/**
 	Clears the stored mesh.
 	*/
 	void clearMesh();
@@ -124,6 +130,9 @@ public: // Serialisation
 	 \param outStream	A stream that accepts writing
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
+
+protected: // Parameter Dialog
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
 
 private: // Parser Callbacks
 	void info_callback(const std::string& filename, std::size_t line_number, const std::string& message);
