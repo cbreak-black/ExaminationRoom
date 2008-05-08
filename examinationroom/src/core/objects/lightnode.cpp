@@ -9,6 +9,8 @@
 
 #include "lightnode.h"
 
+#include "parameter/parameterlightnode.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -47,6 +49,11 @@ std::string LightNode::toLua(std::ostream & outStream) const
 		<< ambient().b << ", "
 		<< ambient().a << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> LightNode::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterLightNode(sharedPtr()));
 }
 
 // Drawing
