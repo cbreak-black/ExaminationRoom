@@ -27,14 +27,17 @@ AffineTransformation::AffineTransformation()
 
 void AffineTransformation::loadIdentity()
 {
+	objectWillChange();
 	trans_[0] = 1;	trans_[4] = 0;	trans_[8] = 0;	trans_[12] = 0;
 	trans_[1] = 0;	trans_[5] = 1;	trans_[9] = 0;	trans_[13] = 0;
 	trans_[2] = 0;	trans_[6] = 0;	trans_[10] = 1;	trans_[14] = 0;
 	trans_[3] = 0;	trans_[7] = 0;	trans_[11] = 0;	trans_[15] = 1;
+	objectDidChange();
 }
 
 void AffineTransformation::multMatrix(double * m)
 {
+	objectWillChange();
 	double t[16];
 	// Matrix Multiplication
 	for (int k=0; k<16; k+=4)
@@ -50,6 +53,7 @@ void AffineTransformation::multMatrix(double * m)
 	{
 		trans_[k] = t[k];
 	}
+	objectDidChange();
 }
 
 void AffineTransformation::translate(Vector t)

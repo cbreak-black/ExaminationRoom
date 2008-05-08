@@ -27,7 +27,9 @@ Tool::Color4 LightNode::ambient() const
 
 void LightNode::setAmbient(Tool::Color4 color)
 {
+	objectWillChange();
 	ambient_ = color;
+	objectDidChange();
 }
 
 // Serialisation

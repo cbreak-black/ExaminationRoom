@@ -148,7 +148,9 @@ bool Container::enabled() const
 
 void Container::setEnabled(bool enabled)
 {
+	objectWillChange();
 	enabled_ = enabled;
+	objectDidChange();
 }
 
 // Serialisation

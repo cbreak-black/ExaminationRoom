@@ -74,7 +74,9 @@ bool DepthBuffer::depthBufferState() const
 
 void DepthBuffer::setDepthBufferState(bool enabled)
 {
+	objectWillChange();
 	depthBufferState_ = enabled;
+	objectDidChange();
 }
 
 // Serialisation

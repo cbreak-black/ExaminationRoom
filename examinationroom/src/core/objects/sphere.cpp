@@ -66,7 +66,9 @@ float Sphere::radius() const
 
 void Sphere::setRadius(float radius)
 {
+	objectWillChange();
 	radius_ = radius;
+	objectDidChange();
 }
 
 int Sphere::slices() const
@@ -76,7 +78,9 @@ int Sphere::slices() const
 
 void Sphere::setSlices(int slices)
 {
+	objectWillChange();
 	slices_ = slices;
+	objectDidChange();
 }
 
 int Sphere::stacks() const
@@ -86,7 +90,9 @@ int Sphere::stacks() const
 
 void Sphere::setStacks(int stacks)
 {
+	objectWillChange();
 	stacks_ = stacks;
+	objectDidChange();
 }
 
 // Serialisation

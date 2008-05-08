@@ -55,12 +55,16 @@ std::string Text::text() const
 
 void Text::setText(std::string t)
 {
+	objectWillChange();
 	text_ = t;
+	objectDidChange();
 }
 
 void Text::setText(const char * c)
 {
+	objectWillChange();
 	text_ = c;
+	objectDidChange();
 }
 
 std::tr1::shared_ptr<ParameterObject> Text::createDialog()

@@ -51,13 +51,17 @@ Vec2f Pixelplane::size() const
 
 void Pixelplane::setSize(float w, float h)
 {
+	objectWillChange();
 	width_ = w;
 	height_ = h;
+	objectDidChange();
 }
 
 void Pixelplane::setAutoResize(bool b)
 {
+	objectWillChange();
 	autoresize_ = b;
+	objectDidChange();
 }
 
 bool Pixelplane::autoResize() const
@@ -98,12 +102,14 @@ Vec2f Pixelplane::zoom() const
 
 void Pixelplane::setZoom(float zx, float zy)
 {
+	objectWillChange();
 	zoomFactorX_ = zx;
 	zoomFactorY_ = zy;
 	if (texture())
 	{
 		texture()->setZoom(zoomFactorX_, zoomFactorY_);
 	}
+	objectDidChange();
 }
 
 void Pixelplane::setTexture(std::tr1::shared_ptr<AbstractTexture> t)

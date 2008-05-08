@@ -137,10 +137,12 @@ void Rectangle::draw(GLWidget * dest) const
 void Rectangle::setTexCoords(float llx, float lly, float ulx, float uly,
 							 float lrx, float lry, float urx, float ury)
 {
+	objectWillChange();
 	texA_ = Vec2f(llx, lly);
 	texB_ = Vec2f(ulx, uly);
 	texC_ = Vec2f(lrx, lry);
 	texD_ = Vec2f(urx, ury);
+	objectDidChange();
 }
 
 Tool::Vec2f Rectangle::texA() const
@@ -165,22 +167,30 @@ Tool::Vec2f Rectangle::texD() const
 
 void Rectangle::setTexA(const Tool::Vec2f & v)
 {
+	objectWillChange();
 	texA_ = v;
+	objectDidChange();
 }
 
 void Rectangle::setTexB(const Tool::Vec2f & v)
 {
+	objectWillChange();
 	texB_ = v;
+	objectDidChange();
 }
 
 void Rectangle::setTexC(const Tool::Vec2f & v)
 {
+	objectWillChange();
 	texC_ = v;
+	objectDidChange();
 }
 
 void Rectangle::setTexD(const Tool::Vec2f & v)
 {
+	objectWillChange();
 	texD_ = v;
+	objectDidChange();
 }
 
 
@@ -196,12 +206,16 @@ Tool::Vector Rectangle::dirB() const
 
 void Rectangle::setDirA(Tool::Vector v)
 {
+	objectWillChange();
 	directionA_ = v;
+	objectDidChange();
 }
 
 void Rectangle::setDirB(Tool::Vector v)
 {
+	objectWillChange();
 	directionB_ = v;
+	objectDidChange();
 }
 
 unsigned int Rectangle::subdivision() const
@@ -211,7 +225,9 @@ unsigned int Rectangle::subdivision() const
 
 void Rectangle::setSubdivision(unsigned int subdivision)
 {
+	objectWillChange();
 	subdivision_ = subdivision;
+	objectDidChange();
 }
 
 // Serialisation

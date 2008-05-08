@@ -30,7 +30,9 @@ Atmosphere::FogMode Atmosphere::mode() const
 
 void Atmosphere::setMode(FogMode fogMode)
 {
+	objectWillChange();
 	fogMode_ = fogMode;
+	objectDidChange();
 }
 
 float Atmosphere::density() const
@@ -40,7 +42,9 @@ float Atmosphere::density() const
 
 void Atmosphere::setDensity(float density)
 {
+	objectWillChange();
 	density_ = fabs(density);
+	objectDidChange();
 }
 
 float Atmosphere::start() const
@@ -50,7 +54,9 @@ float Atmosphere::start() const
 
 void Atmosphere::setStart(float start)
 {
+	objectWillChange();
 	start_ = start;
+	objectDidChange();
 }
 
 float Atmosphere::end() const
@@ -60,7 +66,9 @@ float Atmosphere::end() const
 
 void Atmosphere::setEnd(float end)
 {
+	objectWillChange();
 	end_ = end;
+	objectDidChange();
 }
 
 // Serialisation

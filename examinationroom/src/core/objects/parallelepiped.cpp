@@ -68,7 +68,9 @@ Tool::Vector Parallelepiped::dirC() const
 
 void Parallelepiped::setDirC(Tool::Vector v)
 {
+	objectWillChange();
 	directionC_ = v;
+	objectDidChange();
 }
 
 // Serialisation
