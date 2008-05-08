@@ -1,5 +1,5 @@
 /*
- *  rectangle.cpp
+ *  pixelplane.cpp
  *  ExaminationRoom
  *
  *  Created by CBreak on 12.02.08.
@@ -14,6 +14,8 @@
 #include "scene.h"
 #include "camera.h"
 #include "platform_math.h"
+
+#include "parameter/parameterpixelplane.h"
 
 namespace Examination
 {
@@ -126,6 +128,11 @@ std::string Pixelplane::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setSize(" << size().x << ", " << size().y << ");\n";
 	outStream << name() << ":" << "setZoom(" << zoom().x << ", " << zoom().y << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> Pixelplane::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterPixelplane(sharedPtr()));
 }
 
 }

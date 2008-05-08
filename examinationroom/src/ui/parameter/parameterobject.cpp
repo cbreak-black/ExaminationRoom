@@ -15,7 +15,6 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QTextStream>
-#include <QPushButton>
 #include <QCheckBox>
 #include <QColorDialog>
 
@@ -46,7 +45,7 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	linePosX_->setAlignment(Qt::AlignRight);
 	linePosY_->setAlignment(Qt::AlignRight);
 	linePosZ_->setAlignment(Qt::AlignRight);
-	linePriority_->setAlignment(Qt::AlignLeft);
+	linePriority_->setAlignment(Qt::AlignRight);
 	colorLabel_ = new QLabel();
 	colorLabel_->setText("color");
 	colorLabel_->setAutoFillBackground(true);

@@ -190,11 +190,13 @@ void Texture::glBindTex(GLWidget * w)
 
 void Texture::draw(GLWidget * w)
 {
+	GLubyte * t;
+	Tool::Vec2f z;
 	if (image_.format() == QImage::Format_Indexed8)
 	{
 		loadPixelMap(image_);
-		GLubyte * t =  image_.bits();
-		Tool::Vec2f z = zoom();
+		t =  image_.bits();
+		z = zoom();
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
@@ -202,8 +204,8 @@ void Texture::draw(GLWidget * w)
 	else
 	{
 		QImage tx = transformColorSpace(image_);
-		GLubyte * t =  tx.bits();
-		Tool::Vec2f z = zoom();
+		t =  tx.bits();
+		z = zoom();
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
