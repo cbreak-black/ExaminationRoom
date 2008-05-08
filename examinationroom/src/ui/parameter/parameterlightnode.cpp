@@ -9,17 +9,6 @@
 
 #include "parameterlightnode.h"
 
-/*
- *  parameterobject.cpp
- *  ExaminationRoom
- *
- *  Created by cbreak on 04.05.08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
-
-#include "parameterobject.h"
-
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
