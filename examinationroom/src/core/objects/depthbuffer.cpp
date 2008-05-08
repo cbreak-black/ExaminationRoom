@@ -9,6 +9,8 @@
 
 #include "depthbuffer.h"
 
+#include "parameter/parameterdepthbuffer.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -90,6 +92,11 @@ std::string DepthBuffer::toLua(std::ostream & outStream) const
 	Container::toLua(outStream);
 	outStream << name() << ":" << "setDepthBufferState(" << (depthBufferState() ? "true" : "false") << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> DepthBuffer::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterDepthBuffer(sharedPtr()));
 }
 
 }
