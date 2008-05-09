@@ -9,6 +9,8 @@
 
 #include "atmosphere.h"
 
+#include "parameter/parameteratmosphere.h"
+
 #include <qgl.h>
 
 namespace Examination
@@ -98,6 +100,11 @@ std::string Atmosphere::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setStart(" << start() << ");\n";
 	outStream << name() << ":" << "setEnd(" << end() << ");\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> Atmosphere::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterAtmosphere(sharedPtr()));
 }
 
 // Drawing
