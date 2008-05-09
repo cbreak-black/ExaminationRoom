@@ -44,7 +44,6 @@ ParameterLightNode::ParameterLightNode(std::tr1::shared_ptr<Object> object)
 
 	if (object)
 	{
-		object->addCallbackParameterChanged(std::tr1::bind(&ParameterObject::objectDidChange, this));
 		reloadData();
 	}
 }

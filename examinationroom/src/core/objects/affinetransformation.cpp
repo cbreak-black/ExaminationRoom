@@ -9,6 +9,8 @@
 
 #include "affinetransformation.h"
 
+#include "parameter/parameteraffinetransformation.h"
+
 #include <qgl.h>
 
 #include "platform_math.h"
@@ -113,6 +115,11 @@ std::string AffineTransformation::toLua(std::ostream & outStream) const
 		outStream << trans_[i] << ", ";
 	outStream << trans_[15] << "});\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> AffineTransformation::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterAffineTransformation(sharedPtr()));
 }
 
 // Drawing
