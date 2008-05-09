@@ -38,7 +38,7 @@ public:
 	void setScene(std::tr1::shared_ptr<Scene> scene);
 
 public slots:
-	void editObject(const QModelIndex & index);
+	void editObject(const QModelIndex & current, const QModelIndex & previous);
 	void editObject(std::tr1::shared_ptr<Object> object);
 
 private:
