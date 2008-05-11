@@ -12,13 +12,12 @@
 #include "mainwindow.h"
 
 #include "glwidget.h"
-#include "scene.h"
-
 #include "designwidget.h"
 
-#include "luaproxy.h"
+#include "program.h"
 
 #include <iostream>
+#include <fstream>
 
 namespace Examination
 {
@@ -46,7 +45,7 @@ MainWindow::MainWindow()
 					this, SLOT(loadLuaFile()),
 					QKeySequence(QKeySequence::Open));
 	menu->addAction(tr("Close Scene"),
-					this, SLOT(closeScene()),
+					this, SLOT(newScene()),
 					QKeySequence(QKeySequence::Close));
 	menu->addAction(tr("&Save Scene..."),
 					this, SLOT(storeLuaFile()),
@@ -131,7 +130,7 @@ MainWindow::MainWindow()
 //	}
 
 	// Create Scene
-	newScene();
+	setProgram(Program::create());
 
 	// Set up redraw timer
 	timer_ = new QTimer(this);
@@ -142,13 +141,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-	delete timer_;
-	delete signalMapper_;
-	delete dockDesign_;
-	delete dockProgram_;
-	delete dockCode_;
-//	delete outGlWidget_;
-	delete mainGlWidget_;
+	// All child widgets are deallocated by QT
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
@@ -159,7 +152,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 	}
 	else
 	{
-		luaProxy_->onKeyDown(event->key());
+		program_->onKeyDown(event->key());
 		mainGlWidget_->update(); // update() for deferred updates
 //		outGlWidget_->update();
 	}
@@ -167,14 +160,14 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 
 void MainWindow::keyReleaseEvent(QKeyEvent * event)
 {
-	luaProxy_->onKeyUp(event->key());
+	program_->onKeyUp(event->key());
 	mainGlWidget_->update(); // update() for deferred updates
 //	outGlWidget_->update();
 }
 
 void MainWindow::onTimeout()
 {
-	luaProxy_->onUpdate();
+	program_->onUpdate();
 	mainGlWidget_->update(); // update() for deferred updates
 //	outGlWidget_->update();
 }
@@ -187,8 +180,7 @@ void MainWindow::loadLuaFile()
 													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
-		newScene();
-		luaProxy_->runFile(fileName.toAscii());
+		setProgram(Program::createFromLua(fileName.toStdString()));
 	}
 }
 
@@ -201,13 +193,8 @@ void MainWindow::storeLuaFile()
 	{
 		std::ofstream of;
 		of.open(fileName.toAscii(), std::ios_base::out);
-		scene_->toLua(of);
+		program_->toLua(of);
 	}
-}
-
-void MainWindow::closeScene()
-{
-	newScene();
 }
 
 void MainWindow::setDrawStyle(int t)
@@ -217,23 +204,15 @@ void MainWindow::setDrawStyle(int t)
 
 void MainWindow::newScene()
 {
-	std::tr1::shared_ptr<Scene> scene = std::tr1::shared_ptr<Scene>(new Scene());
-	setScene(scene);
-	scene->setName("Scene"); // Scene was taken before old scene is destroyed
+	setProgram(Program::create());
 }
 
-std::tr1::shared_ptr<Scene> MainWindow::scene() const
+void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 {
-	return scene_;
-}
-
-void MainWindow::setScene(std::tr1::shared_ptr<Scene> scene)
-{
-	mainGlWidget_->setScene(scene);
-	//outGlWidget_->setScene(scene);
-	dockDesign_->setScene(scene);
-	scene_ = scene;
-	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+	program_ = program;
+	mainGlWidget_->setScene(program_->scene());
+	//outGlWidget_->setScene(program_->scene());
+	dockDesign_->setScene(program_->scene());
 }
 
 

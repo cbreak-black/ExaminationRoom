@@ -36,7 +36,7 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 {
 	scene_ = scene;
 	
-	L_ = lua_open();
+	L_ = luaL_newstate();
 	luaL_openlibs(L_);
 
 	Luna<LuaProxy>::inject(L_, this);

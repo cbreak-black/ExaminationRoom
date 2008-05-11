@@ -19,10 +19,9 @@
 
 namespace Examination
 {
-	class Scene;
 	class GLWidget;
-	class LuaProxy;
 	class DesignWidget;
+	class Program;
 
 /**
 The main window. It contains only the GLWidget. It also creates most of the other
@@ -57,9 +56,9 @@ public slots:
 	void loadLuaFile();
 
 	/**
-	Closes the current scene.
+	Closes the current scene and creates a new one in it's place
 	*/
-	void closeScene();
+	void newScene();
 
 	/**
 	Opens a file save dialog and stores sthe current scene as the selected file
@@ -77,23 +76,7 @@ private slots:
 	void onTimeout();
 
 private:
-	/**
-	Creates a new scene and sets it as current scene.
-	Also creates a new LUA Proxy.
-	*/
-	void newScene();
-
-	/**
-	Returns a shared pointer to the current scene.
-	*/
-	std::tr1::shared_ptr<Scene> scene() const;
-
-	/**
-	Sets the current scene.
-	This also resets the current lua environment. Setting a new scene only makes
-	sense when discarding everything associated with the old.
-	*/
-	void setScene(std::tr1::shared_ptr<Scene> scene);
+	void setProgram(std::tr1::shared_ptr<Program> program);
 
 private:
     GLWidget * mainGlWidget_;
@@ -105,9 +88,7 @@ private:
 	QDockWidget * dockProgram_;
 	QDockWidget * dockCode_;
 
-	std::tr1::shared_ptr<Scene> scene_;
-
-	std::tr1::shared_ptr<LuaProxy> luaProxy_;
+	std::tr1::shared_ptr<Program> program_;
 };
 
 }

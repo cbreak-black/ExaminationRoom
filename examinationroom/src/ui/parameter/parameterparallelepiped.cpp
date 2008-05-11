@@ -61,7 +61,7 @@ void ParameterParallelepiped::reloadData()
 		if (p)
 		{
 			// Dir C
-			Tool::Vec3f dC = p->dirA();
+			Tool::Vec3f dC = p->dirC();
 			lineDirCX_->setText(QString::number(dC.x,'g',3));
 			lineDirCY_->setText(QString::number(dC.y,'g',3));
 			lineDirCZ_->setText(QString::number(dC.z,'g',3));
