@@ -79,23 +79,22 @@ protected:
 	The default implementation returns a pointer to this.
 	 \return The container that serves as parent for all the objects contained in this container
 	*/
-	virtual Container * getParent();
+	virtual std::tr1::shared_ptr<Container> getParent();
 
 	/**
 	Returns the scene this container is associated with
 	*/
-	virtual Scene * getScene();
+	virtual std::tr1::shared_ptr<Scene> getScene();
 
 	/**
 	Sets the parent and scene pointers of all direct children.
 	 \param p	the new parent
 	 \param s	the new scene
 	*/
-	void setParentsAndScenes(Container * p, Scene * s);
+	void setParentsAndScenes(std::tr1::shared_ptr<Container> p, std::tr1::shared_ptr<Scene> s);
 
 public: // From Object
-	virtual void setScene(Scene * s);
-	virtual void setParent(Container * c);
+	virtual void setScene(std::tr1::shared_ptr<Scene> s);
 
 public:
 	/**

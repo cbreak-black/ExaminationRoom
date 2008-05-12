@@ -19,6 +19,7 @@ namespace Examination
 	class Object;
 	class GLWidget;
 	class Camera;
+	class Program;
 
 /**
 This class represents the scene. It contains references to objects.
@@ -183,12 +184,28 @@ private: // Signals: Internal data and methods
 	std::list<SignalCallbackType> layoutDidChangeCallbacks_;
 
 protected:
-	virtual Container * getParent();
-	virtual Scene * getScene();
+	virtual std::tr1::shared_ptr<Container> getParent();
+	virtual std::tr1::shared_ptr<Scene> getScene();
 
 private:
 	std::tr1::shared_ptr<Camera> camera_;
 
+public: // Linking
+	/**
+	Returns the associated program if it exists, an invalid poionter otherwise.
+	 \return the associated program object
+	*/
+	std::tr1::shared_ptr<Program> program() const;
+
+	/**
+	Sets the associated program. It is internaly stored as weak_ptr, so the
+	no posession rights are asumed.
+	 \param program the shared_ptr to the program that contains this scene
+	*/
+	void setProgram(std::tr1::shared_ptr<Program> program);
+
+private: // Linking
+	std::tr1::weak_ptr<Program> program_;
 };
 
 }

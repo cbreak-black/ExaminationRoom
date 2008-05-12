@@ -13,7 +13,8 @@
 
 #include "parameter/parameterobject.h"
 
-#include <sstream>
+#include "program.h"
+#include "namemanager.h"
 
 namespace Examination
 {
@@ -23,8 +24,6 @@ namespace Examination
 Object::Object()
 {
 	origin_ = Point(0,0,0);
-	setScene(0);
-	setParent(0);
 	setColor(Color4(1, 1, 1, 1));
 	setWireframe(false);
 	setShown(true);
@@ -34,7 +33,10 @@ Object::Object()
 
 Object::~Object()
 {
-	unregisterUniqueName(name_);
+	if (scene() && scene()->program())
+	{
+		scene()->program()->nameManager()->unregisterName(name_);
+	}
 }
 
 std::tr1::shared_ptr<Object> Object::sharedPtr() const
@@ -54,22 +56,33 @@ void Object::setPosition(Tool::Point p)
 	objectDidChange();
 }
 
-Scene * Object::scene() const
+std::tr1::shared_ptr<Scene> Object::scene() const
 {
-	return scene_;
+	return scene_.lock();
 }
 
-void Object::setScene(Scene * s)
+void Object::setScene(std::tr1::shared_ptr<Scene> s)
 {
+	if (scene() && scene()->program())
+	{
+		scene()->program()->nameManager()->unregisterName(name());
+	}
 	scene_ = s;
+	if (scene() && scene()->program())
+	{
+		// Re-set the name to ensure uniqueness
+		std::tr1::shared_ptr<NameManager> nm = scene()->program()->nameManager();
+		NamedItemPtr nip = nm->registerName(nm->sanitizeName(name()), sharedPtr());
+		name_ = nip->name();
+	}
 }
 
-Container * Object::parent() const
+std::tr1::shared_ptr<Container> Object::parent() const
 {
-	return parent_;
+	return parent_.lock();
 }
 
-void Object::setParent(Container * c)
+void Object::setParent(std::tr1::shared_ptr<Container> c)
 {
 	parent_ = c;
 }
@@ -167,70 +180,22 @@ const std::string & Object::name() const
 bool Object::setName(const std::string & name)
 {
 	objectWillChange();
-	unregisterUniqueName(name_);
-	std::string saneName = sanitizeName(name);
-	bool result = checkUniqueName(saneName);
-	name_ = registerUniqueName(saneName);
-	objectDidChange();
-	return result;
-}
-
-// Unique Name Management (Static)
-std::set<std::string> Object::uniqueNames_ = std::set<std::string>();
-const char saneCharacters[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
-const char saneCharactersFirst[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
-
-bool Object::checkUniqueName(const std::string & name)
-{
-	return uniqueNames_.find(name) == uniqueNames_.end();
-}
-
-std::string Object::sanitizeName(const std::string & name)
-{
-	std::string saneName = name;
-	unsigned int pos = saneName.find_last_not_of(saneCharacters);
-	while (pos != std::string::npos)
+	bool result = true;
+	if (scene() && scene()->program())
 	{
-		saneName[pos] = '_';
-		pos = saneName.find_last_not_of(saneCharacters, pos);
-	}
-	pos = saneName.find_last_not_of(saneCharactersFirst, 0);
-	if (pos != std::string::npos)
-	{
-		saneName[0] = '_';
-	}
-	return saneName;
-}
-
-std::string Object::registerUniqueName(const std::string & name)
-{
-	if (checkUniqueName(name))
-	{
-		// If the name is free, register it
-		uniqueNames_.insert(name);
-		return name;
+		std::tr1::shared_ptr<NameManager> nm = scene()->program()->nameManager();
+		nm->unregisterName(name_);
+		std::string saneName = nm->sanitizeName(name);
+		result = nm->checkUniqueName(saneName);
+		NamedItemPtr nip = nm->registerName(saneName, sharedPtr());
+		name_ = nip->name();
 	}
 	else
 	{
-		// Search a free name
-		int i = 1;
-		std::string tempName = name;
-		while (!checkUniqueName(tempName))
-		{
-			std::stringstream ss(name, std::ios_base::out | std::ios_base::app);
-			ss << i;
-			tempName = ss.str();
-			i++;
-		}
-		// If the name is free, register it
-		uniqueNames_.insert(tempName);
-		return tempName;
+		name_ = name;
 	}
-}
-
-void Object::unregisterUniqueName(const std::string & name)
-{
-	uniqueNames_.erase(name);
+	objectDidChange();
+	return result;
 }
 
 // Serialisation

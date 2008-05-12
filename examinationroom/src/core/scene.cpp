@@ -21,7 +21,6 @@ Scene::Scene()
 {
 	camera_ = shared_ptr<Camera>(new Camera());
 	setBackgroundColor(0,0,0,0);
-	setScene(this);
 	setName("Scene");
 }
 
@@ -97,14 +96,14 @@ std::string Scene::toLuaCreate(std::ostream & outStream) const
 	return name();
 }
 
-Container * Scene::getParent()
+std::tr1::shared_ptr<Container> Scene::getParent()
 {
-	return this;
+	return std::tr1::dynamic_pointer_cast<Container,Object>(sharedPtr());
 }
 
-Scene * Scene::getScene()
+std::tr1::shared_ptr<Scene> Scene::getScene()
 {
-	return this;
+	return std::tr1::dynamic_pointer_cast<Scene,Object>(sharedPtr());
 }
 
 // Signals
@@ -148,5 +147,16 @@ void Scene::addCallbackLayoutDidChange(const SignalCallbackType & cb)
 {
 	layoutDidChangeCallbacks_.push_back(cb);
 }
+
+std::tr1::shared_ptr<Program> Scene::program() const
+{
+	return program_.lock();
+}
+
+void Scene::setProgram(std::tr1::shared_ptr<Program> program)
+{
+	program_ = program;
+}
+
 
 }

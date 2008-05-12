@@ -56,10 +56,10 @@ bool Container::addObject(shared_ptr<Object> object)
 	//objects_.sort();
 	// Removing non unique objects is not needed since we test for uniqueness before inserting
 	//objects_.unique();
-	Container * p = object->parent();
+	std::tr1::shared_ptr<Container> p = object->parent();
 	// If the object had a valid parent, and the parent was not us
 	// We should not reach this place if the parent was us... due to the guard
-	if (p && (p != this))
+	if (p && (p.get() != this))
 	{
 		// remove it
 		p->removeObject(object);
@@ -74,8 +74,8 @@ bool Container::addObject(shared_ptr<Object> object)
 void Container::removeObject(shared_ptr<Object> object)
 {
 	layoutWillChange();
-	object->setParent(0);
-	object->setScene(0);
+	object->setParent(std::tr1::shared_ptr<Container>());
+	object->setScene(std::tr1::shared_ptr<Scene>());
 	objects_.remove(object);
 	layoutDidChange();
 }
@@ -83,7 +83,7 @@ void Container::removeObject(shared_ptr<Object> object)
 void Container::clear()
 {
 	layoutWillChange();
-	setParentsAndScenes(0,0);
+	setParentsAndScenes(std::tr1::shared_ptr<Container>(),std::tr1::shared_ptr<Scene>());
 	objects_.clear();
 	layoutDidChange();
 }
@@ -95,17 +95,17 @@ void Container::sortObjects()
 	layoutDidChange();
 }
 
-Container * Container::getParent()
+std::tr1::shared_ptr<Container> Container::getParent()
 {
-	return this;
+	return std::tr1::dynamic_pointer_cast<Container,Object>(sharedPtr());
 }
 
-Scene * Container::getScene()
+std::tr1::shared_ptr<Scene> Container::getScene()
 {
 	return scene();
 }
 
-void Container::setParentsAndScenes(Container * p, Scene * s)
+void Container::setParentsAndScenes(std::tr1::shared_ptr<Container> p, std::tr1::shared_ptr<Scene> s)
 {
 	std::list<shared_ptr<Object> >::iterator i = objects_.begin();
 	for (; i != objects_.end(); i++)
@@ -115,15 +115,9 @@ void Container::setParentsAndScenes(Container * p, Scene * s)
 	}
 }
 
-void Container::setScene(Scene * s)
+void Container::setScene(std::tr1::shared_ptr<Scene> s)
 {
 	Object::setScene(s);
-	setParentsAndScenes(getParent(), getScene());
-}
-
-void Container::setParent(Container * c)
-{
-	Object::setParent(c);
 	setParentsAndScenes(getParent(), getScene());
 }
 

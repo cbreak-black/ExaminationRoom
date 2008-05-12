@@ -77,13 +77,13 @@ public: // Persistency
 
 public: // Accessors
 	std::tr1::shared_ptr<Scene> scene() const;
-	std::tr1::shared_ptr<NameManager> names() const;
+	std::tr1::shared_ptr<NameManager> nameManager() const;
 	std::tr1::shared_ptr<LuaProxy> luaProxy() const;
 	std::tr1::shared_ptr<Program> sharedPtr() const;
 
 private:
 	std::tr1::shared_ptr<Scene> scene_;
-	std::tr1::shared_ptr<NameManager> names_;
+	std::tr1::shared_ptr<NameManager> nameManager_;
 	std::tr1::shared_ptr<LuaProxy> luaProxy_;
 
 private:

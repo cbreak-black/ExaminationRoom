@@ -13,16 +13,10 @@ INCLUDEPATH += \
 
 QT           += opengl
 
-# Input
-HEADERS += \
-	src/core/scene.h \
-	src/core/camera.h \
-	src/core/program.h
-SOURCES += \
-	src/main.cpp \
-	src/core/scene.cpp \
-	src/core/camera.cpp \
-	src/core/program.cpp
+# Core
+SOURCES += src/main.cpp
+HEADERS += src/core/*.h
+SOURCES += src/core/*.cpp
 
 # UI
 HEADERS += \

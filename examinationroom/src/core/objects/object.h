@@ -165,16 +165,18 @@ public: // Nesting
 	 \todo Change to use std:tr1:weak_ptr if possible
 	 \return a pointer to the scene of this object
 	*/
-	Scene * scene() const;
+	std::tr1::shared_ptr<Scene> scene() const;
 
 	/**
 	Sets the scene pointer of this object. This should only be called by the
 	Container this object is stored in. The container is responsible for maintaining
 	the pointer.
+	This method unregisters the object name in the program associated with the old scene
+	and registers it with the program associated with the new scene.
 	 \todo Change to use std:tr1:weak_ptr if possible
 	 \param s	Scene pointer
 	*/
-	virtual void setScene(Scene * s);
+	virtual void setScene(std::tr1::shared_ptr<Scene> s);
 
 	/**
 	Returns a pointer to the parent container this object is in.
@@ -182,7 +184,7 @@ public: // Nesting
 	 \todo Change to use std:tr1:weak_ptr if possible
 	 \return a pointer to the container of this object
 	*/
-	Container * parent() const;
+	std::tr1::shared_ptr<Container> parent() const;
 
 	/**
 	Sets the parent pointer of this object. This should only be called by the Container
@@ -194,7 +196,7 @@ public: // Nesting
 	 \todo Change to use std:tr1:weak_ptr if possible
 	 \param c	Container pointer
 	*/
-	virtual void setParent(Container * c);
+	virtual void setParent(std::tr1::shared_ptr<Container> c);
 
 public: // Drawing priority
 	/**
@@ -226,37 +228,6 @@ public: // Name
 	 \return True if the name was set as passed, false if it had to be changed.
 	*/
 	bool setName(const std::string & name);
-
-	/**
-	Checks if the passed name is available.
-	 \param name	The desired name
-	 \return True if the passed name is available, false if it would have to be changed
-	*/
-	static bool checkUniqueName(const std::string & name);
-
-	/**
-	Sanitizes a name, removing evil characters.
-	 \param name	A name containing potentially evil characters
-	 \return	The name without those characters
-	*/
-	static std::string sanitizeName(const std::string & name);
-
-protected:
-	/**
-	Registers a unique name with the object class. If the passed name is unique,
-	it is registered at is and returned unchanged.
-	If the passed name is not unique, a unique version is built by appending
-	numbers.
-	 \param name	The desired base name
-	 \return a unique version of a passed name
-	*/
-	static std::string registerUniqueName(const std::string & name);
-
-	/**
-	Unregisters a name from the object class.
-	 \param name	The actual name
-	*/
-	static void unregisterUniqueName(const std::string & name);
 
 public: // Serialisation
 	/**
@@ -360,17 +331,14 @@ protected: // Notify scene/observers of changes
 private: // State (not exported)
 	std::tr1::weak_ptr<Object> this_;
 
-	Scene * scene_;
-	Container * parent_;
+	std::tr1::weak_ptr<Scene> scene_;
+	std::tr1::weak_ptr<Container> parent_;
 
 	// List with callbacks
 	std::list<SignalCallbackType> parameterChanged_;
 
 	// Parameter Dialog
 	std::tr1::shared_ptr<ParameterObject> dialog_;
-
-	// Name management
-	static std::set<std::string> uniqueNames_;
 
 private: // Parameters (exported)
 	std::string name_;

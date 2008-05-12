@@ -75,15 +75,15 @@ QModelIndex SceneModel::parent(const QModelIndex &child) const
 	{
 		Object * o = static_cast<Object*>(child.internalPointer());
 		// If it has no parent, or a scene as parent
-		if ((!o->parent()) || dynamic_cast<Scene*>(o->parent()))
+		if ((!o->parent()) || std::tr1::dynamic_pointer_cast<Scene>(o->parent()))
 		{
 			// Has no real parent
 			return QModelIndex();
 		}
 		else
 		{
-			Container * p = o->parent();
-			Container * c = p->parent(); // Parent of the parent, to find parent's coordinates
+			std::tr1::shared_ptr<Container> p = o->parent();
+			std::tr1::shared_ptr<Container> c = p->parent(); // Parent of the parent, to find parent's coordinates
 			// c should always be valid, since every object has a parent besides the scene
 			// and objects that have scene as parent were rejected above
 			if (c)
@@ -91,12 +91,12 @@ QModelIndex SceneModel::parent(const QModelIndex &child) const
 				Container::ObjectList::const_iterator it = c->objects().begin();
 				Container::ObjectList::const_iterator end = c->objects().end();
 				int i = 0;
-				while (it != end && (*it).get() != p)
+				while (it != end && (*it) != p)
 				{
 					i++;
 					it++;
 				}
-				return createIndex(i, 0, o->parent());
+				return createIndex(i, 0, o->parent().get());
 			}
 			else
 			{

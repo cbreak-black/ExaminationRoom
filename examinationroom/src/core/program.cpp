@@ -11,14 +11,16 @@
 
 #include "scene.h"
 #include "luaproxy.h"
+#include "namemanager.h"
 
 namespace Examination
 {
 
 Program::Program()
 {
-	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
+	scene_ = Object::Create<Scene>();
 	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
+	nameManager_ = std::tr1::shared_ptr<NameManager>(new NameManager());
 }
 
 Program::~Program()
@@ -29,6 +31,7 @@ std::tr1::shared_ptr<Program> Program::create()
 {
 	std::tr1::shared_ptr<Program> t(new Program());
 	t->this_ = t;
+	t->scene_->setProgram(t);
 	return t;
 }
 
@@ -36,6 +39,7 @@ std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 {
 	std::tr1::shared_ptr<Program> t(new Program());
 	t->this_ = t;
+	t->scene_->setProgram(t);
 	t->luaProxy_->runFile(path.c_str());
 	return t;
 }
@@ -68,9 +72,9 @@ std::tr1::shared_ptr<Scene> Program::scene() const
 	return scene_;
 }
 
-std::tr1::shared_ptr<NameManager> Program::names() const
+std::tr1::shared_ptr<NameManager> Program::nameManager() const
 {
-	return names_;
+	return nameManager_;
 }
 
 std::tr1::shared_ptr<LuaProxy> Program::luaProxy() const
