@@ -80,7 +80,7 @@ std::string Scene::toLua(std::ostream & outStream) const
 		<< (int)(color().a*255) << ");\n";
 	// Store all sub objects
 	outStream << "-- Start sub-objects of " << name() << std::endl;
-	std::list<shared_ptr<Object> >::const_reverse_iterator i = objects().rbegin();
+	ObjectList::const_reverse_iterator i = objects().rbegin();
 	for (; i != objects().rend(); i++)
 	{
 		std::string itemName = (*i)->toLua(outStream);

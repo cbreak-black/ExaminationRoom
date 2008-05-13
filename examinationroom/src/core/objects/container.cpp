@@ -30,8 +30,8 @@ Container::~Container()
 
 bool Container::addObject(shared_ptr<Object> object)
 {
-	std::list< shared_ptr<Object> >::iterator it = objects_.begin();
-	std::list< shared_ptr<Object> >::iterator end = objects_.end();
+	ObjectList::iterator it = objects_.begin();
+	ObjectList::iterator end = objects_.end();
 	// Check for duplicate insert. Return false if the object is already stored
 	while (it != end)
 	{
@@ -159,7 +159,7 @@ std::string Container::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setEnabled(" << (enabled() ? "true" : "false") << ");\n";
 	// Store all sub objects
 	outStream << "-- Start sub-objects of " << name() << std::endl;
-	std::list<shared_ptr<Object> >::const_reverse_iterator i = objects_.rbegin();
+	ObjectList::const_reverse_iterator i = objects_.rbegin();
 	for (; i != objects_.rend(); i++)
 	{
 		std::string itemName = (*i)->toLua(outStream);
