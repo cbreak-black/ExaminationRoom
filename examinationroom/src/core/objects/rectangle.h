@@ -104,14 +104,14 @@ public: // Subdiv
 	The longer side is subdivided so that the subdivisions are as little skewed as possible.
 	 \return the number of subdivisions of the rectangle along the short side
 	*/
-	unsigned int subdivision() const;
+	int subdivision() const;
 
 	/**
 	Sets the number of subdivisions of the rectangle.
 	 \see subdivision()
 	 \param subdivision	Number of desired subdivisions along the short side
 	*/
-	void setSubdivision(unsigned int subdivision);
+	void setSubdivision(int subdivision);
 
 public: // Serialisation
 	/**
@@ -139,7 +139,7 @@ private:
 	Tool::Vec2f texC_;
 	Tool::Vec2f texD_;
 
-	unsigned int subdivision_;
+	int subdivision_;
 };
 	
 }

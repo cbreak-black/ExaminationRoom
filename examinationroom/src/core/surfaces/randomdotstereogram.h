@@ -32,10 +32,16 @@ public: // Constructors and Destructor
 	*/
 	RandomdotStereogram(std::tr1::shared_ptr<Texture> d);
 
+	/**
+	 Creates a new stereogram by taking the passed string as path to a depth map.
+	 \param path	Path to a Depth map
+	*/
+	RandomdotStereogram(std::string path);
+
 public:
 	void setMaxColor(int mc);
 	void setExclusiveColor(int ec);
-	void setColor(int idx, unsigned char r, unsigned char g, unsigned char b);
+	void setColor(int idx, char r, char g, char b);
 	void setColor(int idx, unsigned int color);
 	void resetColor();
 

@@ -19,6 +19,8 @@
 namespace Examination
 {
 	class Scene;
+	class Object;
+	class Camera;
 
 /**
 \defgroup LUA	LUA Bindings
@@ -60,18 +62,23 @@ public: // From C++
 	 */
 	int runString(const char * code);
 
+	/**
+	Returns the associated lua state.
+	*/
+	lua_State * luaState() const;
+
 public: // Scene
-	int addObject(lua_State *L);
-	int removeObject(lua_State *L);
-	int clearScene(lua_State *L);
+	void addObject(std::tr1::shared_ptr<Object> object);
+	void removeObject(std::tr1::shared_ptr<Object> object);
+	void clearScene();
 	int setBackgroundColor(lua_State *L);
 public: // Camera
-	int setCameraPos(lua_State *L);
-	int setCameraDir(lua_State *L);
-	int setCameraUp(lua_State *L);
-	int setCameraFoV(lua_State *L);
-	int setCameraSep(lua_State *L);
-	int setCameraParalaxPlane(lua_State *L);
+	void setCameraPos(float x, float y, float z);
+	void setCameraDir(float x, float y, float z);
+	void setCameraUp(float x, float y, float z);
+	void setCameraFoV(float fov);
+	void setCameraSep(float sep);
+	void setCameraParalaxPlane(float pp);
 	int getCameraPos(lua_State *L);
 	int getCameraDir(lua_State *L);
 	int getCameraUp(lua_State *L);
@@ -79,8 +86,8 @@ public: // Camera
 	int getCameraSep(lua_State *L);
 	int getCameraParalaxPlane(lua_State *L);
 	// Access camera directly
-	int camera(lua_State *L);
-	int setCamera(lua_State *L);
+	std::tr1::shared_ptr<Camera> camera() const;
+	void setCamera(std::tr1::shared_ptr<Camera> camera);
 
 public: // Statistical helpers
 	int getSeparationAtPoint(lua_State *L);
@@ -93,8 +100,6 @@ public: // Low Level Wrapper
 
 public: // Misc
 	int setEventListener(lua_State *L);
-	int log(lua_State *L);
-	int debugLog(lua_State *L);
 	void log(const char * msg);
 	void debugLog(const char * msg);
 
@@ -150,9 +155,6 @@ private:
 
 	std::ofstream logOutStream_;
 
-public: // LUNA
-	static const char className[];
-	static const Luna<LuaProxy>::RegType Register[];
 };
 
 	

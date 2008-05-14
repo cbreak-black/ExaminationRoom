@@ -74,7 +74,7 @@ Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHei
 
 -- Create a floor object
 -- A Rectangle
-rectFloor = Object("Rectangle");
+rectFloor = Rectangle();
 -- Rectangles are defined by two vectors
 rectFloor:setDirA(6,0,0);
 rectFloor:setDirB(0,0,26);
@@ -83,7 +83,7 @@ rectFloor:setPosition(-3, -2, -18.5);
 -- The texture is a checkerboard pattern, and is repeated
 -- 26 times in depth, 6 times in width
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 -- Add the floor to the scene
 Scene:addObject(rectFloor);
 
@@ -91,17 +91,13 @@ Scene:addObject(rectFloor);
 targets = {};
 for i = 1, numTargets do
 	-- Targets are Pixelplanes (textures that get drawn directly on screen
-	local t = Object("Pixelplane");
+	local t = Pixelplane();
 	-- This inserts the object into the list
 	table.insert(targets, t);
 	-- Set the size of the object. This only matters with auto resize
 	t:setSize(targetWidth, targetHeight);
 	-- ...which is turned on
 	t:setAutoResize(true);
-	-- Objects can be treated like tables. However, do NOT overwrite
-	-- field 0, or bad things happen.
-	-- Here, a new field "pos" is created and filled with a table of coordinates
-	t["pos"] = {0,0,0};
 	-- Add them to the scene
 	Scene:addObject(t);
 end
@@ -123,10 +119,10 @@ displayTarget = function (target)
 	-- Random direction (in/out)
 	local dir = directions[math.random(1, #directions)];
 	-- Get the target and it's position
-	local pos = target["pos"];
+	local pos = target:position();
 
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shape);
+	local texture = RandomDot(shape);
 	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(exclusiveColor);
 --	// Uncomment the following for a Pattern version
@@ -148,7 +144,7 @@ parseInput = function (k)
 	if d then
 		-- The first target is picked and it's position is changed
 		local target = targets[1];
-		local pos = target["pos"];
+		local pos = target:position();
 		if d == "up" then
 			pos[2] = pos[2] + 0.5;
 		elseif d == "right" then
@@ -163,6 +159,7 @@ parseInput = function (k)
 			pos[2] = pos[3] + 0.5;
 		elseif d == "space" then
 		end
+		target:setPosition(pos);
 		displayTarget(target);
 	else
 		Scene:log("Input invalid, ignored ("..string.byte(k)..")");

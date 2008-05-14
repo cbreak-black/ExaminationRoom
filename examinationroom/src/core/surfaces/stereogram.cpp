@@ -37,6 +37,15 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	style_ = convex;
 }
 
+Stereogram::Stereogram(std::string lpath, std::string rpath)
+{
+	texDepth_.reset();
+	texLeft_ = shared_ptr<Texture>(new Texture(lpath));
+	texRight_ = shared_ptr<Texture>(new Texture(rpath));
+	offset_ = 6;
+	style_ = convex;
+}
+
 void Stereogram::recreateStereogram()
 {
 	// Nothing to do here

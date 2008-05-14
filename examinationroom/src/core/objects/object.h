@@ -41,7 +41,7 @@ Everything in a scene is a subclass of this class.
  \author Gerhard Roethlin
  \ingroup Objects
 */
-class Object
+class Object : public std::tr1::enable_shared_from_this<Object>
 {
 public:
 	/**
@@ -58,14 +58,13 @@ public:
 public: // Shared Pointers
 	/**
 	Creates a new Object instance and returns a shared pointer to it.
-	Internaly also stores a weak_ptr to this for later use.
+	enable_shared_from_this also internaly stores a weak_ptr to this for later use.
 	 \return A shared_ptr to the new object instance
 	*/
 	template <typename O>
 	static std::tr1::shared_ptr<O> Create()
 	{
 		std::tr1::shared_ptr<O> sharedPtr(new O());
-		sharedPtr->this_ = sharedPtr;
 		return sharedPtr;
 	}
 
@@ -77,7 +76,7 @@ public: // Shared Pointers
 	To casat it to a subclass, use std::tr1::dynamic_pointer_cast()
 	 \return A shared_ptr to this object
 	*/
-	std::tr1::shared_ptr<Object> sharedPtr() const;
+	std::tr1::shared_ptr<Object> sharedPtr();
 
 public: // Accessors
 	/**
@@ -329,8 +328,6 @@ protected: // Notify scene/observers of changes
 	void objectDidChange() const;
 
 private: // State (not exported)
-	std::tr1::weak_ptr<Object> this_;
-
 	std::tr1::weak_ptr<Scene> scene_;
 	std::tr1::weak_ptr<Container> parent_;
 

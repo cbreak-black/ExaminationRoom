@@ -35,7 +35,8 @@ void AbstractTexture::setZoom(float zx, float zy)
 
 void AbstractTexture::setZoom(const Tool::Vec2f & z)
 {
-	setZoom(z.x, z.y);
+	zoomFactorX_ = z.x;
+	zoomFactorY_ = z.y;
 }
 
 }

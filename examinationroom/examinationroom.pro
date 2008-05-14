@@ -9,7 +9,7 @@ INCLUDEPATH += \
 	boost boost/tr1/tr1 \
 	. src \
 	src/ui src/core src/tools src/proxy \
-	src/lua src/lua/src src/parser
+	src/lua src/lua/src src/lua/luabridge/include src/parser
 
 QT           += opengl
 
@@ -37,8 +37,8 @@ HEADERS += src/core/objects/*.h
 SOURCES += src/core/objects/*.cpp
 
 # Proxies
-HEADERS += src/proxy/*.h
-SOURCES += src/proxy/*.cpp
+HEADERS += src/proxy/luaproxy.h
+SOURCES += src/proxy/luaproxy.cpp
 
 # Parsers
 HEADERS += src/parser/obj/*.hpp src/parser/*.hpp
@@ -48,8 +48,11 @@ SOURCES += src/parser/obj/*.cpp
 HEADERS += src/lua/src/*.h src/lua/lua.hpp
 SOURCES += src/lua/src/*.c
 
-# LUNA
-HEADERS += src/lua/luna.h
+# LUABIND
+HEADERS += \
+	src/lua/luabridge/include/luabridge.hpp \
+	src/lua/luabridge/include/impl/*.hpp
+SOURCES += src/lua/luabridge/src/luabridge.cpp
 
 # TOOLS
 HEADERS += \

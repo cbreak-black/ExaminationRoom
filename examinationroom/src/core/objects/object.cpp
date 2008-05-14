@@ -39,9 +39,9 @@ Object::~Object()
 	}
 }
 
-std::tr1::shared_ptr<Object> Object::sharedPtr() const
+std::tr1::shared_ptr<Object> Object::sharedPtr()
 {
-	return this_.lock();
+	return shared_from_this();
 }
 
 Tool::Point Object::position() const

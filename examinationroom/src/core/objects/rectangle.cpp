@@ -218,15 +218,15 @@ void Rectangle::setDirB(Tool::Vector v)
 	objectDidChange();
 }
 
-unsigned int Rectangle::subdivision() const
+int Rectangle::subdivision() const
 {
 	return subdivision_;
 }
 
-void Rectangle::setSubdivision(unsigned int subdivision)
+void Rectangle::setSubdivision(int subdivision)
 {
 	objectWillChange();
-	subdivision_ = subdivision;
+	subdivision_ = subdivision < 0 ? 0 : subdivision;
 	objectDidChange();
 }
 

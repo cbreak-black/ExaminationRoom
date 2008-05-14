@@ -30,6 +30,15 @@ RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 	// Stereogram gets generated automatically
 }
 
+RandomdotStereogram::RandomdotStereogram(std::string path)
+{
+	setMaxColor(4);
+	setExclusiveColor(0);
+	setOffset(6);
+	setTexDepth(shared_ptr<Texture>(new Texture(path)));
+	// Stereogram gets generated automatically
+}
+
 void RandomdotStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;
@@ -135,7 +144,7 @@ void RandomdotStereogram::setExclusiveColor(int ec)
 	excColor_ = ec;
 }
 
-void RandomdotStereogram::setColor(int idx, unsigned char r, unsigned char g, unsigned char b)
+void RandomdotStereogram::setColor(int idx, char r, char g, char b)
 {
 	setColor(idx, qRgb(r, g, b));
 }

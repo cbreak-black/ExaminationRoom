@@ -44,6 +44,14 @@ public: // Constructors and Destructor
 	*/
 	Stereogram(std::tr1::shared_ptr<Texture> l, std::tr1::shared_ptr<Texture> r);
 
+	/**
+	Creates a new stereogram by taking the passed strings as paths to left and right
+	sides.
+	 \param l	Path to Left texture
+	 \param r	Path to Right texture
+	 */
+	Stereogram(std::string lpath, std::string rpath);
+
 protected:
 	/**
 	Creates a new empty stereogram. Should only be used by subclasses.
