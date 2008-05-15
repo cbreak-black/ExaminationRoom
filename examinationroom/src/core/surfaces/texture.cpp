@@ -25,7 +25,7 @@ Texture::Texture(const char * path)
 	imageGLID_ = 0;
 }
 
-Texture::Texture(std::string path)
+Texture::Texture(const std::string & path)
 {
 	image_ = QImage(path.c_str());
 	imagePath_ = path;
@@ -268,7 +268,7 @@ std::string Texture::toLua(std::ostream & outStream) const
 std::string Texture::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";
-	outStream << name << " = Texture(\"" << className() << "\", \"" << imagePath_ << "\");\n";
+	outStream << name << " = " << className() << "(\"" << imagePath_ << "\");\n";
 	return name;
 }
 

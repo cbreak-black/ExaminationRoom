@@ -58,6 +58,29 @@ void AffineTransformation::multMatrix(double * m)
 	objectDidChange();
 }
 
+void AffineTransformation::multMatrix(std::vector<double> m)
+{
+	if (m.size() < 16)
+		return;
+	objectWillChange();
+	double t[16];
+	// Matrix Multiplication
+	for (int k=0; k<16; k+=4)
+	{
+		for (int j=0; j<4; j++)
+		{
+			t[j+k] = 0;
+			for (int i=0; i<4; i++)
+				t[j+k] += m[4*i+j]*trans_[i+k];
+		}
+	}
+	for (int k=0; k<16; k++)
+	{
+		trans_[k] = t[k];
+	}
+	objectDidChange();
+}
+
 void AffineTransformation::translate(Vector t)
 {
 	double temp[16];

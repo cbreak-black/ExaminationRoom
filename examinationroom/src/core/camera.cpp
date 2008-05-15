@@ -325,12 +325,12 @@ std::string Camera::toLua(std::ostream & outStream, const std::string & name) co
 			break;
 	}
 	outStream << "\");\n";
-	outStream << name << ":" << "setPosition("
-		<< position().x << ", " << position().y << ", " << position().z << ");\n";
-	outStream << name << ":" << "setDirection("
-		<< direction().x << ", " << direction().y << ", " << direction().z << ");\n";
-	outStream << name << ":" << "setUp("
-		<< up().x << ", " << up().y << ", " << up().z << ");\n";
+	outStream << name << ":" << "setPosition({"
+		<< position().x << ", " << position().y << ", " << position().z << "});\n";
+	outStream << name << ":" << "setDirection({"
+		<< direction().x << ", " << direction().y << ", " << direction().z << "});\n";
+	outStream << name << ":" << "setUp({"
+		<< up().x << ", " << up().y << ", " << up().z << "});\n";
 	outStream << name << ":" << "setSeparation(" << separation() << ");\n";
 	outStream << name << ":" << "setFieldOfView(" << fieldOfView() << ");\n";
 	outStream << name << ":" << "setParalaxPlane(" << paralaxPlane() << ");\n";

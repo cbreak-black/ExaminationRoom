@@ -30,7 +30,7 @@ RandomdotStereogram::RandomdotStereogram(shared_ptr<Texture> d)
 	// Stereogram gets generated automatically
 }
 
-RandomdotStereogram::RandomdotStereogram(std::string path)
+RandomdotStereogram::RandomdotStereogram(const std::string & path)
 {
 	setMaxColor(4);
 	setExclusiveColor(0);
@@ -218,7 +218,7 @@ std::string RandomdotStereogram::toLua(std::ostream & outStream) const
 std::string RandomdotStereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";
-	outStream << name << " = Texture(\"" << className() << "\", \"" << texDepth()->path() << "\");\n";
+	outStream << name << " = " << className() << "(\"" << texDepth()->path() << "\");\n";
 	return name;
 }
 

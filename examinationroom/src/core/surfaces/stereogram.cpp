@@ -37,7 +37,7 @@ Stereogram::Stereogram(shared_ptr<Texture> l, shared_ptr<Texture> r)
 	style_ = convex;
 }
 
-Stereogram::Stereogram(std::string lpath, std::string rpath)
+Stereogram::Stereogram(const std::string & lpath, const std::string & rpath)
 {
 	texDepth_.reset();
 	texLeft_ = shared_ptr<Texture>(new Texture(lpath));
@@ -231,7 +231,7 @@ std::string Stereogram::toLua(std::ostream & outStream) const
 std::string Stereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";
-	outStream << name << " = Texture(\"" << className() << "\", \""
+	outStream << name << " = " << className() << "(\""
 		<< texLeft()->path() << "\", \"" << texRight()->path() << "\");\n";
 	return name;
 }

@@ -50,7 +50,7 @@ public: // Constructors and Destructor
 	 \param l	Path to Left texture
 	 \param r	Path to Right texture
 	 */
-	Stereogram(std::string lpath, std::string rpath);
+	Stereogram(const std::string & lpath, const std::string & rpath);
 
 protected:
 	/**

@@ -245,8 +245,8 @@ std::string Rectangle::toLua(std::ostream & outStream) const
 		<< texB().x << ", " << texB().y << ", "
 		<< texC().x << ", " << texC().y << ", "
 		<< texD().x << ", " << texD().y << ");\n";
-	outStream << name() << ":" << "setDirA(" << dirA().x << ", " << dirA().y << ", " << dirA().z << ");\n";
-	outStream << name() << ":" << "setDirB(" << dirB().x << ", " << dirB().y << ", " << dirB().z << ");\n";
+	outStream << name() << ":" << "setDirA({" << dirA().x << ", " << dirA().y << ", " << dirA().z << "});\n";
+	outStream << name() << ":" << "setDirB({" << dirB().x << ", " << dirB().y << ", " << dirB().z << "});\n";
 	return name();
 }
 

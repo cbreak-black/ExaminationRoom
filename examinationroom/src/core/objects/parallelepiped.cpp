@@ -82,7 +82,7 @@ std::string Parallelepiped::className() const
 std::string Parallelepiped::toLua(std::ostream & outStream) const
 {
 	Rectangle::toLua(outStream);
-	outStream << name() << ":" << "setDirC(" << dirC().x << ", " << dirC().y << ", " << dirC().z << ");\n";
+	outStream << name() << ":" << "setDirC({" << dirC().x << ", " << dirC().y << ", " << dirC().z << "});\n";
 	return name();
 }
 

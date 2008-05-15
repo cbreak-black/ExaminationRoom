@@ -76,10 +76,10 @@ Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHei
 -- A Rectangle
 rectFloor = Rectangle();
 -- Rectangles are defined by two vectors
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
 -- Set the position of the rectangle
-rectFloor:setPosition(-3, -2, -18.5);
+rectFloor:setPosition({-3, -2, -18.5});
 -- The texture is a checkerboard pattern, and is repeated
 -- 26 times in depth, 6 times in width
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
@@ -134,7 +134,7 @@ displayTarget = function (target)
 	-- Set the newly created texture as texture of the target
 	target:setTexture(texture);
 	-- Move to proper position
-	target:setPosition(pos[1], pos[2], pos[3]);
+	target:setPosition(pos);
 end;
 
 -- This method reacts to user input
@@ -154,9 +154,9 @@ parseInput = function (k)
 		elseif d == "left" then
 			pos[1] = pos[1] - 0.5;
 		elseif d == "pgUp" then
-			pos[2] = pos[3] - 0.5;
+			pos[3] = pos[3] - 0.5;
 		elseif d == "pgDown" then
-			pos[2] = pos[3] + 0.5;
+			pos[3] = pos[3] + 0.5;
 		elseif d == "space" then
 		end
 		target:setPosition(pos);
@@ -182,7 +182,7 @@ updateScene = function (t)
 	x = math.sin(timePassed)*3-1;
 	y = math.sin(timePassed/10)*2;
 	z = math.cos(timePassed)*2;
-	target:setPosition(x, y, z);
+	target:setPosition({x, y, z});
 end;
 
 -- Sets the function defined above as handler of update events

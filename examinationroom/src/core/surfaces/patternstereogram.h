@@ -39,6 +39,14 @@ public: // Constructors and Destructor
 	 \param q	Foreground pattern map
 	 */
 	PatternStereogram(std::tr1::shared_ptr<Texture> d, std::tr1::shared_ptr<Texture> p, std::tr1::shared_ptr<Texture> q);
+	/**
+	Creates a new stereogram by taking the passed strings as paths to textures for
+	patterns and depth maps.
+	 \param d	Depth map path
+	 \param b	Background pattern path
+	 \param f	Foreground pattern path
+	*/
+	PatternStereogram(const std::string & d, const std::string & b, const std::string & f);
 
 public: // Serialisation
 	virtual std::string className() const;

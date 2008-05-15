@@ -10,7 +10,9 @@
 #ifndef LUAPROXY_H
 #define LUAPROXY_H
 
-#include "luna.h"
+#include "lua.hpp"
+
+#include "vec.h"
 
 #include <QTime>
 #include <fstream>
@@ -71,7 +73,7 @@ public: // Scene
 	void addObject(std::tr1::shared_ptr<Object> object);
 	void removeObject(std::tr1::shared_ptr<Object> object);
 	void clearScene();
-	int setBackgroundColor(lua_State *L);
+	void setBackgroundColor(char red, char green, char blue, char alpha);
 public: // Camera
 	void setCameraPos(float x, float y, float z);
 	void setCameraDir(float x, float y, float z);
@@ -79,24 +81,24 @@ public: // Camera
 	void setCameraFoV(float fov);
 	void setCameraSep(float sep);
 	void setCameraParalaxPlane(float pp);
-	int getCameraPos(lua_State *L);
-	int getCameraDir(lua_State *L);
-	int getCameraUp(lua_State *L);
-	int getCameraFoV(lua_State *L);
-	int getCameraSep(lua_State *L);
-	int getCameraParalaxPlane(lua_State *L);
+	Tool::Point getCameraPos();
+	Tool::Vec3f getCameraDir();
+	Tool::Vec3f getCameraUp();
+	float getCameraFoV();
+	float getCameraSep();
+	float getCameraParalaxPlane();
 	// Access camera directly
 	std::tr1::shared_ptr<Camera> camera() const;
 	void setCamera(std::tr1::shared_ptr<Camera> camera);
 
 public: // Statistical helpers
-	int getSeparationAtPoint(lua_State *L);
-	int getUnitScreenSize(lua_State *L);
+	float getSeparationAtPoint(Tool::Point p);
+	float getUnitScreenSize(Tool::Point p);
 	int getViewport(lua_State *L);
 
 public: // Low Level Wrapper
-	int beep(lua_State *L);
-	int exit(lua_State *L);
+	void beep();
+	void exit();
 
 public: // Misc
 	int setEventListener(lua_State *L);

@@ -36,7 +36,7 @@ public: // Constructors and Destructor
 	 Creates a new stereogram by taking the passed string as path to a depth map.
 	 \param path	Path to a Depth map
 	*/
-	RandomdotStereogram(std::string path);
+	RandomdotStereogram(const std::string & path);
 
 public:
 	void setMaxColor(int mc);

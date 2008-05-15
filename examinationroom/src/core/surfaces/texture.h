@@ -42,7 +42,7 @@ public: // Constructors and Destructor
 	 \see QImage
 	 \param path	STD String to a file containing image data
 	*/
-	Texture(std::string path);
+	Texture(const std::string & path);
 	/**
 	Creates a texture with an internal copy of a passed QImage as texture.
 	 \param image	A QImage object containing texture data

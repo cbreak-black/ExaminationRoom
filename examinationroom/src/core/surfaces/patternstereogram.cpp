@@ -39,6 +39,21 @@ PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> 
 	// Stereogram gets generated automatically
 }
 
+PatternStereogram::PatternStereogram(const std::string & d, const std::string & b, const std::string & f)
+{
+	bgPattern_ = shared_ptr<Texture>(new Texture(d));
+	if (b == f)
+	{
+		fgPattern_ = bgPattern_;
+	}
+	else
+	{
+		fgPattern_ = shared_ptr<Texture>(new Texture(b));
+	}
+	setTexDepth(shared_ptr<Texture>(new Texture(f)));
+	// Stereogram gets generated automatically
+}
+
 void PatternStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;
@@ -135,15 +150,8 @@ std::string PatternStereogram::toLua(std::ostream & outStream) const
 std::string PatternStereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";
-	outStream << name << " = Texture(\"" << className() << "\", \"" << texDepth()->path() << "\",\n\"";
-	if (fgPattern_->path() == bgPattern_->path())
-	{
-		outStream << bgPattern_->path() << ");\n";
-	}
-	else
-	{
-		outStream << bgPattern_->path() << "\", \"" << fgPattern_->path() << "\");\n";
-	}
+	outStream << name << " = " << className() << "(\"" << texDepth()->path() << "\",\n\t\"";
+	outStream << bgPattern_->path() << "\", \"" << fgPattern_->path() << "\");\n";
 	return name;
 }
 

@@ -43,11 +43,11 @@ std::string LightNode::className() const
 std::string LightNode::toLua(std::ostream & outStream) const
 {
 	Container::toLua(outStream);
-	outStream << name() << ":" << "setAmbient("
+	outStream << name() << ":" << "setAmbient({"
 		<< ambient().r << ", "
 		<< ambient().g << ", "
 		<< ambient().b << ", "
-		<< ambient().a << ");\n";
+		<< ambient().a << "});\n";
 	return name();
 }
 

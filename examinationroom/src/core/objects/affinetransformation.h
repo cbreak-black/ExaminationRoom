@@ -14,6 +14,8 @@
 
 #include "vec.h"
 
+#include <vector>
+
 namespace Examination
 {
 
@@ -45,6 +47,12 @@ public:
 	 \param m	A pointer to a 16 element array in OpenGL ordering.
 	*/
 	void multMatrix(double * m);
+
+	/**
+	Multiplies the given matrix with the stored matrix to get the stored matrix.
+	 \param m	A std::vector with 16 doubles in OpenGL ordering.
+	*/
+	void multMatrix(std::vector<double> m);
 
 	/**
 	Translates the object by the given vector.

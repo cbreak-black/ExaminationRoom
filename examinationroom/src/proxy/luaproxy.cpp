@@ -17,11 +17,22 @@
 #include "objects/container.h"
 #include "objects/pixelplane.h"
 #include "objects/rectangle.h"
+#include "objects/parallelepiped.h"
+#include "objects/mesh.h"
+#include "objects/sphere.h"
+#include "objects/text.h"
+#include "objects/affinetransformation.h"
+#include "objects/atmosphere.h"
+#include "objects/atmosphere.h"
+#include "objects/cameranode.h"
+#include "objects/depthbuffer.h"
+#include "objects/lightnode.h"
 
 #include "surfaces/abstracttexture.h"
 #include "surfaces/texture.h"
 #include "surfaces/stereogram.h"
 #include "surfaces/randomdotstereogram.h"
+#include "surfaces/patternstereogram.h"
 
 #include "camera.h"
 
@@ -53,7 +64,65 @@ namespace luabridge
 		}
 		static Examination::Stereogram::Style get (lua_State *L, int index)
 		{
-			return (Examination::Stereogram::Style)luaL_checkoption(L, index, 0, textureStyles);
+			return static_cast<Examination::Stereogram::Style>(luaL_checkoption(L, index, 0, textureStyles));
+		}
+	};
+	char * fogModes[] =
+	{
+		"Exp",
+		"Exp2",
+		"Linear",
+		0
+	};
+	template <>
+	struct tdstack <Examination::Atmosphere::FogMode>
+	{
+		static void push (lua_State *L, Examination::Atmosphere::FogMode data)
+		{
+			lua_pushstring(L, fogModes[data]);
+		}
+		static Examination::Atmosphere::FogMode get (lua_State *L, int index)
+		{
+			return static_cast<Examination::Atmosphere::FogMode>(luaL_checkoption(L, index, 0, fogModes));
+		}
+	};
+	const char * cameraTypes[] =
+	{
+		"Perspective",
+		"Parallel",
+		"Screen",
+		0
+	};
+	template <>
+	struct tdstack <Examination::Camera::Type>
+	{
+		static void push (lua_State *L, Examination::Camera::Type data)
+		{
+			lua_pushstring(L, cameraTypes[data]);
+		}
+		static Examination::Camera::Type get (lua_State *L, int index)
+		{
+			return static_cast<Examination::Camera::Type>(luaL_checkoption(L, index, 0, cameraTypes));
+		}
+	};
+	template <>
+	struct tdstack <std::vector<double> >
+	{
+	private:
+		static void push (lua_State *L, std::vector<double> data);
+	public:
+		static std::vector<double> get (lua_State *L, int index)
+		{
+			luaL_checktype(L, index, LUA_TTABLE);
+			std::vector<double> mat;
+			for (int i = 1; i <= 16; i++)
+			{
+				lua_pushnumber(L, i);
+				lua_gettable(L, index);
+				mat.push_back(lua_tonumber(L, -1));
+				lua_pop(L, 1);
+			}
+			return mat;
 		}
 	};
 }
@@ -82,6 +151,25 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 
 	luabridge::module m(L_);
 
+	m.class_<Camera>("Camera")
+	.constructor<void (*)()>()
+	.method("type", &Camera::type)
+	.method("setType", &Camera::setType)
+	.method("position", &Camera::position)
+	.method("setPosition", &Camera::setPosition)
+	.method("direction", &Camera::direction)
+	.method("setDirection", &Camera::setDirection)
+	.method("up", &Camera::up)
+	.method("setUp", &Camera::setUp)
+	.method("separation", &Camera::separation)
+	.method("setSeparation", &Camera::setSeparation)
+	.method("fieldOfView", &Camera::fieldOfView)
+	.method("setFieldOfView", &Camera::setFieldOfView)
+	.method("paralaxPlane", &Camera::paralaxPlane)
+	.method("setParalaxPlane", &Camera::setParalaxPlane)
+	.method<float (Camera::*)(Tool::Point) const>("unitScreenSize", &Camera::unitScreenSize)
+	.method("separationAtPoint", &Camera::separationAtPoint);
+
 	m.class_<AbstractTexture>("AbstractTexture")
 	.method("width", &AbstractTexture::width)
 	.method("height", &AbstractTexture::height)
@@ -108,6 +196,9 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("setExclusiveColor", &RandomdotStereogram::setExclusiveColor)
 	.method<void (RandomdotStereogram::*)(int,char,char,char)>("setColor", &RandomdotStereogram::setColor)
 	.method("resetColor", &RandomdotStereogram::resetColor);
+
+	m.subclass<PatternStereogram,Stereogram>("Pattern")
+	.constructor<void (*)(std::string,std::string,std::string)>();
 
 	m.class_<LuaProxy>("Scene")
 	.method("addObject", &LuaProxy::addObject)
@@ -179,6 +270,65 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("subdivision", &Rectangle::subdivision)
 	.method("setSubdivision", &Rectangle::setSubdivision)
 	.method("setTexCoords", &Rectangle::setTexCoords);
+
+	m.subclass<Parallelepiped,Rectangle>("Parallelepiped")
+	.constructor<void (*)()>()
+	.method("dirC", &Parallelepiped::dirC)
+	.method("setDirC", &Parallelepiped::setDirC);
+
+	m.subclass<Mesh,Object>("Mesh")
+	.constructor<void (*)()>()
+	.method("loadMesh", &Mesh::loadMesh)
+	.method("getMeshPath", &Mesh::getMeshPath)
+	.method("clearMesh", &Mesh::clearMesh)
+	.method("scaleFactor", &Mesh::scaleFactor)
+	.method("setScaleFactor", &Mesh::setScaleFactor);
+
+	m.subclass<Sphere,Object>("Sphere")
+	.constructor<void (*)()>()
+	.method("radius", &Sphere::radius)
+	.method("setRadius", &Sphere::setRadius)
+	.method("slices", &Sphere::slices)
+	.method("setSlices", &Sphere::setSlices)
+	.method("stacks", &Sphere::setStacks);
+
+	m.subclass<Text,Object>("Text")
+	.constructor<void (*)()>()
+	.method("text", &Text::text)
+	.method<void (Text::*)(const char *)>("setText", &Text::setText);
+
+	m.subclass<AffineTransformation,Container>("AffineTransformation")
+	.constructor<void (*)()>()
+	.method("translate", &AffineTransformation::translate)
+	.method("rotate", &AffineTransformation::rotate)
+	.method("scale", &AffineTransformation::scale)
+	.method<void (AffineTransformation::*)(std::vector<double>)>("multMatrix", &AffineTransformation::multMatrix);
+
+	m.subclass<Atmosphere,Container>("Atmosphere")
+	.constructor<void (*)()>()
+	.method("mode", &Atmosphere::mode)
+	.method("setMode", &Atmosphere::setMode)
+	.method("density", &Atmosphere::density)
+	.method("setDensity", &Atmosphere::setDensity)
+	.method("start", &Atmosphere::start)
+	.method("setStart", &Atmosphere::setStart)
+	.method("end", &Atmosphere::end)
+	.method("setEnd", &Atmosphere::setEnd);
+
+	m.subclass<CameraNode,Container>("CameraNode")
+	.constructor<void (*)()>()
+	.method("camera", &CameraNode::camera)
+	.method("setCamera", &CameraNode::setCamera);
+
+	m.subclass<DepthBuffer,Container>("DepthBuffer")
+	.constructor<void (*)()>()
+	.method("depthBufferState", &DepthBuffer::depthBufferState)
+	.method("setDepthBufferState", &DepthBuffer::setDepthBufferState);
+
+	m.subclass<LightNode,Container>("LightNode")
+	.constructor<void (*)()>()
+	.method("ambient", &LightNode::ambient)
+	.method("setAmbient", &LightNode::setAmbient);
 
 	// Add Scene object
 	luabridge::tdstack<std::tr1::shared_ptr<LuaProxy> >::push(L_, std::tr1::shared_ptr<LuaProxy>(this, null_deleter()));
@@ -263,19 +413,13 @@ Signature: setBackground(<red>, <green>, <blue>, <alpha>)
 Each component can have values ranging from 0 to 255.
  \see	Scene::setBackgroundColor()
 */
-int LuaProxy::setBackgroundColor(lua_State *L)
+void LuaProxy::setBackgroundColor(char red, char green, char blue, char alpha)
 {
-	checkTop(L, 5);
-	scene_->setBackgroundColor(lua_tonumber(L, 2),
-							   lua_tonumber(L, 3),
-							   lua_tonumber(L, 4),
-							   lua_tonumber(L, 5));
-	lua_pop(L, 5);
-	return 0;
+	scene_->setBackgroundColor(red, green, blue, alpha);
 }
 
 /**
-Signature: setCameraPos(<Number:x>, <Number:y>, <Number:z>)
+Signature: setCameraPos({<Number:x>, <Number:y>, <Number:z>})
  \see	Camera::setPosition()
 */
 void LuaProxy::setCameraPos(float x, float y, float z)
@@ -350,75 +494,57 @@ void LuaProxy::setCameraParalaxPlane(float pp)
 }
 
 /**
-Signature: x, y, z = getCameraPos()
+Signature: {x, y, z} = getCameraPos()
  \see	Camera::position()
 */
-int LuaProxy::getCameraPos(lua_State *L)
+Tool::Point LuaProxy::getCameraPos()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	pushVector(L, scene_->camera()->position());
-	return 3;
+	return scene_->camera()->position();
 }
 
 /**
-Signature: x, y, z = getCameraDir()
+Signature: {x, y, z} = getCameraDir()
  \see	Camera::direction()
 */
-int LuaProxy::getCameraDir(lua_State *L)
+Tool::Vector LuaProxy::getCameraDir()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	pushVector(L, scene_->camera()->direction());
-	return 3;
+	return scene_->camera()->direction();
 }
 
 /**
-Signature: x, y, z = getCameraUp()
+Signature: {x, y, z} = getCameraUp()
  \see	Camera::up()
 */
-int LuaProxy::getCameraUp(lua_State *L)
+Tool::Vector LuaProxy::getCameraUp()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	pushVector(L, scene_->camera()->up());
-	return 3;
+	return scene_->camera()->up();
 }
 
 /**
 Signature: fov = getCameraFoV()
  \see	Camera::fieldOfView()
 */
-int LuaProxy::getCameraFoV(lua_State *L)
+float LuaProxy::getCameraFoV()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	lua_pushnumber(L, scene_->camera()->fieldOfView());
-	return 1;
+	return scene_->camera()->fieldOfView();
 }
 
 /**
 Signature: sep = getCameraSep()
  \see	Camera::separation()
 */
-int LuaProxy::getCameraSep(lua_State *L)
+float LuaProxy::getCameraSep()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	lua_pushnumber(L, scene_->camera()->separation());
-	return 1;
+	return scene_->camera()->separation();
 }
 
 /**
 Signature: dist = getCameraParalaxPlane()
  \see	Camera::paralaxPlane()
 */
-int LuaProxy::getCameraParalaxPlane(lua_State *L)
+float LuaProxy::getCameraParalaxPlane()
 {
-	checkTop(L, 1);
-	lua_pop(L, 1);
-	lua_pushnumber(L, scene_->camera()->paralaxPlane());
-	return 1;
+	return scene_->camera()->paralaxPlane();
 }
 
 /**
@@ -442,35 +568,28 @@ void LuaProxy::setCamera(std::tr1::shared_ptr<Camera> camera)
 }
 
 /**
-Signature: sep = getSeparationAtPoint(<Number:x>, <Number:y>, <Number:z>)
+Signature: sep = getSeparationAtPoint({<Number:x>, <Number:y>, <Number:z>})
  \see	Camera::separationAtPoint()
 */
-int LuaProxy::getSeparationAtPoint(lua_State *L)
+float LuaProxy::getSeparationAtPoint(Tool::Point p)
 {
-	checkTop(L, 4);
-	float sep = scene_->camera()->separationAtPoint(toVector(L,2));
-	lua_pop(L, 4);
-	lua_pushnumber(L, sep);
-	return 1;
+	return scene_->camera()->separationAtPoint(p);
 }
 
 /**
-Signature: uss = getUnitScreenSize(<Number:x>, <Number:y>, <Number:z>)
+Signature: uss = getUnitScreenSize({<Number:x>, <Number:y>, <Number:z>})
  \see	Camera::unitScreenSize()
 */
-int LuaProxy::getUnitScreenSize(lua_State *L)
+float LuaProxy::getUnitScreenSize(Tool::Point p)
 {
-	checkTop(L, 4);
-	int uss = scene_->camera()->unitScreenSize(toVector(L,2));
-	lua_pop(L, 4);
-	lua_pushinteger(L, uss);
-	return 1;
+	return scene_->camera()->unitScreenSize(p);
 }
 
 /**
 Signature: x, y, w, h = getViewport()
  \see	Camera::screenProject()
  \see	ScreenProject::viewport()
+ \warning Old Code, Revisit
 */
 int LuaProxy::getViewport(lua_State *L)
 {
@@ -489,28 +608,19 @@ int LuaProxy::getViewport(lua_State *L)
 /**
 Signature: beep()
 */
-int LuaProxy::beep(lua_State *L)
+void LuaProxy::beep()
 {
 	QApplication::beep();
-	lua_settop(L, 0);
-	return 0;
 }
 
 /**
 Signature: exit()
-Signature: exit(<Number:result>)
+Signature: exit(<Number:result>) // Unimplemented
 Exits the application with the given result value
 */
-int LuaProxy::exit(lua_State *L)
+void LuaProxy::exit()
 {
-	int res = 0;
-	if (lua_isnumber(L, 2))
-	{
-		res = lua_tonumber(L, 2);
-	}
-	QCoreApplication::exit(res);
-	lua_settop(L, 0);
-	return 0;
+	QCoreApplication::exit(0);
 }
 
 // Event Stuff
@@ -529,25 +639,26 @@ const char * eventIdx[] =
 /**
 Signature: setEventListener(<String:eventIdx>, <Function:handler>)
  \see	eventIdx
+ \warning Old Code, Revisit
 */
 int LuaProxy::setEventListener(lua_State *L)
 {
 	checkTop(L, 3);
-	luaL_checktype(L, 1, LUA_TTABLE);
 	//luaL_checktype(L, 3, LUA_TFUNCTION);
 	int opt = luaL_checkoption(L, 2, 0, eventIdx);
 	int t = lua_type(L, 3);
-	if (t == LUA_TFUNCTION)
+
+	if (lua_getmetatable(L, 1)) // 4
 	{
-		lua_setfield(L, 1, eventIdx[opt]);
-		lua_pop(L, 2);
+		lua_pushstring(L, eventIdx[opt]); // 5 -- key
+		if (t == LUA_TFUNCTION)
+			lua_pushvalue(L, 3); // 6 -- value
+		else
+			lua_pushnil(L); // 6 -- value
+		lua_settable(L, 4); // 4 -- meta[key] = value, pops key, value
+		lua_pop(L, 1); // 3 -- pops meta
 	}
-	else
-	{
-		lua_pushnil(L);
-		lua_setfield(L, 1, eventIdx[opt]);
-		lua_pop(L, 3);
-	}
+	lua_pop(L, 3);
 	return 0;
 }
 
@@ -592,6 +703,8 @@ void LuaProxy::onEvent(const char * event, double param)
 		if (res != 0)
 		{
 			// Error
+			const char *  s = lua_tostring(L_, -1);
+			handleError(res, s);
 			lua_pop(L_, 1);
 		}
 		lua_pop(L_, 1);

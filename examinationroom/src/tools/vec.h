@@ -22,13 +22,15 @@ A small helper object, that is a 2 element vector. It can be treated as point
 template <typename T>
 union Vec2
 {
+	enum { dim = 2 };
+
 	struct
 	{
 		T x;
 		T y;
 	};
 
-	T vec[2];
+	T vec[dim];
 
 	Vec2() {x = y = 0; };
 	Vec2(const Vec2<T>& v)
@@ -71,6 +73,8 @@ operator[] accessor).
 template <typename T>
 union Vec3
 {
+	enum { dim = 3 };
+
 	struct
 	{
 		T x;
@@ -85,7 +89,7 @@ union Vec3
 		T b;
 	};
 
-	T vec[3];
+	T vec[dim];
 
 	Vec3() {x = y = z = 0; };
 	Vec3(const Vec2<T>& v)
@@ -135,6 +139,8 @@ operator[] accessor).
 */
 template <typename T> union Vec4
 {
+	enum { dim = 4};
+
 	struct
 	{
 		T x;
@@ -151,7 +157,7 @@ template <typename T> union Vec4
 		T a;
 	};
 
-	T vec[4];
+	T vec[dim];
 
 	Vec4() {x = y = z = t = 0; };
 	Vec4(const Vec2<T>& v)
