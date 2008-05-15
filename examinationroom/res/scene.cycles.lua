@@ -92,16 +92,16 @@ Scene:log("Texture Colors = "..maxColor.."(-"..exclusiveColor..")");
 Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHeight);
 Scene:log("Scene Properties = "..blocksPerScene.." blocks with "..cyclesPerBlock.." cycles per Block");
 
-rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2, -18.5);
+rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition({-3, -2, -18.5});
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 
 targets = {};
 for i = 1, numTargets do
-	local t = Object("Pixelplane");
+	local t = Pixelplane();
 	table.insert(targets, t);
 	t:setSize(targetWidth, targetHeight);
 	t:setAutoResize(true);
@@ -210,16 +210,16 @@ displayNextTarget = function ()
 	local shape = shapes[math.random(1, #shapes)];
 
 	--	// Uncomment the following for a (rerendered) Stereogram version
---	local texture = Texture("Stereogram",
+--	local texture = Stereogram(
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shape);
+	local texture = RandomDot(shape);
 	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(exclusiveColor);
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
---	local texture = Texture("Pattern", shape, patterns[1], patterns[2]);
+--	local texture = Pattern(shape, patterns[1], patterns[2]);
 --	// End Comments
 	texture:setStyle(replies[currentTest]); -- Here the concave/convex status is set
 
@@ -230,7 +230,7 @@ displayNextTarget = function ()
 		target = targets[1];
 	end
 	target:setTexture(texture);
-	target:setPosition(pos[1], pos[2], pos[3]);
+	target:setPosition(pos);
 	Scene:addObject(target);
 
 	-- Extensive logging of object properties

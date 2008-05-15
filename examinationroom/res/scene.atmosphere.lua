@@ -15,23 +15,23 @@ local cameraPos = {0, 2.5, cameraDistance};
 local cameraFoV = 18;
 local cameraSep = 0.15;
 cam = Scene:camera();
-cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
-cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+cam:setPosition(cameraPos);
+cam:setDirection(cameraDir);
 cam:setFieldOfView(cameraFoV);
 cam:setSeparation(cameraSep);
 cam:setParalaxPlane(cameraPP);
 
-local sn = Object("Text");
-sn:setPosition(0,1,0);
+local sn = Text();
+sn:setPosition({0,1,0});
 Scene:addObject(sn);
 
 floorPos = {-3, -2.5, -20};
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition(floorPos);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
 fogModes = {"Linear", "Exp", "Exp2"};
@@ -39,29 +39,29 @@ fogModeIdx = 1;
 fogDensity = 0.05;
 fogStart = 10;
 fogEnd = 30;
-local airBox = Object("Atmosphere");
+local airBox = Atmosphere();
 airBox:setMode(fogModes[fogModeIdx]);
-airBox:setColor(0,0,0,1);
+airBox:setColor({0,0,0,1});
 airBox:setDensity(fogDensity);
 airBox:setStart(fogStart);
 airBox:setEnd(fogEnd);
 Scene:addObject(airBox);
 sn:setText("Mode: "..fogModes[fogModeIdx]);
 
-local container1 = Object("AffineTransformation");
-container1:setPosition(0, 1, 0);
-container1:scale(0.005, 0.005, 0.005);
+local container1 = AffineTransformation();
+container1:setPosition({0, 1, 0});
+container1:scale({0.005, 0.005, 0.005});
 Scene:addObject(container1);
 
-local container2 = Object("AffineTransformation");
+local container2 = AffineTransformation();
 airBox:addObject(container2);
 
-local m1 = Object("Mesh");
+local m1 = Mesh();
 m1:loadMesh("res/bunny_243V.obj");
 m1:setScaleFactor(12);
-m1:setPosition(0, 2, 0);
+m1:setPosition({0, 2, 0});
 container2:addObject(m1);
-local m2 = Object("Mesh");
+local m2 = Mesh();
 -- Dolphin model, with normals
 --m2:loadMesh("res/Dolphin/Dolphin.obj");
 --m2:setScaleFactor(0.005);
@@ -77,7 +77,7 @@ m2:setScaleFactor(0.005);
 -- Cube model, without normals
 --m2:loadMesh("res/cube.obj");
 --m2:setScaleFactor(1);
-m2:setPosition(0, -2.5, 0);
+m2:setPosition({0, -2.5, 0});
 container2:addObject(m2);
 
 -- Library
@@ -135,8 +135,8 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "down" then
 			fogDensity = fogDensity/stepFactor;
 			fogEnd = fogEnd - 1;
@@ -148,18 +148,18 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "pgUp" then
 			cameraDistance = cameraDistance + 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		elseif d == "pgDown" then
 			cameraDistance = cameraDistance - 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		elseif d == "fogMode" then
 			fogModeIdx = fogModeIdx%#fogModes + 1
 			airBox:setMode(fogModes[fogModeIdx]);
@@ -170,8 +170,8 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container1:rotate(0,1,0, delta/4);
-	container2:rotate(0,1,0, -delta/4);
+	container1:rotate({0,1,0}, delta/4);
+	container2:rotate({0,1,0}, -delta/4);
 end;
 updateListener(0);
 

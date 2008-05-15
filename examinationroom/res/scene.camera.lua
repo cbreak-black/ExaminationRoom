@@ -15,91 +15,91 @@ local cameraPos = {0, 2.5, cameraDistance};
 local cameraFoV = 18;
 local cameraSep = 0.15;
 cam = Scene:camera();
-cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
-cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+cam:setPosition(cameraPos);
+cam:setDirection(cameraDir);
 cam:setFieldOfView(cameraFoV);
 cam:setSeparation(cameraSep);
 cam:setParalaxPlane(cameraPP);
 
-local sn = Object("Text");
+local sn = Text();
 sn:setText("Watch here");
-sn:setPosition(0,0,0);
+sn:setPosition({0,0,0});
 Scene:addObject(sn);
 
 floorPos = {-3, -2.5, -20};
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition(floorPos);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local cameraBox = Object("CameraNode");
+local cameraBox = CameraNode();
 local c2 = cameraBox:camera();
-c2:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
-c2:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+c2:setPosition(cameraPos);
+c2:setDirection(cameraDir);
 c2:setFieldOfView(cameraFoV);
 c2:setSeparation(cameraSep);
 c2:setParalaxPlane(cameraPP);
 c2:setType("Parallel");
 Scene:addObject(cameraBox);
 
-local pep1 = Object("Parallelepiped");
-pep1:setTexture(Texture("Simple", "res/checkerboard.png"));
+local pep1 = Parallelepiped();
+pep1:setTexture(Texture("res/checkerboard.png"));
 local d = 1;
 local l = 0.816*d;
 local s = 0.578*d;
 local s120 = math.sin(math.pi*2/3);
-pep1:setDirA(0, s, l);
-pep1:setDirB(s120*l, s, -0.5*l);
-pep1:setDirC(-s120*l, s, -0.5*l);
-pep1:setPosition(-3, -math.sqrt(3*d*d)/2 + 2, 0)
+pep1:setDirA({0, s, l});
+pep1:setDirB({s120*l, s, -0.5*l});
+pep1:setDirC({-s120*l, s, -0.5*l});
+pep1:setPosition({-3, -math.sqrt(3*d*d)/2 + 2, 0});
 cameraBox:addObject(pep1);
 
-local container = Object("AffineTransformation");
-container:setPosition(0, 0, 0);
+local container = AffineTransformation();
+container:setPosition({0, 0, 0});
 Scene:addObject(container);
 
-local pep2 = Object("Parallelepiped");
-pep2:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
+local pep2 = Parallelepiped();
+pep2:setTexture(Texture("res/texMarbleGrey.jpg"));
 local d = 1;
 local l = 0.816*d;
 local s = 0.578*d;
 local s120 = math.sin(math.pi*2/3);
-pep2:setDirA(0, s, l);
-pep2:setDirB(s120*l, s, -0.5*l);
-pep2:setDirC(-s120*l, s, -0.5*l);
-pep2:setPosition(0, -math.sqrt(3*d*d)/2, 0)
+pep2:setDirA({0, s, l});
+pep2:setDirB({s120*l, s, -0.5*l});
+pep2:setDirC({-s120*l, s, -0.5*l});
+pep2:setPosition({0, -math.sqrt(3*d*d)/2, 0});
 container:addObject(pep2);
 
-local camScreen = Object("CameraNode");
+local camScreen = CameraNode();
 camScreen:camera():setType("Screen");
 camScreen:setDrawPriority(256);
 Scene:addObject(camScreen);
 
-local r1 = Object("Rectangle");
-r1:setDirA(512, 0, 0);
-r1:setDirB(0, 512, 0);
-r1:setPosition(0, -256, 0);
-r1:setColor(0, 1, 1, 0.5);
+local r1 = Rectangle();
+r1:setDirA({512, 0, 0});
+r1:setDirB({0, 512, 0});
+r1:setPosition({0, -256, 0});
+r1:setColor({0, 1, 1, 0.5});
 r1:setWireframe(true);
 r1:setSubdivision(8);
 camScreen:addObject(r1);
 
-local r2 = Object("Rectangle");
-r2:setDirA(1024, 0, 0);
-r2:setDirB(0, 768, 0);
-r2:setPosition(-512, -384, 0);
-r2:setColor(1, 1, 0, 0.5);
+local r2 = Rectangle();
+r2:setDirA({1024, 0, 0});
+r2:setDirB({0, 768, 0});
+r2:setPosition({-512, -384, 0});
+r2:setColor({1, 1, 0, 0.5});
 r2:setWireframe(true);
 r2:setSubdivision(4);
 camScreen:addObject(r2);
 
-local s1 = Object("Sphere");
+local s1 = Sphere();
 s1:setRadius(256);
-s1:setPosition(-256, 0, 0);
-s1:setColor(1, 1, 1, 0.25);
+s1:setPosition({-256, 0, 0});
+s1:setColor({1, 1, 1, 0.25});
 s1:setWireframe(true);
 camScreen:addObject(s1);
 
@@ -157,8 +157,8 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "down" then
 			cameraSep = cameraSep - 0.01;
 			cam:setSeparation(cameraSep);
@@ -168,18 +168,18 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "pgUp" then
 			cameraDistance = cameraDistance + 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		elseif d == "pgDown" then
 			cameraDistance = cameraDistance - 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		elseif d == "perspective" then
 			cam:setType("Perspective");
 		elseif d == "oblique" then
@@ -191,7 +191,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container:rotate(0,1,0, delta/4);
+	container:rotate({0,1,0}, delta/4);
 end;
 updateListener(0);
 

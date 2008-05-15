@@ -15,67 +15,67 @@ local cameraPos = {0, 2.5, cameraDistance};
 local cameraFoV = 18;
 local cameraSep = 0.15;
 cam = Scene:camera();
-cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
-cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
+cam:setPosition(cameraPos);
+cam:setDirection(cameraDir);
 cam:setFieldOfView(cameraFoV);
 cam:setSeparation(cameraSep);
 cam:setParalaxPlane(cameraPP);
 
-local sn = Object("Text");
+local sn = Text();
 sn:setText("Watch here");
-sn:setPosition(0,0,0);
+sn:setPosition({0,0,0});
 --Scene:addObject(sn);
 
-floorPos = {-3, -2.5, -20};
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+floorPos = {-3, -2.5, -18};
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition(floorPos);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local lightBox = Object("LightNode");
-lightBox:setPosition(-4, 2, 2);
-lightBox:setColor(1.0, 1.0, 1.0, 1.0);
-lightBox:setAmbient(0.1, 0.1, 0.1, 1.0);
+local lightBox = LightNode();
+lightBox:setPosition({-4, 2, 2});
+lightBox:setColor({1.0, 1.0, 1.0, 1.0});
+lightBox:setAmbient({0.1, 0.1, 0.1, 1.0});
 lightBox:setDrawPriority(64); -- Draw after background
 Scene:addObject(lightBox);
 
-local container = Object("AffineTransformation");
+local container = AffineTransformation();
 lightBox:addObject(container);
 
-local depthBox = Object("DepthBuffer");
+local depthBox = DepthBuffer();
 container:addObject(depthBox);
 
-local sphere = Object("Sphere");
---sphere:setTexture(Texture("Simple", "res/checkerboard.png"));
-sphere:setPosition(3, 1, 0);
+local sphere = Sphere();
+--sphere:setTexture(Texture("res/checkerboard.png"));
+sphere:setPosition({3, 1, 0});
 sphere:setRadius(1);
-sphere:setColor(0,1,0,1);
+sphere:setColor({0,1,0,1});
 sphere:setDrawPriority(-8); -- Draw second
 depthBox:addObject(sphere);
 
-local r1 = Object("Parallelepiped");
+local r1 = Parallelepiped();
 local d = 1;
 local l = 0.816*d;
 local s = 0.578*d;
 local s120 = math.sin(math.pi*2/3);
-r1:setDirA(0, s, l);
-r1:setDirB(s120*l, s, -0.5*l);
-r1:setDirC(-s120*l, s, -0.5*l);
-r1:setPosition(-3, -math.sqrt(3*d*d)/2, 0)
-r1:setColor(1,0,0,1);
+r1:setDirA({0, s, l});
+r1:setDirB({s120*l, s, -0.5*l});
+r1:setDirC({-s120*l, s, -0.5*l});
+r1:setPosition({-3, -math.sqrt(3*d*d)/2, 0});
+r1:setColor({1,0,0,1});
 depthBox:addObject(r1);
 
-local m1 = Object("Mesh");
+local m1 = Mesh();
 m1:loadMesh("res/bunny_243V.obj");
 m1:setScaleFactor(12);
-m1:setPosition(0, 1, 0);
-m1:setColor(0,0,1,1);
+m1:setPosition({0, 1, 0});
+m1:setColor({0,0,1,1});
 m1:setDrawPriority(-16); -- Draw first
 depthBox:addObject(m1);
-local m2 = Object("Mesh");
+local m2 = Mesh();
 -- Dolphin model, with normals
 --m2:loadMesh("res/Dolphin/Dolphin.obj");
 --m2:setScaleFactor(0.005);
@@ -91,8 +91,8 @@ m2:setScaleFactor(0.005);
 -- Cube model, without normals
 --m2:loadMesh("res/cube.obj");
 --m2:setScaleFactor(1);
-m2:setPosition(0, -2.5, 0);
-m2:setColor(1,0,1,1);
+m2:setPosition({0, -2.5, 0});
+m2:setColor({1,0,1,1});
 depthBox:addObject(m2);
 
 -- Library
@@ -145,8 +145,8 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "down" then
 		elseif d == "left" then
 			cameraAngle = cameraAngle - 0.1;
@@ -154,18 +154,18 @@ local parseInput = function (k)
 			cameraDir[3] = -math.cos(cameraAngle);
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setDirection(cameraDir[1], cameraDir[2], cameraDir[3]);
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setDirection(cameraDir);
+			cam:setPosition(cameraPos);
 		elseif d == "pgUp" then
 			cameraDistance = cameraDistance + 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		elseif d == "pgDown" then
 			cameraDistance = cameraDistance - 1;
 			cameraPos[1] = -math.sin(cameraAngle)*cameraDistance;
 			cameraPos[3] = math.cos(cameraAngle)*cameraDistance;
-			cam:setPosition(cameraPos[1], cameraPos[2], cameraPos[3]);
+			cam:setPosition(cameraPos);
 		end;
 		nextFrame();
 	end
@@ -173,7 +173,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container:rotate(0,1,0, -delta/4);
+	container:rotate({0,1,0}, -delta/4);
 end;
 updateListener(0);
 

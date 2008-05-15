@@ -13,36 +13,36 @@ Scene:setCameraFoV(18);
 Scene:setCameraSep(0.15);
 Scene:setCameraParalaxPlane(25);
 
-local sn = Object("Text");
+local sn = Text();
 sn:setText("Watch here");
-sn:setPosition(0,0,0);
+sn:setPosition({0,0,0});
 Scene:addObject(sn);
 
 floorPos = {-3, -2.5, -20};
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18);
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition(floorPos);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local rectCeil = Object("Rectangle");
-rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,26);
-rectCeil:setPosition(-3, 2.5, -18);
+local rectCeil = Rectangle();
+rectCeil:setDirA({6,0,0});
+rectCeil:setDirB({0,0,26});
+rectCeil:setPosition({-3, 2.5, -18});
 rectCeil:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectCeil:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
 Scene:log("Added floor and ceil");
 
 local stereograms = {};
 for i=1,9 do
-	stereograms[i] = Object("Pixelplane");
+	stereograms[i] = Pixelplane();
 	stereograms[i]:setSize(2.0,2.0);
 	stereograms[i]:setAutoResize(true);
-	stereograms[i].pos = {0,0,0};
+	stereograms[i]:setPosition({0,0,0});
 	Scene:addObject(stereograms[i]);
 	Scene:log("Added stereogram "..i);
 end
@@ -95,24 +95,24 @@ local nextFrame = function ()
 	permuteTable(replies);
 --	// Uncomment the following for a Random Dot version
 	permuteTable(shapes); -- Pick a random shape
-	local texture = Texture("RandomDot", shapes[1]);
+	local texture = RandomDot(shapes[1]);
 	texture:setMaxColor(8);
 	texture:setExclusiveColor(1);
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
 --	permuteTable(shapes); -- Pick a random shape
---	local texture = Texture("Pattern", shapes[1], patterns[1], patterns[2]);
+--	local texture = Pattern(shapes[1], patterns[1], patterns[2]);
 --	// End Comments
 	texture:setStyle(replies[1]); -- Here the concave/convex status is set
 
 	if cur == 0 then
-		rectFloor:setPosition(floorPos[1], floorPos[2], floorPos[3]);
-		rectCeil:setPosition(floorPos[1], -1*floorPos[2], floorPos[3]);
+		rectFloor:setPosition(floorPos);
+		rectCeil:setPosition({floorPos[1], -1*floorPos[2], floorPos[3]});
 	else
-		local pos = stereograms[cur].pos;
+		local pos = stereograms[cur]:position();
 		stereograms[cur]:setTexture(texture);
-		stereograms[cur]:setPosition(pos[1], pos[2], pos[3]);
-		sn:setPosition(pos[1]+2, pos[2], pos[3]);
+		stereograms[cur]:setPosition(pos);
+		sn:setPosition({pos[1]+2, pos[2], pos[3]});
 		-- Separation at center
 		local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
 		local s = string.format("%s @ (%0.2f,%0.2f,%0.2f),s=%0.4f",
@@ -133,7 +133,7 @@ local parseInput = function (k)
 		if cur == 0 then
 			pos = floorPos;
 		else
-			pos = stereograms[cur].pos;
+			pos = stereograms[cur]:position();
 		end
 		if d == "up" then
 			pos[2] = pos[2] + step;
@@ -154,6 +154,9 @@ local parseInput = function (k)
 			Scene:addObject(rectFloor);
 			Scene:addObject(rectCeil);
 		end;
+		if cur ~= 0 then
+			stereograms[cur]:setPosition(pos);
+		end
 		nextFrame();
 	elseif n then
 		cur = n;

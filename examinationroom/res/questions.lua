@@ -33,29 +33,29 @@ questions = {
 			-- Title
 			local t = this:getText(1);
 			t:setText(question.title);
-			t:setPosition(1.5+xStart, 1.25, 0);
+			t:setPosition({1.5+xStart, 1.25, 0});
 			Scene:addObject(t);
 			if question.type == "range" then
 				-- Left Text
 				t = this:getText(2);
 				t:setText(question.textL);
-				t:setPosition(1.5+xStart, 0.75, 0);
+				t:setPosition({1.5+xStart, 0.75, 0});
 				Scene:addObject(t);
 				-- Right Text
 				t = this:getText(3);
 				t:setText(question.textR);
-				t:setPosition(1.5*question.count+xStart, 0.75, 0);
+				t:setPosition({1.5*question.count+xStart, 0.75, 0});
 				Scene:addObject(t);
 				-- Boxes
 				for i = 1, question.count do
 					local b = this:getBox(i);
-					b:setPosition(xStart + i*1.5, -0.5, 0);
+					b:setPosition({xStart + i*1.5, -0.5, 0});
 					Scene:addObject(b);
 					-- Box Labels
 					t = this:getText(3+i);
 					t:setText(i);
-					t:setPosition(xStart + i*1.5+0.25, -0.25, 0.5);
-					t:setColor(1,1,1,0.5);
+					t:setPosition({xStart + i*1.5+0.25, -0.25, 0.5});
+					t:setColor({1,1,1,0.5});
 					Scene:addObject(t);
 				end;
 			elseif question.type == "bullet" then
@@ -63,20 +63,20 @@ questions = {
 				-- Boxes
 				for i, text in ipairs(question.texts) do
 					local b = this:getBox(i);
-					b:setPosition(xStart + i*1.5, -0.5, 0);
+					b:setPosition({xStart + i*1.5, -0.5, 0});
 					Scene:addObject(b);
 					-- Box Labels
 					t = this:getText(textNum);
 					t:setText(i);
-					t:setPosition(xStart + i*1.5+0.25, -0.25, 0.5);
-					t:setColor(1,1,1,0.5);
+					t:setPosition({xStart + i*1.5+0.25, -0.25, 0.5});
+					t:setColor({1,1,1,0.5});
 					Scene:addObject(t);
 					textNum = textNum + 1;
 					-- Box Bullet Labels
 					t = this:getText(textNum);
 					t:setText(text);
-					t:setPosition(xStart + i*1.5, -0.75, 0.5);
-					t:setColor(1,1,1,1);
+					t:setPosition({xStart + i*1.5, -0.75, 0.5});
+					t:setColor({1,1,1,1});
 					Scene:addObject(t);
 					textNum = textNum + 1;
 				end;
@@ -171,20 +171,20 @@ questions = {
 		if this.boxes[idx] then
 			b = this.boxes[idx];
 		else
-			b = Object("Rectangle");
+			b = Rectangle();
 			this.boxes[idx] = b;
 		end
 		b:setWireframe(true);
 		b:setSubdivision(0);
-		b:setColor(1,1,1,1);
-		b:setDirA(1, 0, 0);
-		b:setDirB(0, 1, 0);
+		b:setColor({1,1,1,1});
+		b:setDirA({1, 0, 0});
+		b:setDirB({0, 1, 0});
 		return b;
 	end;
 
 	getText = function (this, idx)
 		if this.texts[idx] == nil then
-			local t = Object("Text");
+			local t = Text();
 			this.texts[idx] = t;
 		end
 		return this.texts[idx];

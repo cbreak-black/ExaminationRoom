@@ -13,36 +13,35 @@ Scene:setCameraFoV(18);
 Scene:setCameraSep(0.065);
 Scene:setCameraParalaxPlane(25);
 
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,48);
-rectFloor:setPosition(-3, -3, -40);
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,48});
+rectFloor:setPosition({-3, -3, -40});
 rectFloor:setTexCoords(0,0, 0,48, 6,0, 6,48);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local rectCeil = Object("Rectangle");
-rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,48);
-rectCeil:setPosition(-3, 3, -40);
+local rectCeil = Rectangle();
+rectCeil:setDirA({6,0,0});
+rectCeil:setDirB({0,0,48});
+rectCeil:setPosition({-3, 3, -40});
 rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
-rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectCeil:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
-local meshObject = Object("Mesh");
-meshObject:setPosition(-3, 0, 0);
+local meshObject = Mesh();
+meshObject:setPosition({-3, 0, 0});
 meshObject:setWireframe(true);
-meshObject:setColor(1, 0, 0, 0.75);
+meshObject:setColor({1, 0, 0, 0.75});
 
-local meshObject2 = Object("Mesh");
-meshObject2:setPosition(3, 0, 0);
+local meshObject2 = Mesh();
+meshObject2:setPosition({3, 0, 0});
 meshObject2:setWireframe(false);
-meshObject2:setColor(0, 1, 1, 1);
+meshObject2:setColor({0, 1, 1, 1});
 
-local container = Object("AffineTransformation");
-container:setPosition(0, 0, -2);
+local container = AffineTransformation();
+container:setPosition({0, 0, -2});
 Scene:addObject(container);
-container.pos = {0, 0, -2};
 
 container:addObject(meshObject);
 container:addObject(meshObject2);
@@ -86,18 +85,12 @@ permuteTable = function (t)
 	end
 end;
 
-local nextFrame = function ()
-	local pos = container.pos;
-	container:setPosition(pos[1], pos[2], pos[3]);
-end
-nextFrame();
-
 local parseInput = function (k)
 	local step = 0.5;
 	local d = Key[string.byte(k)];
 	if d then
 		Scene:log("input: "..d);
-		local pos = container.pos;
+		local pos = container:position();
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
@@ -117,7 +110,7 @@ local parseInput = function (k)
 			Scene:addObject(rectFloor);
 			Scene:addObject(rectCeil);
 		end;
-		nextFrame();
+		container:setPosition(pos);
 	else
 		Scene:log("Unknown key "..k.." ("..string.byte(k)..")");
 	end
@@ -125,7 +118,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container:rotate(0,1,0, delta/4);
+	container:rotate({0,1,0}, delta/4);
 end;
 updateListener(0);
 

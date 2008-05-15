@@ -106,26 +106,26 @@ Scene:log("Texture Colors = "..maxColor.."(-"..exclusiveColor..")");
 Scene:log("Target Properties = "..numTargets.." @ "..targetWidth.."x"..targetHeight);
 Scene:log("Scene Properties = "..blocksPerScene.." blocks with "..cyclesPerBlock.." cycles per Block");
 
-rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2, -18.5);
+rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition({-3, -2, -18.5});
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 
 targets = {};
 for i = 1, numTargets do
-	local t = Object("Pixelplane");
+	local t = Pixelplane();
 	table.insert(targets, t);
 	t:setSize(targetWidth, targetHeight);
 	t:setAutoResize(false);
 end
 
-marker = Object("Rectangle");
+marker = Rectangle();
 marker:setWireframe(true);
-marker:setColor(1, 1, 0, 1);
-marker:setDirA(targetWidth, 0, 0);
-marker:setDirB(0, targetHeight, 0);
+marker:setColor({1, 1, 0, 1});
+marker:setDirA({targetWidth, 0, 0});
+marker:setDirB({0, targetHeight, 0});
 marker:setSubdivision(0);
 
 -- State
@@ -241,16 +241,16 @@ displayTarget = function ()
 	local shape = shapes[math.random(1, #shapes)];
 
 	--	// Uncomment the following for a (rerendered) Stereogram version
---	local texture = Texture("Stereogram",
+--	local texture = Stereogram(
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shape);
+	local texture = RandomDot(shape);
 	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(exclusiveColor);
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
---	local texture = Texture("Pattern", shape, patterns[1], patterns[2]);
+--	local texture = Pattern(shape, patterns[1], patterns[2]);
 --	// End Comments
 	texture:setStyle(replies[currentTest]); -- Here the concave/convex status is set
 
@@ -263,17 +263,17 @@ displayTarget = function ()
 	target:setTexture(texture);
 	-- Resize pixelplane to paralax plane size
 	Scene:addObject(target);
-	target:setPosition(0, 0, 0);
+	target:setPosition({0, 0, 0});
 	target:resizeToCurrent();
 	-- Move to proper position
-	target:setPosition(pos[1], pos[2], pos[3]);
+	target:setPosition(pos);
 	-- Resize marker to paralax plane size (HACK!)
-	local pps = Scene:getUnitScreenSize(0,0,0);
-	local dps = Scene:getUnitScreenSize(pos[1], pos[2], pos[3]);
-	marker:setDirA(targetWidth*pps/dps, 0, 0);
-	marker:setDirB(0, targetHeight*pps/dps, 0);
+	local pps = Scene:getUnitScreenSize({0,0,0});
+	local dps = Scene:getUnitScreenSize(pos);
+	marker:setDirA({targetWidth*pps/dps, 0, 0});
+	marker:setDirB({0, targetHeight*pps/dps, 0});
 	-- Move to proper position
-	marker:setPosition(pos[1], pos[2]+0.001, pos[3]+0.001);
+	marker:setPosition({pos[1], pos[2]+0.001, pos[3]+0.001});
 	Scene:addObject(marker);
 
 	-- Floor
@@ -345,7 +345,7 @@ end;
 
 endTest = function ()
 	Scene:log("Scene Completed");
-	os.exit(0);
+	os.exit();
 end;
 
 -- Questions

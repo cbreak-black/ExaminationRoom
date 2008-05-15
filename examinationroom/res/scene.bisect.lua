@@ -146,17 +146,17 @@ testNum = 0;
 nextFrame = function ()
 	testNum = testNum+1;
 --	// Uncomment the following for a (rerendered) Stereogram version
---	local texture = Texture("Stereogram",
+--	local texture = Stereogram(
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shapes[math.random(1, #shapes)]);
+	local texture = RandomDot(shapes[math.random(1, #shapes)]);
 	texture:setMaxColor(8);
 	texture:setExclusiveColor(1);
 --	// Uncomment the following for a Pattern version
 --	permuteTable(patterns); -- Pick two random patterns
 --	permuteTable(shapes); -- Pick a random shape
---	local texture = Texture("Pattern", shapes[1], patterns[1], patterns[2]);
+--	local texture = Pattern(shapes[1], patterns[1], patterns[2]);
 --	// End Comments
 	texture:setStyle(replies[testNum]); -- Here the concave/convex status is set
 	local pos = mountPoints[testNum];
@@ -169,7 +169,7 @@ nextFrame = function ()
 		-- Test near
 		z = nearPoint;
 	end
-	stereogramA:setPosition(pos[1], pos[2], z);
+	stereogramA:setPosition({pos[1], pos[2], z});
 	-- Separation at center
 	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, z);
 	local s = string.format("New Q: %s/%s (%0.2f, %0.2f, %0.2f), s=%0.4f deg",

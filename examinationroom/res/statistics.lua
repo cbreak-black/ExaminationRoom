@@ -19,13 +19,15 @@ statistics =
 
 	paralaxAtPoint = function (this, x, y, z)
 		-- Separation in pixel
-		local sep = Scene:getSeparationAtPoint(x, y, z);
+		local sep = Scene:getSeparationAtPoint({x, y, z});
 		-- Field of view the screen takes up
 		local fov =
 			math.atan2(this.screenHeight*(1-this.eyePosition), this.viewingDistance) +
 			math.atan2(this.screenHeight*(this.eyePosition), this.viewingDistance);
 		fov = fov / math.pi * 180;
 		-- FoV per Pixel (approximation)
+		--local vp = Scene:getViewport();
+		--local vx, vy, vw, vh = vp[1], vp[2], vp[3], vp[4];
 		local vx, vy, vw, vh = Scene:getViewport();
 		local fpp = fov / vh;
 		-- Distance of a pixel

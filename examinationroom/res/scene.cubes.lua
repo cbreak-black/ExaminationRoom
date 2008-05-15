@@ -13,46 +13,45 @@ Scene:setCameraFoV(18);
 Scene:setCameraSep(0.065);
 Scene:setCameraParalaxPlane(25);
 
-local rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,48);
-rectFloor:setPosition(-3, -3, -40);
+local rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,48});
+rectFloor:setPosition({-3, -3, -40});
 rectFloor:setTexCoords(0,0, 0,48, 6,0, 6,48);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectFloor);
 
-local rectCeil = Object("Rectangle");
-rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,48);
-rectCeil:setPosition(-3, 3, -40);
+local rectCeil = Rectangle();
+rectCeil:setDirA({6,0,0});
+rectCeil:setDirB({0,0,48});
+rectCeil:setPosition({-3, 3, -40});
 rectCeil:setTexCoords(0,0, 0,48, 6,0, 6,48);
-rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectCeil:setTexture(Texture("res/checkerboard.png"));
 Scene:addObject(rectCeil);
 
-local pep1 = Object("Parallelepiped");
-pep1:setDirA(1,0,0);
-pep1:setDirB(0,1,0);
-pep1:setDirC(0,0,1);
+local pep1 = Parallelepiped();
+pep1:setDirA({1,0,0});
+pep1:setDirB({0,1,0});
+pep1:setDirC({0,0,1});
 pep1:setTexCoords(0,0, 0,2, 2,0, 2,2);
-pep1:setPosition(-3, -3, 0);
-pep1:setTexture(Texture("Simple", "res/checkerboard.png"));
+pep1:setPosition({-3, -3, 0});
+pep1:setTexture(Texture("res/checkerboard.png"));
 --Scene:addObject(pep1);
 
-local container = Object("AffineTransformation");
-container:setPosition(0, 0, -2);
+local container = AffineTransformation();
+container:setPosition({0, 0, -2});
 Scene:addObject(container);
-container.pos = {0, 0, -2};
 
-local pep2 = Object("Parallelepiped");
-pep2:setTexture(Texture("Simple", "res/texMarbleGrey.jpg"));
+local pep2 = Parallelepiped();
+pep2:setTexture(Texture("res/texMarbleGrey.jpg"));
 local d = 1;
 local l = 0.816*d;
 local s = 0.578*d;
 local s120 = math.sin(math.pi*2/3);
-pep2:setDirA(0, s, l);
-pep2:setDirB(s120*l, s, -0.5*l);
-pep2:setDirC(-s120*l, s, -0.5*l);
-pep2:setPosition(0, -math.sqrt(3*d*d)/2, 0)
+pep2:setDirA({0, s, l});
+pep2:setDirB({s120*l, s, -0.5*l});
+pep2:setDirC({-s120*l, s, -0.5*l});
+pep2:setPosition({0, -math.sqrt(3*d*d)/2, 0});
 container:addObject(pep2);
 
 Scene:log("Added floor and ceil");
@@ -88,18 +87,12 @@ permuteTable = function (t)
 	end
 end;
 
-local nextFrame = function ()
-	local pos = container.pos;
-	container:setPosition(pos[1], pos[2], pos[3]);
-end
-nextFrame();
-
 local parseInput = function (k)
 	local step = 0.5;
 	local d = Key[string.byte(k)];
 	if d then
 		Scene:log("input: "..d);
-		local pos = container.pos;
+		local pos = container:position();
 		if d == "up" then
 			pos[2] = pos[2] + step;
 		elseif d == "right" then
@@ -119,7 +112,7 @@ local parseInput = function (k)
 			Scene:addObject(rectFloor);
 			Scene:addObject(rectCeil);
 		end;
-		nextFrame();
+		container:setPosition(pos);
 	else
 		Scene:log("Unknown key "..k.." ("..string.byte(k)..")");
 	end
@@ -127,7 +120,7 @@ end;
 
 local tPassed = 0;
 local updateListener = function (delta)
-	container:rotate(0,1,0, delta/4);
+	container:rotate({0,1,0}, delta/4);
 end;
 updateListener(0);
 
@@ -135,5 +128,3 @@ Scene:setEventListener("update", updateListener);
 Scene:setEventListener("keyDown", parseInput);
 --Scene:setEventListener("keyUp", function (k) Scene:log("up: "..k); end);
 Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
-
---Scene:clearScene();

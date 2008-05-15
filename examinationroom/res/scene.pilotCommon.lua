@@ -14,28 +14,28 @@ Scene:setCameraFoV(18);
 Scene:setCameraSep(0.15);
 Scene:setCameraParalaxPlane(25);
 
-rectFloor = Object("Rectangle");
-rectFloor:setDirA(6,0,0);
-rectFloor:setDirB(0,0,26);
-rectFloor:setPosition(-3, -2.5, -18.5);
+rectFloor = Rectangle();
+rectFloor:setDirA({6,0,0});
+rectFloor:setDirB({0,0,26});
+rectFloor:setPosition({-3, -2.5, -18.5});
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectFloor:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectFloor:setTexture(Texture("res/checkerboard.png"));
 
-rectCeil = Object("Rectangle");
-rectCeil:setDirA(6,0,0);
-rectCeil:setDirB(0,0,26);
-rectCeil:setPosition(-3, 2.5, -18.5);
+rectCeil = Rectangle();
+rectCeil:setDirA({6,0,0});
+rectCeil:setDirB({0,0,26});
+rectCeil:setPosition({-3, 2.5, -18.5});
 rectCeil:setTexCoords(0,0, 0,26, 6,0, 6,26);
-rectCeil:setTexture(Texture("Simple", "res/checkerboard.png"));
+rectCeil:setTexture(Texture("res/checkerboard.png"));
 
 Scene:log("Added floor and ceil");
 
-stereogramA = Object("Pixelplane");
+stereogramA = Pixelplane();
 stereogramA:setSize(2.0,2.0);
 stereogramA:setAutoResize(true);
 Scene:addObject(stereogramA);
 
-stereogramB = Object("Pixelplane");
+stereogramB = Pixelplane();
 stereogramB:setSize(2.0,2.0);
 stereogramB:setAutoResize(true);
 Scene:addObject(stereogramB);
