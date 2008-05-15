@@ -253,7 +253,7 @@ int Texture::height() const
 
 std::string Texture::className() const
 {
-	return "Simple";
+	return "Texture";
 }
 
 std::string Texture::toLua(std::ostream & outStream) const

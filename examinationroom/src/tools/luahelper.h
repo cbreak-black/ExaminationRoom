@@ -135,7 +135,6 @@ struct method_proxy <int (T::*)(lua_State*), int>
 	{
 		classtype *obj = ((shared_ptr<classtype> *)checkclass(L, 1,
 															  lua_tostring(L, lua_upvalueindex(1))))->get();
-		lua_pop(L, 2); // checkclass seems to push two meta tables on top of the stack
 		methodtype fp = *(methodtype *)lua_touserdata(L, lua_upvalueindex(2));
 		return (obj->*fp)(L);
 	}

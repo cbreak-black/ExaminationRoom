@@ -53,7 +53,11 @@ void *luabridge::checkclass (lua_State *L, int idx, const char *tname,
 			tname += 6;
 
 		if (lua_rawequal(L, -1, -2))
-			return lua_touserdata(L, idx);
+		{
+			void * u = lua_touserdata(L, idx);
+			lua_pop(L, 2); // remove the two meta tables
+			return u;
+		}
 		else
 		{
 			// Generate an informative error message
@@ -63,6 +67,7 @@ void *luabridge::checkclass (lua_State *L, int idx, const char *tname,
 				lua_tostring(L, -1));
 			// luaL_argerror does not return
 			luaL_argerror(L, idx, buffer);
+			lua_pop(L, 2); // remove the two meta tables anyway
 			return 0;
 		}
 	}
@@ -103,7 +108,9 @@ void *luabridge::checkclass (lua_State *L, int idx, const char *tname,
 	}
 	
 	// Found a matching metatable; return the userdata
-	return lua_touserdata(L, idx);
+	void * u = lua_touserdata(L, idx);
+	lua_pop(L, 2); // remove the two meta tables
+	return u;
 }
 
 /*
