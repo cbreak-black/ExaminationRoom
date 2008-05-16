@@ -22,7 +22,7 @@ CameraNode::CameraNode()
 {
 	cam_ = shared_ptr<Camera>(new Camera());
 	setDrawPriority(128);
-	setName("Camera");
+	setName("cameranode");
 }
 
 std::tr1::shared_ptr<Camera> CameraNode::camera() const
@@ -36,9 +36,11 @@ void CameraNode::setCamera(std::tr1::shared_ptr<Camera> camera)
 }
 
 // Serialisation
+const char * CameraNode::className_ = "CameraNode";
+
 std::string CameraNode::className() const
 {
-	return "CameraNode";
+	return CameraNode::className_;
 }
 
 /**

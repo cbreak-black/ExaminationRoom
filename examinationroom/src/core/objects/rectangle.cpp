@@ -26,7 +26,7 @@ Rectangle::Rectangle()
 	
 	setTexCoords(0,0, 0,1, 1,0, 1,1);
 	setSubdivision(2);
-	setName("Rectangle");
+	setName("rectangle");
 }
 
 // Drawing
@@ -231,9 +231,11 @@ void Rectangle::setSubdivision(int subdivision)
 }
 
 // Serialisation
+const char * Rectangle::className_ = "Rectangle";
+
 std::string Rectangle::className() const
 {
-	return "Rectangle";
+	return Rectangle::className_;
 }
 
 std::string Rectangle::toLua(std::ostream & outStream) const

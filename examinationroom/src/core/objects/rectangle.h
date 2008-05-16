@@ -140,6 +140,9 @@ private:
 	Tool::Vec2f texD_;
 
 	int subdivision_;
+
+public: // Meta
+	static const char * className_;
 };
 	
 }

@@ -154,6 +154,9 @@ protected:
 private:
 	ObjectList objects_;
 	bool enabled_;
+
+public: // Meta
+	static const char * className_;
 };
 
 }

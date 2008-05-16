@@ -19,7 +19,7 @@ namespace Examination
 
 Container::Container()
 {
-	setName("Container");
+	setName("container");
 	setEnabled(true);
 }
 
@@ -148,9 +148,11 @@ void Container::setEnabled(bool enabled)
 }
 
 // Serialisation
+const char * Container::className_ = "Container";
+
 std::string Container::className() const
 {
-	return "Container";
+	return Container::className_;
 }
 
 std::string Container::toLua(std::ostream & outStream) const

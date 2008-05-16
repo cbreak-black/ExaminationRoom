@@ -73,7 +73,7 @@ namespace luabridge
 template <>
 struct tdstack <Tool::Vec2f>
 {
-	static void push (lua_State *L, Tool::Vec2f data)
+	static void push (lua_State *L, const Tool::Vec2f & data)
 	{
 		pushVector<Tool::Vec2f>(L, data);
 	}
@@ -86,7 +86,7 @@ struct tdstack <Tool::Vec2f>
 template <>
 struct tdstack <Tool::Vec3f>
 {
-	static void push (lua_State *L, Tool::Vec3f data)
+	static void push (lua_State *L, const Tool::Vec3f & data)
 	{
 		pushVector<Tool::Vec3f>(L, data);
 	}
@@ -99,7 +99,46 @@ struct tdstack <Tool::Vec3f>
 template <>
 struct tdstack <Tool::Vec4f>
 {
-	static void push (lua_State *L, Tool::Vec4f data)
+	static void push (lua_State *L, const Tool::Vec4f & data)
+	{
+		pushVector<Tool::Vec4f>(L, data);
+	}
+	static Tool::Vec4f get (lua_State *L, int index)
+	{
+		return toVector<Tool::Vec4f>(L, index);
+	}
+};
+
+template <>
+struct tdstack <const Tool::Vec2f &>
+{
+	static void push (lua_State *L, const Tool::Vec2f & data)
+	{
+		pushVector<Tool::Vec2f>(L, data);
+	}
+	static Tool::Vec2f get (lua_State *L, int index)
+	{
+		return toVector<Tool::Vec2f>(L, index);
+	}
+};
+
+template <>
+struct tdstack <const Tool::Vec3f &>
+{
+	static void push (lua_State *L, const Tool::Vec3f & data)
+	{
+		pushVector<Tool::Vec3f>(L, data);
+	}
+	static Tool::Vec3f get (lua_State *L, int index)
+	{
+		return toVector<Tool::Vec3f>(L, index);
+	}
+};
+
+template <>
+struct tdstack <const Tool::Vec4f &>
+{
+	static void push (lua_State *L, const Tool::Vec4f & data)
 	{
 		pushVector<Tool::Vec4f>(L, data);
 	}

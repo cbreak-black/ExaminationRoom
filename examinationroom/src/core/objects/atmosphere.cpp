@@ -22,7 +22,7 @@ Atmosphere::Atmosphere()
 	setStart(0);
 	setEnd(100);
 	setDensity(1);
-	setName("Atmosphere");
+	setName("atmosphere");
 }
 
 Atmosphere::FogMode Atmosphere::mode() const
@@ -74,9 +74,11 @@ void Atmosphere::setEnd(float end)
 }
 
 // Serialisation
+const char * Atmosphere::className_ = "Atmosphere";
+
 std::string Atmosphere::className() const
 {
-	return "Atmosphere";
+	return Atmosphere::className_;
 }
 
 std::string Atmosphere::toLua(std::ostream & outStream) const

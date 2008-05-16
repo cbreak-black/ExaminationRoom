@@ -78,6 +78,8 @@ protected: // Parameter Dialog
 private: // Depth buffer state
 	bool depthBufferState_;
 
+public: // Meta
+	static const char * className_;
 };
 
 }

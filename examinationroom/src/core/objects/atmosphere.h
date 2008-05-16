@@ -120,6 +120,9 @@ private:
 	float density_;
 	float start_;
 	float end_;
+
+public: // Meta
+	static const char * className_;
 };
 
 }

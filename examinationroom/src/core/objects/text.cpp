@@ -20,13 +20,15 @@ namespace Examination
 Text::Text()
 {
 	font_ = QFont("Helvetica", 20);
-	setName("Text");
+	setName("text");
 }
 
 // Serialisation
+const char * Text::className_ = "Text";
+
 std::string Text::className() const
 {
-	return "Text";
+	return Text::className_;
 }
 
 std::string Text::toLua(std::ostream & outStream) const

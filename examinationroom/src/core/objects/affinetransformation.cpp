@@ -24,7 +24,7 @@ namespace Examination
 AffineTransformation::AffineTransformation()
 {
 	loadIdentity();
-	setName("Transformation");
+	setName("transformation");
 }
 
 void AffineTransformation::loadIdentity()
@@ -125,9 +125,11 @@ void AffineTransformation::scale(Tool::Vec3f scale)
 }
 
 // Serialisation
+const char * AffineTransformation::className_ = "AffineTransformation";
+
 std::string AffineTransformation::className() const
 {
-	return "AffineTransformation";
+	return AffineTransformation::className_;
 }
 
 std::string AffineTransformation::toLua(std::ostream & outStream) const

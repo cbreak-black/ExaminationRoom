@@ -176,7 +176,7 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("resizeTo", &AbstractTexture::resizeTo)
 	.method("resizeToOriginal", &AbstractTexture::resizeToOriginal)
 	.method("zoom", &AbstractTexture::zoom)
-	.method<void (AbstractTexture::*)(const Tool::Vec2f &)>("setZoom", &AbstractTexture::setZoom);
+	.method<void (AbstractTexture::*)(float, float)>("setZoom", &AbstractTexture::setZoom);
 
 	m.subclass<Texture,AbstractTexture>("Texture")
 	.constructor<void (*)(const char *)>()
@@ -229,6 +229,8 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("debugLog", &LuaProxy::debugLog);
 
 	m.class_<Object>("Object")
+	.method("name", &Object::name)
+	.method("setName", &Object::setName)
 	.method("position", &Object::position)
 	.method("setPosition", &Object::setPosition)
 	.method("color", &Object::color)
@@ -290,7 +292,8 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("setRadius", &Sphere::setRadius)
 	.method("slices", &Sphere::slices)
 	.method("setSlices", &Sphere::setSlices)
-	.method("stacks", &Sphere::setStacks);
+	.method("stacks", &Sphere::stacks)
+	.method("setStacks", &Sphere::setStacks);
 
 	m.subclass<Text,Object>("Text")
 	.constructor<void (*)()>()

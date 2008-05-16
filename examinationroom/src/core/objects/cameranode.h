@@ -73,6 +73,9 @@ public: // Serialisation
 
 private:
 	std::tr1::shared_ptr<Camera> cam_;
+
+public: // Meta
+	static const char * className_;
 };
 
 }

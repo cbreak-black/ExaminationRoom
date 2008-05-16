@@ -22,7 +22,7 @@ namespace Examination
 Parallelepiped::Parallelepiped()
 {
 	directionC_.z = 1;
-	setName("Parallelepiped");
+	setName("parallelepiped");
 }
 
 // Drawing
@@ -74,9 +74,11 @@ void Parallelepiped::setDirC(Tool::Vector v)
 }
 
 // Serialisation
+const char * Parallelepiped::className_ = "Parallelepiped";
+
 std::string Parallelepiped::className() const
 {
-	return "Parallelepiped";
+	return Parallelepiped::className_;
 }
 
 std::string Parallelepiped::toLua(std::ostream & outStream) const

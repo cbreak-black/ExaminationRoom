@@ -98,6 +98,9 @@ protected: // Parameter Dialog
 
 private:
 	double trans_[16];
+
+public: // Meta
+	static const char * className_;
 };
 
 }

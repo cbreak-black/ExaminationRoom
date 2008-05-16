@@ -20,7 +20,7 @@ DepthBuffer::DepthBuffer()
 {
 	setDepthBufferState(true);
 	setDrawPriority(128);
-	setName("Depth");
+	setName("depthbuffer");
 }
 
 // Drawing
@@ -82,9 +82,11 @@ void DepthBuffer::setDepthBufferState(bool enabled)
 }
 
 // Serialisation
+const char * DepthBuffer::className_ = "DepthBuffer";
+
 std::string DepthBuffer::className() const
 {
-	return "DepthBuffer";
+	return DepthBuffer::className_;
 }
 
 std::string DepthBuffer::toLua(std::ostream & outStream) const

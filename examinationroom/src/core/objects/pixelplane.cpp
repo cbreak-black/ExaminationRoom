@@ -26,7 +26,7 @@ Pixelplane::Pixelplane()
 	setAutoResize(false);
 	setSize(1,1);
 	setZoom(1,1);
-	setName("Pixelplane");
+	setName("pixelplane");
 }
 
 // Drawing
@@ -122,9 +122,11 @@ void Pixelplane::setTexture(std::tr1::shared_ptr<AbstractTexture> t)
 }
 
 // Serialisation
+const char * Pixelplane::className_ = "Pixelplane";
+
 std::string Pixelplane::className() const
 {
-	return "Pixelplane";
+	return Pixelplane::className_;
 }
 
 std::string Pixelplane::toLua(std::ostream & outStream) const

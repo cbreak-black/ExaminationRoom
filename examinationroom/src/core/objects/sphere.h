@@ -95,6 +95,9 @@ private:
 	float radius_;
 	int slices_;
 	int stacks_;
+
+public: // Meta
+	static const char * className_;
 };
 	
 }

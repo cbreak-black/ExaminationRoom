@@ -23,7 +23,7 @@ Sphere::Sphere()
 	radius_ = 1;
 	slices_ = 24;
 	stacks_ = 12;
-	setName("Sphere");
+	setName("sphere");
 }
 
 // Drawing
@@ -96,9 +96,11 @@ void Sphere::setStacks(int stacks)
 }
 
 // Serialisation
+const char * Sphere::className_ = "Sphere";
+
 std::string Sphere::className() const
 {
-	return "Sphere";
+	return Sphere::className_;
 }
 
 std::string Sphere::toLua(std::ostream & outStream) const

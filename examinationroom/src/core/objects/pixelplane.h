@@ -125,6 +125,9 @@ private:
 	float height_;
 	float zoomFactorX_;
 	float zoomFactorY_;
+
+public: // Meta
+	static const char * className_;
 };
 	
 }

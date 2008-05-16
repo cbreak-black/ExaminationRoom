@@ -69,6 +69,9 @@ protected: // Parameter Dialog
 
 private:
 	Tool::Vector directionC_;
+
+public: // Meta
+	static const char * className_;
 };
 	
 }

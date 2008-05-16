@@ -81,6 +81,9 @@ protected: // Parameter Dialog
 private:
 	std::string text_;
 	QFont font_;
+
+public: // Meta
+	static const char * className_;
 };
 	
 }

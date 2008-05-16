@@ -19,7 +19,7 @@ namespace Examination
 LightNode::LightNode()
 {
 	setAmbient(Tool::Color4(0,0,0,1));
-	setName("Light");
+	setName("light");
 }
 
 Tool::Color4 LightNode::ambient() const
@@ -35,9 +35,11 @@ void LightNode::setAmbient(Tool::Color4 color)
 }
 
 // Serialisation
+const char * LightNode::className_ = "LightNode";
+
 std::string LightNode::className() const
 {
-	return "LightNode";
+	return LightNode::className_;
 }
 
 std::string LightNode::toLua(std::ostream & outStream) const

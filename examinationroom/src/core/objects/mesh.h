@@ -164,6 +164,9 @@ private:
 	std::string meshPath_;
 	float scaleFactor_;
 	int displayList_;
+
+public: // Meta
+	static const char * className_;
 };
 
 }

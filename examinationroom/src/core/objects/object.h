@@ -248,6 +248,8 @@ public: // Serialisation
 	*/
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
+private: // LUA API
+
 public: // Parameter Dialog
 	/**
 	Returns a ParameterDialog subclass instance associated with this object.
@@ -346,6 +348,13 @@ private: // Parameters (exported)
 	bool wireframe_;
 	bool shown_;
 	int drawPriority_;
+
+public: // Meta
+	/**
+	This static member is used in registration of the class with the program.
+	Subclasses are required to provide their own name the same way.
+	*/
+	static const char * className_;
 };
 
 /**

@@ -95,6 +95,9 @@ protected:
 	static LightID fromGlLight(int glLight);
 private: // Static OpenGL light management
 	static bool lightActive [8];
+
+public: // Meta
+	static const char * className_;
 };
 
 }

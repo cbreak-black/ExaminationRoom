@@ -28,7 +28,7 @@ Object::Object()
 	setWireframe(false);
 	setShown(true);
 	setDrawPriority(0);
-	setName("Object");
+	setName("object");
 }
 
 Object::~Object()
@@ -199,9 +199,11 @@ bool Object::setName(const std::string & name)
 }
 
 // Serialisation
+const char * Object::className_ = "Object";
+
 std::string Object::className() const
 {
-	return "Object";
+	return Object::className_;
 }
 
 std::string Object::toLua(std::ostream & outStream) const

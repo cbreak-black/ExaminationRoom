@@ -85,7 +85,7 @@ Mesh::Mesh()
 {
 	displayList_ = 0;
 	scaleFactor_ = 1;
-	setName("Mesh");
+	setName("mesh");
 }
 
 bool Mesh::loadMesh(std::string path)
@@ -157,7 +157,6 @@ void Mesh::clearMesh()
 	textureCoordinates_.clear();
 	triangles_.clear();
 	invalidateCache();
-	setName("Mesh");
 	objectDidChange();
 }
 
@@ -238,9 +237,11 @@ void Mesh::setScaleFactor(float scaleFactor)
 }
 
 // Serialisation
+const char * Mesh::className_ = "Mesh";
+
 std::string Mesh::className() const
 {
-	return "Mesh";
+	return Mesh::className_;
 }
 
 std::string Mesh::toLua(std::ostream & outStream) const
