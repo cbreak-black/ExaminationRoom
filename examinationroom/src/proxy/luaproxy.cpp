@@ -67,25 +67,6 @@ namespace luabridge
 			return static_cast<Examination::Stereogram::Style>(luaL_checkoption(L, index, 0, textureStyles));
 		}
 	};
-	char * fogModes[] =
-	{
-		"Exp",
-		"Exp2",
-		"Linear",
-		0
-	};
-	template <>
-	struct tdstack <Examination::Atmosphere::FogMode>
-	{
-		static void push (lua_State *L, Examination::Atmosphere::FogMode data)
-		{
-			lua_pushstring(L, fogModes[data]);
-		}
-		static Examination::Atmosphere::FogMode get (lua_State *L, int index)
-		{
-			return static_cast<Examination::Atmosphere::FogMode>(luaL_checkoption(L, index, 0, fogModes));
-		}
-	};
 	const char * cameraTypes[] =
 	{
 		"Perspective",
@@ -103,26 +84,6 @@ namespace luabridge
 		static Examination::Camera::Type get (lua_State *L, int index)
 		{
 			return static_cast<Examination::Camera::Type>(luaL_checkoption(L, index, 0, cameraTypes));
-		}
-	};
-	template <>
-	struct tdstack <std::vector<double> >
-	{
-	private:
-		static void push (lua_State *L, std::vector<double> data);
-	public:
-		static std::vector<double> get (lua_State *L, int index)
-		{
-			luaL_checktype(L, index, LUA_TTABLE);
-			std::vector<double> mat;
-			for (int i = 1; i <= 16; i++)
-			{
-				lua_pushnumber(L, i);
-				lua_gettable(L, index);
-				mat.push_back(lua_tonumber(L, -1));
-				lua_pop(L, 1);
-			}
-			return mat;
 		}
 	};
 }
@@ -228,110 +189,19 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("log", &LuaProxy::log)
 	.method("debugLog", &LuaProxy::debugLog);
 
-	m.class_<Object>("Object")
-	.method("name", &Object::name)
-	.method("setName", &Object::setName)
-	.method("position", &Object::position)
-	.method("setPosition", &Object::setPosition)
-	.method("color", &Object::color)
-	.method("setColor", &Object::setColor)
-	.method("wireframe", &Object::wireframe)
-	.method("setWireframe", &Object::setWireframe)
-	.method("drawPriority", &Object::drawPriority)
-	.method("setDrawPriority", &Object::setDrawPriority)
-	.method("shown", &Object::shown)
-	.method("setShown", &Object::setShown)
-	.method("visible", &Object::visible)
-	.method("texture", &Object::texture)
-	.method("setTexture", &Object::setTexture);
-
-	m.subclass<Container,Object>("Container")
-	.method("addObject", &Container::addObject)
-	.method("removeObject", &Container::removeObject)
-	.method("clear", &Container::clear)
-	.method("enabled", &Container::enabled)
-	.method("setEnabled", &Container::setEnabled);
-
-	m.subclass<Pixelplane,Object>("Pixelplane")
-	.constructor<void (*)()>()
-	.method("size", &Pixelplane::size)
-	.method("setSize", &Pixelplane::setSize)
-	.method("autoResize", &Pixelplane::autoResize)
-	.method("setAutoResize", &Pixelplane::setAutoResize)
-	.method("resizeToCurrent", &Pixelplane::resizeToCurrent)
-	.method("resizeTo", &Pixelplane::resizeTo)
-	.method("zoom", &Pixelplane::zoom)
-	.method("setZoom", &Pixelplane::setZoom);
-
-	m.subclass<Rectangle,Object>("Rectangle")
-	.constructor<void (*)()>()
-	.method("dirA", &Rectangle::dirA)
-	.method("dirB", &Rectangle::dirB)
-	.method("setDirA", &Rectangle::setDirA)
-	.method("setDirB", &Rectangle::setDirB)
-	.method("subdivision", &Rectangle::subdivision)
-	.method("setSubdivision", &Rectangle::setSubdivision)
-	.method("setTexCoords", &Rectangle::setTexCoords);
-
-	m.subclass<Parallelepiped,Rectangle>("Parallelepiped")
-	.constructor<void (*)()>()
-	.method("dirC", &Parallelepiped::dirC)
-	.method("setDirC", &Parallelepiped::setDirC);
-
-	m.subclass<Mesh,Object>("Mesh")
-	.constructor<void (*)()>()
-	.method("loadMesh", &Mesh::loadMesh)
-	.method("getMeshPath", &Mesh::getMeshPath)
-	.method("clearMesh", &Mesh::clearMesh)
-	.method("scaleFactor", &Mesh::scaleFactor)
-	.method("setScaleFactor", &Mesh::setScaleFactor);
-
-	m.subclass<Sphere,Object>("Sphere")
-	.constructor<void (*)()>()
-	.method("radius", &Sphere::radius)
-	.method("setRadius", &Sphere::setRadius)
-	.method("slices", &Sphere::slices)
-	.method("setSlices", &Sphere::setSlices)
-	.method("stacks", &Sphere::stacks)
-	.method("setStacks", &Sphere::setStacks);
-
-	m.subclass<Text,Object>("Text")
-	.constructor<void (*)()>()
-	.method("text", &Text::text)
-	.method<void (Text::*)(const char *)>("setText", &Text::setText);
-
-	m.subclass<AffineTransformation,Container>("AffineTransformation")
-	.constructor<void (*)()>()
-	.method("translate", &AffineTransformation::translate)
-	.method("rotate", &AffineTransformation::rotate)
-	.method("scale", &AffineTransformation::scale)
-	.method<void (AffineTransformation::*)(std::vector<double>)>("multMatrix", &AffineTransformation::multMatrix);
-
-	m.subclass<Atmosphere,Container>("Atmosphere")
-	.constructor<void (*)()>()
-	.method("mode", &Atmosphere::mode)
-	.method("setMode", &Atmosphere::setMode)
-	.method("density", &Atmosphere::density)
-	.method("setDensity", &Atmosphere::setDensity)
-	.method("start", &Atmosphere::start)
-	.method("setStart", &Atmosphere::setStart)
-	.method("end", &Atmosphere::end)
-	.method("setEnd", &Atmosphere::setEnd);
-
-	m.subclass<CameraNode,Container>("CameraNode")
-	.constructor<void (*)()>()
-	.method("camera", &CameraNode::camera)
-	.method("setCamera", &CameraNode::setCamera);
-
-	m.subclass<DepthBuffer,Container>("DepthBuffer")
-	.constructor<void (*)()>()
-	.method("depthBufferState", &DepthBuffer::depthBufferState)
-	.method("setDepthBufferState", &DepthBuffer::setDepthBufferState);
-
-	m.subclass<LightNode,Container>("LightNode")
-	.constructor<void (*)()>()
-	.method("ambient", &LightNode::ambient)
-	.method("setAmbient", &LightNode::setAmbient);
+	Object::registerLuaApi(&m);
+	Container::registerLuaApi(&m);
+	Pixelplane::registerLuaApi(&m);
+	Rectangle::registerLuaApi(&m);
+	Parallelepiped::registerLuaApi(&m);
+	Mesh::registerLuaApi(&m);
+	Sphere::registerLuaApi(&m);
+	Text::registerLuaApi(&m);
+	AffineTransformation::registerLuaApi(&m);
+	Atmosphere::registerLuaApi(&m);
+	CameraNode::registerLuaApi(&m);
+	DepthBuffer::registerLuaApi(&m);
+	LightNode::registerLuaApi(&m);
 
 	// Add Scene object
 	luabridge::tdstack<std::tr1::shared_ptr<LuaProxy> >::push(L_, std::tr1::shared_ptr<LuaProxy>(this, null_deleter()));

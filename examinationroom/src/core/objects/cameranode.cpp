@@ -13,6 +13,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -55,6 +58,15 @@ std::string CameraNode::toLua(std::ostream & outStream) const
 	camera()->toLua(outStream, c);
 	outStream << "end --cam\n";
 	return name();
+}
+
+// LUA
+void CameraNode::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<CameraNode,Container>(CameraNode::className_)
+	.constructor<void (*)()>()
+	.method("camera", &CameraNode::camera)
+	.method("setCamera", &CameraNode::setCamera);
 }
 
 // Drawing

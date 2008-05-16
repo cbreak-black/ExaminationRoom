@@ -16,6 +16,9 @@
 #include "program.h"
 #include "namemanager.h"
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -230,6 +233,27 @@ std::string Object::toLuaCreate(std::ostream & outStream) const
 	outStream << std::endl << "-- Create " << name() << " of type " << className() << std::endl;
 	outStream << name() << " = " << className() << "();\n";
 	return name();
+}
+
+// LUA
+void Object::registerLuaApi(luabridge::module * m)
+{
+	m->class_<Object>(Object::className_)
+	.method("name", &Object::name)
+	.method("setName", &Object::setName)
+	.method("position", &Object::position)
+	.method("setPosition", &Object::setPosition)
+	.method("color", &Object::color)
+	.method("setColor", &Object::setColor)
+	.method("wireframe", &Object::wireframe)
+	.method("setWireframe", &Object::setWireframe)
+	.method("drawPriority", &Object::drawPriority)
+	.method("setDrawPriority", &Object::setDrawPriority)
+	.method("shown", &Object::shown)
+	.method("setShown", &Object::setShown)
+	.method("visible", &Object::visible)
+	.method("texture", &Object::texture)
+	.method("setTexture", &Object::setTexture);
 }
 
 // Parameter Dialog

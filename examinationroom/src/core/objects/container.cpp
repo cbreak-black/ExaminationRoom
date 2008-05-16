@@ -12,6 +12,9 @@
 #include "scene.h"
 #include "objects/object.h"
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -170,6 +173,17 @@ std::string Container::toLua(std::ostream & outStream) const
 	outStream << "-- End sub-objects of " << name() << std::endl;
 
 	return name();
+}
+
+// LUA
+void Container::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Container,Object>(Container::className_)
+	.method("addObject", &Container::addObject)
+	.method("removeObject", &Container::removeObject)
+	.method("clear", &Container::clear)
+	.method("enabled", &Container::enabled)
+	.method("setEnabled", &Container::setEnabled);
 }
 
 // Object accessor

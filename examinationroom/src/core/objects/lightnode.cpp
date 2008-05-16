@@ -13,6 +13,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 
@@ -51,6 +54,15 @@ std::string LightNode::toLua(std::ostream & outStream) const
 		<< ambient().b << ", "
 		<< ambient().a << "});\n";
 	return name();
+}
+
+// LUA
+void LightNode::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<LightNode,Container>(LightNode::className_)
+	.constructor<void (*)()>()
+	.method("ambient", &LightNode::ambient)
+	.method("setAmbient", &LightNode::setAmbient);
 }
 
 std::tr1::shared_ptr<ParameterObject> LightNode::createDialog()

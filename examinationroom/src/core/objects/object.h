@@ -19,6 +19,11 @@
 #include <functional>
 #include <iostream>
 
+namespace luabridge
+{
+	class module;
+}
+
 namespace Examination
 {
 	class GLWidget;
@@ -248,7 +253,8 @@ public: // Serialisation
 	*/
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
-private: // LUA API
+public: // LUA API
+	static void registerLuaApi(luabridge::module * m);
 
 public: // Parameter Dialog
 	/**

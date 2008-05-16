@@ -71,6 +71,9 @@ public: // Serialisation
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
 
+public: // LUA API
+	static void registerLuaApi(luabridge::module * m);
+
 private:
 	std::tr1::shared_ptr<Camera> cam_;
 

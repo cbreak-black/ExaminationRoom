@@ -13,6 +13,9 @@
 
 #include "glwidget.h"
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -36,6 +39,15 @@ std::string Text::toLua(std::ostream & outStream) const
 	Object::toLua(outStream);
 	outStream << name() << ":" << "setText(\"" << text().c_str() << "\");\n";
 	return name();
+}
+
+// LUA
+void Text::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Text,Object>(Text::className_)
+	.constructor<void (*)()>()
+	.method("text", &Text::text)
+	.method<void (Text::*)(const char *)>("setText", &Text::setText);
 }
 
 // Drawing

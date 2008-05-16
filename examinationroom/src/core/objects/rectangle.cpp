@@ -15,6 +15,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -250,6 +253,20 @@ std::string Rectangle::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setDirA({" << dirA().x << ", " << dirA().y << ", " << dirA().z << "});\n";
 	outStream << name() << ":" << "setDirB({" << dirB().x << ", " << dirB().y << ", " << dirB().z << "});\n";
 	return name();
+}
+
+// LUA
+void Rectangle::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Rectangle,Object>(Rectangle::className_)
+	.constructor<void (*)()>()
+	.method("dirA", &Rectangle::dirA)
+	.method("dirB", &Rectangle::dirB)
+	.method("setDirA", &Rectangle::setDirA)
+	.method("setDirB", &Rectangle::setDirB)
+	.method("subdivision", &Rectangle::subdivision)
+	.method("setSubdivision", &Rectangle::setSubdivision)
+	.method("setTexCoords", &Rectangle::setTexCoords);
 }
 
 std::tr1::shared_ptr<ParameterObject> Rectangle::createDialog()

@@ -13,6 +13,35 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
+namespace luabridge
+{
+
+char * fogModes[] =
+{
+	"Exp",
+	"Exp2",
+	"Linear",
+	0
+};
+
+template <>
+struct tdstack <Examination::Atmosphere::FogMode>
+{
+	static void push (lua_State *L, Examination::Atmosphere::FogMode data)
+	{
+		lua_pushstring(L, fogModes[data]);
+	}
+	static Examination::Atmosphere::FogMode get (lua_State *L, int index)
+	{
+		return static_cast<Examination::Atmosphere::FogMode>(luaL_checkoption(L, index, 0, fogModes));
+	}
+};
+
+}
+
 namespace Examination
 {
 
@@ -102,6 +131,21 @@ std::string Atmosphere::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setStart(" << start() << ");\n";
 	outStream << name() << ":" << "setEnd(" << end() << ");\n";
 	return name();
+}
+
+// LUA
+void Atmosphere::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Atmosphere,Container>(Atmosphere::className_)
+	.constructor<void (*)()>()
+	.method("mode", &Atmosphere::mode)
+	.method("setMode", &Atmosphere::setMode)
+	.method("density", &Atmosphere::density)
+	.method("setDensity", &Atmosphere::setDensity)
+	.method("start", &Atmosphere::start)
+	.method("setStart", &Atmosphere::setStart)
+	.method("end", &Atmosphere::end)
+	.method("setEnd", &Atmosphere::setEnd);
 }
 
 std::tr1::shared_ptr<ParameterObject> Atmosphere::createDialog()

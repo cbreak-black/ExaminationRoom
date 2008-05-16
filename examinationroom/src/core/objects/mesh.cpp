@@ -19,6 +19,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -250,6 +253,18 @@ std::string Mesh::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "loadMesh(\"" << meshPath_ << "\");\n";
 	outStream << name() << ":" << "setScaleFactor(" << scaleFactor() << ");\n";
 	return name();
+}
+
+// LUA
+void Mesh::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Mesh,Object>(Mesh::className_)
+	.constructor<void (*)()>()
+	.method("loadMesh", &Mesh::loadMesh)
+	.method("getMeshPath", &Mesh::getMeshPath)
+	.method("clearMesh", &Mesh::clearMesh)
+	.method("scaleFactor", &Mesh::scaleFactor)
+	.method("setScaleFactor", &Mesh::setScaleFactor);
 }
 
 std::tr1::shared_ptr<ParameterObject> Mesh::createDialog()

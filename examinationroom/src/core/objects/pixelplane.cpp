@@ -17,6 +17,9 @@
 
 #include "parameter/parameterpixelplane.h"
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -136,6 +139,21 @@ std::string Pixelplane::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setSize(" << size().x << ", " << size().y << ");\n";
 	outStream << name() << ":" << "setZoom(" << zoom().x << ", " << zoom().y << ");\n";
 	return name();
+}
+
+// LUA
+void Pixelplane::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Pixelplane,Object>(Pixelplane::className_)
+	.constructor<void (*)()>()
+	.method("size", &Pixelplane::size)
+	.method("setSize", &Pixelplane::setSize)
+	.method("autoResize", &Pixelplane::autoResize)
+	.method("setAutoResize", &Pixelplane::setAutoResize)
+	.method("resizeToCurrent", &Pixelplane::resizeToCurrent)
+	.method("resizeTo", &Pixelplane::resizeTo)
+	.method("zoom", &Pixelplane::zoom)
+	.method("setZoom", &Pixelplane::setZoom);
 }
 
 std::tr1::shared_ptr<ParameterObject> Pixelplane::createDialog()

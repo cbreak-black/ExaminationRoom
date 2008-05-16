@@ -13,6 +13,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 
@@ -94,6 +97,15 @@ std::string DepthBuffer::toLua(std::ostream & outStream) const
 	Container::toLua(outStream);
 	outStream << name() << ":" << "setDepthBufferState(" << (depthBufferState() ? "true" : "false") << ");\n";
 	return name();
+}
+
+// LUA
+void DepthBuffer::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<DepthBuffer,Container>("DepthBuffer")
+	.constructor<void (*)()>()
+	.method("depthBufferState", &DepthBuffer::depthBufferState)
+	.method("setDepthBufferState", &DepthBuffer::setDepthBufferState);
 }
 
 std::tr1::shared_ptr<ParameterObject> DepthBuffer::createDialog()

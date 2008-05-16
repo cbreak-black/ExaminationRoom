@@ -15,6 +15,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 	using namespace Tool;
@@ -86,6 +89,15 @@ std::string Parallelepiped::toLua(std::ostream & outStream) const
 	Rectangle::toLua(outStream);
 	outStream << name() << ":" << "setDirC({" << dirC().x << ", " << dirC().y << ", " << dirC().z << "});\n";
 	return name();
+}
+
+// LUA
+void Parallelepiped::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Parallelepiped,Rectangle>(Parallelepiped::className_)
+	.constructor<void (*)()>()
+	.method("dirC", &Parallelepiped::dirC)
+	.method("setDirC", &Parallelepiped::setDirC);
 }
 
 std::tr1::shared_ptr<ParameterObject> Parallelepiped::createDialog()

@@ -15,7 +15,36 @@
 
 #include "platform_math.h"
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 using namespace std::tr1;
+
+namespace luabridge
+{
+
+template <>
+struct tdstack <std::vector<double> >
+{
+private:
+	static void push (lua_State *L, std::vector<double> data);
+public:
+	static std::vector<double> get (lua_State *L, int index)
+	{
+		luaL_checktype(L, index, LUA_TTABLE);
+		std::vector<double> mat;
+		for (int i = 1; i <= 16; i++)
+		{
+			lua_pushnumber(L, i);
+			lua_gettable(L, index);
+			mat.push_back(lua_tonumber(L, -1));
+			lua_pop(L, 1);
+		}
+		return mat;
+	}
+};
+
+}
 
 namespace Examination
 {
@@ -140,6 +169,17 @@ std::string AffineTransformation::toLua(std::ostream & outStream) const
 		outStream << trans_[i] << ", ";
 	outStream << trans_[15] << "});\n";
 	return name();
+}
+
+// LUA
+void AffineTransformation::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<AffineTransformation,Container>(AffineTransformation::className_)
+	.constructor<void (*)()>()
+	.method("translate", &AffineTransformation::translate)
+	.method("rotate", &AffineTransformation::rotate)
+	.method("scale", &AffineTransformation::scale)
+	.method<void (AffineTransformation::*)(std::vector<double>)>("multMatrix", &AffineTransformation::multMatrix);
 }
 
 std::tr1::shared_ptr<ParameterObject> AffineTransformation::createDialog()

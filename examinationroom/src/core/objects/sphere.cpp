@@ -15,6 +15,9 @@
 
 #include <qgl.h>
 
+#include "luabridge.hpp"
+#include "luahelper.h"
+
 namespace Examination
 {
 
@@ -110,6 +113,18 @@ std::string Sphere::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setSlices(" << slices() << ");\n";
 	outStream << name() << ":" << "setStacks(" << stacks() << ");\n";
 	return name();
+}
+
+void Sphere::registerLuaApi(luabridge::module * m)
+{
+	m->subclass<Sphere,Object>(Sphere::className_)
+	.constructor<void (*)()>()
+	.method("radius", &Sphere::radius)
+	.method("setRadius", &Sphere::setRadius)
+	.method("slices", &Sphere::slices)
+	.method("setSlices", &Sphere::setSlices)
+	.method("stacks", &Sphere::stacks)
+	.method("setStacks", &Sphere::setStacks);
 }
 
 std::tr1::shared_ptr<ParameterObject> Sphere::createDialog()

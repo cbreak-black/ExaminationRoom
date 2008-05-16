@@ -133,6 +133,9 @@ public: // Serialisation
 	*/
 	virtual std::string toLua(std::ostream & outStream) const;
 
+public: // LUA API
+	static void registerLuaApi(luabridge::module * m);
+
 public:
 	/**
 	Returns the internal object list.
