@@ -51,6 +51,13 @@ public: // Factory methods
 	*/
 	static std::tr1::shared_ptr<Program> createFromLua(const std::string & path);
 
+private:
+	/**
+	This method is used by factories after program creation to register objects
+	with the LUA engine, and both objects and keywords with the name manager.
+	*/
+	void registerComponents();
+
 public: // Events
 	/**
 	Call to signal the lua world that the scene has to be updated.

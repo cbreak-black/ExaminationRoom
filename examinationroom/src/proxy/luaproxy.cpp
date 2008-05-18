@@ -13,21 +13,6 @@
 #include "camera.h"
 #include "screenproject.h"
 
-#include "objects/object.h"
-#include "objects/container.h"
-#include "objects/pixelplane.h"
-#include "objects/rectangle.h"
-#include "objects/parallelepiped.h"
-#include "objects/mesh.h"
-#include "objects/sphere.h"
-#include "objects/text.h"
-#include "objects/affinetransformation.h"
-#include "objects/atmosphere.h"
-#include "objects/atmosphere.h"
-#include "objects/cameranode.h"
-#include "objects/depthbuffer.h"
-#include "objects/lightnode.h"
-
 #include "surfaces/abstracttexture.h"
 #include "surfaces/texture.h"
 #include "surfaces/stereogram.h"
@@ -188,20 +173,6 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("setEventListener", &LuaProxy::setEventListener)
 	.method("log", &LuaProxy::log)
 	.method("debugLog", &LuaProxy::debugLog);
-
-	Object::registerLuaApi(&m);
-	Container::registerLuaApi(&m);
-	Pixelplane::registerLuaApi(&m);
-	Rectangle::registerLuaApi(&m);
-	Parallelepiped::registerLuaApi(&m);
-	Mesh::registerLuaApi(&m);
-	Sphere::registerLuaApi(&m);
-	Text::registerLuaApi(&m);
-	AffineTransformation::registerLuaApi(&m);
-	Atmosphere::registerLuaApi(&m);
-	CameraNode::registerLuaApi(&m);
-	DepthBuffer::registerLuaApi(&m);
-	LightNode::registerLuaApi(&m);
 
 	// Add Scene object
 	luabridge::tdstack<std::tr1::shared_ptr<LuaProxy> >::push(L_, std::tr1::shared_ptr<LuaProxy>(this, null_deleter()));

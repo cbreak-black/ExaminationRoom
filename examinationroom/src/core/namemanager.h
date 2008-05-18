@@ -60,6 +60,20 @@ private:
 };
 
 /**
+A helper class that stores a class as NamedItem
+*/
+template <typename O>
+class NamedClass : public NamedItem
+{
+public:
+	NamedClass(const std::string & name) : NamedItem(name)
+	{
+	}
+public:
+	typedef O classType;
+};
+
+/**
 This type is used as shorthand. All named items should always be pointed at
 by a shared_ptr, and are not intended to be used by-value, this type is the
 intended way to refer to them.
