@@ -72,17 +72,25 @@ public slots:
 	*/
 	void setDrawStyle(int t);
 
+	/**
+	Toggles full screen mode.
+	*/
+	void toggleFullscreen();
+
 private slots:
 	void onTimeout();
+	void onUpdate();
 
 private:
 	void setProgram(std::tr1::shared_ptr<Program> program);
 
 private:
     GLWidget * mainGlWidget_;
-	GLWidget * outGlWidget_;
+	GLWidget * fsGlWidget_;
 	QTimer *timer_;
 	QSignalMapper * signalMapper_;
+
+	bool fullScreen_;
 
 	DesignWidget * dockDesign_;
 	QDockWidget * dockProgram_;

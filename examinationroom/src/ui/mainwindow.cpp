@@ -24,6 +24,8 @@ namespace Examination
 
 MainWindow::MainWindow()
 {
+	fullScreen_ = false;
+
 	// Set Title and window properties
 	setWindowTitle(tr("Examinationroom"));
 	QMainWindow::setDockOptions(AnimatedDocks | AllowNestedDocks | AllowTabbedDocks);
@@ -35,9 +37,9 @@ MainWindow::MainWindow()
 	QGLFormat::setDefaultFormat(glFormat);
 
 	mainGlWidget_ = new GLWidget(this);
-//	outGlWidget_ = new GLWidget(0, mainGlWidget_);
+	fsGlWidget_ = new GLWidget(0, mainGlWidget_);
 	mainGlWidget_->setStyle(GLWidget::single);
-//	outGlWidget_->setStyle(GLWidget::single);
+	fsGlWidget_->setStyle(GLWidget::single);
 
 	// Add menu
 	QMenu *menu = menuBar()->addMenu(tr("&File"));
@@ -61,30 +63,43 @@ MainWindow::MainWindow()
 
 	QAction * action;
 	menu = menuBar()->addMenu(tr("&Output Mode"));
+
+	action = menu->addAction(tr("&Fullscreen"),
+					this, SLOT(toggleFullscreen()),
+					QKeySequence(Qt::Key_F | Qt::CTRL));
+	fsGlWidget_->addAction(action);
+
+	menu->addSeparator();
+
 	action = menu->addAction(tr("&Anaglyph"));
 	action->setShortcut(QKeySequence(Qt::Key_1 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::anaglyph);
+	fsGlWidget_->addAction(action);
 
 	action = menu->addAction(tr("&Side by Side"));
 	action->setShortcut(QKeySequence(Qt::Key_2 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::sidebyside);
+	fsGlWidget_->addAction(action);
 
 	action = menu->addAction(tr("&Line interlacing (Experimental)"));
 	action->setShortcut(QKeySequence(Qt::Key_3 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::line);
+	fsGlWidget_->addAction(action);
 
 	action = menu->addAction(tr("Quad Buffering (Experimental)"));
 	action->setShortcut(QKeySequence(Qt::Key_4 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::quad);
+	fsGlWidget_->addAction(action);
 
 	action = menu->addAction(tr("Matrix Anaglyph (Experimental)"));
 	action->setShortcut(QKeySequence(Qt::Key_5 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::matrix);
+	fsGlWidget_->addAction(action);
 
 	menu->addSeparator();
 
@@ -92,6 +107,7 @@ MainWindow::MainWindow()
 	action->setShortcut(QKeySequence(Qt::Key_0 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 	signalMapper_->setMapping(action, GLWidget::single);
+	fsGlWidget_->addAction(action);
 
 	connect(signalMapper_, SIGNAL(mapped(int)), this, SLOT(setDrawStyle(int)));
 
@@ -112,23 +128,6 @@ MainWindow::MainWindow()
 	setFocusPolicy(Qt::StrongFocus);
 	setCentralWidget(mainGlWidget_);
 
-//	int numScreens = QApplication::desktop()->numScreens();
-
-//	if (numScreens == 2)
-//	{
-//		// Two Screens used by output widget
-//		outGlWidget_->setStyle(GLWidget::sidebyside);
-//		outGlWidget_->showFullScreen();
-//		QRect s2 = QApplication::desktop()->screenGeometry(0);
-//		s2 = s2.united(QApplication::desktop()->screenGeometry(1));
-//		outGlWidget_->setGeometry(s2);
-//	}
-//	if (numScreens == 1)
-//	{
-//		outGlWidget_->setStyle(GLWidget::single);
-//		outGlWidget_->showFullScreen();
-//	}
-
 	// Create Scene
 	setProgram(Program::create());
 
@@ -142,6 +141,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 	// All child widgets are deallocated by QT
+	delete fsGlWidget_;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent * event)
@@ -154,22 +154,28 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 	{
 		program_->onKeyDown(event->key());
 		mainGlWidget_->update(); // update() for deferred updates
-//		outGlWidget_->update();
+		fsGlWidget_->update();
 	}
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent * event)
 {
 	program_->onKeyUp(event->key());
-	mainGlWidget_->update(); // update() for deferred updates
-//	outGlWidget_->update();
+	onUpdate();
 }
 
 void MainWindow::onTimeout()
 {
 	program_->onUpdate();
-	mainGlWidget_->update(); // update() for deferred updates
-//	outGlWidget_->update();
+	onUpdate();
+}
+
+void MainWindow::onUpdate()
+{
+	if (fullScreen_)
+		fsGlWidget_->update();
+	else
+		mainGlWidget_->update(); // update() for deferred updates
 }
 
 void MainWindow::loadLuaFile()
@@ -200,6 +206,33 @@ void MainWindow::storeLuaFile()
 void MainWindow::setDrawStyle(int t)
 {
 	mainGlWidget_->setStyle((GLWidget::DrawStyle)t);
+	fsGlWidget_->setStyle((GLWidget::DrawStyle)t);
+}
+
+void MainWindow::toggleFullscreen()
+{
+	if (fullScreen_)
+	{
+		fullScreen_ = false;
+		fsGlWidget_->hide();
+		releaseKeyboard();
+//		mainGlWidget_->show();
+	}
+	else
+	{
+		fullScreen_ = true;
+		grabKeyboard();
+//		mainGlWidget_->hide();
+		fsGlWidget_->showFullScreen();
+		int numScreens = QApplication::desktop()->numScreens();
+		if (numScreens >= 2)
+		{
+			// Two Screens used by output widget
+			QRect s2 = QApplication::desktop()->screenGeometry(0);
+			s2 = s2.united(QApplication::desktop()->screenGeometry(1));
+			fsGlWidget_->setGeometry(s2);
+		}
+	}
 }
 
 void MainWindow::newScene()
@@ -211,7 +244,7 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 {
 	program_ = program;
 	mainGlWidget_->setScene(program_->scene());
-	//outGlWidget_->setScene(program_->scene());
+	fsGlWidget_->setScene(program_->scene());
 	dockDesign_->setScene(program_->scene());
 }
 

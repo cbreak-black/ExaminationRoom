@@ -31,7 +31,6 @@ int main (int argc, char** argv)
 	
 	Examination::MainWindow mw;
 	mw.show();
-	mw.loadLuaFile();
 	
     return app.exec();
 }
