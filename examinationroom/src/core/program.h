@@ -55,6 +55,7 @@ private:
 	/**
 	This method is used by factories after program creation to register objects
 	with the LUA engine, and both objects and keywords with the name manager.
+	New Object subclasses have to be registered by adding an entry in this function.
 	*/
 	void registerComponents();
 

@@ -35,8 +35,8 @@ void AbstractTexture::setZoom(float zx, float zy)
 
 void AbstractTexture::setZoom(const Tool::Vec2f & z)
 {
-	zoomFactorX_ = z.x;
-	zoomFactorY_ = z.y;
+	// Call main method, which can be overwritten because it's virtual
+	setZoom(z.x, z.y);
 }
 
 }

@@ -47,8 +47,8 @@ public: // Constructors and Destructor
 	/**
 	Creates a new stereogram by taking the passed strings as paths to left and right
 	sides.
-	 \param l	Path to Left texture
-	 \param r	Path to Right texture
+	 \param lpath	Path to Left texture
+	 \param rpath	Path to Right texture
 	 */
 	Stereogram(const std::string & lpath, const std::string & rpath);
 

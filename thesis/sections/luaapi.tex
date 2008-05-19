@@ -14,14 +14,15 @@ The lua language is simple, but to understand it's details, reading the manual\c
 Here the basic constructs:
 
 \paragraph{Expression with assignments}
-\begin{verbatim}x,y = math.cos(a)*r, math.sin(a)*r
+\begin{verbatim}
+x,y = math.cos(a)*r, math.sin(a)*r
 \end{verbatim}
 
 \paragraph{Method call}
 \begin{verbatim}
-Scene:addObject(Object("Sphere"))
+Scene:addObject(Sphere())
 \end{verbatim}
-On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Object(<String>)}, which is the Object constructor.
+On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Sphere()}, which is the constructor for spheres.
 
 \paragraph{table construction and access}
 \begin{verbatim}
@@ -32,10 +33,13 @@ local t = {
 }
 t.three = 3;
 \end{verbatim}
-LUA supports number indexes like a sparse array, and key based lookup like a map.
+LUA tables support number indexes like a sparse array, and key based lookup like a map.
 With string indexes tables can be treated like accessing structs in C.
 The convention is to use 1 based arrays.
-\paragraph{for loop}\begin{verbatim}
+Tables are used in place of Vec vector objects when passing values to the API.
+
+\paragraph{for loop}
+\begin{verbatim}
 for i = 1,10,2 do
     Scene:log("Number :"..i);
 end
@@ -90,9 +94,14 @@ Four types of events are currently available: Key input can be received for both
 
 \subsubsection{Differences from C++}
 \paragraph{}
-The main difference between the C++ and the corresponding LUA methods is for Vec parameters. The Vec family of union structs represents 2, 3 or 4 element vectors. In lua, the contained values are simply passed directly.
+The main difference between the C++ and the corresponding LUA methods is for Vec parameters.
+The Vec family of union structs represents 2, 3 or 4 element vectors.
+In lua, the contained values are simply passed as lua tables of a suitable size.
+Tables are one based.
 
-Since lua allows more than one return value, some of the accessors could be merged into one, instead of an accessor for zoomX and one for zoomY, a single method zoom returns both values.
+Since lua allows more than one return value, some of the accessors could be simplified, a single method zoom could return both x and y values instead of a Vec2 object.
+This is not done, but instead a table containing both values is returned.
+This follows the convention of returning Vec parameters as tables.
 
 Enumerators do not exist in LUA, string constants are used instead.
 
@@ -129,12 +138,17 @@ The quit function gets zero as argument.
 
 \subsection{The Objects}
 \paragraph{}
-The LUA bindings are implemented in the Class \texttt{ObjectProxy}, it represents all object types.
-Methods that are not supported by an object are silently ignored.
+The LUA bindings are implemented with the template based library \textit{luabridge}\cite{lb}.
+It can automatically generate api wrapper code for most basic types of functions with up to 8 parameters.
+Objects are registered in the method \texttt{Program::registerComponents()},
+by calling each object's \texttt{registerLuaApi()} method.
+Subclasses can overwrite this method and register their own methods.
 
 \subsubsection{Creation}
 \paragraph{}
-The object constructor \texttt{Object(<String>)} accepts the following constants: \texttt{"Sphere"}, \texttt{"Rectangle"}, \texttt{"Parallelepiped"}, \texttt{"Pixelplane"}, \texttt{"Text"}, \texttt{"Mesh"}, \texttt{"AffineTransformation"}, \texttt{"CameraNode"}, \texttt{"LightNode"}, \texttt{"Atmosphere"}, \texttt{"DepthBuffer"}, each corresponding with the class with the same name.
+The object constructors are global functions with the same name as the class.
+The following classes are provided with the program:
+\texttt{Sphere()}, \texttt{Rectangle()}, \texttt{Parallelepiped()}, \texttt{Pixelplane()}, \texttt{Text()}, \texttt{Mesh()}, \texttt{AffineTransformation()}, \texttt{CameraNode()}, \texttt{LightNode()}, \texttt{Atmosphere()}, \texttt{DepthBuffer()}, each corresponding with the class with the same name.
 
 \subsubsection{Base}
 \paragraph{}
@@ -158,9 +172,11 @@ The other camera properties can also be changed with accessors.
 \subsubsection{Texture}
 \paragraph{}
 Textures are created by loading image data from a file.
-The first parameter of the constructor \texttt{Texture(<String>,...)} is the name of the desired texture class, one of the following strings: \texttt{"Simple"}, \texttt{"Stereogram"}, \texttt{"RandomDot"}, \texttt{"Pattern"}.
+Like objects, they are bound by \textit{luabridge}, and follow the same rules.
+The constructors are global functions with the name of the class, one of the following:
+\texttt{Texture()}, \texttt{Stereogram()}, \texttt{RandomDot()}, \texttt{Pattern()}.
 
-Simple textures take one additional argument, the string to an image file.
+Simple textures take one argument, the string to an image file.
 Stereogram textures take two image paths as argument, and load the left and right eye view directly.
 RandomDot textures take one path as argument, and use this as depth map to construct a random dot stereogram.
 Pattern textures work similar, but they take a second and optional third argument containing the path to a pattern for background and foreground.

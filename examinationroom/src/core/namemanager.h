@@ -136,7 +136,8 @@ public: // Name Registering
 	The passed object is added to the NamedItem by using the subclass NamedObject.
 	This instance is returned.
 	 \param name	The desired base name
-	 \return a named item containing the unique version of the name
+	 \param object	The object instance to add
+	 \return a named item containing the unique version of the name, of type NamedObject
 	*/
 	NamedItemPtr registerName(const std::string & name, std::tr1::shared_ptr<Object> object);
 

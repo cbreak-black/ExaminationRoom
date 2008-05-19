@@ -102,7 +102,6 @@ public: // Resizing
 	Negative values flip the texture.
 	This only applies when the texture is drawn as pixel data.
 	This method calls setZoom(float, float), overwrite that method if needed.
-	 \overload setZoom(float, float)
 	 \param z	A Vec2f object containing the x and y zoom factors
 	*/
 	void setZoom(const Tool::Vec2f & z);

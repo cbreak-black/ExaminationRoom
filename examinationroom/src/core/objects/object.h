@@ -43,6 +43,28 @@ and positioned in space.
 A generic object, which can be placed in a scene.
 Everything in a scene is a subclass of this class.
 
+When subclassing, several methods have to be overwritten to provide a
+consistent user experience. The draw() method is called every time the object
+is drawn. The passed widget can be used to query a limited amount of information
+or to perform specific tasks. Drawing is done with OpenGL calls.
+
+The method className() and the static variable className_ should both be changed
+to reflect the new class name.
+
+The methods toLua() can be changed to write additional commands for added state.
+Subclasses should always call the parent's toLua() method, or toLuaCreate() before
+writing their own commands.
+
+The method dialog() returns a class specific instance of a ParameterDialog subclass.
+Subclasses can overwrite createDialog() to return their own instance. This instance
+is then cached until the object is destroyed.
+
+The method Object::registerLuaApi() is called by the Program in
+Program::registerComponents() when adding new objects.
+Subclasses of Object are required to overwrite this static method and register their
+own methods with LUA.
+Even when not adding new methods, the creator and the parent must still be registered.
+
  \author Gerhard Roethlin
  \ingroup Objects
 */
@@ -254,6 +276,13 @@ public: // Serialisation
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
 public: // LUA API
+	/**
+	This static method has to be reimplemented in all subclasses.
+	It is responsible for registering the class' constructor, the parent class
+	and the new methods with LUA.
+	Registration is done with luabridge.
+	 \param m	A pointer to a luabridge::module instance that acts on the intended lua_State
+	*/
 	static void registerLuaApi(luabridge::module * m);
 
 public: // Parameter Dialog

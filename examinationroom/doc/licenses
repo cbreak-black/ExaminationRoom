@@ -1,0 +1,19 @@
+=====================
+Licenses
+=====================
+
+
+Examinationroom itself is licensed under the GPL version 2
+
+
+Bundled libraries:
+
+- obj, a C++ .obj file parser library is licensed under the GPL version 2
+- lua is licensed under the MIT license
+- luabridge is licensed under the BSD license
+
+
+Used libraries:
+
+- Boos is licensed under the Boost license
+- QT is licensed under the GPL version 2 (and other licenses)
