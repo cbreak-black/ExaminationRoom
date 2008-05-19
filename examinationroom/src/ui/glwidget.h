@@ -17,6 +17,7 @@
 namespace Examination
 {
 	class Scene;
+	class AbstractRenderer;
 
 /**
 The GLWidget is a view that is drawn with OpenGL. It has a reference to a scene,
@@ -52,10 +53,10 @@ protected:
     void initializeGL();
     void paintGL();
     void resizeGL(int width, int height);
-	void lineStencil();
 
 private:
 	std::tr1::shared_ptr<Scene> scene_;
+	std::tr1::shared_ptr<AbstractRenderer> renderer_;
 	Side side_;
 	DrawStyle style_;
 };

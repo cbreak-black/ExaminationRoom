@@ -22,11 +22,13 @@ SOURCES += src/core/*.cpp
 HEADERS += \
 	src/ui/*.h \
 	src/ui/helper/*.h \
-	src/ui/parameter/*.h
+	src/ui/parameter/*.h \
+	src/ui/renderer/*.h
 SOURCES += \
 	src/ui/*.cpp \
 	src/ui/helper/*.cpp \
-	src/ui/parameter/*.cpp
+	src/ui/parameter/*.cpp \
+	src/ui/renderer/*.cpp
 
 # Surfaces
 HEADERS += src/core/surfaces/*.h
