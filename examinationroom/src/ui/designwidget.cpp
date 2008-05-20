@@ -12,11 +12,13 @@
 #include <QTreeView>
 #include <QSplitter>
 #include <QScrollArea>
+#include <QAction>
 
 #include "program.h"
 #include "helper/scenemodel.h"
 #include "parameter/parameterobject.h"
 #include "objects/object.h"
+#include "objects/container.h"
 
 namespace Examination
 {
@@ -29,12 +31,17 @@ DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlag
 
 	treeView_ = new QTreeView();
 	treeView_->setUniformRowHeights(true);
+	treeView_->setDragDropMode(QAbstractItemView::InternalMove);
 	splitter->addWidget(treeView_);
 	scrollArea_ = new QScrollArea(this);
 	scrollArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	scrollArea_->setWidgetResizable(true);
 	scrollArea_->setMaximumWidth(512);
 	splitter->addWidget(scrollArea_);
+	QAction * action = new QAction(tr("Remove Selected"), this);
+	action->setShortcut(QKeySequence::Delete);
+	connect(action, SIGNAL(triggered()), this, SLOT(removeSelectedObject()));
+	addAction(action);
 }
 
 DesignWidget::~DesignWidget()
@@ -45,8 +52,16 @@ DesignWidget::~DesignWidget()
 
 void DesignWidget::editObject(const QModelIndex & current, const QModelIndex & /* previous */)
 {
-	Object * o = static_cast<Object*>(current.internalPointer());
-	editObject(o->sharedPtr());
+	if (current.isValid())
+	{
+		Object * o = static_cast<Object*>(current.internalPointer());
+		editObject(o->sharedPtr());
+	}
+	else
+	{
+		scrollArea_->takeWidget();
+		currentDialog_ = std::tr1::shared_ptr<ParameterObject>();
+	}
 }
 
 void DesignWidget::editObject(std::tr1::shared_ptr<Object> object)
@@ -88,12 +103,29 @@ void DesignWidget::setProgram(std::tr1::shared_ptr<Program> program)
 
 std::tr1::shared_ptr<Object> DesignWidget::selectedObject()
 {
-	QItemSelectionModel * selection = treeView_->selectionModel();
-	Object * o = static_cast<Object*>(selection->currentIndex().internalPointer());
+	QModelIndex idx = treeView_->selectionModel()->currentIndex();
+	if (idx.isValid())
+	{
+		Object * o = static_cast<Object*>(idx.internalPointer());
+		if (o)
+			return o->sharedPtr();
+	}
+	return std::tr1::shared_ptr<Object>();
+}
+
+bool DesignWidget::removeSelectedObject()
+{
+	ObjectPtr o = selectedObject();
 	if (o)
-		return o->sharedPtr();
-	else
-		return std::tr1::shared_ptr<Object>();
+	{
+		if (o->parent())
+		{
+			treeView_->selectionModel()->clear();
+			o->parent()->removeObject(o);
+			return true;
+		}
+	}
+	return false;
 }
 
 }

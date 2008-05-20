@@ -63,6 +63,13 @@ public:
 	virtual void removeObject(std::tr1::shared_ptr<Object> object);
 
 	/**
+	Removes an object range from the container.
+	 \param start	The index of the first object to remove, zero based
+	 \param count	The number of objects to remove
+	*/
+	virtual bool removeObjectRange(int start, int count);
+
+	/**
 	Removes all objects.
 	*/
 	virtual void clear();
@@ -161,6 +168,12 @@ private:
 public: // Meta
 	static const char * className_;
 };
+
+/**
+The type of Container pointers.
+Raw pointers should never be used.
+*/
+typedef std::tr1::shared_ptr<Container> ContainerPtr;
 
 }
 

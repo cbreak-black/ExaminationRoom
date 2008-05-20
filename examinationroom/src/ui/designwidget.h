@@ -48,6 +48,12 @@ public slots:
 	void editObject(const QModelIndex & current, const QModelIndex & previous);
 	void editObject(std::tr1::shared_ptr<Object> object);
 
+	/**
+	 Removes the selected object
+	 \return true if an object was removed, false otherwise
+	 */
+	bool removeSelectedObject();
+
 private:
 	std::tr1::shared_ptr<Program> program_;
 	std::tr1::shared_ptr<SceneModel> sceneModel_;

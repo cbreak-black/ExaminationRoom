@@ -380,6 +380,12 @@ public: // Meta
 };
 
 /**
+The type of Object pointers.
+Raw pointers should never be used.
+*/
+typedef std::tr1::shared_ptr<Object> ObjectPtr;
+
+/**
 Returns true if the drawing priority of a is smaller than b.
  \return true if the drawing priority of a is smaller than b.
 */

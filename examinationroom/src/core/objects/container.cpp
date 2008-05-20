@@ -83,6 +83,34 @@ void Container::removeObject(shared_ptr<Object> object)
 	layoutDidChange();
 }
 
+bool Container::removeObjectRange(int start, int count)
+{
+	// Return false on invalid ranges
+	if (start < 0 || start+count > (int)objects_.size() || count < 1)
+		return false;
+	layoutWillChange();
+	// Seek to the first to remove
+	ObjectList::iterator itStart = objects_.begin();
+	ObjectList::iterator itEnd;
+	for (int i = 0; i < start; i++)
+	{
+		itStart++;
+	}
+	itEnd = itStart;
+	// Seek to the first to not remove (could be past the end)
+	// Also set the links correctly
+	for (int i = 0; i < count; i++)
+	{
+		(*itEnd)->setParent(std::tr1::shared_ptr<Container>());
+		(*itEnd)->setScene(std::tr1::shared_ptr<Scene>());
+		itEnd++;
+	}
+	// Remove them
+	objects_.erase(itStart, itEnd);
+	layoutDidChange();
+	return true;
+}
+
 void Container::clear()
 {
 	layoutWillChange();

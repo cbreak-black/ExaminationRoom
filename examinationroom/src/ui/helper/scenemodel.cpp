@@ -250,7 +250,7 @@ Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 
 	if (index.column() == 0)
 	{
-		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
 	}
 	else if (index.column() == 1)
 	{
@@ -306,6 +306,30 @@ QVariant SceneModel::headerData(int section, Qt::Orientation orientation, int ro
 	}
 }
 
+bool SceneModel::removeRows (int row, int count, const QModelIndex & parent)
+{
+	std::tr1::shared_ptr<Container> container;
+	if (!parent.isValid())
+	{
+		// Remove from scene
+		container = scene_;
+	}
+	else
+	{
+		std::tr1::shared_ptr<Object> o = (static_cast<Object*>(parent.internalPointer()))->sharedPtr();
+		container = std::tr1::dynamic_pointer_cast<Container>(o);
+		if (!container)
+		{
+			// Should not happen, all valid model indexes that are parents are containers
+			return false;
+		}
+	}
+	beginRemoveRows(parent, row, row+count-1);
+	bool r = container->removeObjectRange(row, count);
+	endRemoveRows();
+	return r;
+}
+
 // Callbacks
 void SceneModel::objectWillChange(const Object *)
 {
@@ -323,6 +347,7 @@ void SceneModel::layoutWillChange(const Object *)
 void SceneModel::layoutDidChange(const Object *)
 {
 	layoutChanged();
+	//reset();
 }
 
 }
