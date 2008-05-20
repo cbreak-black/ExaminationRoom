@@ -44,7 +44,12 @@ Object::~Object()
 
 std::tr1::shared_ptr<Object> Object::sharedPtr()
 {
-	return shared_from_this();
+	return _internal_weak_this.lock();
+}
+
+std::tr1::shared_ptr<Object const> Object::sharedPtr() const
+{
+	return _internal_weak_this.lock();
 }
 
 Tool::Point Object::position() const
@@ -59,7 +64,12 @@ void Object::setPosition(Tool::Point p)
 	objectDidChange();
 }
 
-std::tr1::shared_ptr<Scene> Object::scene() const
+std::tr1::shared_ptr<Scene const> Object::scene() const
+{
+	return scene_.lock();
+}
+
+std::tr1::shared_ptr<Scene> Object::scene()
 {
 	return scene_.lock();
 }

@@ -204,6 +204,21 @@ public: // Linking
 	*/
 	void setProgram(std::tr1::shared_ptr<Program> program);
 
+	/**
+	Returns a pointer to the scene this object is which is itself. It is equivalent
+	to the sharedPtr() method.
+	 \return a pointer to the scene of this object
+	*/
+	virtual std::tr1::shared_ptr<Scene> scene();
+	virtual std::tr1::shared_ptr<Scene const> scene() const;
+
+	/**
+	Sets the scene pointer of this object. Since this method is pointless for
+	the scene itself, it does nothing.
+	 \param s	Scene pointer
+	*/
+	virtual void setScene(std::tr1::shared_ptr<Scene> s);
+
 private: // Linking
 	std::tr1::weak_ptr<Program> program_;
 };

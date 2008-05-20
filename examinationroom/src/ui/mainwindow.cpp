@@ -15,6 +15,9 @@
 #include "designwidget.h"
 
 #include "program.h"
+#include "scene.h"
+
+#include "objects/object.h"
 
 #include <iostream>
 #include <fstream>
@@ -61,6 +64,7 @@ MainWindow::MainWindow()
 	// Signal mapper for display types
 	signalMapper_ = new QSignalMapper(this);
 
+	// Add display menu
 	QAction * action;
 	menu = menuBar()->addMenu(tr("&Output Mode"));
 
@@ -110,6 +114,11 @@ MainWindow::MainWindow()
 	fsGlWidget_->addAction(action);
 
 	connect(signalMapper_, SIGNAL(mapped(int)), this, SLOT(setDrawStyle(int)));
+
+	// Object Creation Menu and signal mapper
+	objectMenu_ = menuBar()->addMenu(tr("&Create Object"));
+	objectMapper_ = new QSignalMapper(this);
+	connect(objectMapper_, SIGNAL(mapped(int)), this, SLOT(onObjectCreate(int)));
 
 	// Add Dock Widgets
 	dockDesign_ = new DesignWidget("Scene Design", this);
@@ -245,8 +254,50 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 	program_ = program;
 	mainGlWidget_->setScene(program_->scene());
 	fsGlWidget_->setScene(program_->scene());
-	dockDesign_->setScene(program_->scene());
+	dockDesign_->setProgram(program);
+	// Recreate menu
+	objectMenu_->clear(); // Should also destroy all mappings
+	const std::vector<ObjectFactoryPtr> & factories = program->factories();
+	QAction * action;
+	for (unsigned int i = 0; i < factories.size(); i++)
+	{
+		action = objectMenu_->addAction(QString::fromStdString(factories[i]->name()), objectMapper_, SLOT(map()));
+		objectMapper_->setMapping(action, i);
+	}
 }
 
+void MainWindow::onObjectCreate(int id)
+{
+	// Create a new object
+	std::tr1::shared_ptr<Object> o = program_->factories()[id]->create();
+	// And find a place to put it
+	std::tr1::shared_ptr<Object> s = dockDesign_->selectedObject();
+
+	if (s)
+	{
+		std::tr1::shared_ptr<Container> c = std::tr1::dynamic_pointer_cast<Container>(s);
+		std::tr1::shared_ptr<Container> p = s->parent();
+		if (c)
+		{
+			// A container selected, insert into it
+			c->addObject(o);
+		}
+		else if (p)
+		{
+			// An object selected, insert into its parent
+			p->addObject(o);
+		}
+		else
+		{
+			// Selected object has no parent, should not happen!
+			program_->scene()->addObject(o);
+		}
+	}
+	else
+	{
+		// Nothing useful selected, insert as root
+		program_->scene()->addObject(o);
+	}
+}
 
 }

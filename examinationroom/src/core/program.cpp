@@ -35,7 +35,7 @@ namespace Examination
 
 Program::Program()
 {
-	scene_ = Object::Create<Scene>();
+	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
 	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 	nameManager_ = std::tr1::shared_ptr<NameManager>(new NameManager());
 }
@@ -72,6 +72,7 @@ inline void registerObject(luabridge::module * m, std::tr1::shared_ptr<NameManag
 
 void Program::registerComponents()
 {
+	// Fill the LUA API and the NameManager with all classes
 	luabridge::module m(luaProxy_->luaState());
 	registerObject<Object>(&m, nameManager_);
 	registerObject<Container>(&m, nameManager_);
@@ -86,6 +87,19 @@ void Program::registerComponents()
 	registerObject<CameraNode>(&m, nameManager_);
 	registerObject<DepthBuffer>(&m, nameManager_);
 	registerObject<LightNode>(&m, nameManager_);
+
+	// Fill the Factory with classes that are intended to be instanciated
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Pixelplane>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Rectangle>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Parallelepiped>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Mesh>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Sphere>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Text>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<AffineTransformation>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<Atmosphere>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<CameraNode>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<DepthBuffer>));
+	factories_.push_back(ObjectFactoryPtr(new ObjectFactory<LightNode>));
 }
 
 // Events
@@ -129,6 +143,11 @@ std::tr1::shared_ptr<LuaProxy> Program::luaProxy() const
 std::tr1::shared_ptr<Program> Program::sharedPtr() const
 {
 	return this_.lock();
+}
+
+const std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > & Program::factories() const
+{
+	return factories_;
 }
 
 }

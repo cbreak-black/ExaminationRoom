@@ -11,12 +11,14 @@
 #define PROGRAM_H
 
 #include <memory>
+#include <vector>
 
 namespace Examination
 {
 	class Scene;
 	class LuaProxy;
 	class NameManager;
+	class ObjectFactoryBase;
 
 class Program
 {
@@ -88,11 +90,13 @@ public: // Accessors
 	std::tr1::shared_ptr<NameManager> nameManager() const;
 	std::tr1::shared_ptr<LuaProxy> luaProxy() const;
 	std::tr1::shared_ptr<Program> sharedPtr() const;
+	const std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > & factories() const;
 
 private:
 	std::tr1::shared_ptr<Scene> scene_;
 	std::tr1::shared_ptr<NameManager> nameManager_;
 	std::tr1::shared_ptr<LuaProxy> luaProxy_;
+	std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > factories_;
 
 private:
 	std::tr1::weak_ptr<Program> this_;

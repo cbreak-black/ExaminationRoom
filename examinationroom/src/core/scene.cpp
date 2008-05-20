@@ -158,5 +158,19 @@ void Scene::setProgram(std::tr1::shared_ptr<Program> program)
 	program_ = program;
 }
 
+std::tr1::shared_ptr<Scene> Scene::scene()
+{
+	return std::tr1::dynamic_pointer_cast<Scene>(sharedPtr());
+}
+
+std::tr1::shared_ptr<Scene const> Scene::scene() const
+{
+	return std::tr1::dynamic_pointer_cast<Scene const>(sharedPtr());
+}
+
+void Scene::setScene(std::tr1::shared_ptr<Scene> /* s */)
+{
+}
+
 
 }

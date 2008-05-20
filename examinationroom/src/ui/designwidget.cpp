@@ -13,6 +13,7 @@
 #include <QSplitter>
 #include <QScrollArea>
 
+#include "program.h"
 #include "helper/scenemodel.h"
 #include "parameter/parameterobject.h"
 #include "objects/object.h"
@@ -42,7 +43,7 @@ DesignWidget::~DesignWidget()
 	delete treeView_;
 }
 
-void DesignWidget::editObject(const QModelIndex & current, const QModelIndex & previous)
+void DesignWidget::editObject(const QModelIndex & current, const QModelIndex & /* previous */)
 {
 	Object * o = static_cast<Object*>(current.internalPointer());
 	editObject(o->sharedPtr());
@@ -60,21 +61,21 @@ void DesignWidget::editObject(std::tr1::shared_ptr<Object> object)
 
 // Accessors
 
-std::tr1::shared_ptr<Scene> DesignWidget::scene() const
+std::tr1::shared_ptr<Program> DesignWidget::program() const
 {
-	return scene_;
+	return program_;
 }
 
-void DesignWidget::setScene(std::tr1::shared_ptr<Scene> scene)
+void DesignWidget::setProgram(std::tr1::shared_ptr<Program> program)
 {
+	program_ = program;
 	// Remove previous widget
 	scrollArea_->takeWidget();
 	currentDialog_.reset();
 	// Set new scene / model
-	SceneModel * sm = new SceneModel(scene);
+	SceneModel * sm = new SceneModel(program->scene());
 	treeView_->setModel(sm);
 	sceneModel_ = std::tr1::shared_ptr<SceneModel>(sm);
-	scene_ = scene;
 	treeView_->setColumnWidth(0, 192);
 	treeView_->setColumnWidth(1, 48);
 	treeView_->setColumnWidth(2, 48);
@@ -85,5 +86,14 @@ void DesignWidget::setScene(std::tr1::shared_ptr<Scene> scene)
 			this, SLOT(editObject(const QModelIndex &, const QModelIndex &)));
 }
 
+std::tr1::shared_ptr<Object> DesignWidget::selectedObject()
+{
+	QItemSelectionModel * selection = treeView_->selectionModel();
+	Object * o = static_cast<Object*>(selection->currentIndex().internalPointer());
+	if (o)
+		return o->sharedPtr();
+	else
+		return std::tr1::shared_ptr<Object>();
+}
 
 }

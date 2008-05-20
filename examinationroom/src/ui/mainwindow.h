@@ -11,11 +11,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDockWidget>
-#include <QSignalMapper>
-#include <QTimer>
 
 #include <memory>
+
+class QMenu;
+class QSignalMapper;
+class QDockWidget;
+class QTimer;
 
 namespace Examination
 {
@@ -80,6 +82,7 @@ public slots:
 private slots:
 	void onTimeout();
 	void onUpdate();
+	void onObjectCreate(int id);
 
 private:
 	void setProgram(std::tr1::shared_ptr<Program> program);
@@ -89,6 +92,8 @@ private:
 	GLWidget * fsGlWidget_;
 	QTimer *timer_;
 	QSignalMapper * signalMapper_;
+	QSignalMapper * objectMapper_;
+	QMenu * objectMenu_;
 
 	bool fullScreen_;
 

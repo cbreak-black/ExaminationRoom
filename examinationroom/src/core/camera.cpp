@@ -26,13 +26,13 @@ Camera::Camera()
 	spL_ = new ScreenProject();
 	spR_ = new ScreenProject();
 
-	setPosition(Tool::Point(0, 0, -10));
+	setPosition(Tool::Point(0, 0, 20));
 	setDirection(Tool::Vector(0,0,-1));
 	setUp(Tool::Vector(0,1,0));
 
 	setSeparation(0.2f);
-	setFieldOfView(50);
-	setParalaxPlane(10);
+	setFieldOfView(25);
+	setParalaxPlane(20);
 	setType(Perspective);
 }
 

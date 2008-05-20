@@ -42,6 +42,8 @@ and positioned in space.
 /**
 A generic object, which can be placed in a scene.
 Everything in a scene is a subclass of this class.
+This class should always be used wrapped in a shared_ptr, or some functions might not work,
+such as sharedPtr(), which relies on enable_shared_from_this
 
 When subclassing, several methods have to be overwritten to provide a
 consistent user experience. The draw() method is called every time the object
@@ -84,18 +86,6 @@ public:
 
 public: // Shared Pointers
 	/**
-	Creates a new Object instance and returns a shared pointer to it.
-	enable_shared_from_this also internaly stores a weak_ptr to this for later use.
-	 \return A shared_ptr to the new object instance
-	*/
-	template <typename O>
-	static std::tr1::shared_ptr<O> Create()
-	{
-		std::tr1::shared_ptr<O> sharedPtr(new O());
-		return sharedPtr;
-	}
-
-	/**
 	Returns the shared_ptr to this object.
 	This method only works if the object was created with Object::Create(),
 	which is recommended.
@@ -104,6 +94,7 @@ public: // Shared Pointers
 	 \return A shared_ptr to this object
 	*/
 	std::tr1::shared_ptr<Object> sharedPtr();
+	std::tr1::shared_ptr<Object const> sharedPtr() const;
 
 public: // Accessors
 	/**
@@ -187,11 +178,10 @@ public: // Visibility
 public: // Nesting
 	/**
 	Returns a pointer to the scene this object is in.
-	This pointer should not be stored externaly.
-	 \todo Change to use std:tr1:weak_ptr if possible
 	 \return a pointer to the scene of this object
 	*/
-	std::tr1::shared_ptr<Scene> scene() const;
+	virtual std::tr1::shared_ptr<Scene> scene();
+	virtual std::tr1::shared_ptr<Scene const> scene() const;
 
 	/**
 	Sets the scene pointer of this object. This should only be called by the
@@ -199,7 +189,6 @@ public: // Nesting
 	the pointer.
 	This method unregisters the object name in the program associated with the old scene
 	and registers it with the program associated with the new scene.
-	 \todo Change to use std:tr1:weak_ptr if possible
 	 \param s	Scene pointer
 	*/
 	virtual void setScene(std::tr1::shared_ptr<Scene> s);
@@ -207,10 +196,9 @@ public: // Nesting
 	/**
 	Returns a pointer to the parent container this object is in.
 	This poionter should not be stored externaly.
-	 \todo Change to use std:tr1:weak_ptr if possible
 	 \return a pointer to the container of this object
 	*/
-	std::tr1::shared_ptr<Container> parent() const;
+	virtual std::tr1::shared_ptr<Container> parent() const;
 
 	/**
 	Sets the parent pointer of this object. This should only be called by the Container
@@ -219,7 +207,6 @@ public: // Nesting
 	This ensures that it is both only stored once in a container (by removing itself even if it gets
 	inserted into the same) and that it is only inserted in one container. Keeping the data structure
 	in order is the responsibility of the container class.
-	 \todo Change to use std:tr1:weak_ptr if possible
 	 \param c	Container pointer
 	*/
 	virtual void setParent(std::tr1::shared_ptr<Container> c);
@@ -397,6 +384,40 @@ Returns true if the drawing priority of a is smaller than b.
  \return true if the drawing priority of a is smaller than b.
 */
 bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b);
+
+/**
+Base class for object factories.
+An object factory is an object that creates "Object" instances.
+*/
+class ObjectFactoryBase
+{
+public:
+	virtual ~ObjectFactoryBase() {};
+public:
+	/**
+	Creates a new instance of Object or a subclass and returns a shared_ptr to it
+	 \return shared_ptr to the newly created Object
+	*/
+	virtual std::tr1::shared_ptr<Object> create() const = 0;
+	virtual std::string name() const = 0;
+};
+
+typedef std::tr1::shared_ptr<ObjectFactoryBase> ObjectFactoryPtr;
+
+template <class O>
+class ObjectFactory : public ObjectFactoryBase
+{
+public:
+	virtual std::tr1::shared_ptr<Object> create() const
+	{
+		std::tr1::shared_ptr<O> sharedPtr(new O());
+		return sharedPtr;
+	}
+	virtual std::string name() const
+	{
+		return O::className_;
+	}
+};
 
 }
 
