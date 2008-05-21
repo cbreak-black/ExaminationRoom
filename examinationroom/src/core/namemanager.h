@@ -156,6 +156,12 @@ public: // Name Registering
 	*/
 	void unregisterName(const std::string & name);
 
+public:
+	/**
+	Registers lua keywords so that they are not used as name for objects.
+	*/
+	void registerLuaKeywords();
+
 private:
 	std::map<std::string,NamedItemPtr> names_;
 };

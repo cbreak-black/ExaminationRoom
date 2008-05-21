@@ -129,5 +129,22 @@ void NameManager::unregisterName(const std::string & name)
 	names_.erase(name);
 }
 
+const char * luaKeywords[] =
+{
+	"and",	"break",	"do",	"else",	"elseif",
+	"end",	"false",	"for",	"function",	"if",
+	"in",	"local",	"nil",	"not",	"or", "repeat",
+	"return",	"then",	"true",	"until",	"while",
+	0
+};
+
+void NameManager::registerLuaKeywords()
+{
+	for (unsigned int i = 0; luaKeywords[i]; i++)
+	{
+		registerName(luaKeywords[i]);
+	}
+}
+
 
 }

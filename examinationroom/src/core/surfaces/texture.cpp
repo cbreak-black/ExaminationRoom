@@ -130,7 +130,7 @@ Linear filter.
 If it is already loaded into memory, just bind the texture.
  \param w	The GLWidget to draw into
 */
-void Texture::glBindTex(GLWidget * w)
+void Texture::glBindTex(GLWidget * /* w */)
 {
 	if (imageGLID_ == 0)
 	{
@@ -188,7 +188,7 @@ void Texture::glBindTex(GLWidget * w)
 	}
 }
 
-void Texture::draw(GLWidget * w)
+void Texture::draw(GLWidget * /* w */)
 {
 	GLubyte * t;
 	Tool::Vec2f z;

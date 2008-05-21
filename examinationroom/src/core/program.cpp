@@ -38,6 +38,8 @@ Program::Program()
 	scene_ = std::tr1::shared_ptr<Scene>(new Scene());
 	luaProxy_ = std::tr1::shared_ptr<LuaProxy>(new LuaProxy(scene_));
 	nameManager_ = std::tr1::shared_ptr<NameManager>(new NameManager());
+	nameManager_->registerLuaKeywords();
+	registerComponents();
 }
 
 Program::~Program()
@@ -49,7 +51,6 @@ std::tr1::shared_ptr<Program> Program::create()
 	std::tr1::shared_ptr<Program> t(new Program());
 	t->this_ = t;
 	t->scene_->setProgram(t);
-	t->registerComponents();
 	return t;
 }
 
