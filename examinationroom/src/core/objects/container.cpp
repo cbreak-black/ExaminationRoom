@@ -44,6 +44,16 @@ bool Container::addObject(shared_ptr<Object> object)
 		}
 		it++;
 	}
+	// Check for cycles. Return false if the object to be inserted is a parent of us.
+	// The scene graph is a tree, no cycles allowed.
+	ContainerPtr p = std::tr1::dynamic_pointer_cast<Container>(sharedPtr());
+	while (p)
+	{
+		if (object == p)
+			return false;
+		p = p->parent();
+	}
+	// Notify of changes
 	layoutWillChange();
 	// Search insert position.
 	it = objects_.begin();
@@ -59,7 +69,7 @@ bool Container::addObject(shared_ptr<Object> object)
 	//objects_.sort();
 	// Removing non unique objects is not needed since we test for uniqueness before inserting
 	//objects_.unique();
-	std::tr1::shared_ptr<Container> p = object->parent();
+	p = object->parent();
 	// If the object had a valid parent, and the parent was not us
 	// We should not reach this place if the parent was us... due to the guard
 	if (p && (p.get() != this))
