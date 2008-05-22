@@ -235,5 +235,7 @@ private:
 	Camera::Type	type_;
 };
 
+typedef std::tr1::shared_ptr<Camera> CameraPtr;
+
 }
 #endif

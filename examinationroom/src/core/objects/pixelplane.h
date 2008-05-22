@@ -15,6 +15,7 @@
 namespace Examination
 {
 	class AbstractTexture;
+	class Camera;
 
 /**
 A Pixelplane is an object that only consists of a texture. The texture is drawn
@@ -121,6 +122,15 @@ public: // LUA API
 
 protected: // Parameter Dialog
 	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
+
+protected:
+	/**
+	Returns the local camera, that is the camera that sees this object.
+	This is either the camera of the closest CameraNode, or the camera of the
+	containing scene.
+	 \return the local camera, or an invalid shared_ptr if not in a camera or scene
+	*/
+	std::tr1::shared_ptr<Camera> localCamera() const;
 
 private:
 	bool autoresize_;

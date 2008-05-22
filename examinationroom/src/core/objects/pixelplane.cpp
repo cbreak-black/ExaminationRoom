@@ -12,6 +12,7 @@
 #include "surfaces/abstracttexture.h"
 #include "glwidget.h"
 #include "scene.h"
+#include "objects/cameranode.h"
 #include "camera.h"
 #include "platform_math.h"
 
@@ -72,11 +73,36 @@ bool Pixelplane::autoResize() const
 	return autoresize_;
 }
 
+CameraPtr Pixelplane::localCamera() const
+{
+	ContainerPtr p = parent();
+	std::tr1::shared_ptr<CameraNode> camNode;
+	do
+	{
+		camNode = std::tr1::dynamic_pointer_cast<CameraNode>(p);
+		if (camNode)
+		{
+			return camNode->camera();
+		}
+		p = p->parent();
+	} while (p);
+	// Reached scene/unconnected node
+	if (scene())
+	{
+		return scene()->camera();
+	}
+	else
+	{
+		// Nothing found
+		return CameraPtr();
+	}
+}
+
 void Pixelplane::resizeToCurrent() const
 {
-	if (scene() && texture())
+	CameraPtr cam = localCamera();
+	if (cam && texture())
 	{
-		std::tr1::shared_ptr<Camera> cam = scene()->camera();
 		int w, h, cw, ch;
 		float uss = cam->unitScreenSize(position());
 		w = uss*width_/zoomFactorX_;
