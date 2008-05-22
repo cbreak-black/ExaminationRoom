@@ -59,7 +59,6 @@ std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 	std::tr1::shared_ptr<Program> t(new Program());
 	t->this_ = t;
 	t->scene_->setProgram(t);
-	t->registerComponents();
 	t->luaProxy_->runFile(path.c_str());
 	return t;
 }

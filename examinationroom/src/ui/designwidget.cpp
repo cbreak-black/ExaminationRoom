@@ -31,7 +31,10 @@ DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlag
 
 	treeView_ = new QTreeView();
 	treeView_->setUniformRowHeights(true);
-	treeView_->setDragDropMode(QAbstractItemView::InternalMove);
+	treeView_->setDragDropMode(QAbstractItemView::DragDrop);
+	treeView_->setDragEnabled(true);
+	treeView_->setAcceptDrops(true);
+	treeView_->setDropIndicatorShown(true);
 	splitter->addWidget(treeView_);
 	scrollArea_ = new QScrollArea(this);
 	scrollArea_->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

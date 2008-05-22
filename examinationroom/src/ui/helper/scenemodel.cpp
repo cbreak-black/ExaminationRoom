@@ -10,6 +10,8 @@
 #include "scenemodel.h"
 
 #include <QSize>
+#include <QMimeData>
+#include <QStringList>
 
 #include "objects/object.h"
 #include "objects/container.h"
@@ -17,6 +19,26 @@
 
 namespace Examination
 {
+
+/**
+A small helper class to perform internal drag&drops
+*/
+class ObjectMimeData : public QMimeData
+{
+public: // Creator
+	ObjectMimeData() {};
+public: // Accessors
+	const QList<ObjectPtr> & objects() const
+	{
+		return objects_;
+	}
+	void addObject(ObjectPtr o)
+	{
+		objects_.append(o);
+	}
+private:
+	QList<ObjectPtr> objects_;
+};
 
 SceneModel::SceneModel(std::tr1::shared_ptr<Scene> scene)
 {
@@ -246,11 +268,22 @@ bool SceneModel::setData(const QModelIndex & index, const QVariant & value, int 
 Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 {
 	if (!index.isValid())
-		return 0;
+		return Qt::ItemIsDropEnabled;
 
+	Object * o = static_cast<Object*>(index.internalPointer());
+	Container * c = dynamic_cast<Container*>(o);
 	if (index.column() == 0)
 	{
-		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+		if (c)
+		{
+			return Qt::ItemIsEnabled | Qt::ItemIsSelectable |
+				Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+		}
+		else
+		{
+			return Qt::ItemIsEnabled | Qt::ItemIsSelectable |
+				Qt::ItemIsDragEnabled;
+		}
 	}
 	else if (index.column() == 1)
 	{
@@ -258,8 +291,7 @@ Qt::ItemFlags SceneModel::flags(const QModelIndex &index) const
 	}
 	else if (index.column() == 2)
 	{
-		Object * o = static_cast<Object*>(index.internalPointer());
-		if (dynamic_cast<Container*>(o))
+		if (c)
 		{
 			return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
 		}
@@ -306,28 +338,81 @@ QVariant SceneModel::headerData(int section, Qt::Orientation orientation, int ro
 	}
 }
 
-bool SceneModel::removeRows (int row, int count, const QModelIndex & parent)
+//bool SceneModel::removeRows (int row, int count, const QModelIndex & parent)
+//{
+//	std::tr1::shared_ptr<Container> container;
+//	if (!parent.isValid())
+//	{
+//		// Remove from scene
+//		container = scene_;
+//	}
+//	else
+//	{
+//		std::tr1::shared_ptr<Object> o = (static_cast<Object*>(parent.internalPointer()))->sharedPtr();
+//		container = std::tr1::dynamic_pointer_cast<Container>(o);
+//		if (!container)
+//		{
+//			// Should not happen, all valid model indexes that are parents are containers
+//			return false;
+//		}
+//	}
+//	beginRemoveRows(parent, row, row+count-1);
+//	bool r = container->removeObjectRange(row, count);
+//	endRemoveRows();
+//	return r;
+//}
+
+QStringList SceneModel::mimeTypes() const
 {
-	std::tr1::shared_ptr<Container> container;
-	if (!parent.isValid())
+	QStringList types;
+	types.append("text/plain");
+	return types;
+}
+
+QMimeData * SceneModel::mimeData(const QModelIndexList &indexes) const
+{
+	ObjectMimeData * omd = new ObjectMimeData;
+	omd->setText("Internal Data");
+	for (QModelIndexList::const_iterator it = indexes.begin();
+		 it != indexes.end();
+		 it++)
 	{
-		// Remove from scene
-		container = scene_;
+		if (it->isValid() && it->column() == 0)
+		{
+			Object * o = static_cast<Object*>(it->internalPointer());
+			omd->addObject(o->sharedPtr());
+		}
+	}
+	return omd;
+}
+
+bool SceneModel::dropMimeData(const QMimeData *data, Qt::DropAction /* action */,
+				  int /* row */, int /* column */, const QModelIndex &parent)
+{
+//	const ObjectMimeData *myData = qobject_cast<const ObjectMimeData *>(data);
+	const ObjectMimeData *myData = dynamic_cast<const ObjectMimeData *>(data);
+	const QList<ObjectPtr> & objects = myData->objects();
+
+	if (parent.isValid())
+	{
+		// Get an object pointer
+		Object * p = static_cast<Object*>(parent.internalPointer());
 	}
 	else
 	{
-		std::tr1::shared_ptr<Object> o = (static_cast<Object*>(parent.internalPointer()))->sharedPtr();
-		container = std::tr1::dynamic_pointer_cast<Container>(o);
-		if (!container)
+		for (QList<ObjectPtr>::const_iterator it = indexes.begin();
+			 it != indexes.end();
+			 it++)
 		{
-			// Should not happen, all valid model indexes that are parents are containers
-			return false;
+			scene_->addObject(*it);
 		}
 	}
-	beginRemoveRows(parent, row, row+count-1);
-	bool r = container->removeObjectRange(row, count);
-	endRemoveRows();
-	return r;
+	return true;
+}
+
+Qt::DropActions SceneModel::supportedDropActions() const
+{
+	return Qt::MoveAction;
 }
 
 // Callbacks
