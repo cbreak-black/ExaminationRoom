@@ -13,6 +13,8 @@
 #include <QMimeData>
 #include <QStringList>
 
+#include <sstream>
+
 #include "objects/object.h"
 #include "objects/container.h"
 #include "scene.h"
@@ -372,7 +374,7 @@ QStringList SceneModel::mimeTypes() const
 QMimeData * SceneModel::mimeData(const QModelIndexList &indexes) const
 {
 	ObjectMimeData * omd = new ObjectMimeData;
-	omd->setText("Internal Data");
+	std::stringstream ss(std::ios_base::out);
 	for (QModelIndexList::const_iterator it = indexes.begin();
 		 it != indexes.end();
 		 it++)
@@ -380,39 +382,81 @@ QMimeData * SceneModel::mimeData(const QModelIndexList &indexes) const
 		if (it->isValid() && it->column() == 0)
 		{
 			Object * o = static_cast<Object*>(it->internalPointer());
+			o->toLua(ss);
 			omd->addObject(o->sharedPtr());
 		}
 	}
+	omd->setText(QString::fromStdString(ss.str()));
 	return omd;
 }
 
 bool SceneModel::dropMimeData(const QMimeData *data, Qt::DropAction /* action */,
-				  int /* row */, int /* column */, const QModelIndex &parent)
+				  int row, int /* column */, const QModelIndex &parent)
 {
 //	const ObjectMimeData *myData = qobject_cast<const ObjectMimeData *>(data);
 	const ObjectMimeData *myData = dynamic_cast<const ObjectMimeData *>(data);
 	const QList<ObjectPtr> & objects = myData->objects();
 
+	ContainerPtr dest;
+
 	if (parent.isValid())
 	{
 		// Get an object pointer
 		Object * p = static_cast<Object*>(parent.internalPointer());
+		Container * c = dynamic_cast<Container*>(p);
+		if (c) // Parent is a container
+		{
+			// Get the specified sub object
+			Container::ObjectList ol = c->objects();
+			if (row >= 0 && row < (int)ol.size())
+			{
+				Container::ObjectList::const_iterator it = ol.begin();
+				int itCounter = 0;
+				while (itCounter < row)
+				{
+					itCounter++;
+					it++;
+				}
+				dest = std::tr1::dynamic_pointer_cast<Container>(*it);
+				if (!dest)
+				{
+					// Found object is not a container. Just use parent
+					dest = std::tr1::dynamic_pointer_cast<Container>(c->sharedPtr());
+				}
+				// else // Found object is where we drop our items in
+				//{
+				//	dest = dest;
+				//}
+			}
+			else
+			{
+				// Invalid index. Use parent as container
+				dest = std::tr1::dynamic_pointer_cast<Container>(c->sharedPtr());
+			}
+		}
+		else
+		{
+			// Parents should always be containers so this should not happen
+			dest = scene_;
+		}
 	}
 	else
 	{
-		for (QList<ObjectPtr>::const_iterator it = indexes.begin();
-			 it != indexes.end();
-			 it++)
-		{
-			scene_->addObject(*it);
-		}
+		// Invalid index means insert into scene
+		dest = scene_;
+	}
+	for (QList<ObjectPtr>::const_iterator it = objects.begin();
+		 it != objects.end();
+		 it++)
+	{
+		dest->addObject(*it);
 	}
 	return true;
 }
 
 Qt::DropActions SceneModel::supportedDropActions() const
 {
-	return Qt::MoveAction;
+	return Qt::CopyAction;
 }
 
 // Callbacks
