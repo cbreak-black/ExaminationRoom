@@ -16,6 +16,13 @@ namespace Examination
 {
 	class Scene;
 	class GLWidget;
+	class Container;
+
+/**
+ The type of Container pointers.
+ Raw pointers should never be used.
+ */
+typedef std::tr1::shared_ptr<Container> ContainerPtr;
 
 /**
 This class is a container object. It can store and manage other objects.
@@ -46,7 +53,7 @@ public:
 	shared_ptr, they are deleted.
 	*/
 	virtual ~Container();
-	
+
 public:
 	/**
 	Adds an object to the container. An object can only be added once.
@@ -79,6 +86,20 @@ public:
 	This method is called by objects on their parent, when their drawPriority changes.
 	*/
 	void sortObjects();
+
+public:
+	/**
+	Splits off all contained items into a new Container.
+	This object is empty after this function.
+	 \return a new container filled with all former contents of this object
+	 */
+	ContainerPtr split();
+
+	/**
+	Merges all contents from the passed container with this object.
+	The passed container is empty after this function.
+	*/
+	void merge(ContainerPtr c);
 
 protected:
 	/**
@@ -168,12 +189,6 @@ private:
 public: // Meta
 	static const char * className_;
 };
-
-/**
-The type of Container pointers.
-Raw pointers should never be used.
-*/
-typedef std::tr1::shared_ptr<Container> ContainerPtr;
 
 }
 

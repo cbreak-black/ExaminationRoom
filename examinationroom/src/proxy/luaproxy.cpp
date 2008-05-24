@@ -150,6 +150,8 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("addObject", &LuaProxy::addObject)
 	.method("removeObject", &LuaProxy::removeObject)
 	.method("clearScene", &LuaProxy::clearScene)
+	.method("split", &LuaProxy::split)
+	.method("merge", &LuaProxy::merge)
 	.method("setCameraPos", &LuaProxy::setCameraPos)
 	.method("setCameraDir", &LuaProxy::setCameraDir)
 	.method("setCameraUp", &LuaProxy::setCameraUp)
@@ -250,6 +252,24 @@ Signature: clearScene()
 void LuaProxy::clearScene()
 {
 	scene_->clear();
+}
+
+/**
+Signature: split()
+ \see Container::split()
+*/
+std::tr1::shared_ptr<Container> LuaProxy::split()
+{
+	return scene_->split();
+}
+
+/**
+Signature: merge(<Container>)
+ \see Container::merge()
+*/
+void LuaProxy::merge(std::tr1::shared_ptr<Container> c)
+{
+	scene_->merge(c);
 }
 
 /**

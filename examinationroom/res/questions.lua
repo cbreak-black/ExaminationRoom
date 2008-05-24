@@ -95,6 +95,7 @@ questions = {
 
 	startQuestioning = function (this, questionList, callback)
 		Scene:log("Questions Start");
+		this.sceneBackup = Scene:split(); -- Store Scene
 		this.endCallback = callback;
 		this.questionList = questionList;
 		this.questionNumber = 1;
@@ -112,6 +113,11 @@ questions = {
 		this:unloadQuestion()
 		-- Clean temporaries
 		this.quesitonList = nil;
+		-- Restore Scene
+		if this.sceneBackup then
+			Scene:merge(this.sceneBackup);
+			this.sceneBackup = nil;
+		end
 		-- Call the callback
 		this.endCallback();
 	end;

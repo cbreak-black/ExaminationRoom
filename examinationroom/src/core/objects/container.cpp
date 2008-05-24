@@ -136,6 +136,28 @@ void Container::sortObjects()
 	layoutDidChange();
 }
 
+ContainerPtr Container::split()
+{
+	ContainerPtr c(new Container());
+	ObjectList obj = this->objects(); // Copy the list
+	ObjectList::reverse_iterator i = obj.rbegin();
+	for (; i != obj.rend(); i++)
+	{
+		c->addObject(*i);
+	}
+	return c;
+}
+
+void Container::merge(ContainerPtr c)
+{
+	ObjectList obj = c->objects(); // Copy the list
+	ObjectList::reverse_iterator i = obj.rbegin();
+	for (; i != obj.rend(); i++)
+	{
+		this->addObject(*i);
+	}
+}
+
 std::tr1::shared_ptr<Container> Container::getParent()
 {
 	return std::tr1::dynamic_pointer_cast<Container,Object>(sharedPtr());
@@ -217,8 +239,11 @@ std::string Container::toLua(std::ostream & outStream) const
 void Container::registerLuaApi(luabridge::module * m)
 {
 	m->subclass<Container,Object>(Container::className_)
+	.constructor<void (*)()>()
 	.method("addObject", &Container::addObject)
 	.method("removeObject", &Container::removeObject)
+	.method("split", &Container::split)
+	.method("merge", &Container::merge)
 	.method("clear", &Container::clear)
 	.method("enabled", &Container::enabled)
 	.method("setEnabled", &Container::setEnabled);

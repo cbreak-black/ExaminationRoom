@@ -22,6 +22,7 @@ namespace Examination
 {
 	class Scene;
 	class Object;
+	class Container;
 	class Camera;
 
 /**
@@ -73,6 +74,8 @@ public: // Scene
 	void addObject(std::tr1::shared_ptr<Object> object);
 	void removeObject(std::tr1::shared_ptr<Object> object);
 	void clearScene();
+	std::tr1::shared_ptr<Container> split();
+	void merge(std::tr1::shared_ptr<Container> c);
 	void setBackgroundColor(char red, char green, char blue, char alpha);
 public: // Camera
 	void setCameraPos(float x, float y, float z);
