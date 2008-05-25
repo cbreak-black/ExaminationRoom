@@ -54,6 +54,12 @@ public:
 	Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up);
 
 	/**
+	Creates a camera as clone from the passed camera c.
+	 \param c	A camera
+	*/
+	Camera(const Camera & c);
+
+	/**
 	Destroys the camera
 	*/
 	~Camera();

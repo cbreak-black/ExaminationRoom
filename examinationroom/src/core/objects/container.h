@@ -26,6 +26,8 @@ typedef std::tr1::shared_ptr<Container> ContainerPtr;
 
 /**
 This class is a container object. It can store and manage other objects.
+Container subclasses have to be aware that the copy constructor does not copy
+subobjects. Use clone(Container const *) in your clone() method.
  \author Gerhard Roethlin
  \ingroup Objects
 */
@@ -36,15 +38,23 @@ public: // Types
 	The type of the internal data structure that is used to contain objects.
 	The most common operations is iterating over all objects.
 	*/
-	typedef std::list< std::tr1::shared_ptr<Object> > ObjectList;
+	typedef std::list<ObjectPtr> ObjectList;
 
 public:
 	/**
 	Creates a default container.
-	 \warning Don't create instances of this class directly, use Object::Create()
-	 \see Object::Create()
 	*/
 	Container();
+
+	/**
+	Creates a copy of Container c.
+	For technical reasons, this does NOT copy sub objects. If a complete clone
+	is desired, use clone(), or create a Container clone and call clone(ContainerPtr)
+	to also clone subobjects.
+	(An object does not know it's own sharedPtr, so it can not set it in child objects)
+	 \param c	The container to be cloned
+	*/
+	Container(const Container & c);
 
 public:
 	/**
@@ -53,6 +63,28 @@ public:
 	shared_ptr, they are deleted.
 	*/
 	virtual ~Container();
+
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	Overwrite this method in all subclasses and use clone(Container const *)
+	to clone subobjects.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
+
+	/**
+	Adds clones of all subobjects of Container c and adds them to
+	this object.
+	 \param c	The container which's subobjects are to be cloned
+	 \see merge()
+	*/
+	void clone(ContainerPtr c);
+
+	/**
+	 \overload
+	*/
+	void clone(Container const * c);
 
 public:
 	/**
@@ -98,6 +130,8 @@ public:
 	/**
 	Merges all contents from the passed container with this object.
 	The passed container is empty after this function.
+	 \param c	The container which's subobject are to be added
+	 \see clone(ContainerPtr c)
 	*/
 	void merge(ContainerPtr c);
 

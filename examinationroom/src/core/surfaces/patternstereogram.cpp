@@ -54,6 +54,18 @@ PatternStereogram::PatternStereogram(const std::string & d, const std::string & 
 	// Stereogram gets generated automatically
 }
 
+PatternStereogram::PatternStereogram(const PatternStereogram & p)
+	: Stereogram(p)
+{
+	bgPattern_ = std::tr1::dynamic_pointer_cast<Texture>(p.bgPattern_->clone());
+	fgPattern_ = std::tr1::dynamic_pointer_cast<Texture>(p.fgPattern_->clone());
+}
+
+std::tr1::shared_ptr<AbstractTexture> PatternStereogram::clone() const
+{
+	return std::tr1::shared_ptr<PatternStereogram>(new PatternStereogram(*this));
+}
+
 void PatternStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;

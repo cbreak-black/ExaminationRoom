@@ -28,6 +28,11 @@ Parallelepiped::Parallelepiped()
 	setName("parallelepiped");
 }
 
+ObjectPtr Parallelepiped::clone() const
+{
+	return ObjectPtr(new Parallelepiped(*this));
+}
+
 // Drawing
 void Parallelepiped::draw(GLWidget * dest) const
 {

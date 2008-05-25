@@ -26,6 +26,13 @@ DepthBuffer::DepthBuffer()
 	setName("depthbuffer");
 }
 
+ObjectPtr DepthBuffer::clone() const
+{
+	ContainerPtr c(new DepthBuffer(*this));
+	c->clone(this);
+	return c;
+}
+
 // Drawing
 void DepthBuffer::draw(GLWidget * dest) const
 {

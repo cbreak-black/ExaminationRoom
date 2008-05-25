@@ -29,14 +29,19 @@ public: // Construction
 	Creates a default parallelepiped.
 	It defaults to the unit cube from (0,0,0) to (1,1,1).
 	The default name is "Parallelepiped".
-	 \warning Don't create instances of this class directly, use Object::Create()
-	 \see Object::Create()
 	*/
 	Parallelepiped();
 
-public:
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
+
+public: // Drawing
 	virtual void draw(GLWidget * dest) const;
-	
+
 public:
 	/**
 	Returns the third direction of this rectangle.

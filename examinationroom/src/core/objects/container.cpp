@@ -26,9 +26,39 @@ Container::Container()
 	setEnabled(true);
 }
 
+Container::Container(const Container & c)
+	: Object(c)
+{
+	setEnabled(c.enabled());
+	// Can't add children yet since no
+	// shared_ptr on this exists yet
+}
+
 Container::~Container()
 {
 	clear();
+}
+
+ObjectPtr Container::clone() const
+{
+	ContainerPtr c(new Container(*this));
+	c->clone(this);
+	return c;
+}
+
+void Container::clone(ContainerPtr c)
+{
+	clone(c.get());
+}
+
+void Container::clone(Container const * c)
+{
+	const ObjectList & obj = c->objects();
+	ObjectList::const_reverse_iterator i = obj.rbegin();
+	for (; i != obj.rend(); i++)
+	{
+		this->addObject((*i)->clone());
+	}
 }
 
 bool Container::addObject(shared_ptr<Object> object)

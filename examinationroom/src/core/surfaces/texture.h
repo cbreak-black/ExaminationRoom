@@ -43,12 +43,29 @@ public: // Constructors and Destructor
 	 \param path	STD String to a file containing image data
 	*/
 	Texture(const std::string & path);
+
 	/**
 	Creates a texture with an internal copy of a passed QImage as texture.
 	 \param image	A QImage object containing texture data
 	*/
 	Texture(QImage image);
-	~Texture();
+
+	/**
+	Creates a clone of texture t.
+	*/
+	Texture(const Texture & t);
+
+	/**
+	Deletes the texture
+	*/
+	virtual ~Texture();
+
+public: // Clone
+	/**
+	Creates a clone of this texture and returns a shared pointer to it.
+	 \return a clone of the texture
+	*/
+	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
 
 public:
 	/**

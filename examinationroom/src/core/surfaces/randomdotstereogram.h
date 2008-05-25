@@ -38,6 +38,13 @@ public: // Constructors and Destructor
 	*/
 	RandomdotStereogram(const std::string & path);
 
+public: // Clone
+	/**
+	Creates a clone of this texture and returns a shared pointer to it.
+	 \return a clone of the texture
+	*/
+	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
+
 public:
 	void setMaxColor(int mc);
 	void setExclusiveColor(int ec);

@@ -33,6 +33,11 @@ Pixelplane::Pixelplane()
 	setName("pixelplane");
 }
 
+ObjectPtr Pixelplane::clone() const
+{
+	return ObjectPtr(new Pixelplane(*this));
+}
+
 // Drawing
 void Pixelplane::draw(GLWidget * dest) const
 {

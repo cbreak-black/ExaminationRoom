@@ -36,6 +36,13 @@ public: // Construction
 	*/
 	Pixelplane();
 
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
+
 public:
 	virtual void draw(GLWidget * dest) const;
 

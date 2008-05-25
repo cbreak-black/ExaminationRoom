@@ -152,6 +152,7 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 	.method("clearScene", &LuaProxy::clearScene)
 	.method("split", &LuaProxy::split)
 	.method("merge", &LuaProxy::merge)
+	.method("clone", &LuaProxy::clone)
 	.method("setCameraPos", &LuaProxy::setCameraPos)
 	.method("setCameraDir", &LuaProxy::setCameraDir)
 	.method("setCameraUp", &LuaProxy::setCameraUp)
@@ -270,6 +271,15 @@ Signature: merge(<Container>)
 void LuaProxy::merge(std::tr1::shared_ptr<Container> c)
 {
 	scene_->merge(c);
+}
+
+/**
+Signature: clone()
+ \see Container::clone()
+*/
+std::tr1::shared_ptr<Container> LuaProxy::clone()
+{
+	return std::tr1::dynamic_pointer_cast<Container>(scene_->clone());
 }
 
 /**

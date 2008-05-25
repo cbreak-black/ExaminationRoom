@@ -52,11 +52,24 @@ public: // Constructors and Destructor
 	 */
 	Stereogram(const std::string & lpath, const std::string & rpath);
 
+	/**
+	Creates a clone of the stereogram s.
+	 \param s	A stereogram
+	*/
+	Stereogram(const Stereogram & s);
+
 protected:
 	/**
 	Creates a new empty stereogram. Should only be used by subclasses.
 	*/
 	Stereogram();
+
+public: // Clone
+	/**
+	Creates a clone of this texture and returns a shared pointer to it.
+	 \return a clone of the texture
+	*/
+	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
 
 public:
 	/**

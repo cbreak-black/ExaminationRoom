@@ -31,7 +31,7 @@ DesignWidget::DesignWidget(const QString &title, QWidget *parent, Qt::WindowFlag
 
 	treeView_ = new QTreeView();
 	treeView_->setUniformRowHeights(true);
-	treeView_->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	treeView_->setSelectionMode(QAbstractItemView::SingleSelection);
 	treeView_->setDragDropMode(QAbstractItemView::DragDrop);
 	treeView_->setDragEnabled(true);
 	treeView_->setAcceptDrops(true);

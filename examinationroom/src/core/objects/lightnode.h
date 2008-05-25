@@ -50,6 +50,13 @@ public: // Construction
 	*/
 	LightNode();
 
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
+
 public:
 	/**
 	Returns the color of the ambient light.

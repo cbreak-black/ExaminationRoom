@@ -48,6 +48,18 @@ public: // Constructors and Destructor
 	*/
 	PatternStereogram(const std::string & d, const std::string & b, const std::string & f);
 
+	/**
+	Creates a clone of a pattern stereogram.
+	*/
+	PatternStereogram(const PatternStereogram & p);
+
+public: // Clone
+	/**
+	Creates a clone of this texture and returns a shared pointer to it.
+	 \return a clone of the texture
+	*/
+	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
+
 public: // Serialisation
 	virtual std::string className() const;
 	virtual std::string toLua(std::ostream & outStream) const;

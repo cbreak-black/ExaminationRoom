@@ -51,6 +51,21 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
 	setType(Perspective);
 }
 
+Camera::Camera(const Camera & c)
+{
+	spL_ = new ScreenProject();
+	spR_ = new ScreenProject();
+
+	setPosition(c.position());
+	setDirection(c.direction());
+	setUp(c.up());
+
+	setSeparation(c.separation());
+	setFieldOfView(c.fieldOfView());
+	setParalaxPlane(c.paralaxPlane());
+	setType(c.type());
+}
+
 Camera::~Camera()
 {
 	delete spL_;

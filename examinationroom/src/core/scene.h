@@ -37,9 +37,22 @@ public:
     Scene();
 
 	/**
+	Creates a clone of scene s.
+	 \param s	The scene that is to be cloned
+	*/
+	Scene(const Scene & s);
+
+	/**
 	Destructor of scenes. Also deletes all contained objects.
 	*/
 	~Scene();
+
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
 
 public: // Camera
 	void setCamera(std::tr1::shared_ptr<Camera> camera);

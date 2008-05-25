@@ -25,6 +25,13 @@ LightNode::LightNode()
 	setName("light");
 }
 
+ObjectPtr LightNode::clone() const
+{
+	ContainerPtr c(new LightNode(*this));
+	c->clone(this);
+	return c;
+}
+
 Tool::Color4 LightNode::ambient() const
 {
 	return ambient_;

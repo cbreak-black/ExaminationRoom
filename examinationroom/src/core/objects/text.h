@@ -32,6 +32,13 @@ public: // Construction
 	*/
 	Text();
 
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
+
 public:
 	/**
 	Draws the text to the passed widget.

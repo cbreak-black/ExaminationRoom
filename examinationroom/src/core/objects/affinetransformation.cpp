@@ -56,6 +56,13 @@ AffineTransformation::AffineTransformation()
 	setName("transformation");
 }
 
+ObjectPtr AffineTransformation::clone() const
+{
+	ContainerPtr c(new AffineTransformation(*this));
+	c->clone(this);
+	return c;
+}
+
 void AffineTransformation::loadIdentity()
 {
 	objectWillChange();

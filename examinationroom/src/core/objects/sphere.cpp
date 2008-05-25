@@ -29,6 +29,11 @@ Sphere::Sphere()
 	setName("sphere");
 }
 
+ObjectPtr Sphere::clone() const
+{
+	return ObjectPtr(new Sphere(*this));
+}
+
 // Drawing
 void Sphere::draw(GLWidget * dest) const
 {

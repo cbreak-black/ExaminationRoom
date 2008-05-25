@@ -32,10 +32,20 @@ public: // Construction
 	/**
 	Constructs a default camera node with a default camera.
 	Default draw priority is 128.
-	 \warning Don't create instances of this class directly, use Object::Create()
-	 \see Object::Create()
 	*/
 	CameraNode();
+
+	/**
+	Constructs a camera as clone from c.
+	*/
+	CameraNode(const CameraNode & c);
+
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
 
 public:
 	/**

@@ -91,6 +91,11 @@ Mesh::Mesh()
 	setName("mesh");
 }
 
+ObjectPtr Mesh::clone() const
+{
+	return ObjectPtr(new Mesh(*this));
+}
+
 bool Mesh::loadMesh(std::string path)
 {
 	using namespace std::tr1::placeholders;

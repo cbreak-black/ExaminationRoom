@@ -26,12 +26,27 @@ namespace Examination
 // Creation
 Object::Object()
 {
-	origin_ = Point(0,0,0);
+	setPosition(Point(0,0,0));
 	setColor(Color4(1, 1, 1, 1));
 	setWireframe(false);
 	setShown(true);
 	setDrawPriority(0);
 	setName("object");
+}
+
+Object::Object(const Object & o)
+	: std::tr1::enable_shared_from_this<Object>(o)
+{
+	setPosition(o.position());
+	setColor(o.color());
+	setWireframe(o.wireframe());
+	setShown(o.shown());
+	setDrawPriority(o.drawPriority());
+	setName(o.name());
+	if (o.texture())
+	{
+		setTexture(o.texture()->clone());
+	}
 }
 
 Object::~Object()
@@ -42,12 +57,12 @@ Object::~Object()
 	}
 }
 
-std::tr1::shared_ptr<Object> Object::sharedPtr()
+ObjectPtr Object::sharedPtr()
 {
 	return _internal_weak_this.lock();
 }
 
-std::tr1::shared_ptr<Object const> Object::sharedPtr() const
+ConstObjectPtr Object::sharedPtr() const
 {
 	return _internal_weak_this.lock();
 }
@@ -95,7 +110,7 @@ std::tr1::shared_ptr<Container> Object::parent() const
 	return parent_.lock();
 }
 
-void Object::setParent(std::tr1::shared_ptr<Container> c)
+void Object::setParent(std::tr1::shared_ptr<Container> c) const
 {
 	parent_ = c;
 }
@@ -179,7 +194,7 @@ void Object::setDrawPriority(int priority)
 	objectDidChange();
 }
 
-bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b)
+bool operator<(ObjectPtr & a, ObjectPtr & b)
 {
 	return a->drawPriority() < b->drawPriority();
 }
@@ -309,6 +324,11 @@ void Object::objectDidChange() const
 	if (scene())
 		scene()->objectDidChange(this);
 	callCallbacks(parameterChanged_, this);
+}
+
+Object & Object::operator=(const Object &)
+{
+	return *this;
 }
 
 

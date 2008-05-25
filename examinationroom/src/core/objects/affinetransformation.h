@@ -31,10 +31,15 @@ public: // Construction
 	/**
 	Creates an affine transformation object with the identity transformation.
 	The default name is "Transformation".
-	 \warning Don't create instances of this class directly, use Object::Create()
-	 \see Object::Create()
 	*/
 	AffineTransformation();
+
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	 \return a newly created copy of this object
+	*/
+	virtual ObjectPtr clone() const;
 
 public:
 	/**

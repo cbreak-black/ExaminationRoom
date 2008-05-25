@@ -167,6 +167,8 @@ Key = {
 [21] = "down";
 [22] = "pgUp";
 [23] = "pgDown";
+[76] = "load";
+[83] = "store";
 }
 -- For FG/BG
 patterns = {
@@ -202,6 +204,15 @@ local parseInput = function (k)
 		elseif d == "left" then
 		elseif d == "pgUp" then
 		elseif d == "pgDown" then
+		elseif d == "load" then
+			if storedScene then
+				sceneBackups[sceneCurrent] = Scene:split();
+				Scene:merge(storedScene)
+				storedScene = nil;
+				sceneCurrent = -1; -- Out of range
+			end
+		elseif d == "store" then
+			storedScene = Scene:clone();
 		end;
 		nextFrame();
 	end

@@ -76,6 +76,7 @@ public: // Scene
 	void clearScene();
 	std::tr1::shared_ptr<Container> split();
 	void merge(std::tr1::shared_ptr<Container> c);
+	std::tr1::shared_ptr<Container> clone();
 	void setBackgroundColor(char red, char green, char blue, char alpha);
 public: // Camera
 	void setCameraPos(float x, float y, float z);

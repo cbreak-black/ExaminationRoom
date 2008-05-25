@@ -54,6 +54,13 @@ Atmosphere::Atmosphere()
 	setName("atmosphere");
 }
 
+ObjectPtr Atmosphere::clone() const
+{
+	ContainerPtr c(new Atmosphere(*this));
+	c->clone(this);
+	return c;
+}
+
 Atmosphere::FogMode Atmosphere::mode() const
 {
 	return fogMode_;

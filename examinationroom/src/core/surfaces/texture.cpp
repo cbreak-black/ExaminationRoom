@@ -42,10 +42,25 @@ Texture::Texture(QImage image)
 	imageGLID_ = 0;
 }
 
+Texture::Texture(const Texture & t)
+	: AbstractTexture(t)
+{
+	image_ = t.image_;
+	imagePath_ = t.imagePath_;
+	original_ = t.original_;
+
+	imageGLID_ = 0;
+}
+
 Texture::~Texture()
 {
 	glDeleteTextures(1, &imageGLID_);
 	// Delete associated GL Textures
+}
+
+std::tr1::shared_ptr<AbstractTexture> Texture::clone() const
+{
+	return std::tr1::shared_ptr<AbstractTexture>(new Texture(*this));
 }
 
 void Texture::loadPixelMap(QImage image)

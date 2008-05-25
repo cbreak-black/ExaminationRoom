@@ -31,6 +31,19 @@ namespace Examination
 	class Container;
 	class AbstractTexture;
 	class ParameterObject;
+	class Object;
+
+/**
+The type of Object pointers.
+Raw pointers should never be used.
+*/
+typedef std::tr1::shared_ptr<Object> ObjectPtr;
+
+/**
+The type of const Object pointers.
+Raw pointers should never be used.
+*/
+typedef std::tr1::shared_ptr<const Object> ConstObjectPtr;
 
 /**
 \defgroup Objects	Scene Contents
@@ -43,12 +56,19 @@ and positioned in space.
 A generic object, which can be placed in a scene.
 Everything in a scene is a subclass of this class.
 This class should always be used wrapped in a shared_ptr, or some functions might not work,
-such as sharedPtr(), which relies on enable_shared_from_this
+such as sharedPtr(), which relies on enable_shared_from_this.
+It should never be used by-value.
 
 When subclassing, several methods have to be overwritten to provide a
 consistent user experience. The draw() method is called every time the object
 is drawn. The passed widget can be used to query a limited amount of information
 or to perform specific tasks. Drawing is done with OpenGL calls.
+
+The method clone() creates a clone of the called object. This happens in two steps:
+The copy constructor Object(const Object&) creates a new object from a reference to an
+object. It should be overwritten if reference parameters are used.
+The clone() method uses this copy constructor to create a new instance of a subclass
+with the copy constructor, wrapps it into an ObjectPtr and returns it.
 
 The method className() and the static variable className_ should both be changed
 to reflect the new class name.
@@ -78,23 +98,43 @@ public:
 	*/
     Object();
 
+	/**
+	Creator of Objects.
+	Initializes it with all relevant values of o.
+	*/
+	Object(const Object & o);
+
 public:
 	/**
 	Destructor of Objects
 	*/
 	virtual ~Object();
 
+public: // Cloning
+	/**
+	Returns a newly allocated clone of this object.
+	All parameters of the clone are copied.
+	The clone is not contained in a view hierarchy and has no registered
+	callbacks.
+	 \return a newly created copy of this object
+	*/
+	virtual std::tr1::shared_ptr<Object> clone() const = 0;
+
 public: // Shared Pointers
 	/**
 	Returns the shared_ptr to this object.
-	This method only works if the object was created with Object::Create(),
-	which is recommended.
+	This method only works if the object is referenced by a shared_ptr,
+	which is required for some functionality.
 	If the shared_ptr could not be locked, an invalid shared_ptr is returned.
-	To casat it to a subclass, use std::tr1::dynamic_pointer_cast()
+	To cast it to a subclass, use std::tr1::dynamic_pointer_cast()
 	 \return A shared_ptr to this object
 	*/
-	std::tr1::shared_ptr<Object> sharedPtr();
-	std::tr1::shared_ptr<Object const> sharedPtr() const;
+	ObjectPtr sharedPtr();
+
+	/**
+	 \overload
+	*/
+	ConstObjectPtr sharedPtr() const;
 
 public: // Accessors
 	/**
@@ -189,6 +229,7 @@ public: // Nesting
 	the pointer.
 	This method unregisters the object name in the program associated with the old scene
 	and registers it with the program associated with the new scene.
+	This method can not be called on constant objects since it might change the name.
 	 \param s	Scene pointer
 	*/
 	virtual void setScene(std::tr1::shared_ptr<Scene> s);
@@ -209,7 +250,7 @@ public: // Nesting
 	in order is the responsibility of the container class.
 	 \param c	Container pointer
 	*/
-	virtual void setParent(std::tr1::shared_ptr<Container> c);
+	virtual void setParent(std::tr1::shared_ptr<Container> c) const;
 
 public: // Drawing priority
 	/**
@@ -277,6 +318,9 @@ public: // Parameter Dialog
 	Returns a ParameterDialog subclass instance associated with this object.
 	If none is cached, it is created and returned, otherwise a cached instance
 	is returned.
+	Does not exist in a constant variant, since changing parameters for
+	constant objects does not make sense.
+	 \return pointer to a ParameterDialog
 	*/
 	std::tr1::shared_ptr<ParameterObject> dialog();
 
@@ -297,6 +341,7 @@ public: // Signals
 	/**
 	This method adds a parameterChanged callback. It is called every time the
 	object's parametrisation changes.
+	Constant objects are not observable since they will not change anyway.
 	 \param cb	A callback, created with std::tr1::bind
 	*/
 	void addCallbackParameterChanged(const SignalCallbackType & cb);
@@ -351,9 +396,15 @@ protected: // Notify scene/observers of changes
 	*/
 	void objectDidChange() const;
 
+private: // No-copy
+	/**
+	Does nothing, since objects are not asignable. Use clone() instead.
+	*/
+	Object & operator=(const Object &);
+
 private: // State (not exported)
-	std::tr1::weak_ptr<Scene> scene_;
-	std::tr1::weak_ptr<Container> parent_;
+	mutable std::tr1::weak_ptr<Scene> scene_;
+	mutable std::tr1::weak_ptr<Container> parent_;
 
 	// List with callbacks
 	std::list<SignalCallbackType> parameterChanged_;
@@ -380,16 +431,10 @@ public: // Meta
 };
 
 /**
-The type of Object pointers.
-Raw pointers should never be used.
-*/
-typedef std::tr1::shared_ptr<Object> ObjectPtr;
-
-/**
 Returns true if the drawing priority of a is smaller than b.
  \return true if the drawing priority of a is smaller than b.
 */
-bool operator<(std::tr1::shared_ptr<Object> & a, std::tr1::shared_ptr<Object> & b);
+bool operator<(ObjectPtr & a, ObjectPtr & b);
 
 /**
 Base class for object factories.
@@ -404,7 +449,7 @@ public:
 	Creates a new instance of Object or a subclass and returns a shared_ptr to it
 	 \return shared_ptr to the newly created Object
 	*/
-	virtual std::tr1::shared_ptr<Object> create() const = 0;
+	virtual ObjectPtr create() const = 0;
 	virtual std::string name() const = 0;
 };
 

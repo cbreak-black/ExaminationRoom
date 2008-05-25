@@ -46,6 +46,19 @@ Stereogram::Stereogram(const std::string & lpath, const std::string & rpath)
 	style_ = convex;
 }
 
+Stereogram::Stereogram(const Stereogram & s)
+	: AbstractTexture(s)
+{
+	texDepth_ = std::tr1::dynamic_pointer_cast<Texture>(s.texDepth_->clone());
+	texLeft_ = std::tr1::dynamic_pointer_cast<Texture>(s.texLeft_->clone());
+	texRight_ = std::tr1::dynamic_pointer_cast<Texture>(s.texRight_->clone());
+}
+
+std::tr1::shared_ptr<AbstractTexture> Stereogram::clone() const
+{
+	return std::tr1::shared_ptr<AbstractTexture>(new Stereogram(*this));
+}
+
 void Stereogram::recreateStereogram()
 {
 	// Nothing to do here

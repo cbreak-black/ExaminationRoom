@@ -39,6 +39,11 @@ RandomdotStereogram::RandomdotStereogram(const std::string & path)
 	// Stereogram gets generated automatically
 }
 
+std::tr1::shared_ptr<AbstractTexture> RandomdotStereogram::clone() const
+{
+	return std::tr1::shared_ptr<AbstractTexture>(new RandomdotStereogram(*this));
+}
+
 void RandomdotStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;

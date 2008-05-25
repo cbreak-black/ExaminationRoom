@@ -24,12 +24,25 @@ Scene::Scene()
 	setName("Scene");
 }
 
+Scene::Scene(const Scene & s)
+	: Container(s)
+{
+	camera_ = shared_ptr<Camera>(new Camera(*(s.camera())));
+}
+
 Scene::~Scene()
 {
 	objWillChangeCallbacks_.clear();
 	objDidChangeCallbacks_.clear();
 	layoutWillChangeCallbacks_.clear();
 	layoutDidChangeCallbacks_.clear();
+}
+
+ObjectPtr Scene::clone() const
+{
+	ContainerPtr c(new Scene(*this));
+	c->clone(this);
+	return c;
 }
 
 void Scene::setCamera(std::tr1::shared_ptr<Camera> camera)

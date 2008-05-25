@@ -28,6 +28,19 @@ CameraNode::CameraNode()
 	setName("cameranode");
 }
 
+CameraNode::CameraNode(const CameraNode & c)
+	: Container(c)
+{
+	cam_ = shared_ptr<Camera>(new Camera(*(c.camera())));
+}
+
+ObjectPtr CameraNode::clone() const
+{
+	ContainerPtr c(new CameraNode(*this));
+	c->clone(this);
+	return c;
+}
+
 std::tr1::shared_ptr<Camera> CameraNode::camera() const
 {
 	return cam_;

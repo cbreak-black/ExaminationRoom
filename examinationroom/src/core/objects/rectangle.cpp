@@ -32,6 +32,11 @@ Rectangle::Rectangle()
 	setName("rectangle");
 }
 
+ObjectPtr Rectangle::clone() const
+{
+	return ObjectPtr(new Rectangle(*this));
+}
+
 // Drawing
 void Rectangle::drawRect(Tool::Point o, Tool::Vector v1, Tool::Vector v2) const
 {

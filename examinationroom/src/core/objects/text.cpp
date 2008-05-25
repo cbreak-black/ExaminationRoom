@@ -26,6 +26,11 @@ Text::Text()
 	setName("text");
 }
 
+ObjectPtr Text::clone() const
+{
+	return ObjectPtr(new Text(*this));
+}
+
 // Serialisation
 const char * Text::className_ = "Text";
 
