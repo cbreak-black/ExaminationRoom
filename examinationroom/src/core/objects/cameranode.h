@@ -84,6 +84,9 @@ public: // Serialisation
 public: // LUA API
 	static void registerLuaApi(luabridge::module * m);
 
+protected: // Parameter Dialog
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
+
 private:
 	std::tr1::shared_ptr<Camera> cam_;
 

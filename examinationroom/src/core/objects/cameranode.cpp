@@ -11,6 +11,8 @@
 
 #include "camera.h"
 
+#include "parameter/parametercameranode.h"
+
 #include <qgl.h>
 
 #include "luabridge.hpp"
@@ -80,6 +82,11 @@ void CameraNode::registerLuaApi(luabridge::module * m)
 	.constructor<void (*)()>()
 	.method("camera", &CameraNode::camera)
 	.method("setCamera", &CameraNode::setCamera);
+}
+
+std::tr1::shared_ptr<ParameterObject> CameraNode::createDialog()
+{
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterCameraNode(sharedPtr()));
 }
 
 // Drawing
