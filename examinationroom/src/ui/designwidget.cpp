@@ -15,6 +15,7 @@
 #include <QAction>
 
 #include "program.h"
+#include "scene.h"
 #include "helper/scenemodel.h"
 #include "parameter/parameterobject.h"
 #include "objects/object.h"
@@ -63,8 +64,7 @@ void DesignWidget::editObject(const QModelIndex & current, const QModelIndex & /
 	}
 	else
 	{
-		scrollArea_->takeWidget();
-		currentDialog_ = std::tr1::shared_ptr<ParameterObject>();
+		editObject(program()->scene());
 	}
 }
 
@@ -103,6 +103,7 @@ void DesignWidget::setProgram(std::tr1::shared_ptr<Program> program)
 	QItemSelectionModel * selection = treeView_->selectionModel();
 	connect(selection, SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
 			this, SLOT(editObject(const QModelIndex &, const QModelIndex &)));
+	editObject(program->scene());
 }
 
 std::tr1::shared_ptr<Object> DesignWidget::selectedObject()

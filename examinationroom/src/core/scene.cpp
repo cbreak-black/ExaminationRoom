@@ -12,6 +12,8 @@
 #include "objects/object.h"
 #include "camera.h"
 
+#include "parameter/parameterscene.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -107,6 +109,12 @@ std::string Scene::toLuaCreate(std::ostream & outStream) const
 {
 	outStream << "-- The Scene object exists from the Start\n";
 	return name();
+}
+
+std::tr1::shared_ptr<ParameterObject> Scene::createDialog()
+{
+	std::tr1::shared_ptr<Scene> thisPtr = std::tr1::dynamic_pointer_cast<Scene>(sharedPtr());
+	return std::tr1::shared_ptr<ParameterObject>(new ParameterScene(thisPtr));
 }
 
 std::tr1::shared_ptr<Container> Scene::getParent()

@@ -100,6 +100,9 @@ public: // Serialisation
 	*/
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
+protected: // Parameter Dialog
+	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
+
 public: // Signals: Called by sub objects
 	/**
 	Called by objects that are about to change. Changes include attributes and data.
