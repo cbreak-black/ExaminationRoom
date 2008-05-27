@@ -17,6 +17,7 @@
 class QLineEdit;
 class QLabel;
 class QCheckBox;
+class QComboBox;
 
 namespace Examination
 {
@@ -57,6 +58,8 @@ public slots: // From the UI
 	void priorityEdited();
 	void wireframeStateChanged(int state);
 	void setColor();
+	void editTexture();
+	void setTexture(int);
 
 private:
 	std::tr1::weak_ptr<Object> object_;
@@ -68,6 +71,7 @@ private:
 	QLineEdit * linePriority_;
 	QLabel * colorLabel_;
 	QCheckBox * checkboxWireframe_;
+	QComboBox * comboTex_;
 };
 
 

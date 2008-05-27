@@ -71,11 +71,11 @@ void ParameterPixelplane::reloadData()
 		std::tr1::shared_ptr<Pixelplane> p = std::tr1::dynamic_pointer_cast<Pixelplane,Object>(o);
 		if (p)
 		{
-			// Position
+			// Size
 			Tool::Vec2f size = p->size();
 			lineSizeX_->setText(QString::number(size.x, 'g', 3));
 			lineSizeY_->setText(QString::number(size.y, 'g', 3));
-			// Position
+			// Zoom
 			Tool::Vec2f zoom = p->zoom();
 			lineZoomX_->setText(QString::number(zoom.x, 'g', 3));
 			lineZoomY_->setText(QString::number(zoom.y, 'g', 3));

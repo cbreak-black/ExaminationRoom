@@ -17,8 +17,14 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QColorDialog>
+#include <QComboBox>
 
 #include "objects/object.h"
+#include "surfaces/abstracttexture.h"
+#include "surfaces/patternstereogram.h"
+#include "surfaces/randomdotstereogram.h"
+#include "surfaces/stereogram.h"
+#include "surfaces/texture.h"
 
 namespace Examination
 {
@@ -36,6 +42,7 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	g->addWidget(new QLabel(tr("Position:")), 1, 0);
 	g->addWidget(new QLabel(tr("Color:")), 2, 0);
 	g->addWidget(new QLabel(tr("Priority:")), 3, 0);
+	g->addWidget(new QLabel(tr("Texture:")), 5, 0);
 //	g->addWidget(new QLabel(tr("Wireframe:")), 4, 0);
 	lineName_ = new QLineEdit();
 	linePosX_ = new QLineEdit();
@@ -51,6 +58,13 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	colorLabel_->setAutoFillBackground(true);
 	QPushButton * cb = new QPushButton("Set", this);
 	checkboxWireframe_ = new QCheckBox("Wireframe", this);
+	QPushButton * bTex = new QPushButton("Edit Texture...", this);
+	comboTex_ = new QComboBox(this);
+	comboTex_->addItem("No Texture");
+	comboTex_->addItem("Simple");
+	comboTex_->addItem("Stereo");
+	comboTex_->addItem("Random Dot");
+	comboTex_->addItem("Pattern");
 	g->addWidget(lineName_, 0, 2, 1, 3);
 	g->addWidget(linePosX_, 1, 2);
 	g->addWidget(linePosY_, 1, 3);
@@ -59,7 +73,9 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	g->addWidget(cb, 2, 4);
 	g->addWidget(linePriority_, 3, 2, 1, 3);
 	g->addWidget(checkboxWireframe_, 4, 0, 1, 5);
-	g->setRowStretch(5, 1);
+	g->addWidget(bTex, 5, 2, 1, 3);
+	g->addWidget(comboTex_, 6, 2, 1, 3);
+	g->setRowStretch(7, 1);
 	addWidget(b);
 
 	connect(lineName_, SIGNAL(editingFinished()),
@@ -76,6 +92,10 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 			this, SLOT(wireframeStateChanged(int)));
 	connect(cb, SIGNAL(clicked()),
 			this, SLOT(setColor()));
+	connect(bTex, SIGNAL(clicked()),
+			this, SLOT(editTexture()));
+	connect(comboTex_, SIGNAL(activated(int)),
+			this, SLOT(setTexture(int)));
 
 	if (object)
 	{
@@ -96,6 +116,31 @@ ParameterObject::~ParameterObject()
 void ParameterObject::objectDidChange()
 {
 	reloadData();
+}
+
+/**
+Crude helper function. Takes a shared_ptr to a texture
+and returns which subclass it is. Should probably be done
+in a more modular way later on.
+ \param tex	The texture to identify
+ \return An integer value identifying the texture
+*/
+int identifyTexture(AbstractTexturePtr tex)
+{
+	if (!tex)
+		return 0; // No Texture
+	if (std::tr1::dynamic_pointer_cast<Texture>(tex))
+		return 1; // Texture
+	if (std::tr1::dynamic_pointer_cast<Stereogram>(tex))
+	{
+		if (std::tr1::dynamic_pointer_cast<RandomdotStereogram>(tex))
+			return 3; // RandomdotStereogram
+		else if (std::tr1::dynamic_pointer_cast<PatternStereogram>(tex))
+			return 4; // PatternStereogram
+		else
+			return 2; // Unknown Stereogram subclass or Stereogram
+	}
+	return -1; // Unknown AbstractTextureSubclass
 }
 
 void ParameterObject::reloadData()
@@ -122,6 +167,10 @@ void ParameterObject::reloadData()
 		linePriority_->setText(QString::number(o->drawPriority()));
 		// Wireframe
 		checkboxWireframe_->setCheckState(o->wireframe()? Qt::Checked : Qt::Unchecked);
+		// Texture
+		int texType = identifyTexture(o->texture());
+		if (texType >= 0) comboTex_->setCurrentIndex(texType);
+		else comboTex_->setCurrentIndex(0);
 	}
 }
 
@@ -222,6 +271,43 @@ void ParameterObject::setColor()
 		if (newColor.isValid())
 		{
 			o->setColor(Tool::Color4(newColor.redF(), newColor.greenF(), newColor.blueF(), newColor.alphaF()));
+		}
+	}
+}
+
+void ParameterObject::editTexture()
+{
+	std::tr1::shared_ptr<Object> o = object();
+	if (o && o->texture())
+	{
+		o->texture()->dialog()->show();
+	}
+}
+
+void ParameterObject::setTexture(int i)
+{
+	std::tr1::shared_ptr<Object> o = object();
+	if (o)
+	{
+		switch (i)
+		{
+			case 0:
+				o->setTexture(AbstractTexturePtr());
+				break;
+			case 1:
+				o->setTexture(AbstractTexturePtr(new Texture("")));
+				break;
+			case 2:
+				o->setTexture(AbstractTexturePtr(new Stereogram("", "")));
+				break;
+			case 3:
+				o->setTexture(AbstractTexturePtr(new RandomdotStereogram("")));
+				break;
+			case 4:
+				o->setTexture(AbstractTexturePtr(new PatternStereogram("", "", "")));
+				break;
+			default:
+				break;
 		}
 	}
 }

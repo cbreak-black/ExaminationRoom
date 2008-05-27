@@ -107,6 +107,9 @@ public: // Resizing
 	virtual int width() const;
 	virtual int height() const;
 
+public: // Parameter Dialog
+	virtual std::tr1::shared_ptr<Parameterdialog> createDialog();
+
 public: // Serialisation
 	virtual std::string className() const;
 	virtual std::string toLua(std::ostream & outStream) const;

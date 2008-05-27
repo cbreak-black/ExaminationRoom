@@ -13,6 +13,8 @@
 
 #include "platform_math.h"
 
+#include "parameter/parameterabstracttexture.h"
+
 namespace Examination
 {
 
@@ -264,6 +266,11 @@ int Texture::width() const
 int Texture::height() const
 {
 	return image().height();
+}
+
+std::tr1::shared_ptr<Parameterdialog> Texture::createDialog()
+{
+	return std::tr1::shared_ptr<Parameterdialog>(new ParameterAbstractTexture(sharedPtr()));
 }
 
 std::string Texture::className() const

@@ -19,6 +19,14 @@
 namespace Examination
 {
 	class GLWidget;
+	class Parameterdialog;
+	class AbstractTexture;
+
+/**
+The type of texture pointers.
+*/
+typedef std::tr1::shared_ptr<AbstractTexture> AbstractTexturePtr;
+typedef std::tr1::shared_ptr<const AbstractTexture> ConstAbstractTexturePtr;
 
 /**
 \defgroup Surfaces	Surfaces
@@ -30,9 +38,10 @@ Surfaces can have different pixel data depending on the eye they are looked at w
 /**
 This is an abstract base class for textures. It provides an interface
 for clients to use all kinds of textures easily.
+Always wrap it into shared_ptr, never use it with direct pointers or by-value.
  \ingroup Surfaces
 */
-class AbstractTexture
+class AbstractTexture : public std::tr1::enable_shared_from_this<AbstractTexture>
 {
 public:
 	AbstractTexture();
@@ -44,6 +53,22 @@ public: // Clone
 	 \return a clone of the texture
 	*/
 	virtual std::tr1::shared_ptr<AbstractTexture> clone() const = 0;
+
+public: // Shared Pointers
+	/**
+	Returns the shared_ptr to this object.
+	This method only works if the object is referenced by a shared_ptr,
+	which is required for some functionality.
+	If the shared_ptr could not be locked, an invalid shared_ptr is returned.
+	To cast it to a subclass, use std::tr1::dynamic_pointer_cast()
+	 \return A shared_ptr to this object
+	*/
+	AbstractTexturePtr sharedPtr();
+
+	/**
+	 \overload
+	*/
+	ConstAbstractTexturePtr sharedPtr() const;
 
 public:
 	/**
@@ -115,6 +140,23 @@ public: // Resizing
 	*/
 	void setZoom(const Tool::Vec2f & z);
 
+public: // Parameter Dialog
+	/**
+	Returns a ParameterDialog subclass instance associated with this object.
+	If none is cached, it is created and returned, otherwise a cached instance
+	is returned.
+	Does not exist in a constant variant, since changing parameters for
+	constant objects does not make sense.
+	 \return pointer to a ParameterDialog
+	*/
+	std::tr1::shared_ptr<Parameterdialog> dialog();
+
+	/**
+	Creates a parameter dialog and stores it internally.
+	Subclasses should overwrite this method to create their own instances.
+	*/
+	virtual std::tr1::shared_ptr<Parameterdialog> createDialog();
+
 public: // Serialisation
 	/**
 	Returns the name of the "class" of this texture. This can be used in LUA
@@ -138,6 +180,8 @@ public: // Serialisation
 private:
 	float zoomFactorX_;
 	float zoomFactorY_;
+
+	std::tr1::shared_ptr<Parameterdialog> dialog_;
 };
 
 }

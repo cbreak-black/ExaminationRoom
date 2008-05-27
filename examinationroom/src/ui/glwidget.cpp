@@ -37,7 +37,7 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 {
 	setSide(left);
 	setStyle(single);
-	this->setCursor(Qt::BlankCursor);
+	this->setCursor(Qt::CrossCursor);
 }
 
 GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWidget)
