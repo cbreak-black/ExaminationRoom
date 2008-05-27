@@ -14,6 +14,8 @@
 
 #include <QImage>
 
+#include "parameter/parameterstereogram.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -208,6 +210,11 @@ void Stereogram::setTexRight(std::tr1::shared_ptr<Texture> t)
 	texRight_ = t;
 	if (texRight_)
 		texRight_->setZoom(zoom());
+}
+
+std::tr1::shared_ptr<Parameterdialog> Stereogram::createDialog()
+{
+	return std::tr1::shared_ptr<Parameterdialog>(new ParameterStereogram(sharedPtr()));
 }
 
 // Serialisation

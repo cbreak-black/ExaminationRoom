@@ -60,13 +60,20 @@ public: // Clone
 	*/
 	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
 
+public: // Parameter Dialog
+	virtual std::tr1::shared_ptr<Parameterdialog> createDialog();
+
 public: // Serialisation
 	virtual std::string className() const;
 	virtual std::string toLua(std::ostream & outStream) const;
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
-private:
+public:
 	virtual void recreateStereogram();
+
+public:
+	std::tr1::shared_ptr<Texture> texBG() const;
+	std::tr1::shared_ptr<Texture> texFG() const;
 
 private:
 	std::tr1::shared_ptr<Texture> bgPattern_;

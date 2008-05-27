@@ -18,6 +18,8 @@
 
 #include "platform_math.h" // for roundf
 
+#include "parameter/parameterpatternstereogram.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -42,14 +44,7 @@ PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> 
 PatternStereogram::PatternStereogram(const std::string & d, const std::string & b, const std::string & f)
 {
 	bgPattern_ = shared_ptr<Texture>(new Texture(d));
-	if (b == f)
-	{
-		fgPattern_ = bgPattern_;
-	}
-	else
-	{
-		fgPattern_ = shared_ptr<Texture>(new Texture(b));
-	}
+	fgPattern_ = shared_ptr<Texture>(new Texture(b));
 	setTexDepth(shared_ptr<Texture>(new Texture(f)));
 	// Stereogram gets generated automatically
 }
@@ -68,10 +63,12 @@ std::tr1::shared_ptr<AbstractTexture> PatternStereogram::clone() const
 
 void PatternStereogram::recreateStereogram()
 {
-	if (!texDepth()) return;
+	if ((!texDepth()) || (!texDepth()->valid())) return;
+	if ((!texBG()) || (!texBG()->valid())) return;
+	if ((!texFG()) || (!texFG()->valid())) return;
 	QImage imageTemp = texDepth()->image();
-	QImage imageBG = bgPattern_->image();
-	QImage imageFG = fgPattern_->image();
+	QImage imageBG = texBG()->image();
+	QImage imageFG = texFG()->image();
 	QSize s = imageTemp.size();
 	QSize bgSize = imageBG.size();
 	QSize fgSize = imageFG.size();
@@ -140,6 +137,21 @@ void PatternStereogram::recreateStereogram()
 	shared_ptr<Texture> texRight = shared_ptr<Texture>(new Texture(imageR));
 	setTexLeft(texLeft);
 	setTexRight(texRight);
+}
+
+std::tr1::shared_ptr<Texture> PatternStereogram::texBG() const
+{
+	return bgPattern_;
+}
+
+std::tr1::shared_ptr<Texture> PatternStereogram::texFG() const
+{
+	return fgPattern_;
+}
+
+std::tr1::shared_ptr<Parameterdialog> PatternStereogram::createDialog()
+{
+	return std::tr1::shared_ptr<Parameterdialog>(new ParameterPatternStereogram(sharedPtr()));
 }
 
 // Serialisation

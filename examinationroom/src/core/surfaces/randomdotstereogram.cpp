@@ -16,6 +16,8 @@
 
 #include "platform_math.h" // for roundf
 
+#include "parameter/parameterrandomdot.h"
+
 using namespace std::tr1;
 
 namespace Examination
@@ -47,6 +49,7 @@ std::tr1::shared_ptr<AbstractTexture> RandomdotStereogram::clone() const
 void RandomdotStereogram::recreateStereogram()
 {
 	if (!texDepth()) return;
+	if (!texDepth()->valid()) return;
 	QImage imageTemp = texDepth()->image();
 	QSize s = imageTemp.size();
 
@@ -72,7 +75,7 @@ void RandomdotStereogram::recreateStereogram()
 	{
 		for (i = 0; i < s.width(); i++)
 		{
-			char col = rand()%(maxColor_-excColor_);
+			char col = rand()%abs(maxColor_-excColor_);
 			imageL.setPixel(i, j, col);
 			imageR.setPixel(i, j, col);
 		}
@@ -138,15 +141,28 @@ void RandomdotStereogram::recreateStereogram()
 	setTexRight(texRight);
 }
 
+int RandomdotStereogram::maxColor() const
+{
+	return maxColor_;
+}
+
+int RandomdotStereogram::exclusiveColor() const
+{
+	return excColor_;
+}
+
 void RandomdotStereogram::setMaxColor(int mc)
 {
-	maxColor_ = mc;
+	maxColor_ = abs(mc < 127 ? mc : 127);
+	excColor_ = excColor_ < maxColor_ ? excColor_ : 0;
 	resetColor();
+	recreateStereogram();
 }
 
 void RandomdotStereogram::setExclusiveColor(int ec)
 {
-	excColor_ = ec;
+	excColor_ = abs(ec < maxColor_ ? ec : 0);
+	recreateStereogram();
 }
 
 void RandomdotStereogram::setColor(int idx, char r, char g, char b)
@@ -176,7 +192,7 @@ void RandomdotStereogram::resetColor()
 
 void RandomdotStereogram::applyColorPalette()
 {
-	if (texLeft())
+	if (texLeft() && texLeft()->valid())
 	{
 		QImage image = texLeft()->image();
 		image.setNumColors(maxColor_);
@@ -185,7 +201,7 @@ void RandomdotStereogram::applyColorPalette()
 			image.setColor(i, colors_[i]);
 		}
 	}
-	if (texRight())
+	if (texRight() && texRight()->valid())
 	{
 		QImage image = texRight()->image();
 		image.setNumColors(maxColor_);
@@ -194,6 +210,11 @@ void RandomdotStereogram::applyColorPalette()
 			image.setColor(i, colors_[i]);
 		}
 	}
+}
+
+std::tr1::shared_ptr<Parameterdialog> RandomdotStereogram::createDialog()
+{
+	return std::tr1::shared_ptr<Parameterdialog>(new ParameterRandomDot(sharedPtr()));
 }
 
 // Serialisation

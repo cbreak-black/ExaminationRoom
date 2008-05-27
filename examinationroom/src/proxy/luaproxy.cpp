@@ -138,6 +138,8 @@ LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
 
 	m.subclass<RandomdotStereogram,Stereogram>("RandomDot")
 	.constructor<void (*)(std::string)>()
+	.method("maxColor", &RandomdotStereogram::maxColor)
+	.method("exclusiveColor", &RandomdotStereogram::exclusiveColor)
 	.method("setMaxColor", &RandomdotStereogram::setMaxColor)
 	.method("setExclusiveColor", &RandomdotStereogram::setExclusiveColor)
 	.method<void (RandomdotStereogram::*)(int,char,char,char)>("setColor", &RandomdotStereogram::setColor)

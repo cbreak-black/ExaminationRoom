@@ -101,6 +101,12 @@ public:
 	*/
 	std::string path() const;
 
+	/**
+	Effectively loads a new texture from the given path.
+	Check for valid() to verify if it was successfull.
+	*/
+	void setPath(const std::string & path);
+
 public: // Resizing
 	virtual void resizeTo(int width, int height);
 	virtual void resizeToOriginal();

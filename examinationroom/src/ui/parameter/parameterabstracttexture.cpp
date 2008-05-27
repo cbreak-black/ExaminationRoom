@@ -29,7 +29,7 @@ ParameterAbstractTexture::ParameterAbstractTexture(std::tr1::shared_ptr<Abstract
 	setWindowFlags(Qt::Tool | Qt::WindowStaysOnTopHint);
 	QGroupBox * b = new QGroupBox(this);
 	QGridLayout * g = new QGridLayout(b);
-	b->setTitle(tr("Texture"));
+	b->setTitle(tr("Abstract Texture"));
 	b->setLayout(g);
 	g->addWidget(new QLabel(tr("Size:")), 0, 0);
 	g->addWidget(new QLabel(tr("Zoom:")), 1, 0);
@@ -64,6 +64,10 @@ ParameterAbstractTexture::ParameterAbstractTexture(std::tr1::shared_ptr<Abstract
 	addWidget(b);
 
 	reloadData();
+}
+
+ParameterAbstractTexture::~ParameterAbstractTexture()
+{
 }
 
 void ParameterAbstractTexture::reloadData()

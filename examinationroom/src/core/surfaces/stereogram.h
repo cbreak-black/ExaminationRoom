@@ -123,6 +123,9 @@ public:
 	*/
 	virtual void setStyle(Style s);
 
+public: // Parameter Dialog
+	virtual std::tr1::shared_ptr<Parameterdialog> createDialog();
+
 public: // Serialisation
 	virtual std::string className() const;
 	virtual std::string toLua(std::ostream & outStream) const;
@@ -132,16 +135,19 @@ private:
 	int offset_;	/**< Horizontal pixel offset between max and min depth */
 	Style style_;
 
-private:
+public:
 	/**
 	Recreates the stereogram after a resize or other parameter change.
 	This function should be reimplemented by subclasses.
+	Call this method when the underlying data structure texDepth() was
+	modified directly.
+	This method is automatically called when the Stereogram itself is modified.
 	*/
 	virtual void recreateStereogram();
 
-protected:
+public:
 	/**
-	The depth map texture is a single texture that containds the depth information
+	The depth map texture is a single texture that contains the depth information
 	for stereograms.
 	 \return the depth map texture
 	*/

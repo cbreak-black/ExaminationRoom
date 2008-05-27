@@ -30,13 +30,15 @@ public:
 	*/
 	ParameterAbstractTexture(std::tr1::shared_ptr<AbstractTexture> texture);
 
+	virtual ~ParameterAbstractTexture();
+
 public slots:
 	void sizeReset();
 	void sizeEdited();
 	void zoomEdited();
 
 public:
-	void reloadData();
+	virtual void reloadData();
 	std::tr1::shared_ptr<AbstractTexture> texture() const;
 
 private:

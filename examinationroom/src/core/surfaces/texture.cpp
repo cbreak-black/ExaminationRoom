@@ -13,34 +13,28 @@
 
 #include "platform_math.h"
 
-#include "parameter/parameterabstracttexture.h"
+#include "parameter/parametertexture.h"
 
 namespace Examination
 {
 
 Texture::Texture(const char * path)
 {
-	image_ = QImage(path);
-	imagePath_ = path;
-	original_ = image_;
-	
 	imageGLID_ = 0;
+	setPath(path);
 }
 
 Texture::Texture(const std::string & path)
 {
-	image_ = QImage(path.c_str());
-	imagePath_ = path;
-	original_ = image_;
-	
 	imageGLID_ = 0;
+	setPath(path);
 }
 
 Texture::Texture(QImage image)
 {
 	image_ = image;
 	original_ = image;
-	
+
 	imageGLID_ = 0;
 }
 
@@ -236,7 +230,7 @@ QImage Texture::image() const
 
 bool Texture::valid() const
 {
-	return image_.isNull();
+	return !image_.isNull();
 }
 
 std::string Texture::path() const
@@ -244,11 +238,22 @@ std::string Texture::path() const
 	return imagePath_;
 }
 
+void Texture::setPath(const std::string & path)
+{
+	glDeleteTextures(1, &imageGLID_); // Delete old image
+	image_ = QImage(QString::fromStdString(path));
+	imagePath_ = path;
+	original_ = image_;
+
+	imageGLID_ = 0;
+}
+
 void Texture::resizeTo(int width, int height)
 {
 	glDeleteTextures(1, &imageGLID_); // Delete old image
 	imageGLID_ = 0;
-	image_ = original_.scaled(width, height);
+	if (!original_.isNull())
+		image_ = original_.scaled(width, height);
 }
 
 void Texture::resizeToOriginal()
@@ -270,7 +275,7 @@ int Texture::height() const
 
 std::tr1::shared_ptr<Parameterdialog> Texture::createDialog()
 {
-	return std::tr1::shared_ptr<Parameterdialog>(new ParameterAbstractTexture(sharedPtr()));
+	return std::tr1::shared_ptr<Parameterdialog>(new ParameterTexture(sharedPtr()));
 }
 
 std::string Texture::className() const

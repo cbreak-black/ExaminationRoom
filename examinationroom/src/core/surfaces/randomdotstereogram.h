@@ -46,19 +46,42 @@ public: // Clone
 	virtual std::tr1::shared_ptr<AbstractTexture> clone() const;
 
 public:
+	/**
+	Returns the maximal number of colors this RDS uses.
+	this is also the number of colors in the pallete.
+	 \return the maximal number of colors
+	*/
+	int maxColor() const;
+
+	/**
+	Returns the number of exclusive colors.
+	Exclusive colors are colors that only appear in the foreground or background.
+	Use this setting to distinguish the foreground from the background.
+	Note that setting this value to anything but 0 creates monoscopically visible
+	stereograms.
+	 \return the number of exclusive colors.
+	*/
+	int exclusiveColor() const;
+
+public:
 	void setMaxColor(int mc);
 	void setExclusiveColor(int ec);
 	void setColor(int idx, char r, char g, char b);
 	void setColor(int idx, unsigned int color);
 	void resetColor();
 
+public: // Parameter Dialog
+	virtual std::tr1::shared_ptr<Parameterdialog> createDialog();
+
 public: // Serialisation
 	virtual std::string className() const;
 	virtual std::string toLua(std::ostream & outStream) const;
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
-private:
+public:
 	virtual void recreateStereogram();
+
+private:
 	void applyColorPalette();
 
 private:
