@@ -20,6 +20,7 @@
 
 namespace Examination
 {
+	class Program;
 	class Scene;
 	class Object;
 	class Container;
@@ -43,12 +44,35 @@ public:
 	/**
 	Creates the proxy and initializes lua.
 	*/
-	LuaProxy(std::tr1::shared_ptr<Scene> scene);
-	
+	LuaProxy();
+
 	/**
 	Cleans up the lua environment.
 	*/
 	~LuaProxy();
+
+public: // Program
+	/**
+	Returns the program associated with this LuaProxy.
+	 \return the program associated with this LuaProxy
+	*/
+	std::tr1::shared_ptr<Program> program() const;
+
+	/**
+	Sets the program for this LuaProxy.
+	The program is mainly used to access the scene.
+	Set this before doing anything else with the LuaProxy.
+	 \param program	A shared_ptr to a program
+	*/
+	void setProgram(std::tr1::shared_ptr<Program> program);
+
+	/**
+	Returns the scene associated with this LuaProxy.
+	The association is not direct, it goes over the associated
+	Program.
+	 \return the scene associated with this LuaProxy
+	*/
+	std::tr1::shared_ptr<Scene> scene() const;
 
 public: // From C++
 	/**
@@ -57,7 +81,7 @@ public: // From C++
 	 \return 0 on success, error code on failure.
 	*/
 	int runFile(const char * path);
-	
+
 	/**
 	Loads a lua string from memory, and executes it's contents.
 	 \param code	Pointer to LUA script code
@@ -155,7 +179,7 @@ private:
 private:
 	lua_State * L_;
 
-	std::tr1::shared_ptr<Scene> scene_;
+	std::tr1::weak_ptr<Program> program_;
 
 	QTime lastUpdate_;
 

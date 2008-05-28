@@ -9,6 +9,7 @@
 
 #include "luaproxy.h"
 
+#include "program.h"
 #include "scene.h"
 #include "camera.h"
 #include "screenproject.h"
@@ -88,10 +89,8 @@ struct null_deleter
 };
 
 // Creation & Destruction
-LuaProxy::LuaProxy(std::tr1::shared_ptr<Scene> scene)
+LuaProxy::LuaProxy()
 {
-	scene_ = scene;
-	
 	L_ = luaL_newstate();
 	luaL_openlibs(L_);
 
@@ -195,6 +194,25 @@ LuaProxy::~LuaProxy()
 	lua_close(L_);
 }
 
+std::tr1::shared_ptr<Program> LuaProxy::program() const
+{
+	return program_.lock();
+}
+
+void LuaProxy::setProgram(std::tr1::shared_ptr<Program> program)
+{
+	program_ = program;
+}
+
+std::tr1::shared_ptr<Scene> LuaProxy::scene() const
+{
+	std::tr1::shared_ptr<Program> p = program_.lock();
+	if (p)
+		return p->scene();
+	else
+		return std::tr1::shared_ptr<Scene>(); // Invalid
+}
+
 // From C++
 int LuaProxy::runFile(const char * path)
 {
@@ -236,7 +254,7 @@ Signature: addObject(<Object>)
 */
 void LuaProxy::addObject(std::tr1::shared_ptr<Object> object)
 {
-	scene_->addObject(object);
+	scene()->addObject(object);
 }
 
 /**
@@ -245,7 +263,7 @@ Signature: removeObject(<Object>)
 */
 void LuaProxy::removeObject(std::tr1::shared_ptr<Object> object)
 {
-	scene_->removeObject(object);
+	scene()->removeObject(object);
 }
 
 /**
@@ -254,7 +272,7 @@ Signature: clearScene()
 */
 void LuaProxy::clearScene()
 {
-	scene_->clear();
+	scene()->clear();
 }
 
 /**
@@ -263,7 +281,7 @@ Signature: split()
 */
 std::tr1::shared_ptr<Container> LuaProxy::split()
 {
-	return scene_->split();
+	return scene()->split();
 }
 
 /**
@@ -272,7 +290,7 @@ Signature: merge(<Container>)
 */
 void LuaProxy::merge(std::tr1::shared_ptr<Container> c)
 {
-	scene_->merge(c);
+	scene()->merge(c);
 }
 
 /**
@@ -281,7 +299,7 @@ Signature: clone()
 */
 std::tr1::shared_ptr<Container> LuaProxy::clone()
 {
-	return std::tr1::dynamic_pointer_cast<Container>(scene_->clone());
+	return std::tr1::dynamic_pointer_cast<Container>(scene()->clone());
 }
 
 /**
@@ -291,7 +309,7 @@ Each component can have values ranging from 0 to 255.
 */
 void LuaProxy::setBackgroundColor(char red, char green, char blue, char alpha)
 {
-	scene_->setBackgroundColor(red, green, blue, alpha);
+	scene()->setBackgroundColor(red, green, blue, alpha);
 }
 
 /**
@@ -301,7 +319,7 @@ Signature: setCameraPos({<Number:x>, <Number:y>, <Number:z>})
 void LuaProxy::setCameraPos(float x, float y, float z)
 {
 	Tool::Point p(x, y, z);
-	scene_->camera()->setPosition(p);
+	scene()->camera()->setPosition(p);
 	char msg[80];
 	snprintf(msg, 80, "Camera Position: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
 	log(msg);
@@ -314,7 +332,7 @@ Signature: setCameraDir(<Number:x>, <Number:y>, <Number:z>)
 void LuaProxy::setCameraDir(float x, float y, float z)
 {
 	Tool::Point p(x, y, z);
-	scene_->camera()->setDirection(p);
+	scene()->camera()->setDirection(p);
 	char msg[80];
 	snprintf(msg, 80, "Camera Direction: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
 	log(msg);
@@ -327,7 +345,7 @@ Signature: setCameraUp(<Number:x>, <Number:y>, <Number:z>)
 void LuaProxy::setCameraUp(float x, float y, float z)
 {
 	Tool::Point p(x, y, z);
-	scene_->camera()->setUp(p);
+	scene()->camera()->setUp(p);
 	char msg[80];
 	snprintf(msg, 80, "Camera Up: (%2.1f, %2.1f, %2.1f)", p.x, p.y, p.z);
 	log(msg);
@@ -339,7 +357,7 @@ Signature: setCameraFov(<Number:fov>)
 */
 void LuaProxy::setCameraFoV(float fov)
 {
-	scene_->camera()->setFieldOfView(fov);
+	scene()->camera()->setFieldOfView(fov);
 	char msg[80];
 	snprintf(msg, 80, "Camera Field of View: %2.2f deg", fov);
 	log(msg);
@@ -351,7 +369,7 @@ Signature: setCameraSeparation(<Number:sep>)
 */
 void LuaProxy::setCameraSep(float sep)
 {
-	scene_->camera()->setSeparation(sep);
+	scene()->camera()->setSeparation(sep);
 	char msg[80];
 	snprintf(msg, 80, "Camera Separation: %2.3f", sep);
 	log(msg);
@@ -363,7 +381,7 @@ Signature: setCameraParalaxPlane(<Number:dist>)
 */
 void LuaProxy::setCameraParalaxPlane(float pp)
 {
-	scene_->camera()->setParalaxPlane(pp);
+	scene()->camera()->setParalaxPlane(pp);
 	char msg[80];
 	snprintf(msg, 80, "Camera Paralax Plane: %2.2f", pp);
 	log(msg);
@@ -375,7 +393,7 @@ Signature: {x, y, z} = getCameraPos()
 */
 Tool::Point LuaProxy::getCameraPos()
 {
-	return scene_->camera()->position();
+	return scene()->camera()->position();
 }
 
 /**
@@ -384,7 +402,7 @@ Signature: {x, y, z} = getCameraDir()
 */
 Tool::Vector LuaProxy::getCameraDir()
 {
-	return scene_->camera()->direction();
+	return scene()->camera()->direction();
 }
 
 /**
@@ -393,7 +411,7 @@ Signature: {x, y, z} = getCameraUp()
 */
 Tool::Vector LuaProxy::getCameraUp()
 {
-	return scene_->camera()->up();
+	return scene()->camera()->up();
 }
 
 /**
@@ -402,7 +420,7 @@ Signature: fov = getCameraFoV()
 */
 float LuaProxy::getCameraFoV()
 {
-	return scene_->camera()->fieldOfView();
+	return scene()->camera()->fieldOfView();
 }
 
 /**
@@ -411,7 +429,7 @@ Signature: sep = getCameraSep()
 */
 float LuaProxy::getCameraSep()
 {
-	return scene_->camera()->separation();
+	return scene()->camera()->separation();
 }
 
 /**
@@ -420,7 +438,7 @@ Signature: dist = getCameraParalaxPlane()
 */
 float LuaProxy::getCameraParalaxPlane()
 {
-	return scene_->camera()->paralaxPlane();
+	return scene()->camera()->paralaxPlane();
 }
 
 /**
@@ -430,7 +448,7 @@ Signature: cam = camera()
 */
 std::tr1::shared_ptr<Camera> LuaProxy::camera() const
 {
-	return scene_->camera();
+	return scene()->camera();
 }
 
 /**
@@ -440,7 +458,7 @@ Signature: setCamera(<Camera>)
 */
 void LuaProxy::setCamera(std::tr1::shared_ptr<Camera> camera)
 {
-	scene_->setCamera(camera);
+	scene()->setCamera(camera);
 }
 
 /**
@@ -449,7 +467,7 @@ Signature: sep = getSeparationAtPoint({<Number:x>, <Number:y>, <Number:z>})
 */
 float LuaProxy::getSeparationAtPoint(Tool::Point p)
 {
-	return scene_->camera()->separationAtPoint(p);
+	return scene()->camera()->separationAtPoint(p);
 }
 
 /**
@@ -458,7 +476,7 @@ Signature: uss = getUnitScreenSize({<Number:x>, <Number:y>, <Number:z>})
 */
 float LuaProxy::getUnitScreenSize(Tool::Point p)
 {
-	return scene_->camera()->unitScreenSize(p);
+	return scene()->camera()->unitScreenSize(p);
 }
 
 /**
@@ -471,7 +489,7 @@ int LuaProxy::getViewport(lua_State *L)
 {
 	checkTop(L, 1);
 	// Could be right side too, the viewport should be the same...
-	long int * vp_ = scene_->camera()->screenProject(GLWidget::left)->viewport();
+	long int * vp_ = scene()->camera()->screenProject(GLWidget::left)->viewport();
 	lua_pop(L, 1);
 	lua_pushinteger(L, vp_[0]);
 	lua_pushinteger(L, vp_[1]);
