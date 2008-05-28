@@ -13,6 +13,7 @@
 
 #include "glwidget.h"
 #include "designwidget.h"
+#include "logwidget.h"
 
 #include "program.h"
 #include "scene.h"
@@ -121,17 +122,17 @@ MainWindow::MainWindow()
 	connect(objectMapper_, SIGNAL(mapped(int)), this, SLOT(onObjectCreate(int)));
 
 	// Add Dock Widgets
-	dockDesign_ = new DesignWidget("Scene Design", this);
-	dockProgram_ = new QDockWidget("Scene Program", this);
+	dockDesign_ = new DesignWidget("Design", this);
 	dockCode_ = new QDockWidget("Code", this);
+	dockLog_ = new LogWidget("Log", this);
 	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-	dockProgram_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockLog_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	addDockWidget(Qt::RightDockWidgetArea, dockDesign_);
-	addDockWidget(Qt::RightDockWidgetArea, dockProgram_);
 	addDockWidget(Qt::RightDockWidgetArea, dockCode_);
-	tabifyDockWidget(dockDesign_, dockProgram_);
+	addDockWidget(Qt::RightDockWidgetArea, dockLog_);
 	tabifyDockWidget(dockDesign_, dockCode_);
+	tabifyDockWidget(dockDesign_, dockLog_);
 
 	// Set up layout
 	setFocusPolicy(Qt::StrongFocus);
@@ -195,7 +196,8 @@ void MainWindow::loadLuaFile()
 													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
-		setProgram(Program::createFromLua(fileName.toStdString()));
+		setProgram(Program::create());
+		program_->loadLua(fileName.toStdString());
 	}
 }
 
@@ -255,6 +257,7 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 	mainGlWidget_->setScene(program_->scene());
 	fsGlWidget_->setScene(program_->scene());
 	dockDesign_->setProgram(program);
+	dockLog_->setProgram(program);
 	// Recreate menu
 	objectMenu_->clear(); // Should also destroy all mappings
 	const std::vector<ObjectFactoryPtr> & factories = program->factories();

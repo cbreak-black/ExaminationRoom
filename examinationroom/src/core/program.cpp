@@ -30,8 +30,15 @@
 #include "objects/depthbuffer.h"
 #include "objects/lightnode.h"
 
+#include <QDateTime>
+#include <iostream>
+#include <sstream>
+
 namespace Examination
 {
+
+static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
+static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
 
 Program::Program()
 {
@@ -40,6 +47,9 @@ Program::Program()
 	nameManager_ = std::tr1::shared_ptr<NameManager>(new NameManager());
 	nameManager_->registerLuaKeywords();
 	registerComponents();
+
+	QDateTime t = QDateTime::currentDateTime();
+	logOutStream_.open(t.toString(logFileFormatString).toAscii());
 }
 
 Program::~Program()
@@ -57,12 +67,14 @@ std::tr1::shared_ptr<Program> Program::create()
 
 std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 {
-	std::tr1::shared_ptr<Program> t(new Program());
-	t->this_ = t;
-	t->scene_->setProgram(t);
-	t->luaProxy_->setProgram(t);
-	t->luaProxy_->runFile(path.c_str());
+	std::tr1::shared_ptr<Program> t = create();
+	t->loadLua(path);
 	return t;
+}
+
+void Program::loadLua(const std::string & path)
+{
+	luaProxy_->runFile(path.c_str());
 }
 
 template <typename O>
@@ -118,6 +130,38 @@ void Program::onKeyDown(char k)
 void Program::onKeyUp(char k)
 {
 	luaProxy_->onKeyUp(k);
+}
+
+void Program::writeLog(const std::string & msg) const
+{
+	QDateTime t = QDateTime::currentDateTime();
+	std::stringstream ss(t.toString(dateTimeFormatString).toStdString(),
+						 std::ios_base::out | std::ios_base::app);
+	ss << ": " << msg << std::endl;
+	logOutStream_ << ss.str();
+	if (callbackLog_)
+		callbackLog_(ss.str());
+}
+
+void Program::writeError(const std::string & type, const std::string & msg) const
+{
+	QDateTime t = QDateTime::currentDateTime();
+	std::stringstream ss(t.toString(dateTimeFormatString).toStdString(),
+						 std::ios_base::out | std::ios_base::app);
+	ss << ": " << type << ": " << msg << std::endl;
+	std::cout << ss.str();
+	if (callbackError_)
+		callbackError_(ss.str());
+}
+
+void Program::setCallbackLog(const SignalLogType & callback)
+{
+	callbackLog_ = callback;
+}
+
+void Program::setCallbackError(const SignalLogType & callback)
+{
+	callbackError_ = callback;
 }
 
 // Persistency

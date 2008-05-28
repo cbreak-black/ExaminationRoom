@@ -15,7 +15,6 @@
 #include "vec.h"
 
 #include <QTime>
-#include <fstream>
 #include <memory>
 
 namespace Examination
@@ -153,7 +152,11 @@ public:
 
 protected:
 	/**
-	Called by the destructor to signal termination of the scene.
+	This event is not fired anymore.
+	Was called by the destructor to signal termination of the scene.
+	You can't do anything major in reply to this event.
+	The program will be in the process of deallocation, so neither
+	changing the scene nor writing to the log is allowed.
 	*/
 	void onQuit();
 
@@ -182,9 +185,6 @@ private:
 	std::tr1::weak_ptr<Program> program_;
 
 	QTime lastUpdate_;
-
-	std::ofstream logOutStream_;
-
 };
 
 	

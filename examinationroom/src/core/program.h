@@ -11,7 +11,9 @@
 #define PROGRAM_H
 
 #include <memory>
+#include <functional>
 #include <vector>
+#include <fstream>
 
 namespace Examination
 {
@@ -48,10 +50,19 @@ public: // Factory methods
 	/**
 	Factory method.
 	Returns a shared_ptr to a newly allocated instance of Program. It is initialized
-	with the constructor Program(path)
+	with the constructor Program(path).
+	Note that errors that happen during program load will not cached. To set up
+	callbacks before loading the program, use create() and loadLua().
 	 \return a shared_ptr to a new instance of Program
 	*/
 	static std::tr1::shared_ptr<Program> createFromLua(const std::string & path);
+
+public: // LUA
+	/**
+	Loads and executes a lua file from the given path.
+	 \param path	A string containing the path to a lua file
+	*/
+	void loadLua(const std::string & path);
 
 private:
 	/**
@@ -79,6 +90,43 @@ public: // Events
 	*/
 	virtual void onKeyUp(char k);
 
+public: // Logging
+	/**
+	Writes an entry into the log.
+	Log entries are time stamped exactly.
+	The log file is created when the program is instanciated.
+	 \param msg	The message to write to the log
+	*/
+	void writeLog(const std::string & msg) const;
+
+	/**
+	Writes an entry to standard output.
+	Error messages are time stamped like log entries
+	 \param type	The type of the error
+	 \param msg		The error message
+	*/
+	void writeError(const std::string & type, const std::string & msg) const;
+
+public: // Signals
+	/**
+	Listeners for log signals have to have this signature.
+	*/
+	typedef std::tr1::function<void (const std::string &)> SignalLogType;
+
+	/**
+	Sets the callback for log messages.
+	Callbacks will be called every time an entry is written to the log.
+	 \param callback	The callback that is to be registered, created with std::tr1::bind
+	*/
+	void setCallbackLog(const SignalLogType & callback);
+
+	/**
+	Sets the callback for errors.
+	Callbacks will be called every time an error is written to standard output.
+	 \param callback	The callback that is to be registered, created with std::tr1::bind
+	*/
+	void setCallbackError(const SignalLogType & callback);
+
 public: // Persistency
 	/**
 	Writes lua code that can recreate the program to the given out stream
@@ -97,6 +145,10 @@ private:
 	std::tr1::shared_ptr<NameManager> nameManager_;
 	std::tr1::shared_ptr<LuaProxy> luaProxy_;
 	std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > factories_;
+	mutable std::ofstream logOutStream_;
+
+	SignalLogType callbackLog_;
+	SignalLogType callbackError_;
 
 private:
 	std::tr1::weak_ptr<Program> this_;

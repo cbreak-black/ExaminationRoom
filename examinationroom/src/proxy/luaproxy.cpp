@@ -25,8 +25,6 @@
 #include "luabridge.hpp"
 #include "luahelper.h"
 
-#include <iostream>
-#include <QDateTime>
 #include <QApplication>
 
 #include "platform_string.h"
@@ -77,10 +75,9 @@ namespace luabridge
 namespace Examination
 {
 
-static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
-static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
-
-// Keeps "this" from being deallocated
+/**
+Keeps "this" from being deallocated
+*/
 struct null_deleter
 {
 	void operator()(void const *) const
@@ -182,15 +179,11 @@ LuaProxy::LuaProxy()
 	luabridge::tdstack<std::tr1::shared_ptr<LuaProxy> >::push(L_, std::tr1::shared_ptr<LuaProxy>(this, null_deleter()));
 	lua_setglobal(L_, "Scene");
 
-	QDateTime t = QDateTime::currentDateTime();
-	logOutStream_.open(t.toString(logFileFormatString).toAscii());
-
 	lastUpdate_.start();
 }
 
 LuaProxy::~LuaProxy()
 {
-	onQuit();
 	lua_close(L_);
 }
 
@@ -634,20 +627,23 @@ void LuaProxy::onEvent(const char * event, char * param)
 
 void LuaProxy::error(const char * s1, const char * s2)
 {
-	QDateTime t = QDateTime::currentDateTime();
-	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << s1 << ": " << s2 << std::endl;
+	std::tr1::shared_ptr<Program> p = program();
+	if (p)
+		p->writeError(s1, s2);
 }
 
 void LuaProxy::log(const char * msg)
 {
-	QDateTime t = QDateTime::currentDateTime();
-	logOutStream_ << t.toString(dateTimeFormatString).toStdString() << ": " << msg << std::endl;
+	std::tr1::shared_ptr<Program> p = program();
+	if (p)
+		p->writeLog(msg);
 }
 
 void LuaProxy::debugLog(const char * msg)
 {
-	QDateTime t = QDateTime::currentDateTime();
-	std::cout << t.toString(dateTimeFormatString).toStdString() << ": " << msg << std::endl;
+	std::tr1::shared_ptr<Program> p = program();
+	if (p)
+		p->writeError("DEBUG", msg);
 }
 	
 int LuaProxy::handleError(int err, const char * s)

@@ -23,6 +23,7 @@ namespace Examination
 {
 	class GLWidget;
 	class DesignWidget;
+	class LogWidget;
 	class Program;
 
 /**
@@ -98,8 +99,8 @@ private:
 	bool fullScreen_;
 
 	DesignWidget * dockDesign_;
-	QDockWidget * dockProgram_;
 	QDockWidget * dockCode_;
+	LogWidget * dockLog_;
 
 	std::tr1::shared_ptr<Program> program_;
 };
