@@ -13,6 +13,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QComboBox>
 
 #include "surfaces/stereogram.h"
 #include "surfaces/texture.h"
@@ -36,11 +37,15 @@ ParameterStereogram::ParameterStereogram(std::tr1::shared_ptr<AbstractTexture> t
 	linePathRight_ = new QLineEdit();
 	lineOffset_ = new QLineEdit();
 	lineOffset_->setAlignment(Qt::AlignRight);
+	comboStyle_ = new QComboBox(this);
+	comboStyle_->addItem("Convex");
+	comboStyle_->addItem("Concave");
 	g->addWidget(linePathDepth_, 0, 2, 1, 3);
 	g->addWidget(linePathLeft_, 1, 2, 1, 3);
 	g->addWidget(linePathRight_, 2, 2, 1, 3);
 	g->addWidget(lineOffset_, 3, 2, 1, 3);
-	g->setRowStretch(4, 1);
+	g->addWidget(comboStyle_, 4, 2, 1, 3);
+	g->setRowStretch(5, 1);
 
 	addWidget(b);
 
@@ -52,6 +57,8 @@ ParameterStereogram::ParameterStereogram(std::tr1::shared_ptr<AbstractTexture> t
 			this, SLOT(pathRightEdited()));
 	connect(lineOffset_, SIGNAL(editingFinished()),
 			this, SLOT(offsetEdited()));
+	connect(comboStyle_, SIGNAL(activated(int)),
+			this, SLOT(styleActivated(int)));
 
 	reloadData();
 }
@@ -72,6 +79,7 @@ void ParameterStereogram::reloadData()
 			if (tex->texRight())
 				linePathRight_->setText(QString::fromStdString(tex->texRight()->path()));
 			lineOffset_->setText(QString::number(tex->offset()));
+			comboStyle_->setCurrentIndex(tex->style());
 		}
 	}
 }
@@ -134,6 +142,18 @@ void ParameterStereogram::offsetEdited()
 				tex->setOffset(i);
 			}
 			reloadData(); // No auto reload, unlike for objects
+		}
+	}
+}
+
+void ParameterStereogram::styleActivated(int i)
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<Stereogram> tex = std::tr1::dynamic_pointer_cast<Stereogram>(texture());
+		if (tex)
+		{
+			tex->setStyle((Stereogram::Style)i);
 		}
 	}
 }

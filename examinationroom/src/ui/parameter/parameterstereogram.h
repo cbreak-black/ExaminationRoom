@@ -13,6 +13,7 @@
 #include "parameterabstracttexture.h"
 
 class QLineEdit;
+class QComboBox;
 
 namespace Examination
 {
@@ -32,12 +33,14 @@ public slots:
 	void pathLeftEdited();
 	void pathRightEdited();
 	void offsetEdited();
+	void styleActivated(int);
 
 private:
 	QLineEdit * linePathDepth_;
 	QLineEdit * linePathLeft_;
 	QLineEdit * linePathRight_;
 	QLineEdit * lineOffset_;
+	QComboBox * comboStyle_;
 };
 
 }
