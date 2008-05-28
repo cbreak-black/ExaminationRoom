@@ -1,4 +1,4 @@
-dofile("res/scene.pilotCommon.lua");
+Scene:loadLua("res/scene.pilotCommon.lua");
 
 Scene:log("Bisect");
 

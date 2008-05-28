@@ -60,9 +60,19 @@ public: // Factory methods
 public: // LUA
 	/**
 	Loads and executes a lua file from the given path.
+	A list of loaded files is stored, and later written to disk in toLua().
+	Root files are not stored in this list.
+	Only one root file should be loaded per program.
 	 \param path	A string containing the path to a lua file
+	 \param root	True if the file is a root file, false otherwise
 	*/
-	void loadLua(const std::string & path);
+	void loadLua(const std::string & path, bool root = false);
+
+	/**
+	Returns a vector of paths to all files that have been loaded over this program instance.
+	Files that are loaded directly from lua are not tracked.
+	*/
+	const std::vector<std::string> & loadedLuaFiles() const;
 
 private:
 	/**
@@ -111,21 +121,28 @@ public: // Signals
 	/**
 	Listeners for log signals have to have this signature.
 	*/
-	typedef std::tr1::function<void (const std::string &)> SignalLogType;
+	typedef std::tr1::function<void (const std::string &)> SignalStringType;
 
 	/**
 	Sets the callback for log messages.
 	Callbacks will be called every time an entry is written to the log.
 	 \param callback	The callback that is to be registered, created with std::tr1::bind
 	*/
-	void setCallbackLog(const SignalLogType & callback);
+	void setCallbackLog(const SignalStringType & callback);
 
 	/**
 	Sets the callback for errors.
 	Callbacks will be called every time an error is written to standard output.
 	 \param callback	The callback that is to be registered, created with std::tr1::bind
 	*/
-	void setCallbackError(const SignalLogType & callback);
+	void setCallbackError(const SignalStringType & callback);
+
+	/**
+	Sets the callback for file loads
+	Callbacks will be called every time a new file is loaded via the program api.
+	 \param callback	The callback that is to be registered, created with std::tr1::bind
+	*/
+	void setCallbackFileLoad(const SignalStringType & callback);
 
 public: // Persistency
 	/**
@@ -145,10 +162,12 @@ private:
 	std::tr1::shared_ptr<NameManager> nameManager_;
 	std::tr1::shared_ptr<LuaProxy> luaProxy_;
 	std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > factories_;
+	std::vector<std::string> luaFiles_; /**< Stores paths of all loaded lua files */
 	mutable std::ofstream logOutStream_;
 
-	SignalLogType callbackLog_;
-	SignalLogType callbackError_;
+	SignalStringType callbackLog_;
+	SignalStringType callbackError_;
+	SignalStringType callbackFileLoad_;
 
 private:
 	std::tr1::weak_ptr<Program> this_;

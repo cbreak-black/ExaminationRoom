@@ -93,6 +93,8 @@ public: // From C++
 	*/
 	lua_State * luaState() const;
 
+public: // Program
+	void loadLua(const std::string & path);
 public: // Scene
 	void addObject(std::tr1::shared_ptr<Object> object);
 	void removeObject(std::tr1::shared_ptr<Object> object);

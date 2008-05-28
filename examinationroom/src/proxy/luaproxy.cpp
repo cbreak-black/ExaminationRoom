@@ -145,6 +145,7 @@ LuaProxy::LuaProxy()
 	.constructor<void (*)(std::string,std::string,std::string)>();
 
 	m.class_<LuaProxy>("Scene")
+	.method("loadLua", &LuaProxy::loadLua)
 	.method("addObject", &LuaProxy::addObject)
 	.method("removeObject", &LuaProxy::removeObject)
 	.method("clearScene", &LuaProxy::clearScene)
@@ -241,6 +242,17 @@ lua_State * LuaProxy::luaState() const
 }
 
 // From LUA
+/**
+Signature: loadLua(<Path>)
+ \see	Program::loadLua()
+ */
+void LuaProxy::loadLua(const std::string & path)
+{
+	std::tr1::shared_ptr<Program> p = program();
+	if (p)
+		p->loadLua(path);
+}
+
 /**
 Signature: addObject(<Object>)
  \see	Scene::addObject()

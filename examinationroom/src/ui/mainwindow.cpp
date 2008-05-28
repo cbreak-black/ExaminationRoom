@@ -197,7 +197,7 @@ void MainWindow::loadLuaFile()
 	if (!fileName.isNull())
 	{
 		setProgram(Program::create());
-		program_->loadLua(fileName.toStdString());
+		program_->loadLua(fileName.toStdString(), true);
 	}
 }
 

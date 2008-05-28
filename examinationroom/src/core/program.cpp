@@ -72,9 +72,18 @@ std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 	return t;
 }
 
-void Program::loadLua(const std::string & path)
+void Program::loadLua(const std::string & path, bool root)
 {
+	if (!root)
+		luaFiles_.push_back(path);
 	luaProxy_->runFile(path.c_str());
+	if (callbackFileLoad_)
+		callbackFileLoad_(path);
+}
+
+const std::vector<std::string> & Program::loadedLuaFiles() const
+{
+	return luaFiles_;
 }
 
 template <typename O>
@@ -154,20 +163,37 @@ void Program::writeError(const std::string & type, const std::string & msg) cons
 		callbackError_(ss.str());
 }
 
-void Program::setCallbackLog(const SignalLogType & callback)
+void Program::setCallbackLog(const SignalStringType & callback)
 {
 	callbackLog_ = callback;
 }
 
-void Program::setCallbackError(const SignalLogType & callback)
+void Program::setCallbackError(const SignalStringType & callback)
 {
 	callbackError_ = callback;
+}
+
+void Program::setCallbackFileLoad(const SignalStringType & callback)
+{
+	callbackFileLoad_ = callback;
 }
 
 // Persistency
 void Program::toLua(std::ostream & outStream) const
 {
 	scene_->toLua(outStream);
+	if (luaFiles_.size() > 0)
+	{
+		// Only write file load statements if at least one file was loaded
+		outStream << std::endl;
+		outStream << "-- Loaded Files" << std::endl;
+		std::vector<std::string>::const_iterator it = luaFiles_.begin();
+		std::vector<std::string>::const_iterator end = luaFiles_.end();
+		for (; it != end; it++)
+		{
+			outStream << "Scene:loadLua(\"" << *it << "\");" << std::endl;
+		}
+	}
 }
 
 // Accessors

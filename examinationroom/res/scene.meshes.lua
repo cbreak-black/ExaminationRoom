@@ -1,5 +1,5 @@
 -- Load Libraries
-dofile("res/statistics.lua")
+Scene:loadLua("res/statistics.lua")
 -- Distance to screen: 2.5 meter
 -- Screen height: 0.79 meter
 -- Screen width:  1.31 meter
