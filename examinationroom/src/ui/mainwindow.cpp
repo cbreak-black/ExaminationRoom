@@ -13,6 +13,7 @@
 
 #include "glwidget.h"
 #include "designwidget.h"
+#include "codewidget.h"
 #include "logwidget.h"
 
 #include "program.h"
@@ -123,7 +124,7 @@ MainWindow::MainWindow()
 
 	// Add Dock Widgets
 	dockDesign_ = new DesignWidget("Design", this);
-	dockCode_ = new QDockWidget("Code", this);
+	dockCode_ = new CodeWidget("Code", this);
 	dockLog_ = new LogWidget("Log", this);
 	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
@@ -257,6 +258,7 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 	mainGlWidget_->setScene(program_->scene());
 	fsGlWidget_->setScene(program_->scene());
 	dockDesign_->setProgram(program);
+	dockCode_->setProgram(program);
 	dockLog_->setProgram(program);
 	// Recreate menu
 	objectMenu_->clear(); // Should also destroy all mappings

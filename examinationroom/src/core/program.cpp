@@ -68,7 +68,7 @@ std::tr1::shared_ptr<Program> Program::create()
 std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 {
 	std::tr1::shared_ptr<Program> t = create();
-	t->loadLua(path);
+	t->loadLua(path, true);
 	return t;
 }
 
@@ -76,14 +76,28 @@ void Program::loadLua(const std::string & path, bool root)
 {
 	if (!root)
 		luaFiles_.push_back(path);
-	luaProxy_->runFile(path.c_str());
 	if (callbackFileLoad_)
 		callbackFileLoad_(path);
+	luaProxy_->runFile(path.c_str());
 }
 
 const std::vector<std::string> & Program::loadedLuaFiles() const
 {
 	return luaFiles_;
+}
+
+bool Program::removeLua(const std::string & path)
+{
+	std::vector<std::string>::iterator it;
+	for (it = luaFiles_.begin(); it != luaFiles_.end(); it++)
+	{
+		if (*it == path)
+		{
+			luaFiles_.erase(it);
+			return true;
+		}
+	}
+	return false;
 }
 
 template <typename O>

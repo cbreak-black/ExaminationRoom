@@ -24,7 +24,7 @@ LogWidget::LogWidget(const QString &title, QWidget *parent, Qt::WindowFlags flag
 {
 	logView_ = new QTextEdit(this);
 	logView_->setReadOnly(true);
-	logView_->setFontFamily("Monospace");
+	logView_->setFontFamily("Courier");
 	logView_->document()->setMaximumBlockCount(128);
 	setWidget(logView_);
 

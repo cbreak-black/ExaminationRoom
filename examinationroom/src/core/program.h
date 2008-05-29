@@ -74,6 +74,15 @@ public: // LUA
 	*/
 	const std::vector<std::string> & loadedLuaFiles() const;
 
+	/**
+	Removes a path from the loadedLuaFiles list.
+	This does NOT unload the contens of the file itself. It prevents the file
+	from being referenced when the program is written to LUA.
+	 \param path	The path to be removed
+	 \return	True if something was removed, false otherwise
+	*/
+	bool removeLua(const std::string & path);
+
 private:
 	/**
 	This method is used by factories after program creation to register objects
