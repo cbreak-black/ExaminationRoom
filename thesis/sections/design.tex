@@ -75,6 +75,9 @@ The solution to all those problems is to use a programming language to define th
 
 Creating scenes this way follows standard programming paradigmas, and someone who can program in a procedural language should have little problems adapting to what ever syntax the embedded language uses. The drawback of this approach is, that someone who does not have programming experience will find creating a scene rather unintuitive.
 
+It is currently the only supported way of automatisation.
+A possible alternative is discussed in the next section, but was not implemented.
+
 \subsubsection{State API}
 \paragraph{}
 A more user friendly approach is \textit{Visual Programming}, a class of languages that are based on a visual instead of a textual representation of programs. Visual languages are used in data acquisition tools such as \textit{National Instruments}' \textit{LabVIEW}, music studio software such as \textit{Cycling '74}'s \textit{Max/MSP} or scripting tools like \textit{Apple}'s \textit{Automator}.
@@ -109,7 +112,7 @@ Some nodes can work differently in different flow contexts, those are actually d
 
 \subsubsection{Flow Chart Nodes}
 \paragraph{}
-The flow chart state language contains two basic primitives: Nodes and transitions.
+The flow chart state language would contain two basic primitives: Nodes and transitions.
 Normal nodes have exactly one input and one output, only one transition can start at an output, but many can end at the same input. Start nodes have no input, end nodes no output. Decision nodes can have several outputs.
 
 Each node can  execute code, access global variables, or change parameters of the scene.
@@ -165,13 +168,27 @@ Possible implementations include balanced random nodes, that only chose each pat
 
 \subsection{User Interface}
 \paragraph{}
-While not strictly part of software design, the user interface design is never the less important.
+While not strictly part of software design, the user interface design is never the less important\cite{hig}.
 Even though the software backend is designed independently from the user interface, and can work independently of it, it is still influenced by requirements of the users, and the way of interaction.
 
 The user interface of the test execution step is defined by the test itself, anything additional could conflict with the test and should be avoided.
 
 The UI of the scene designer part however has the important function to help with the complicated task of scene design and automatisation. This includes the composition of the look of a scene, which elements it contains, and where they are placed, as well as the definition of the interaction, how the scene acts and reacts to user input.
 
-\todo{How is a scene represented?}
-\todo{Tell about scene contents}
+\subsubsection{Scene}
+Since the scene is internally a tree structure, using a standard tree view offers a powerful visualisation of it.
+Tree like structures are widely used in many areas.
+Most graphical file browser offer a tree view and all common 3D modeling programs visualize their object tree in a similar way.
+
+Together with the layout of the scene, the type and parameters of objects should also be easily visible and changeable.
+Again, widely used applications offer a solution: The parameters of the active entity is shown in detail in it's own widget area, and parameters can be changed there too.
+
+The layout of the objects is controlled with drag\&drop. Parent/child relationships can easily be changed this way, and the paradigma of moving around items with the mouse is widely used in graphical user interfaces.
+
+\subsubsection{Mechanics}
 \todo{Tell about scene mechanics}
+
+\paragraph{Other}
+\todo{Key Bindings}
+\todo{Menu}
+\todo{Log File}
