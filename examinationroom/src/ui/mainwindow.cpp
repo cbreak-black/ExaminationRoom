@@ -15,6 +15,7 @@
 #include "designwidget.h"
 #include "codewidget.h"
 #include "logwidget.h"
+#include "aboutwindow.h"
 
 #include "program.h"
 #include "scene.h"
@@ -46,22 +47,24 @@ MainWindow::MainWindow()
 	mainGlWidget_->setStyle(GLWidget::single);
 	fsGlWidget_->setStyle(GLWidget::single);
 
+	aboutWindow_ = 0;
+
 	// Add menu
 	QMenu *menu = menuBar()->addMenu(tr("&File"));
+	menu->addAction(tr("&About Examinationroom..."),
+					this, SLOT(showAbout()));
 	menu->addAction(tr("&Open Scene..."),
 					this, SLOT(loadLuaFile()),
 					QKeySequence(QKeySequence::Open));
 	menu->addAction(tr("Close Scene"),
 					this, SLOT(newScene()),
 					QKeySequence(QKeySequence::Close));
-	menu->addAction(tr("&Save Scene..."),
+	menu->addAction(tr("&Save Scene As..."),
 					this, SLOT(storeLuaFile()),
 					QKeySequence(QKeySequence::Save));
-#ifndef Q_WS_MACX
 	menu->addSeparator();
 	menu->addAction(tr("&Quit"), this, SLOT(close()),
 					QKeySequence(tr("ctrl-Q")));
-#endif
 
 	// Signal mapper for display types
 	signalMapper_ = new QSignalMapper(this);
@@ -121,6 +124,11 @@ MainWindow::MainWindow()
 	objectMenu_ = menuBar()->addMenu(tr("&Create Object"));
 	objectMapper_ = new QSignalMapper(this);
 	connect(objectMapper_, SIGNAL(mapped(int)), this, SLOT(onObjectCreate(int)));
+
+#ifdef Q_WS_MACX
+	// Make menu bar the default menu bar
+	menuBar()->setParent(0);
+#endif
 
 	// Add Dock Widgets
 	dockDesign_ = new DesignWidget("Design", this);
@@ -303,6 +311,13 @@ void MainWindow::onObjectCreate(int id)
 		// Nothing useful selected, insert as root
 		program_->scene()->addObject(o);
 	}
+}
+
+void MainWindow::showAbout()
+{
+	if (!aboutWindow_)
+		aboutWindow_ = new AboutWindow();
+	aboutWindow_->show();
 }
 
 }

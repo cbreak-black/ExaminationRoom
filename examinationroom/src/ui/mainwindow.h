@@ -21,6 +21,7 @@ class QTimer;
 
 namespace Examination
 {
+	class AboutWindow;
 	class GLWidget;
 	class DesignWidget;
 	class CodeWidget;
@@ -85,6 +86,7 @@ private slots:
 	void onTimeout();
 	void onUpdate();
 	void onObjectCreate(int id);
+	void showAbout();
 
 private:
 	void setProgram(std::tr1::shared_ptr<Program> program);
@@ -102,6 +104,7 @@ private:
 	DesignWidget * dockDesign_;
 	CodeWidget * dockCode_;
 	LogWidget * dockLog_;
+	AboutWindow * aboutWindow_;
 
 	std::tr1::shared_ptr<Program> program_;
 };
