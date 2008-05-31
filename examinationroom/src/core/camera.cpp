@@ -206,12 +206,25 @@ float Camera::unitScreenSize(float d) const
 {
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
-	float fNear, fTop;
 	float fovTan = tanf((fov_/2)/180*M_PI);
-	fNear = ppd_*nearFactor;
-	fTop = fovTan*fNear;
-	// heightInPix / heightInUnits
-	return (float)viewport[3]/(fTop*2) * fNear/d;
+	if (type() == Camera::Perspective)
+	{
+		float fNear, fTop;
+		fNear = ppd_*nearFactor;
+		fTop = fovTan*fNear;
+		// heightInPix / heightInUnits
+		return (float)viewport[3]/(fTop*2) * fNear/d;
+	}
+	else if (type() == Camera::Parallel)
+	{
+		float fTop = fovTan*ppd_;
+		// heightInPix / heightInUnits
+		return (float)viewport[3]/(fTop*2);
+	}
+	else // type() == Camera::Screen
+	{
+		return 1;
+	}
 }
 
 float Camera::unitScreenSize(Point p) const
