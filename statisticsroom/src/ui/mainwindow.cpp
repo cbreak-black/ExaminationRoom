@@ -71,31 +71,27 @@ void MainWindow::setLogModel(shared_ptr<LogModel> lm)
 }
 
 // Slots
-void MainWindow::loadClicked(bool checked)
+void MainWindow::loadClicked(bool /* checked */)
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Log File"), QString(), tr("Log Files (*.log *.txt)"));
 	if (!fileName.isNull())
 	{
-		QFile * f = new QFile(fileName);
-		f->open(QIODevice::ReadOnly | QIODevice::Text);
-		QTextStream * s = new QTextStream(f);
+		QFile f(fileName);
+		f.open(QIODevice::ReadOnly | QIODevice::Text);
+		QTextStream s(&f);
 		setLogModel(LogModel::logModelFromStream(s));
-		delete s;
-		delete f;
 	}
 }
 
-void MainWindow::exportClicked(bool checked)
+void MainWindow::exportClicked(bool /* checked */)
 {
 	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Statistics File"), QString(), tr("Tab seperated list (*.csv)"));
 	if (!fileName.isNull())
 	{
-		QFile * f = new QFile(fileName);
-		f->open(QIODevice::WriteOnly | QIODevice::Text);
-		QTextStream * s = new QTextStream(f);
+		QFile f(fileName);
+		f.open(QIODevice::WriteOnly | QIODevice::Text);
+		QTextStream s(&f);
 		logModel()->calculateStatistics(s);
-		delete s;
-		delete f;
 	}
 }
 

@@ -10,13 +10,13 @@
 #include "logmodel.h"
 
 #include "logline.h"
-#include "tools/vec.h"
 
 #include <QSize>
-#include <QRegExp>
+#include <QTextStream>
+
+#include "pattern.h"
 
 using namespace std::tr1;
-using namespace Tool;
 
 namespace Statistics
 {
@@ -25,11 +25,11 @@ LogModel::LogModel()
 {
 }
 
-LogModel::LogModel(QTextStream * input)
+LogModel::LogModel(QTextStream & input)
 {
-	while (!input->atEnd())
+	while (!input.atEnd())
 	{
-		QString s = input->readLine();
+		QString s = input.readLine();
 		shared_ptr<LogLine> l = LogLine::logLineFromString(s);
 		if (l->isValid())
 		{
@@ -38,117 +38,66 @@ LogModel::LogModel(QTextStream * input)
 	}
 }
 
-shared_ptr<LogModel> LogModel::logModelFromStream(QTextStream * input)
+shared_ptr<LogModel> LogModel::logModelFromStream(QTextStream & input)
 {
 	return shared_ptr<LogModel>(new LogModel(input));
 }
 
 // Statistics
-void LogModel::calculateStatistics(QTextStream * output)
+void LogModel::calculateStatistics(QTextStream & output)
 {
-	QRegExp stimulusStart = QRegExp("^New Target:.*$");
-	QRegExp stimulusEnd = QRegExp("^Input (?:Correct|Incorrect|Skipped): .*$");
-	QRegExp stimulusCorrect = QRegExp("^Input (Correct|Incorrect|Skipped): (.*)$");
-	QRegExp stimulusSeparation = QRegExp("^.*s=(-?\\d+\\.\\d+) deg$");
-	QRegExp stimulusNewCycle = QRegExp("^New Cycle: (.*)$");
-	QRegExp stimulusPosition = QRegExp("^Target Properties:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$");
-	QRegExp stimulusNewBlock = QRegExp("^New Block: (.*)$");
+	typedef shared_ptr<Pattern> PatternPtr;
+	PatternPtr stimulusStart = PatternPtr(new Pattern("^New Target:.*$", "Start"));
+	PatternPtr stimulusEnd = PatternPtr(new Pattern("^Input (?:Correct|Incorrect|Skipped): .*$", "End"));
+	QList<PatternPtr> stimulusPatterns;
+	stimulusPatterns.append(PatternPtr(new Pattern("^Input (Correct|Incorrect|Skipped): (.*)$", "Result;Answer")));
+	stimulusPatterns.append(PatternPtr(new Pattern("^.*s=(-?\\d+\\.\\d+) deg$", "Separation")));
+	stimulusPatterns.append(PatternPtr(new Pattern("^Target Properties:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$", "PosX;PosY;PosZ")));
+	stimulusPatterns.append(PatternPtr(new Pattern("^New Cycle: .*$", "Cycle")));
+	stimulusPatterns.append(PatternPtr(new Pattern("^New Block: .*$", "Block")));
+	stimulusPatterns.append(PatternPtr(new Pattern("^New Block: (.*)$", "BlockLabel")));
 
-	QList<int> listTrials;
-	QList<QString> listCorrect;
-	QList<float> listSeparation;
-	QList<float> listSeparationChange;
-	QList<int> listCycleNumber;
-	QList<int> listBlockNumber;
-	QList<QString> listBlockLabel;
-	QList<Point> listPositions;
+	output << "Time (msec)";
+	stimulusStart->printHeader(output);
+	Q_FOREACH(PatternPtr pat, stimulusPatterns)
+	{
+		pat->printHeader(output);
+	}
+	output << "\n";
 
 	QDateTime tStart;
-	QString sCorrect;
-	float separation = 0;
-	float separationChange = 0;
-	int cycleNumber = 0;
-	int blockNumber = 0;
-	QString sBlock;
-	Point position;
 	for (int i = 0; i < logTable_.size(); i++)
 	{
 		shared_ptr<LogLine> ll = logTable_.at(i);
 		QString lm = ll->message();
-		if (stimulusStart.exactMatch(lm))
+		if (stimulusStart->match(lm))
 		{
 			tStart = ll->timestamp();
 		}
-		if (stimulusCorrect.exactMatch(lm))
+		Q_FOREACH(PatternPtr pat, stimulusPatterns)
 		{
-			sCorrect = stimulusCorrect.cap(1) + "\t" + stimulusCorrect.cap(2);
+			pat->match(lm);
 		}
-		if (stimulusSeparation.exactMatch(lm))
+		if (stimulusEnd->match(lm))
 		{
-			float s = stimulusSeparation.cap(1).toFloat();
-			separationChange = s - separation;
-			separation = s;
+			output << tStart.time().msecsTo(ll->timestamp().time());
+			stimulusStart->print(output);
+			Q_FOREACH(PatternPtr pat, stimulusPatterns)
+			{
+				pat->print(output);
+			}
+			//stimulusEnd.print(output);
+			output << "\n";
 		}
-		if (stimulusNewCycle.exactMatch(lm))
-		{
-			cycleNumber++;
-		}
-		if (stimulusNewBlock.exactMatch(lm))
-		{
-			blockNumber++;
-			sBlock = stimulusNewBlock.cap(1);
-		}
-		if (stimulusPosition.exactMatch(lm))
-		{
-			position = Point(stimulusPosition.cap(1).toFloat(),
-							 stimulusPosition.cap(2).toFloat(),
-							 stimulusPosition.cap(3).toFloat());
-		}
-		if (stimulusEnd.exactMatch(lm))
-		{
-			listTrials.append(tStart.time().msecsTo(ll->timestamp().time()));
-			listCorrect.append(sCorrect);
-			listSeparation.append(separation);
-			listSeparationChange.append(separationChange);
-			listCycleNumber.append(cycleNumber);
-			listBlockNumber.append(blockNumber);
-			listBlockLabel.append(sBlock);
-			listPositions.append(position);
-			sCorrect = "";
-			sBlock = "";
-			tStart = QDateTime();
-		}
-	}
-
-	(*output) << "#\t"
-		<< "Time (msec)\t"
-		<< "Result\tConditions\t"
-		<< "Separation\t"
-		<< "Separation Change\t"
-		<< "Position (x\ty\tz)\t"
-		<< "Cycle Number\t"
-		<< "Block Number\t"
-		<< "Block Label\n";
-	for (int i = 0; i < listTrials.size(); i++)
-	{
-		(*output) << i << "\t"
-			<< listTrials.at(i) << "\t"
-			<< listCorrect.at(i) << "\t"
-			<< listSeparation.at(i) << "\t"
-			<< listSeparationChange.at(i) << "\t"
-			<< listPositions.at(i).x << "\t" << listPositions.at(i).y << "\t" << listPositions.at(i).z << "\t"
-			<< listCycleNumber.at(i) << "\t"
-			<< listBlockNumber.at(i) << "\t"
-			<< listBlockLabel.at(i) << "\n";
 	}
 }
 
-int LogModel::rowCount(const QModelIndex &parent) const
+int LogModel::rowCount(const QModelIndex & /* parent */) const
 {
 	return logTable_.size();
 }
 
-int LogModel::columnCount(const QModelIndex &parent) const
+int LogModel::columnCount(const QModelIndex & /* parent */) const
 {
 	return 3;
 }
