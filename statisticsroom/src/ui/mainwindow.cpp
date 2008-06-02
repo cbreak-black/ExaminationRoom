@@ -11,6 +11,7 @@
 
 #include <QtGui>
 
+#include "log.h"
 #include "logmodel.h"
 
 using namespace std::tr1;
@@ -57,7 +58,18 @@ QSize MainWindow::minimumSizeHint() const
 QSize MainWindow::sizeHint() const
 {
 	return QSize(1024, 768);
-}	
+}
+
+shared_ptr<Log> MainWindow::log() const
+{
+	return log_;
+}
+
+void MainWindow::setLog(shared_ptr<Log> log)
+{
+	log_ = log;
+	logModel_->setLog(log);
+}
 
 shared_ptr<LogModel> MainWindow::logModel() const
 {
@@ -79,7 +91,7 @@ void MainWindow::loadClicked(bool /* checked */)
 		QFile f(fileName);
 		f.open(QIODevice::ReadOnly | QIODevice::Text);
 		QTextStream s(&f);
-		setLogModel(LogModel::logModelFromStream(s));
+		setLog(Log::logFromStream(s));
 	}
 }
 

@@ -8,7 +8,7 @@
  */
 
 #ifndef LOGLINE_H
-#define LOGLINEL_H
+#define LOGLINE_H
 
 #include <QDateTime>
 #include <QString>
@@ -21,7 +21,6 @@ namespace Statistics
 class LogLine
 {
 public:
-	LogLine();
 	LogLine(QDateTime timestamp, QString message);
 
 public:
@@ -33,7 +32,7 @@ public:
 
 public: // Factory Methods
 	static std::tr1::shared_ptr<LogLine> logLineFromString(QString str);
-	
+
 private:
 	QDateTime timestamp_;
 	QString message_;

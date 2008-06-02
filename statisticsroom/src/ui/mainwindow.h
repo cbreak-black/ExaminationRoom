@@ -17,6 +17,7 @@
 
 namespace Statistics
 {
+	class Log;
 	class LogModel;
 
 class MainWindow : public QWidget
@@ -43,10 +44,15 @@ public slots:
 	void exportClicked(bool checked);
 
 private:
+	std::tr1::shared_ptr<Log> log() const;
 	std::tr1::shared_ptr<LogModel> logModel() const;
+
+private:
+	void setLog(std::tr1::shared_ptr<Log> log);
 	void setLogModel(std::tr1::shared_ptr<LogModel> lm);
 
 private:
+	std::tr1::shared_ptr<Log> log_;
 	std::tr1::shared_ptr<LogModel> logModel_;
 	QTableView * tableView_;
 };

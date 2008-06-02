@@ -19,13 +19,17 @@ class QTextStream;
 
 namespace Statistics
 {
-	class LogLine;
+	class Log;
 
 class LogModel : public QAbstractTableModel
 {
 public:
 	LogModel();
-	LogModel(QTextStream & input);
+	LogModel(std::tr1::shared_ptr<Log> log);
+
+public:
+	std::tr1::shared_ptr<Log> log() const;
+	void setLog(std::tr1::shared_ptr<Log> log);
 
 public: // Bare Bones
 	virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -36,11 +40,8 @@ public: // Bare Bones
 public: // Statistics
 	void calculateStatistics(QTextStream & output);
 
-public: // Factory Methods
-	static std::tr1::shared_ptr<LogModel> logModelFromStream(QTextStream & input);
-
 private:
-	QList<std::tr1::shared_ptr<LogLine> > logTable_;
+	std::tr1::shared_ptr<Log> log_;
 };
 
 }

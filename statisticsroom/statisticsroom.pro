@@ -4,18 +4,16 @@
 
 TEMPLATE = app
 TARGET = StatisticsRoom
-DEPENDPATH += . src src/ui src/model
-INCLUDEPATH += boost/tr1/tr1 . src src/ui src/model 
+DEPENDPATH += . src src/ui src/model src/tools
+INCLUDEPATH += boost/tr1/tr1 . src src/ui src/model src/tools
 
 # Input
 HEADERS += \
-	src/model/logmodel.h \
-	src/model/logline.h \
+	src/model/*.h \
 	src/tools/pattern.h \
 	src/ui/mainwindow.h
 SOURCES += \
-	src/model/logmodel.cpp \
-	src/model/logline.cpp \
+	src/model/*.cpp \
 	src/tools/pattern.cpp \
 	src/ui/mainwindow.cpp \
 	src/main.cpp

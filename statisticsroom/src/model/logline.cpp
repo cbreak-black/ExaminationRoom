@@ -18,10 +18,6 @@ namespace Statistics
 
 static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
 
-LogLine::LogLine()
-{
-}
-
 LogLine::LogLine(QDateTime timestamp, QString message)
 {
 	timestamp_ = timestamp;

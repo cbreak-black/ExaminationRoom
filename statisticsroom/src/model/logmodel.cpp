@@ -9,6 +9,7 @@
 
 #include "logmodel.h"
 
+#include "log.h"
 #include "logline.h"
 
 #include <QSize>
@@ -25,27 +26,27 @@ LogModel::LogModel()
 {
 }
 
-LogModel::LogModel(QTextStream & input)
+LogModel::LogModel(std::tr1::shared_ptr<Log> log)
 {
-	while (!input.atEnd())
-	{
-		QString s = input.readLine();
-		shared_ptr<LogLine> l = LogLine::logLineFromString(s);
-		if (l->isValid())
-		{
-			logTable_.append(l);
-		}
-	}
+	log_ = log;
 }
 
-shared_ptr<LogModel> LogModel::logModelFromStream(QTextStream & input)
+std::tr1::shared_ptr<Log> LogModel::log() const
 {
-	return shared_ptr<LogModel>(new LogModel(input));
+	return log_;
+}
+
+void LogModel::setLog(std::tr1::shared_ptr<Log> log)
+{
+	log_ = log;
+	reset();
 }
 
 // Statistics
 void LogModel::calculateStatistics(QTextStream & output)
 {
+	if (!log_) return;
+
 	typedef shared_ptr<Pattern> PatternPtr;
 	PatternPtr stimulusStart = PatternPtr(new Pattern("^New Target:.*$", "Start"));
 	PatternPtr stimulusEnd = PatternPtr(new Pattern("^Input (?:Correct|Incorrect|Skipped): .*$", "End"));
@@ -66,9 +67,9 @@ void LogModel::calculateStatistics(QTextStream & output)
 	output << "\n";
 
 	QDateTime tStart;
-	for (int i = 0; i < logTable_.size(); i++)
+	for (int i = 0; i < log_->size(); i++)
 	{
-		shared_ptr<LogLine> ll = logTable_.at(i);
+		shared_ptr<LogLine> ll = log_->at(i);
 		QString lm = ll->message();
 		if (stimulusStart->match(lm))
 		{
@@ -94,7 +95,10 @@ void LogModel::calculateStatistics(QTextStream & output)
 
 int LogModel::rowCount(const QModelIndex & /* parent */) const
 {
-	return logTable_.size();
+	if (log_)
+		return log_->size();
+	else
+		return 0;
 }
 
 int LogModel::columnCount(const QModelIndex & /* parent */) const
@@ -104,6 +108,8 @@ int LogModel::columnCount(const QModelIndex & /* parent */) const
 
 QVariant LogModel::data(const QModelIndex &index, int role) const
 {
+	if (!log_) return QVariant();
+
 	if (role == Qt::DisplayRole)
 	{
 		int logLineIdx = index.row();
@@ -112,9 +118,9 @@ QVariant LogModel::data(const QModelIndex &index, int role) const
 			case 0:
 				return QVariant(logLineIdx);
 			case 1:
-				return QVariant(logTable_.at(logLineIdx)->timestamp().toString("hh:mm:ss.zzz"));
+				return QVariant(log_->at(logLineIdx)->timestamp().toString("hh:mm:ss.zzz"));
 			case 2:
-				return QVariant(logTable_.at(logLineIdx)->message());
+				return QVariant(log_->at(logLineIdx)->message());
 		}
 	}
 	else if (role == Qt::SizeHintRole)
