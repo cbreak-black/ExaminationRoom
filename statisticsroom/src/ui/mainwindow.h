@@ -42,8 +42,9 @@ public:
     QSize sizeHint() const;
 
 public slots:
-	void loadClicked(bool checked);
-	void exportClicked(bool checked);
+	void storeClicked();
+	void loadClicked();
+	void transformClicked();
 
 private:
 	std::tr1::shared_ptr<Log> log() const;

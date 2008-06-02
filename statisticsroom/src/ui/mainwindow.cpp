@@ -31,7 +31,7 @@ MainWindow::MainWindow()
 	setLayout(mainLayout);
 
 	QSplitter * split = new QSplitter(Qt::Vertical);
-	mainLayout->addWidget(split, 0, 0, 3, 3);
+	mainLayout->addWidget(split, 1, 0, 4, 4);
 
 	patternView_ = new QTreeView();
 	patternView_->setIndentation(0);
@@ -44,11 +44,15 @@ MainWindow::MainWindow()
 	split->addWidget(tableView_);
 
 	QPushButton * bLoad = new QPushButton(tr("Load..."));
-	QPushButton * bExport = new QPushButton(tr("Export..."));
-	mainLayout->addWidget(bLoad, 3, 1);
-	mainLayout->addWidget(bExport, 3, 2);
-	QObject::connect(bLoad, SIGNAL(clicked(bool)), this, SLOT(loadClicked(bool)));
-	QObject::connect(bExport, SIGNAL(clicked(bool)), this, SLOT(exportClicked(bool)));
+	QPushButton * bStore = new QPushButton(tr("Store..."));
+	QPushButton * bTransform = new QPushButton(tr("Transform..."));
+	mainLayout->addWidget(bLoad, 0, 0);
+	mainLayout->addWidget(bStore, 0, 1);
+	mainLayout->addWidget(bTransform, 0, 3);
+
+	connect(bLoad, SIGNAL(clicked()), this, SLOT(loadClicked()));
+	connect(bStore, SIGNAL(clicked()), this, SLOT(storeClicked()));
+	connect(bTransform, SIGNAL(clicked()), this, SLOT(transformClicked()));
 
 	logTransformer_ = std::tr1::shared_ptr<LogTransformer>(new LogTransformer());
 
@@ -97,27 +101,45 @@ void MainWindow::setLogModel(shared_ptr<LogModel> lm)
 }
 
 // Slots
-void MainWindow::loadClicked(bool /* checked */)
+void MainWindow::loadClicked()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Log File"), QString(), tr("Log Files (*.log *.txt)"));
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Load Pattern File"), QString(), tr("Pattern Files (*.pattern)"));
 	if (!fileName.isNull())
 	{
 		QFile f(fileName);
 		f.open(QIODevice::ReadOnly | QIODevice::Text);
 		QTextStream s(&f);
-		setLog(Log::logFromStream(s));
+		logTransformer_->loadFromStream(s);
+		patternView_->reset();
 	}
 }
 
-void MainWindow::exportClicked(bool /* checked */)
+void MainWindow::storeClicked()
 {
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Save Statistics File"), QString(), tr("Tab seperated list (*.csv)"));
+	QString fileName = QFileDialog::getSaveFileName(this, tr("Load Pattern File"), QString(), tr("Pattern Files (*.pattern)"));
 	if (!fileName.isNull())
 	{
 		QFile f(fileName);
 		f.open(QIODevice::WriteOnly | QIODevice::Text);
 		QTextStream s(&f);
-		logTransformer_->transformLog(log(), s);
+		logTransformer_->writeToStream(s);
+	}
+}
+
+void MainWindow::transformClicked()
+{
+	QString fileNameLoad = QFileDialog::getOpenFileName(this, tr("Load Log File"), QString(), tr("Log File ( *.log *.txt)"));
+	QString fileNameStore = QFileDialog::getSaveFileName(this, tr("Save Statistics File"), QString(), tr("Tab separated list (*.csv)"));
+	if (!fileNameLoad.isNull() && !fileNameStore.isNull())
+	{
+		QFile iFile(fileNameLoad);
+		QFile oFile(fileNameStore);
+		iFile.open(QIODevice::ReadOnly | QIODevice::Text);
+		oFile.open(QIODevice::WriteOnly | QIODevice::Text);
+		QTextStream in(&iFile);
+		QTextStream out(&oFile);
+		setLog(Log::logFromStream(in));
+		logTransformer_->transformLog(log(), out);
 	}
 }
 

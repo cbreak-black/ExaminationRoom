@@ -33,6 +33,63 @@ LogTransformer::LogTransformer()
 	stimulusPatterns_.append(PatternPtr(new Pattern("^New Block: (.*)$", "BlockLabel")));
 }
 
+void LogTransformer::writeToStream(QTextStream & out) const
+{
+	// out << "# Start\n";
+	out << stimulusStart_->pattern() << "\n" << stimulusStart_->fieldNames() << "\n";
+	// out << "# End\n";
+	out << stimulusEnd_->pattern() << "\n" << stimulusEnd_->fieldNames() << "\n";
+	// out << "# Data\n";
+	Q_FOREACH(PatternPtr pat, stimulusPatterns_)
+	{
+		out << pat->pattern() << "\n" << pat->fieldNames() << "\n";
+	}
+}
+
+inline PatternPtr readPattern(QTextStream & in)
+{
+	QString p = in.readLine();
+	QString t = in.readLine();
+	if (!p.isNull() && !t.isNull())
+	{
+		return PatternPtr(new Pattern(p, t));
+	}
+	else
+	{
+		return PatternPtr();
+	}
+}
+
+bool LogTransformer::loadFromStream(QTextStream & in)
+{
+	PatternPtr s = readPattern(in);
+	PatternPtr e = readPattern(in);
+	if (s && e)
+	{
+		stimulusStart_ = s;
+		stimulusEnd_ = e;
+	}
+	else
+	{
+		return false;
+	}
+	stimulusPatterns_.clear();
+	// Read data patterns
+	while (!in.atEnd())
+	{
+		PatternPtr p = readPattern(in);
+		if (p)
+		{
+			stimulusPatterns_.append(p);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 std::tr1::shared_ptr<Pattern> LogTransformer::stimulusStart()
 {
 	return stimulusStart_;

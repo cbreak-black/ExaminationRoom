@@ -33,6 +33,21 @@ public:
 public: // Statistics&Transformation
 	void transformLog(std::tr1::shared_ptr<Log> log, QTextStream & output) const;
 
+public: // Persistency
+	/**
+	Writes the contained patterns to the passed stream
+	 \param out	Stream suitable for writing
+	*/
+	void writeToStream(QTextStream & out) const;
+
+	/**
+	Replaces the current patterns with those loaded from the stream.
+	The syntaxi has to be that used by writeToStream()
+	 \param in	Stream suitable for reading
+	 \return true if the stream was successfully loaded, false if an error occured
+	*/
+	bool loadFromStream(QTextStream & in);
+
 public: // Pattern handling
 	/**
 	The start pattern defines the begin of a individual test stimulus.
