@@ -18,16 +18,16 @@ namespace Statistics
 
 Pattern::Pattern(const QString & regExp, const QString & fieldNames)
 {
-	matched_ = 0;
 	regExp_ = QRegExp(regExp);
 	fieldNames_ = fieldNames.split(";");
+	reset();
 }
 
 Pattern::Pattern(const QRegExp & regExp, const QStringList & fieldNames)
 {
-	matched_ = 0;
 	regExp_ = regExp;
 	fieldNames_ = fieldNames;
+	reset();
 }
 
 bool Pattern::match(const QString & string)
@@ -48,6 +48,16 @@ bool Pattern::match(const QString & string)
 	}
 }
 
+void Pattern::reset()
+{
+	matched_ = 0;
+	fieldContents_.clear();
+	for (int i = 0; i < fieldNames_.size(); i++)
+	{
+		fieldContents_.append("");
+	}
+}
+
 void Pattern::printHeader(QTextStream & outStream)
 {
 	for (int i = 0; i < fieldNames_.size(); i++)
@@ -64,6 +74,7 @@ void Pattern::print(QTextStream & outStream)
 		for (int i = 0; i < fieldContents_.size(); i++)
 		{
 			outStream << '\t' << fieldContents_[i];
+			fieldContents_[i] = ""; // Only print every match once
 		}
 	}
 	else

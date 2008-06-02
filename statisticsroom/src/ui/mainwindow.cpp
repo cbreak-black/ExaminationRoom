@@ -13,6 +13,7 @@
 
 #include "log.h"
 #include "logmodel.h"
+#include "logtransformer.h"
 
 using namespace std::tr1;
 
@@ -27,7 +28,7 @@ MainWindow::MainWindow()
 	//mainLayout->setSpacing(0);
 
 	setLayout(mainLayout);
-	
+
 	tableView_ = new QTableView();
 	tableView_->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 	tableView_->horizontalHeader()->setStretchLastSection(true);
@@ -43,6 +44,7 @@ MainWindow::MainWindow()
 	
 	// Model
 	setLogModel(shared_ptr<LogModel>(new LogModel()));
+	logTransformer_ = std::tr1::shared_ptr<LogTransformer>(new LogTransformer());
 }
 
 
@@ -103,7 +105,7 @@ void MainWindow::exportClicked(bool /* checked */)
 		QFile f(fileName);
 		f.open(QIODevice::WriteOnly | QIODevice::Text);
 		QTextStream s(&f);
-		logModel()->calculateStatistics(s);
+		logTransformer_->transformLog(log(), s);
 	}
 }
 

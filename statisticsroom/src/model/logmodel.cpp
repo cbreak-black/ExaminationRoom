@@ -13,9 +13,6 @@
 #include "logline.h"
 
 #include <QSize>
-#include <QTextStream>
-
-#include "pattern.h"
 
 using namespace std::tr1;
 
@@ -40,57 +37,6 @@ void LogModel::setLog(std::tr1::shared_ptr<Log> log)
 {
 	log_ = log;
 	reset();
-}
-
-// Statistics
-void LogModel::calculateStatistics(QTextStream & output)
-{
-	if (!log_) return;
-
-	typedef shared_ptr<Pattern> PatternPtr;
-	PatternPtr stimulusStart = PatternPtr(new Pattern("^New Target:.*$", "Start"));
-	PatternPtr stimulusEnd = PatternPtr(new Pattern("^Input (?:Correct|Incorrect|Skipped): .*$", "End"));
-	QList<PatternPtr> stimulusPatterns;
-	stimulusPatterns.append(PatternPtr(new Pattern("^Input (Correct|Incorrect|Skipped): (.*)$", "Result;Answer")));
-	stimulusPatterns.append(PatternPtr(new Pattern("^.*s=(-?\\d+\\.\\d+) deg$", "Separation")));
-	stimulusPatterns.append(PatternPtr(new Pattern("^Target Properties:.*\\((-?\\d+\\.\\d+), (-?\\d+\\.\\d+), (-?\\d+\\.\\d+)\\).*$", "PosX;PosY;PosZ")));
-	stimulusPatterns.append(PatternPtr(new Pattern("^New Cycle: .*$", "Cycle")));
-	stimulusPatterns.append(PatternPtr(new Pattern("^New Block: .*$", "Block")));
-	stimulusPatterns.append(PatternPtr(new Pattern("^New Block: (.*)$", "BlockLabel")));
-
-	output << "Time (msec)";
-	stimulusStart->printHeader(output);
-	Q_FOREACH(PatternPtr pat, stimulusPatterns)
-	{
-		pat->printHeader(output);
-	}
-	output << "\n";
-
-	QDateTime tStart;
-	for (int i = 0; i < log_->size(); i++)
-	{
-		shared_ptr<LogLine> ll = log_->at(i);
-		QString lm = ll->message();
-		if (stimulusStart->match(lm))
-		{
-			tStart = ll->timestamp();
-		}
-		Q_FOREACH(PatternPtr pat, stimulusPatterns)
-		{
-			pat->match(lm);
-		}
-		if (stimulusEnd->match(lm))
-		{
-			output << tStart.time().msecsTo(ll->timestamp().time());
-			stimulusStart->print(output);
-			Q_FOREACH(PatternPtr pat, stimulusPatterns)
-			{
-				pat->print(output);
-			}
-			//stimulusEnd.print(output);
-			output << "\n";
-		}
-	}
 }
 
 int LogModel::rowCount(const QModelIndex & /* parent */) const
@@ -128,11 +74,11 @@ QVariant LogModel::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case 0:
-				return QVariant(QSize(32, 18));
+				return QVariant(QSize(32, 14));
 			case 1:
-				return QVariant(QSize(128, 18));
+				return QVariant(QSize(128, 14));
 			case 2:
-				return QVariant(QSize(512, 18));
+				return QVariant(QSize(512, 14));
 		}
 	}
 	return QVariant();

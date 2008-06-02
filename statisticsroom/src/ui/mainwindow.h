@@ -19,6 +19,7 @@ namespace Statistics
 {
 	class Log;
 	class LogModel;
+	class LogTransformer;
 
 class MainWindow : public QWidget
 {
@@ -54,6 +55,7 @@ private:
 private:
 	std::tr1::shared_ptr<Log> log_;
 	std::tr1::shared_ptr<LogModel> logModel_;
+	std::tr1::shared_ptr<LogTransformer> logTransformer_;
 	QTableView * tableView_;
 };
 

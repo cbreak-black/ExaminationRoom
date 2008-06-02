@@ -15,8 +15,6 @@
 
 #include <memory>
 
-class QTextStream;
-
 namespace Statistics
 {
 	class Log;
@@ -36,9 +34,6 @@ public: // Bare Bones
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-public: // Statistics
-	void calculateStatistics(QTextStream & output);
 
 private:
 	std::tr1::shared_ptr<Log> log_;

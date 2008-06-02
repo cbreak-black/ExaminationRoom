@@ -38,8 +38,31 @@ public:
 	Pattern(const QRegExp & regExp, const QStringList & fieldNames);
 
 public:
+	/**
+	Matches the string, storing the captures if the match is successfull
+	 \return true if the string was matched, false if it wasn't
+	*/
 	bool match(const QString & string);
+
+	/**
+	Resets the stored captures and the match counter.
+	Call this before/after using patterns in a transformation.
+	*/
+	void reset();
+
+	/**
+	Prints the headers to the passed output stream
+	 \param outStream	A QTextStream open for writing
+	*/
 	void printHeader(QTextStream & outStream);
+
+	/**
+	Prints the Captures to the passed output stream.
+	For each header a capture is printed, additional captures are ignored.
+	Printing also clears stored captures, so repeated printing results in
+	empty fields.
+	 \param outStream	A QTextStream open for writing
+	*/
 	void print(QTextStream & outStream);
 
 private:
