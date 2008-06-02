@@ -74,9 +74,9 @@ QVariant LogModel::data(const QModelIndex &index, int role) const
 		switch (index.column())
 		{
 			case 0:
-				return QVariant(QSize(32, 14));
+				return QVariant(QSize(48, 14));
 			case 1:
-				return QVariant(QSize(128, 14));
+				return QVariant(QSize(192, 14));
 			case 2:
 				return QVariant(QSize(512, 14));
 		}
@@ -107,7 +107,7 @@ QVariant LogModel::headerData(int section, Qt::Orientation orientation, int role
 				case 0:
 					return QVariant(QSize(48, 18));
 				case 1:
-					return QVariant(QSize(128, 18));
+					return QVariant(QSize(192, 18));
 				case 2:
 					return QVariant(QSize(512, 18));
 			}

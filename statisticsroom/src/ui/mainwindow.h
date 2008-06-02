@@ -11,9 +11,10 @@
 #define MAINWINDOW_H
 
 #include <QWidget>
-#include <QTableView>
 
 #include <memory>
+
+class QTreeView;
 
 namespace Statistics
 {
@@ -56,7 +57,8 @@ private:
 	std::tr1::shared_ptr<Log> log_;
 	std::tr1::shared_ptr<LogModel> logModel_;
 	std::tr1::shared_ptr<LogTransformer> logTransformer_;
-	QTableView * tableView_;
+	QTreeView * patternView_;
+	QTreeView * tableView_;
 };
 
 }

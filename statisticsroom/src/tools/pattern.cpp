@@ -30,6 +30,28 @@ Pattern::Pattern(const QRegExp & regExp, const QStringList & fieldNames)
 	reset();
 }
 
+QString Pattern::pattern() const
+{
+	return regExp_.pattern();
+}
+
+void Pattern::setPattern(const QString & pattern)
+{
+	regExp_ = QRegExp(pattern);
+	reset();
+}
+
+QString Pattern::fieldNames() const
+{
+	return fieldNames_.join(";");
+}
+
+void Pattern::setFieldNames(const QString & fieldNames)
+{
+	fieldNames_ = fieldNames.split(";");
+	reset();
+}
+
 bool Pattern::match(const QString & string)
 {
 	if (regExp_.exactMatch(string))
@@ -74,7 +96,7 @@ void Pattern::print(QTextStream & outStream)
 		for (int i = 0; i < fieldContents_.size(); i++)
 		{
 			outStream << '\t' << fieldContents_[i];
-			fieldContents_[i] = ""; // Only print every match once
+			//fieldContents_[i] = ""; // Only print every match once
 		}
 	}
 	else

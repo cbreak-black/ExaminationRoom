@@ -33,6 +33,50 @@ LogTransformer::LogTransformer()
 	stimulusPatterns_.append(PatternPtr(new Pattern("^New Block: (.*)$", "BlockLabel")));
 }
 
+std::tr1::shared_ptr<Pattern> LogTransformer::stimulusStart()
+{
+	return stimulusStart_;
+}
+
+std::tr1::shared_ptr<Pattern> LogTransformer::stimulusEnd()
+{
+	return stimulusEnd_;
+}
+
+std::tr1::shared_ptr<Pattern> LogTransformer::stimulusData(int idx)
+{
+	if (idx >= 0 && idx < stimulusPatterns_.size())
+		return stimulusPatterns_.at(idx);
+	else
+		return std::tr1::shared_ptr<Pattern>();
+}
+
+int LogTransformer::stimulusDataCount() const
+{
+	return stimulusPatterns_.size();
+}
+
+std::tr1::shared_ptr<Pattern> LogTransformer::pattern(int idx)
+{
+	if (idx == 0)
+	{
+		return stimulusStart_;
+	}
+	else if (idx == stimulusDataCount()+1)
+	{
+		return stimulusEnd_;
+	}
+	else
+	{
+		return stimulusData(idx-1);
+	}
+}
+
+int LogTransformer::patternCount() const
+{
+	return stimulusDataCount() + 2;
+}
+
 void LogTransformer::resetPatterns() const
 {
 	stimulusStart_->reset();

@@ -14,6 +14,7 @@
 #include "log.h"
 #include "logmodel.h"
 #include "logtransformer.h"
+#include "logtransformermodel.h"
 
 using namespace std::tr1;
 
@@ -29,24 +30,35 @@ MainWindow::MainWindow()
 
 	setLayout(mainLayout);
 
-	tableView_ = new QTableView();
-	tableView_->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
-	tableView_->horizontalHeader()->setStretchLastSection(true);
-	tableView_->verticalHeader()->setVisible(false);
-	mainLayout->addWidget(tableView_, 0, 0, 3, 3);
-	
+	QSplitter * split = new QSplitter(Qt::Vertical);
+	mainLayout->addWidget(split, 0, 0, 3, 3);
+
+	patternView_ = new QTreeView();
+	patternView_->setIndentation(0);
+	patternView_->setUniformRowHeights(true);
+	split->addWidget(patternView_);
+
+	tableView_ = new QTreeView();
+	tableView_->setIndentation(0);
+	tableView_->setUniformRowHeights(true);
+	split->addWidget(tableView_);
+
 	QPushButton * bLoad = new QPushButton(tr("Load..."));
 	QPushButton * bExport = new QPushButton(tr("Export..."));
 	mainLayout->addWidget(bLoad, 3, 1);
 	mainLayout->addWidget(bExport, 3, 2);
 	QObject::connect(bLoad, SIGNAL(clicked(bool)), this, SLOT(loadClicked(bool)));
 	QObject::connect(bExport, SIGNAL(clicked(bool)), this, SLOT(exportClicked(bool)));
-	
+
+	logTransformer_ = std::tr1::shared_ptr<LogTransformer>(new LogTransformer());
+
 	// Model
 	setLogModel(shared_ptr<LogModel>(new LogModel()));
-	logTransformer_ = std::tr1::shared_ptr<LogTransformer>(new LogTransformer());
-}
+	patternView_->setModel(new LogTransformerModel(logTransformer_));
 
+	// Sizing
+	patternView_->setColumnWidth(0, 400);
+}
 
 MainWindow::~MainWindow()
 {

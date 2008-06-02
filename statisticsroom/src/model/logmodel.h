@@ -10,7 +10,7 @@
 #ifndef LOGMODEL_H
 #define LOGMODEL_H
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 #include <QList>
 
 #include <memory>
@@ -19,7 +19,7 @@ namespace Statistics
 {
 	class Log;
 
-class LogModel : public QAbstractTableModel
+class LogModel : public QAbstractListModel
 {
 public:
 	LogModel();

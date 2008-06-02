@@ -37,6 +37,32 @@ public:
 	 */
 	Pattern(const QRegExp & regExp, const QStringList & fieldNames);
 
+public: // Accessors
+	/**
+	Returns the pattern of the regular expression.
+	 \return the pattern of the regular expression
+	*/
+	QString pattern() const;
+
+	/**
+	Sets the pattern of the regular expression.
+	 \param pattern	A string of a Regular Expression
+	*/
+	void setPattern(const QString & pattern);
+
+	/**
+	Returns the field names as joined string with separator ";".
+	 \return the field names as string
+	*/
+	QString fieldNames() const;
+
+	/**
+	Sets the field names with a ";" separated list of names.
+	This implicitely also sets the number of fields.
+	 \param fieldNames	Field names separated by ";"
+	*/
+	void setFieldNames(const QString & fieldNames);
+
 public:
 	/**
 	Matches the string, storing the captures if the match is successfull
@@ -59,8 +85,6 @@ public:
 	/**
 	Prints the Captures to the passed output stream.
 	For each header a capture is printed, additional captures are ignored.
-	Printing also clears stored captures, so repeated printing results in
-	empty fields.
 	 \param outStream	A QTextStream open for writing
 	*/
 	void print(QTextStream & outStream);
