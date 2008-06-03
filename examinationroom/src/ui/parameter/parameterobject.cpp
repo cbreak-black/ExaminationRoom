@@ -58,7 +58,7 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	colorLabel_->setAutoFillBackground(true);
 	QPushButton * cb = new QPushButton("Set", this);
 	checkboxWireframe_ = new QCheckBox("Wireframe", this);
-	QPushButton * bTex = new QPushButton("Edit Texture...", this);
+	buttonEditTex_ = new QPushButton("Edit Texture...", this);
 	comboTex_ = new QComboBox(this);
 	comboTex_->addItem("No Texture");
 	comboTex_->addItem("Simple");
@@ -73,7 +73,7 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 	g->addWidget(cb, 2, 4);
 	g->addWidget(linePriority_, 3, 2, 1, 3);
 	g->addWidget(checkboxWireframe_, 4, 0, 1, 5);
-	g->addWidget(bTex, 5, 2, 1, 3);
+	g->addWidget(buttonEditTex_, 5, 2, 1, 3);
 	g->addWidget(comboTex_, 6, 2, 1, 3);
 	g->setRowStretch(7, 1);
 	addWidget(b);
@@ -92,7 +92,7 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 			this, SLOT(wireframeStateChanged(int)));
 	connect(cb, SIGNAL(clicked()),
 			this, SLOT(setColor()));
-	connect(bTex, SIGNAL(clicked()),
+	connect(buttonEditTex_, SIGNAL(clicked()),
 			this, SLOT(editTexture()));
 	connect(comboTex_, SIGNAL(activated(int)),
 			this, SLOT(setTexture(int)));
@@ -169,8 +169,16 @@ void ParameterObject::reloadData()
 		checkboxWireframe_->setCheckState(o->wireframe()? Qt::Checked : Qt::Unchecked);
 		// Texture
 		int texType = identifyTexture(o->texture());
-		if (texType >= 0) comboTex_->setCurrentIndex(texType);
-		else comboTex_->setCurrentIndex(0);
+		if (texType > 0)
+		{
+			comboTex_->setCurrentIndex(texType);
+			buttonEditTex_->setEnabled(true);
+		}
+		else
+		{
+			comboTex_->setCurrentIndex(0);
+			buttonEditTex_->setEnabled(false);
+		}
 	}
 }
 

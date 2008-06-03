@@ -18,6 +18,7 @@ class QLineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
+class QPushButton;
 
 namespace Examination
 {
@@ -72,6 +73,7 @@ private:
 	QLabel * colorLabel_;
 	QCheckBox * checkboxWireframe_;
 	QComboBox * comboTex_;
+	QPushButton * buttonEditTex_;
 };
 
 
