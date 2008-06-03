@@ -20,6 +20,13 @@ class Pattern
 {
 public:
 	/**
+	Initializes an empty pattern.
+	The regular expression is set to "^$" (an empty line).
+	The field name is set to "Field Name".
+	*/
+	Pattern();
+
+	/**
 	Initializes a new Pattern.
 	The regular expression to be matched will be built from the passed string,
 	and the field names are built from splitting fieldNames with the separator ";"

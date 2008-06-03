@@ -16,6 +16,13 @@
 namespace Statistics
 {
 
+Pattern::Pattern()
+{
+	regExp_ = QRegExp("^$");
+	fieldNames_ = QStringList("Field Name");
+	reset();
+}
+
 Pattern::Pattern(const QString & regExp, const QString & fieldNames)
 {
 	regExp_ = QRegExp(regExp);

@@ -74,16 +74,30 @@ public: // Pattern handling
 	std::tr1::shared_ptr<Pattern> stimulusData(int idx);
 
 	/**
+	Inserts a pattern into the data list at the given index.
+	 \param idx		The position in which to insert
+	 \param pattern	The pattern to insert
+	*/
+	void insertStimulusData(int idx, std::tr1::shared_ptr<Pattern> pattern);
+
+	/**
+	Removes a pattern from the data list at the given index.
+	 \param idx	Index of the pattern that is to be removed
+	 \return True if the removal was successfull, false if it wasn't
+	*/
+	bool removeStimulusData(int idx);
+
+	/**
 	Returns the number of data patterns.
 	 \return the number of data patterns
 	*/
 	int stimulusDataCount() const;
 
-public:
+public: // Used to access both start/end and data patterns as single list
 	/**
 	Returns the queried pattern.
 	Pattern 0 is always stimulusStart, pattern patternCount()-1 is always
-	stimulusEnd
+	stimulusEnd. The patterns in between are data patterns.
 	 \param idx	index of the desired pattern
 	 \return pattern with quereied index
 	*/

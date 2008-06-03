@@ -15,6 +15,7 @@
 #include "logmodel.h"
 #include "logtransformer.h"
 #include "logtransformermodel.h"
+#include "pattern.h"
 
 using namespace std::tr1;
 
@@ -31,7 +32,7 @@ MainWindow::MainWindow()
 	setLayout(mainLayout);
 
 	QSplitter * split = new QSplitter(Qt::Vertical);
-	mainLayout->addWidget(split, 1, 0, 4, 4);
+	mainLayout->addWidget(split, 1, 0, 1, 6);
 
 	patternView_ = new QTreeView();
 	patternView_->setIndentation(0);
@@ -46,13 +47,19 @@ MainWindow::MainWindow()
 	QPushButton * bLoad = new QPushButton(tr("Load..."));
 	QPushButton * bStore = new QPushButton(tr("Store..."));
 	QPushButton * bTransform = new QPushButton(tr("Transform..."));
+	QPushButton * bPlus = new QPushButton("+");
+	QPushButton * bMinus = new QPushButton("-");
 	mainLayout->addWidget(bLoad, 0, 0);
 	mainLayout->addWidget(bStore, 0, 1);
-	mainLayout->addWidget(bTransform, 0, 3);
+	mainLayout->addWidget(bPlus, 0, 2);
+	mainLayout->addWidget(bMinus, 0, 3);
+	mainLayout->addWidget(bTransform, 0, 5);
 
 	connect(bLoad, SIGNAL(clicked()), this, SLOT(loadClicked()));
 	connect(bStore, SIGNAL(clicked()), this, SLOT(storeClicked()));
 	connect(bTransform, SIGNAL(clicked()), this, SLOT(transformClicked()));
+	connect(bPlus, SIGNAL(clicked()), this, SLOT(plusClicked()));
+	connect(bMinus, SIGNAL(clicked()), this, SLOT(minusClicked()));
 
 	logTransformer_ = std::tr1::shared_ptr<LogTransformer>(new LogTransformer());
 
@@ -143,5 +150,18 @@ void MainWindow::transformClicked()
 	}
 }
 
+void MainWindow::plusClicked()
+{
+	int idx = patternView_->currentIndex().row();
+	logTransformer_->insertStimulusData(idx-1, std::tr1::shared_ptr<Pattern>(new Pattern()));
+	patternView_->reset();
+}
+
+void MainWindow::minusClicked()
+{
+	int idx = patternView_->currentIndex().row();
+	logTransformer_->removeStimulusData(idx-1);
+	patternView_->reset();
+}
 
 }

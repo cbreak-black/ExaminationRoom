@@ -108,6 +108,24 @@ std::tr1::shared_ptr<Pattern> LogTransformer::stimulusData(int idx)
 		return std::tr1::shared_ptr<Pattern>();
 }
 
+void LogTransformer::insertStimulusData(int idx, std::tr1::shared_ptr<Pattern> pattern)
+{
+	stimulusPatterns_.insert(idx, pattern);
+}
+
+bool LogTransformer::removeStimulusData(int idx)
+{
+	if (idx < 0 || idx >= stimulusPatterns_.size())
+	{
+		return false;
+	}
+	else
+	{
+		stimulusPatterns_.removeAt(idx);
+		return true;
+	}
+}
+
 int LogTransformer::stimulusDataCount() const
 {
 	return stimulusPatterns_.size();

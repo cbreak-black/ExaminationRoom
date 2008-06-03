@@ -45,6 +45,8 @@ public slots:
 	void storeClicked();
 	void loadClicked();
 	void transformClicked();
+	void plusClicked();
+	void minusClicked();
 
 private:
 	std::tr1::shared_ptr<Log> log() const;
