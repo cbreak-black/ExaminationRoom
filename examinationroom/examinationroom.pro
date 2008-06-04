@@ -13,6 +13,9 @@ INCLUDEPATH += \
 
 QT           += opengl
 
+QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.4u.sdk
+CONFIG+=x86 ppc
+
 # Core
 SOURCES += src/main.cpp
 HEADERS += src/core/*.h
