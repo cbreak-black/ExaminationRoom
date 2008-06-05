@@ -36,9 +36,11 @@ The following commands will create a local repository from the master repository
 Which repository is chosen as master depends on several factors such as the need for write access.
 After the cloning, more repositories can be added.
 
-\begin{verbatim}git clone <repo-url> <folder>
+\begin{verbatim}
+git clone <repo-url> <folder>
 cd <folder>
-git log\end{verbatim}
+git log
+\end{verbatim}
 
 
 \subsection{Compiling}
@@ -59,7 +61,19 @@ Executing \texttt{qmake} creates a make file that can be built with the tool-cha
 Microsofts Visual Studio can compile \ER, sometimes.
 A visual studio project is created with the file \texttt{createVS.bat}.
 A visual studio makefile is created with \texttt{createWin32.bat}.
-Note that the project structure is not preserved, and that the Visual Studio project file has to be regenerated every time the QT Project file is changed.
+Note that the project structure is not preserved, and that the Visual Studio project file has to be regenerated every time the Qt Project file is changed.
 
 \paragraph{Linux}
 A makefile is generated with \texttt{qmake}, and compiled with \texttt{make}.
+
+
+\subsection{Distribution}
+\paragraph{}
+Preparing a compiled ExaminationRoom binary for distribution requires some care.
+The Qt library has to be bundled in a way the application can find it.
+
+\paragraph{Mac OS X}
+On Mac OS X the recommended method for distribution is with the Qt Frameworks as private embedded framework.
+
+\paragraph{Windows}
+On Windows, the recommended method of distribution is with the Qt Libraries and plugins as dynamically linked files in the same directory.

@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+	<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+	<title>ExaminationRoom</title>
+</head>
+<body>
+
+<div id="container">
+
+<!-- logo -->
+<div id="logo">
+	<img src="logo.png" alt="Logo"/>
+</div>
+
+<!-- head -->
+<div id="head">
+	<h1><a rel="home" href="index.xhtml">ExaminationRoom</a></h1>
+	<h2>Stereoscopic user testing environment</h2>
+</div>
+
+<!-- left -->
+<div id="sidebar">
+
+	<h3>Used Projects</h3>
+	<p class="linklist">
+	<a href="http://www.lua.org/" title="LUA">LUA</a><br/>
+	<a href="http://luabridge.sourceforge.net/" title="LuaBridge">LuaBridge</a><br/>
+	<a href="http://trolltech.com/products/qt" title="Trolltech QT">Trolltech QT</a><br/>
+	<a href="http://www.boost.org/" title="Boost">Boost</a><br/>
+	<a href="http://www.cs.kuleuven.ac.be/~ares/libobj/index.html" title="libObj">libObj</a>
+	</p>
+
+	<h3>Navigation</h3>
+	<p class="linklist">
+	<a href="#overview">Overview</a><br/>
+	<a href="#documentation">Documentation</a><br/>
+	<a href="#download">Download</a><br/>
+	</p>
+
+</div>
+
+<!-- center -->
+<div id="content">
+
+<div id="overview">
+<h3>Overview</h3>
+<p>
+Viewing stereoscopic movies or images is unnatural. The focus and vergence of the eyes have to be decoupled. Artefacts and inconsistencies of a stereoscopic image with the real world cause confusion and decrease viewing pleasure.
+</p>
+
+<p>
+ExaminationRoom is a Tool that enables exploration of those problems and quantifying them by providing a flexible and extensible framework for user testing. Challenges include understanding the needs in this relatively new field of research, as well as the commonly used methods in user testing.
+</p>
+</div>
+
+<hr/>
+
+<div id="documentation">
+<h3>Documentation</h3>
+<p>
+There is no user level application available so far.
+A source code documentation generated with Doxygen can be found <a href="doxygen/index.html">on this page</a>.
+The thesis will be made available once it leaves draft status. It will contain thoughts on the design, examples and more.
+</p>
+</div>
+
+<hr/>
+
+<div id="download">
+<h3>Download</h3>
+<p>
+ExaminationRoom can be downloaded as pre-compiled package for Mac OS X (Universal) and Windows XP. It includes the needed libraries to run (Qt, Lua, and more) either statically linked or as bundled shared library.
+Also available is a source code package that contains the sources of ExaminationRoom, as well as that of the linked libraries.
+</p>
+
+<p class="box">
+<a href="examinationroom-mac-universal.dmg">examinationroom-mac-universal.dmg</a> - For Mac OS X 10.4 and newer, x86 and PPC.<br/>
+<a href="examinationroom-win.zip">examinationroom-win.zip</a> - For Windows XP and newer, x86<br/>
+<a href="examinationroom-src.zip">examinationroom-src.zip</a> - For all supported platform, requires compiler and QT libraries. See <a href="#compiling">compiling</a><br/>
+</p>
+
+<p>
+A public read-only GIT repository is available at <a href="http://the-color-black.net/git/master.git/">http://the-color-black.net/git/master.git/</a>. To clone it and look at the changelog, just execute the following commands. To compile it, follow the <a href="#compiling">compiling</a> guide.
+</p>
+
+<pre>% git clone http://the-color-black.net/git/master.git/ examinationroom
+% cd examinationroom
+% git log</pre>
+
+</div>
+
+<hr/>
+
+<div id="installation">
+<h3>Installation</h3>
+<p>
+Installing the binary of ExaminationRoom is easy, it can be copied anywhere and runs without explicit installation.
+On Mac OS X, the Disk Image contains the application, the license information and library/example files inside the res folder.
+Only the application is needed to run, but the example files asume finding textures and code in the res folder, so it should not be separated. On Windows, in addition to the res folder, the Zip file also contains important DLLs for compiler code and QT. It will not run if those files can not be found.
+</p>
+</div>
+
+<hr/>
+
+<div id="prerequisites">
+<h3>Prerequisites</h3>
+<p>
+This section is only of relevance for developers who desire to change and further develop the system. Several steps have to be taken to compile the code successfully.
+The details depend on the selected operating system, but the general ideas are similar for all three supported platforms.
+</p>
+
+<p>
+The tool depends on a number of frameworks for user interface, Drawing and more.
+OpenGL should be installed by default in all major operating systems. It is required to compile and run ExaminationRoom.
+A C++ compiler is required to compile the code.
+On Mac OS X, XCode and GCC are the recommended tools.
+On Windows, MinGW were tested with a precompiled QT build of the same compiler. Visual Studio should also work.
+The QT binary installer for windows can install MinGW as well.
+On Linux, GCC was tested.
+Boost is a souce code library aiming to extend the C++ standard library. It can be used to provide the TR1 classes used in ExaminationRoom.
+</p>
+
+<ul>
+<li>C++ Compiler</li>
+<li><a href="http://trolltech.com/downloads/opensource">QT</a></li>
+<li><a href="http://www.boost.org/users/download/">boost</a></li>
+</ul>
+
+</div>
+
+<hr/>
+
+<div id="compiling">
+<h3>Compiling</h3>
+<p>
+After installing the libraries and getting the sources, ExaminationRoom can be compiled.
+This is a two step process, first build rules are generated from the QT project file, and then, depending on the rule format chosen, the code is compiled.
+</p>
+
+<p>
+On Mac OS X, the easiest and best method is to use XCode.
+The shellscript createXProj.sh creates project files that contain all information to compile and run the application.
+This process only has to be repeated when the project file changes.
+</p>
+
+<p>
+On Windows, the free compiler MinGW was tested.
+Executing qmake creates a make file that can be built with the tool-chain by invoking make.
+Microsofts Visual Studio can compile ExaminationRoom also sometimes.
+A visual studio project is created with the file createVS.bat.
+A visual studio makefile is created with createWin32.bat.
+</p>
+
+<p>
+On linux, a makefile is generated with qmake, and compiled with make.
+</p>
+
+<pre>% qmake
+% make
+</pre>
+
+	</div>
+
+</div>
+
+<hr/>
+
+<!-- footer -->
+<div id="foot">(c) 2008 by Gerhard Roethlin, released under the GPL 2</div>
+
+</div>
+
+</body>
+</html>
+
+

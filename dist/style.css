@@ -1,0 +1,163 @@
+a
+{
+	text-decoration: none;
+}
+
+a:active
+{
+	color: #ffffff;
+}
+
+a:link
+{
+	color: #404040;
+}
+
+a:visited
+{
+	color: #808080;
+}
+
+body, html
+{
+	background-color: #ffffff;
+	color: #000000;
+}
+
+p, li, h3
+{
+	font-family: Helvetica, Verdana;
+	font-size: 0.9em;
+	line-height: 1.6em;
+	text-align: left;
+	padding-left: 10px;
+	padding-right: 10px;
+	list-style-type: circle;
+}
+
+#logo, #head, #sidebar, .box, pre
+{
+	background-image: url('transparentWhite.png');
+	background-attachment: scroll;
+	border-color:#808080;
+	border-width:1px; border-style:dashed;
+	margin: 10px;
+	padding: 10px;
+}
+
+#sidebar p, #sidebar h3
+{
+	line-height: 15px;
+	font-size: 0.7em;
+	text-align: right;
+}
+
+#logo, #head, #sidebar
+{
+	position: fixed;
+	overflow: hidden;
+}
+
+#logo
+{
+	top: 10px;
+	left: 10px;
+	width: 130px;
+	height: 130px;
+}
+
+#head
+{
+	top: 10px;
+	left: 170px;
+	right: 10px;
+	height: 130px;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+#sidebar
+{
+	top: 170px;
+	left: 10px;
+	width: 130px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#content
+{
+	padding-top: 180px;
+}
+
+#content div
+{
+	padding-left: 170px;
+	counter-increment: section;
+}
+
+#content div h3:before
+{
+	content: counter(section) '. ';
+}
+
+#content p a
+{
+	border-bottom: 1px dashed;
+	border-color: #808080;
+}
+
+#foot
+{
+	clear: both;
+	margin-top: 5px;
+	text-align: center;
+	font-size: 0.7em;
+	line-height: 1.0em;
+}
+
+pre
+{
+	text-align: left;
+	font-family: monospace;
+	font-size: 0.9em;
+	overflow: auto;
+	padding: 10px;
+}
+
+h1
+{
+	font-weight: normal;
+	text-decoration:none;
+	font-family: Courier, monospace;
+	font-size: 3em;
+}
+
+h2
+{
+	font-weight: normal;
+	font-family: Courier, monospace;
+	font-size: 1em;
+}
+
+h3
+{
+	font-weight: bold;
+	font-size: 1.0em
+}
+
+h3 a
+{
+	font-weight: normal;
+}
+
+hr
+{
+	border: none;
+	border-color:#808080;
+	border-top-width: 1px;
+	border-top-style: dashed;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	width:100%;
+}
