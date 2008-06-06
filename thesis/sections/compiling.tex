@@ -11,11 +11,11 @@ OpenGL should be installed by default in all major operating systems. It is requ
 
 A C++ compiler is required to compile the code.
 On \textit{Mac OS X}, XCode and GCC are the recommended tools.
-On \textit{Windows}, MinGW were tested with a precompiled QT build of the same compiler.
-The QT binary installer for windows can install MinGW as well.
+On \textit{Windows}, compiling with MinGW was tested with a precompiled Qt build.
+The Qt binary installer for windows can install MinGW as well.
 On \textit{Linux}, GCC was tested.
 
-QT from Trolltech can be downloaded for free in the GPL version\cite{qt}.
+Qt from Trolltech can be downloaded for free in the GPL version\cite{qt}.
 It is available for all three platforms either as source or precompiled.
 Both the source and the binary versions were tested in version 4.3.4, but never versions are expected to work as well.
 
@@ -27,7 +27,7 @@ All remaining libraries, such as LUA and LibObj are part of the source code, and
 
 
 \subsection{Getting \ER}
-\paragraph{}
+\paragraph{Repository}
 Development is managed with \textit{Git}\cite{git}, a distributed versioning system.
 It is recommended to use the repository to stay up to date with development.
 Git does not depend on a central server, local changes can easily be performed without impacting other developers.
@@ -42,11 +42,16 @@ cd <folder>
 git log
 \end{verbatim}
 
+\paragraph{Project Page}
+An archived version of pre-compiled binaries for Mac OS X and Windows is available on \cite{project}.
+The binaries include all needed libraries, some demo files and lua libraries.
+The project page also contains a link to the public read-only git repository, and the complete source code as zipped archive.
+
 
 \subsection{Compiling}
 \paragraph{}
 After installing the libraries and getting the sources the next step is compiling the program.
-This is a two step process, first build rules are generated from the QT project file, and then, depending on the rule format chosen, the code is compiled.
+This is a two step process, first build rules are generated from the Qt project file, and then, depending on the rule format chosen, the code is compiled.
 
 \paragraph{XCode}
 On \textit{Mac OS X}, the easiest and best method is to use XCode.
@@ -71,9 +76,52 @@ A makefile is generated with \texttt{qmake}, and compiled with \texttt{make}.
 \paragraph{}
 Preparing a compiled ExaminationRoom binary for distribution requires some care.
 The Qt library has to be bundled in a way the application can find it.
+The following sections describe the approach to package a compiled executable for distribution.
+For details and further reading, see \cite{deployment}.
 
-\paragraph{Mac OS X}
+\subsubsection{Mac OS X}
+\paragraph{}
 On Mac OS X the recommended method for distribution is with the Qt Frameworks as private embedded framework.
+All remaining frameworks are compiled into the application.
+The following steps describe how to create such a binary.
+For detailed commands and examples see the mac page on \cite{deployment}.
 
-\paragraph{Windows}
+\begin{enumerate}
+\item Make sure the installed Qt Framework is compiled as \textit{Universal Binary}, a code file that contains both PowerPC and x86 bytecode. This is the case in the pre-compiled distribution.
+\item Build ExaminationRoom as \textit{Universal Binary} in release mode.
+Make sure to disable all debug code beforehand.
+\item To reduce the executable size, remove unused symbols from the code with the \texttt{strip} utility.
+The compiled executable can be found inside the application bundle.
+\item Copy the three Qt frameworks into the application bundle into \texttt{Contents/Frameworks/}.
+ExaminationRoom uses QtCore, QtGUI and QtOpenGL.
+\item If you compiled Qt yourself, it might be needed to change the framework identifier with \texttt{install\_name\_tool -id}.
+This is not needed with the binary distribution, since it does not contain an absolute path.
+\item Change the paths to the libraries in the ExaminationRoom executable.
+The script changeFrameworkRef.sh can do this for the libraries installed into \texttt{/Library/Frameworks}, the location used by the binary distribution.
+If the framework paths differ, use \texttt{install\_name\_tool -change} directly.
+\texttt{otool -L} can list the paths to libraries referred to by code.
+\item Do the same to the Frameworks. The GUI and OpenGL framework refer to Core, and OpenGL also to GUI.
+\item Copy the desired image format plugins into \texttt{Contents/plugins/}.
+Make sure to preserve the folder structure.
+\item Change the framework paths of the plugins as before, either with the script or manually.
+\item Create the empty file at the location \texttt{Contents/Resources/qt.conf}.
+The existence of this file causes Qt to search plugins at the default path instead of the hard coded path.
+\item Bundle the Application with the res folder and the documentation. The recommended format is as Disk Image
+\end{enumerate}
+
+\subsubsection{Windows}
+\paragraph{}
 On Windows, the recommended method of distribution is with the Qt Libraries and plugins as dynamically linked files in the same directory.
+While this does not provide the elegant single-object appearance as the mac version, it is easier to deploy.
+The alternative is using static binding, but this requires a custom compiled Qt installation.
+Depending on the used compiler, additional libraries have to be added.
+
+\begin{itemize}
+\item Build ExaminationRoom in release mode.
+Make sure to disable all debug code beforehand.
+\item Copy the executable into an empty folder
+\item Copy the Qt libraries into this folder.
+The following files are needed: \texttt{QtCore4.dll}, \texttt{QtGui4.dll}, \texttt{QtOpenGL4.dll}.
+\item Copy the compiler library into this folder.
+MinGW uses the file \texttt{mingwm10.dll}, Trolltech's page lists the dlls used in various Visual Studio compilers.
+\end{itemize}
