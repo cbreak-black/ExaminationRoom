@@ -53,16 +53,30 @@ public: // Factory methods
 	with the constructor Program(path).
 	Note that errors that happen during program load will not cached. To set up
 	callbacks before loading the program, use create() and loadLua().
+	 \param path	The path to a lua main file
 	 \return a shared_ptr to a new instance of Program
 	*/
 	static std::tr1::shared_ptr<Program> createFromLua(const std::string & path);
+
+	/**
+	Factory method.
+	Returns a shared_ptr to a newly allocated instance of Program. It is initializes
+	with the same main scene file this program.
+	This is NOT a clone, it is a reverted version from the original file.
+	Note that errors that happen during program load will not cached. To set up
+	callbacks before loading the program, use create() and loadLua() with rootFile()
+	as path.
+	 \return a shared_ptr to a new instance of Program
+	 */
+	std::tr1::shared_ptr<Program> revert() const;
 
 public: // LUA
 	/**
 	Loads and executes a lua file from the given path.
 	A list of loaded files is stored, and later written to disk in toLua().
 	Root files are not stored in this list.
-	Only one root file should be loaded per program.
+	Only one root file can be loaded per program, all further files
+	are treated as normal files even with the root flag set.
 	 \param path	A string containing the path to a lua file
 	 \param root	True if the file is a root file, false otherwise
 	*/
@@ -73,6 +87,13 @@ public: // LUA
 	Files that are loaded directly from lua are not tracked.
 	*/
 	const std::vector<std::string> & loadedLuaFiles() const;
+
+	/**
+	Returns the root path of this program.
+	The root path is path of the initialisation file that references all other files.
+	If no root path is set, an empty string is returned.
+	*/
+	const std::string & rootFile() const;
 
 	/**
 	Removes a path from the loadedLuaFiles list.
@@ -172,6 +193,7 @@ private:
 	std::tr1::shared_ptr<LuaProxy> luaProxy_;
 	std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > factories_;
 	std::vector<std::string> luaFiles_; /**< Stores paths of all loaded lua files */
+	std::string rootFile_; /**< Stores path of the root file */
 	mutable std::ofstream logOutStream_;
 
 	SignalStringType callbackLog_;

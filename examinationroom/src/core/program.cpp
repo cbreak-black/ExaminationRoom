@@ -72,10 +72,22 @@ std::tr1::shared_ptr<Program> Program::createFromLua(const std::string & path)
 	return t;
 }
 
+std::tr1::shared_ptr<Program> Program::revert() const
+{
+	return Program::createFromLua(this->rootFile());
+}
+
 void Program::loadLua(const std::string & path, bool root)
 {
-	if (!root)
+	if (path.empty()) return;
+	if (root && rootFile_.empty())
+	{
+		rootFile_ = path;
+	}
+	else
+	{
 		luaFiles_.push_back(path);
+	}
 	if (callbackFileLoad_)
 		callbackFileLoad_(path);
 	luaProxy_->runFile(path.c_str());
@@ -84,6 +96,11 @@ void Program::loadLua(const std::string & path, bool root)
 const std::vector<std::string> & Program::loadedLuaFiles() const
 {
 	return luaFiles_;
+}
+
+const std::string & Program::rootFile() const
+{
+	return rootFile_;
 }
 
 bool Program::removeLua(const std::string & path)

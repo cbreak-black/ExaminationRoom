@@ -59,9 +59,11 @@ MainWindow::MainWindow()
 	menu->addAction(tr("Close Scene"),
 					this, SLOT(newScene()),
 					QKeySequence(QKeySequence::Close));
-	menu->addAction(tr("&Save Scene As..."),
+	menu->addAction(tr("&Save Copy As..."),
 					this, SLOT(storeLuaFile()),
 					QKeySequence(QKeySequence::Save));
+	menu->addAction(tr("&Revert Scene"),
+					this, SLOT(revert()));
 	menu->addSeparator();
 	menu->addAction(tr("&Quit"), this, SLOT(close()),
 					QKeySequence(tr("ctrl-Q")));
@@ -221,6 +223,15 @@ void MainWindow::storeLuaFile()
 		of.open(fileName.toAscii(), std::ios_base::out);
 		program_->toLua(of);
 	}
+}
+
+void MainWindow::revert()
+{
+	// Don't use Program::revert(), since we want to register our
+	// event handlers before loading the root file
+	std::string rootFile = program_->rootFile();
+	setProgram(Program::create());
+	program_->loadLua(rootFile, true);
 }
 
 void MainWindow::setDrawStyle(int t)

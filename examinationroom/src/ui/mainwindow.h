@@ -72,6 +72,11 @@ public slots:
 	void storeLuaFile();
 
 	/**
+	Reverts the current scene to the last saved state.
+	*/
+	void revert();
+
+	/**
 	Sets the draw type of the main window output view.
 	 \param t	A valid GLWidget::DrawStyle integer
 	*/
