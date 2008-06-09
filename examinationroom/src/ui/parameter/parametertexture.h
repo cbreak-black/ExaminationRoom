@@ -29,6 +29,7 @@ public:
 
 public slots:
 	void pathEdited();
+	void openTexture();
 
 private:
 	QLineEdit * linePath_;

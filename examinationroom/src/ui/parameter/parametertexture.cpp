@@ -13,6 +13,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
 
 #include "surfaces/texture.h"
 
@@ -28,13 +29,17 @@ ParameterTexture::ParameterTexture(std::tr1::shared_ptr<AbstractTexture> texture
 	b->setLayout(g);
 	g->addWidget(new QLabel(tr("Path:")), 0, 0);
 	linePath_ = new QLineEdit();
+	QPushButton * openTexture = new QPushButton("Open Texture...", this);
 	g->addWidget(linePath_, 0, 2, 1, 3);
-	g->setRowStretch(1, 1);
+	g->addWidget(openTexture, 1, 3, 1, 2);
+	g->setRowStretch(2, 1);
 
 	addWidget(b);
 
 	connect(linePath_, SIGNAL(editingFinished()),
 			this, SLOT(pathEdited()));
+	connect(openTexture, SIGNAL(clicked()),
+			this, SLOT(openTexture()));
 
 	reloadData();
 }
@@ -63,6 +68,25 @@ void ParameterTexture::pathEdited()
 			// Path
 			tex->setPath(linePath_->text().toStdString());
 			reloadData(); // No auto reload, unlike for objects
+		}
+	}
+}
+
+void ParameterTexture::openTexture()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<Texture> tex = std::tr1::dynamic_pointer_cast<Texture>(texture());
+		if (tex)
+		{
+			// Path
+			std::string p = openFileRelative("Open Texture");
+			if (!p.empty())
+			{
+				linePath_->setText(QString::fromStdString(p));
+				tex->setPath(p);
+				reloadData(); // No auto reload, unlike for objects
+			}
 		}
 	}
 }
