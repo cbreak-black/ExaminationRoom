@@ -8,8 +8,16 @@ The framework is split into three parts: The test design part aids with the cons
 The requirements for stereoscopic test are different: It is not feasible to manually prepare stimuli, especially if complexe interaction is required. A method to generate them on the fly is needed.
 Section \ref{sceneRep} describes how the look of a scene could be represented.
 
+An important part during the creation of a scene is immediate feedback on the look of the test stimulus.
+By seeing how the scene appears under test conditions, how hard it is to see, and to modify parameters with direct response,
+designing a test that can be conducted by a wide range of people, and deliver reliable results is simplified.
+
 \paragraph{Testing}
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
+
+An other complication with stereoscopic tests is, that they have to be viewed stereoscopically.
+Many methods to see stereoscopic materials exist, starting with simple color based encoding (anaglyph), over polarisation encoded frames to direct viewing of the left and right frames with special hardware.
+A software for stereoscopic testing should support a wide range of output devices and methods.
 
 \paragraph{Analysis}
 Analysing the gathered data is the third part. This is usually done in a combinataion of \textit{Microsoft Excel} and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
@@ -171,6 +179,10 @@ Possible implementations include balanced random nodes, that only chose each pat
 While not strictly part of software design, the user interface design is never the less important\cite{hig}.
 Even though the software backend is designed independently from the user interface, and can work independently of it, it is still influenced by requirements of the users, and the way of interaction.
 
+Since this tool has to work on all three major operating systems, many things the human interface guidelines recommend can't be done.
+The general ideas however make sense on any platform.
+When ever possible, familiar controls and widgets are used, which creates a user interface that offers little surprises.
+
 The user interface of the test execution step is defined by the test itself, anything additional could conflict with the test and should be avoided.
 
 The UI of the scene designer part however has the important function to help with the complicated task of scene design and automatisation. This includes the composition of the look of a scene, which elements it contains, and where they are placed, as well as the definition of the interaction, how the scene acts and reacts to user input.
@@ -183,12 +195,49 @@ Most graphical file browser offer a tree view and all common 3D modeling program
 Together with the layout of the scene, the type and parameters of objects should also be easily visible and changeable.
 Again, widely used applications offer a solution: The parameters of the active entity is shown in detail in it's own widget area, and parameters can be changed there too.
 
-The layout of the objects is controlled with drag\&drop. Parent/child relationships can easily be changed this way, and the paradigma of moving around items with the mouse is widely used in graphical user interfaces.
+The layout and hierarchy of the objects is controlled with drag\&drop.
+Parent/child relationships can easily be changed this way, and the paradigma of moving around items with the mouse is widely used in graphical user interfaces.
+This kind of direct manipulation is preferred to use specific controls for the same purpose.
+
+In a similar way, it is desirable that objects can be moved in space just by dragging them around on screen.
+Due to time constraints, this could not be implemented.
 
 \subsubsection{Mechanics}
-\todo{Tell about scene mechanics}
+\paragraph{}
+More challenging than a scene design UI is one for animating/programming the mechanics of the scene.
+Since the graphical programming language was not realized due to time constraints, only the UI for the procedural API.
 
-\paragraph{Other}
-\todo{Key Bindings}
-\todo{Menu}
-\todo{Log File}
+A scene file consists of LUA code and media files.
+The code describes the scene building blocks, parameters and behaviour, and it loads additional files.
+Those media files can be textures that get mapped on an objects surface, or meshes that describe a complex 3D object.
+Additional code is handled in the same way: It can be loaded and is referenced from the main LUA file.
+
+The user interface for the scene mechanics works in a similar way to that of loading other media files:
+The file itself is edited in an external editor, and loaded into the tool with a standard file open dialog.
+That way, similarly to creating a mesh in an advanced tool for modeling, or creating an image in a bitmap editing software, code can be written in an editor that is built specifically for it.
+History has shown that the choice of text editor can not be taken lightly (see vi vs. emacs).
+Referenced files can be previewed, added and removed.
+
+\subsubsection{Other}
+\paragraph{Menu}
+The menu bar offers general commands grouped by topic.
+It is a standard widget in all major operating systems, and it's roots predate graphical user interfaces.
+This tool offers the usual commands to open, close or save a file.
+A second menu allows changing the output between rendering modes, and to switch between edit and full-screen mode.
+The third menu allows creating new objects.
+
+Key bindings are used extensively by advanced users to access the menu bar commands.
+It is important to use the same shortcuts across all applications on the same platform, to minimise need to retrain users.
+When ever possible, those standard shortcuts are used.
+Switching output modes uses number commands, which groups them together spatially on the keyboard.
+The commands to create new objects do not have keyboard commands, because that action is not expected to be used often, and finding non-conflicting shortcuts is often impossible.
+
+\paragraph{Log File}
+A very important part of a test is the log file.
+It's output contains the data that the test is supposed to gather.
+During the test the contents get written to a file constantly, and can be watched with a tool like \texttt{tail} from a remote terminal.
+
+While developing, this is inconvenient, so the log output is written to the user interface also.
+Normal output is black, errors other anormal events are red.
+This is of great value when testing new code, since many types of errors are immediately apparent.
+
