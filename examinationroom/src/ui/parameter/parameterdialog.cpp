@@ -10,6 +10,7 @@
 #include "parameterdialog.h"
 
 #include <QVBoxLayout>
+#include <QFileDialog>
 
 namespace Examination
 {
@@ -34,6 +35,20 @@ QSize Parameterdialog::sizeHint () const
 void Parameterdialog::addWidget(QWidget * w)
 {
 	layout_->addWidget(w);
+}
+
+std::string Parameterdialog::openFileRelative(const char * caption, const char * filter)
+{
+	QString fileName = QFileDialog::getOpenFileName(this, caption, QString(), filter);
+	if (!fileName.isNull())
+	{
+		QDir dir(QDir::currentPath());
+		return dir.relativeFilePath(fileName).toStdString();
+	}
+	else
+	{
+		return std::string(); // empty
+	}
 }
 
 }

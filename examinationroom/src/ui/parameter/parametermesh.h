@@ -32,6 +32,7 @@ protected:
 public slots: // From the UI
 	void pathEdited();
 	void scaleEdited();
+	void openMesh();
 
 private:
 	QLineEdit * linePath_;
