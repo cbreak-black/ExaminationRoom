@@ -83,7 +83,6 @@ void ParameterTexture::openTexture()
 			std::string p = openFileRelative("Open Texture");
 			if (!p.empty())
 			{
-				linePath_->setText(QString::fromStdString(p));
 				tex->setPath(p);
 				reloadData(); // No auto reload, unlike for objects
 			}

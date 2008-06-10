@@ -38,6 +38,7 @@ ParameterAffineTransformation::ParameterAffineTransformation(std::tr1::shared_pt
 
 void ParameterAffineTransformation::reloadData()
 {
+	ParameterObject::reloadData();
 	std::tr1::shared_ptr<Object> o = object();
 	if (o)
 	{

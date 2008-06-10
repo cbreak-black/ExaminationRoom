@@ -65,6 +65,7 @@ ParameterPixelplane::ParameterPixelplane(std::tr1::shared_ptr<Object> object) : 
 
 void ParameterPixelplane::reloadData()
 {
+	ParameterObject::reloadData();
 	std::tr1::shared_ptr<Object> o = object();
 	if (o)
 	{

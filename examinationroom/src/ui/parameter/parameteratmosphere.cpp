@@ -66,6 +66,7 @@ ParameterAtmosphere::ParameterAtmosphere(std::tr1::shared_ptr<Object> object)
 
 void ParameterAtmosphere::reloadData()
 {
+	ParameterObject::reloadData();
 	std::tr1::shared_ptr<Object> o = object();
 	if (o)
 	{

@@ -13,6 +13,7 @@
 #include "parameterstereogram.h"
 
 class QLineEdit;
+class QPushButton;
 
 namespace Examination
 {
@@ -30,10 +31,14 @@ public:
 public slots:
 	void pathBGEdited();
 	void pathFGEdited();
+	void openBG();
+	void openFG();
 
 private:
 	QLineEdit * linePathBG_;
 	QLineEdit * linePathFG_;
+	QPushButton * pbBG_;
+	QPushButton * pbFG_;
 };
 
 }

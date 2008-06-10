@@ -14,6 +14,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QPushButton>
 
 #include "surfaces/stereogram.h"
 #include "surfaces/texture.h"
@@ -35,14 +36,23 @@ ParameterStereogram::ParameterStereogram(std::tr1::shared_ptr<AbstractTexture> t
 	linePathDepth_ = new QLineEdit();
 	linePathLeft_ = new QLineEdit();
 	linePathRight_ = new QLineEdit();
+	pbDepth_ = new QPushButton("...");
+	pbLeft_ = new QPushButton("...");
+	pbRight_ = new QPushButton("...");
+	pbDepth_->resize(26, 26);
+	pbLeft_->resize(26, 26);
+	pbRight_->resize(26, 26);
 	lineOffset_ = new QLineEdit();
 	lineOffset_->setAlignment(Qt::AlignRight);
 	comboStyle_ = new QComboBox(this);
 	comboStyle_->addItem("Convex");
 	comboStyle_->addItem("Concave");
-	g->addWidget(linePathDepth_, 0, 2, 1, 3);
-	g->addWidget(linePathLeft_, 1, 2, 1, 3);
-	g->addWidget(linePathRight_, 2, 2, 1, 3);
+	g->addWidget(linePathDepth_, 0, 2, 1, 2);
+	g->addWidget(linePathLeft_, 1, 2, 1, 2);
+	g->addWidget(linePathRight_, 2, 2, 1, 2);
+	g->addWidget(pbDepth_, 0, 4);
+	g->addWidget(pbLeft_, 1, 4);
+	g->addWidget(pbRight_, 2, 4);
 	g->addWidget(lineOffset_, 3, 2, 1, 3);
 	g->addWidget(comboStyle_, 4, 2, 1, 3);
 	g->setRowStretch(5, 1);
@@ -59,6 +69,12 @@ ParameterStereogram::ParameterStereogram(std::tr1::shared_ptr<AbstractTexture> t
 			this, SLOT(offsetEdited()));
 	connect(comboStyle_, SIGNAL(activated(int)),
 			this, SLOT(styleActivated(int)));
+	connect(pbDepth_, SIGNAL(clicked()),
+			this, SLOT(openDepth()));
+	connect(pbLeft_, SIGNAL(clicked()),
+			this, SLOT(openLeft()));
+	connect(pbRight_, SIGNAL(clicked()),
+			this, SLOT(openRight()));
 
 	reloadData();
 }
@@ -73,11 +89,41 @@ void ParameterStereogram::reloadData()
 		{
 			// Paths
 			if (tex->texDepth())
+			{
 				linePathDepth_->setText(QString::fromStdString(tex->texDepth()->path()));
+				// Don't set to true again, since the only way this changes is
+				// If the texture got a dynamically generated texture
+				// which isn't intended to be changed
+			}
+			else
+			{
+				linePathDepth_->setEnabled(false);
+				pbDepth_->setEnabled(false);
+			}
 			if (tex->texLeft())
+			{
 				linePathLeft_->setText(QString::fromStdString(tex->texLeft()->path()));
+				// Don't set to true again, since the only way this changes is
+				// If the texture got a dynamically generated texture
+				// which isn't intended to be changed
+			}
+			else
+			{
+				linePathLeft_->setEnabled(false);
+				pbLeft_->setEnabled(false);
+			}
 			if (tex->texRight())
+			{
 				linePathRight_->setText(QString::fromStdString(tex->texRight()->path()));
+				// Don't set to true again, since the only way this changes is
+				// If the texture got a dynamically generated texture
+				// which isn't intended to be changed
+			}
+			else
+			{
+				linePathRight_->setEnabled(false);
+				pbRight_->setEnabled(false);
+			}
 			lineOffset_->setText(QString::number(tex->offset()));
 			comboStyle_->setCurrentIndex(tex->style());
 		}
@@ -154,6 +200,63 @@ void ParameterStereogram::styleActivated(int i)
 		if (tex)
 		{
 			tex->setStyle((Stereogram::Style)i);
+		}
+	}
+}
+
+void ParameterStereogram::openDepth()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<Stereogram> tex = std::tr1::dynamic_pointer_cast<Stereogram>(texture());
+		if (tex && tex->texDepth())
+		{
+			// Path
+			std::string p = openFileRelative("Open Depth Texture");
+			if (!p.empty())
+			{
+				tex->texDepth()->setPath(p);
+				tex->recreateStereogram();
+				reloadData(); // No auto reload, unlike for objects
+			}
+		}
+	}
+}
+
+void ParameterStereogram::openLeft()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<Stereogram> tex = std::tr1::dynamic_pointer_cast<Stereogram>(texture());
+		if (tex && tex->texLeft())
+		{
+			// Path
+			std::string p = openFileRelative("Open Left Texture");
+			if (!p.empty())
+			{
+				tex->texLeft()->setPath(p);
+				tex->recreateStereogram();
+				reloadData(); // No auto reload, unlike for objects
+			}
+		}
+	}
+}
+
+void ParameterStereogram::openRight()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<Stereogram> tex = std::tr1::dynamic_pointer_cast<Stereogram>(texture());
+		if (tex && tex->texRight())
+		{
+			// Path
+			std::string p = openFileRelative("Open Right Texture");
+			if (!p.empty())
+			{
+				tex->texRight()->setPath(p);
+				tex->recreateStereogram();
+				reloadData(); // No auto reload, unlike for objects
+			}
 		}
 	}
 }

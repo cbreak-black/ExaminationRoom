@@ -50,6 +50,7 @@ ParameterLightNode::ParameterLightNode(std::tr1::shared_ptr<Object> object)
 
 void ParameterLightNode::reloadData()
 {
+	ParameterObject::reloadData();
 	std::tr1::shared_ptr<Object> o = object();
 	if (o)
 	{

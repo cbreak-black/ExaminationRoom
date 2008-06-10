@@ -13,6 +13,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
 
 #include "surfaces/patternstereogram.h"
 #include "surfaces/texture.h"
@@ -31,8 +32,12 @@ ParameterPatternStereogram::ParameterPatternStereogram(std::tr1::shared_ptr<Abst
 	g->addWidget(new QLabel(tr("Foreground:")), 1, 0);
 	linePathBG_ = new QLineEdit();
 	linePathFG_ = new QLineEdit();
-	g->addWidget(linePathBG_, 0, 2, 1, 3);
-	g->addWidget(linePathFG_, 1, 2, 1, 3);
+	pbBG_ = new QPushButton("...");
+	pbFG_ = new QPushButton("...");
+	g->addWidget(linePathBG_, 0, 2, 1, 2);
+	g->addWidget(linePathFG_, 1, 2, 1, 2);
+	g->addWidget(pbBG_, 0, 4);
+	g->addWidget(pbFG_, 1, 4);
 	g->setRowStretch(2, 1);
 
 	addWidget(b);
@@ -41,6 +46,10 @@ ParameterPatternStereogram::ParameterPatternStereogram(std::tr1::shared_ptr<Abst
 			this, SLOT(pathBGEdited()));
 	connect(linePathFG_, SIGNAL(editingFinished()),
 			this, SLOT(pathFGEdited()));
+	connect(pbBG_, SIGNAL(clicked()),
+			this, SLOT(openBG()));
+	connect(pbFG_, SIGNAL(clicked()),
+			this, SLOT(openFG()));
 
 	reloadData();
 }
@@ -54,8 +63,24 @@ void ParameterPatternStereogram::reloadData()
 		if (tex)
 		{
 			// Paths
-			linePathBG_->setText(QString::fromStdString(tex->texBG()->path()));
-			linePathFG_->setText(QString::fromStdString(tex->texFG()->path()));
+			if (tex->texBG())
+			{
+				linePathBG_->setText(QString::fromStdString(tex->texBG()->path()));
+			}
+			else
+			{
+				linePathBG_->setEnabled(false);
+				pbBG_->setEnabled(false);
+			}
+			if (tex->texFG())
+			{
+				linePathFG_->setText(QString::fromStdString(tex->texFG()->path()));
+			}
+			else
+			{
+				linePathFG_->setEnabled(false);
+				pbFG_->setEnabled(false);
+			}
 		}
 	}
 }
@@ -86,6 +111,44 @@ void ParameterPatternStereogram::pathFGEdited()
 			tex->texFG()->setPath(linePathFG_->text().toStdString());
 			tex->recreateStereogram();
 			reloadData(); // No auto reload, unlike for objects
+		}
+	}
+}
+
+void ParameterPatternStereogram::openBG()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<PatternStereogram> tex = std::tr1::dynamic_pointer_cast<PatternStereogram>(texture());
+		if (tex && tex->texBG())
+		{
+			// Path
+			std::string p = openFileRelative("Open Background Texture");
+			if (!p.empty())
+			{
+				tex->texBG()->setPath(p);
+				tex->recreateStereogram();
+				reloadData(); // No auto reload, unlike for objects
+			}
+		}
+	}
+}
+
+void ParameterPatternStereogram::openFG()
+{
+	if (texture())
+	{
+		std::tr1::shared_ptr<PatternStereogram> tex = std::tr1::dynamic_pointer_cast<PatternStereogram>(texture());
+		if (tex && tex->texFG())
+		{
+			// Path
+			std::string p = openFileRelative("Open Foreground Texture");
+			if (!p.empty())
+			{
+				tex->texFG()->setPath(p);
+				tex->recreateStereogram();
+				reloadData(); // No auto reload, unlike for objects
+			}
 		}
 	}
 }

@@ -14,6 +14,7 @@
 
 class QLineEdit;
 class QComboBox;
+class QPushButton;
 
 namespace Examination
 {
@@ -34,11 +35,17 @@ public slots:
 	void pathRightEdited();
 	void offsetEdited();
 	void styleActivated(int);
+	void openDepth();
+	void openLeft();
+	void openRight();
 
 private:
 	QLineEdit * linePathDepth_;
 	QLineEdit * linePathLeft_;
 	QLineEdit * linePathRight_;
+	QPushButton * pbDepth_;
+	QPushButton * pbLeft_;
+	QPushButton * pbRight_;
 	QLineEdit * lineOffset_;
 	QComboBox * comboStyle_;
 };

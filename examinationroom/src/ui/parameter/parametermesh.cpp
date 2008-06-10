@@ -110,7 +110,6 @@ void ParameterMesh::openMesh()
 			std::string p = openFileRelative("Open Mesh", "Object File (*.obj)");
 			if (!p.empty())
 			{
-				linePath_->setText(QString::fromStdString(p));
 				m->loadMesh(p);
 			}
 		}
