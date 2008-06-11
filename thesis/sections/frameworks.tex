@@ -7,7 +7,7 @@ but on finding solutions to the specific problems of their program.
 \ER\ uses several libraries for window management, memory management, scripting and rendering.
 
 
-\subsubsection{Qt}
+\subsubsection{Qt\label{FrameworkQt}}
 \paragraph{}
 A big part of the functionality comes from the operating system and associated platform APIs.
 This includes basic necessities like reading data from a file, drawing data to screen or specialized functionality like drawing a tree view, scaling images or managing tool windows.
@@ -28,9 +28,9 @@ Qt is a cross-platform application framework for desktop and embedded developmen
 An alternative would be to use \textit{Java} with it's associated APIs, but it's support for hardware accelerated drawing is lacking.
 
 
-\subsubsection{Boost}
+\subsubsection{Boost\label{FrameworkBoost}}
 \paragraph{}
-\textit{C++} is an old language, and has it's root on the language \textit{C}.
+\textit{C++} is an old language, and has it's root in the language \textit{C}.
 Neither has advanced memory management tools, be it a garbage collector like \textit{LUA} or \textit{Java}, or a reference counting system like used in \textit{Objective-C}.
 Managing memory manually is a challenge, doing it wrong can cause crashes that are hard to debug.
 
@@ -45,20 +45,68 @@ but as soon as all pointers to it go out of scope, the memory will be automatica
 \paragraph{}
 An other useful feature in boost are function binders.
 while standard \textit{C} functions and static functions can be pointed at by a simple pointer,
-\textit{C++} class member functions require more data.
+\textit{C++} class member functions require more data
+(Method Pointers vary in size depending on compiler and platform, and can be 12 bytes or more).
 Together with the strict type checking of \textit{C++}, this makes storing pointers to member functions complicated and inflexible.
 
 With \textit{TR1}'s functional library, binding any kind of method or function and storing it is easily possible, while still retaining strict type checking.
 This is used to implement callbacks.
 
 
-\subsubsection{OpenGL}
+\subsubsection{OpenGL\label{FrameworkOpenGL}}
 \paragraph{}
-\todo{Compare to other drawing methods}
+Since the whole goal of the tool is to generate stereoscopic stimuli and present them to test subjects,
+the graphical rendering framework is of tremendous importance.
+In the beginning of graphical computers, programs drew everything on their own, and accessed the frame buffer directly.
+In modern systems, drawing is highly abstracted and often hardware accelerated.
 
-\subsubsection{LUA}
+\ER\ requires the ability to draw 3D scenes and reproduce many effects such as lighting, cameras, atmospheric effects and other depth cues.
+The goal is to be able to test both abstract scenes consisting only of few shapes and a limited amount of cues,
+as well as scenes that contain many cues, and more closely approximate real visuals.
+This is similar to what computer games use.
+
 \paragraph{}
-\todo{Compare to other scripting}
+The only cross platform 3D drawing toolkit is \textit{OpenGL}\cite{opengl}, a standard developed by \textit{Silicon Graphics} in 1992.
+It's a state-driven procedural C API that was extended with many additions to the standard since it's inception.
+Many features of \textit{OpenGL} are accelerated by modern graphic cards, and allow real time animation rendering.
+
+The \ER\ renderer uses \textit{OpenGL} for the scene output.
+Objects paint them-selfs with OpenGL commands.
+The offerings of the framework are not perfect, but it allowed to realize almost all desired features.
+A more advanced anaglyph renderer would likely be possible to do with frame buffer objects and pixel shader, but that would exclude a wide range of older installations and hardware.
+
+
+\subsubsection{LUA\label{FrameworkLua}}
+\paragraph{}
+It was clear from the beginning of the project that the only way to get the required flexibility to do anything, and test anything can not be achieved by simply defining a scene format and some animation paths.
+Tests like a flight simulator for motion sickness require interactivity in complex ways.
+The chosen solution was to use a programming language to specify interaction and mechanics of a test.
+The design of a language is complex, and many scripting languages are already established, so it was decided to reuse an existing language.
+
+Most scripting languages are either intended to be used in stand-alone scripts such as \textit{Perl} or various shell scripting languages.
+\textit{Python} can be used as  embedded language, and offers a very rich API on it's own.
+The downside is that it is huge and comes with many features that are not needed, which complicate
+the integration into custom applications.
+
+\paragraph{}
+The chosen language is \textit{LUA}\cite{lua}, a small library designed to be used as embedded language.
+It provides all basic features, comes with garbage collection, flexible syntax and powerful binding API.
+It's syntax is easy to understand, but still offers enough sugar to use not only procedural, but also modular, object oriented or functional programming.
+It's license is very liberal, which made it popular even in the comercial game industry.
+The official project description emphasizes those points.
+
+\begin{quotation}
+Lua is an extension programming language designed to support general procedural programming with data description facilities. It also offers good support for object-oriented programming, functional programming, and data-driven programming. Lua is intended to be used as a powerful, light-weight scripting language for any program that needs one. Lua is implemented as a library, written in clean C (that is, in the common subset of ANSI C and C++).
+\end{quotation}
 
 \paragraph{LuaBridge}
+While the \textit{LUA} C API is very powerful, it is also very low level.
+Writing code that interacts with \textit{LUA} and especially code that is called by it requires following the calling convention of \textit{LUA}.
+Manually handling the low level API helped with understanding the language better and finding problems,
+but it also required to maintain two interfaces, one that exposes functions to \textit{C++} and a second set for \textit{LUA}.
+
+\textit{LuaBridge} automatically generates this binding code in a very elegant way.
+Unlike tools like \textit{tolua++} it does not require a preprocessor,
+it uses template meta programming to generate wrapper code.
+\textit{LuaBind} works similar, but \textit{LuaBridge} is smaller, easier to understand and has less dependencies.
 

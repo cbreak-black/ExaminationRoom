@@ -7,15 +7,12 @@ The implementation is closely tied to the abilities requested from the tool, man
 In addition, the scene does not only have to be rendered once but often twice.
 Binocular vision infers depth relationships from slight differences in images taken from two separate viewpoints.
 
-Section \ref{RendFrameworks} discusses the choice of drawing framework.
+Section \ref{FrameworkOpenGL} discusses the choice of drawing framework.
 Section \ref{RendCamera} discusses how a 3D scene gets mapped into a 2D image.
 Section \ref{RendStereo} discusses stereo rendering methods.
 Section \ref{RendSpecial} discusses the implementation of other effects.
 For a high level description of many features see section \ref{sceneRep} on scene representation and \ref{Cues} on the topic of depth cues.
 
-\subsubsection{Frameworks\label{RendFrameworks}}
-\paragraph{}
-\todo{Write about OpenGL, and why D3D and drawing by hand is not an alternative}
 
 \subsubsection{Camera\label{RendCamera}}
 \paragraph{}
@@ -39,6 +36,12 @@ The loss of color contrast is made up with the better fuseability and the reduct
 
 \todo{Write about rendering for stereoscopic vision, such as Anaglyph/SidebySide}
 
+
+\subsubsection{Extending Renderers}
+\paragraph{}
+\todo{Write about how renderers can be extended}
+
+
 \subsubsection{Special nodes\label{RendSpecial}}
 \paragraph{}
 \todo{Write about special nodes that have not been mentioned before}
@@ -46,3 +49,6 @@ The loss of color contrast is made up with the better fuseability and the reduct
 \paragraph{Depth Buffer}
 \paragraph{Light}
 \paragraph{Fog}
+
+
+
