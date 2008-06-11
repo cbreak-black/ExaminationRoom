@@ -38,6 +38,7 @@ To be able to control inconsistencies such as individual depth cues, it is requi
 \subsubsection{Node types}
 \paragraph{}
 Scene graphs are tree structures consisting of nodes with zero or more child nodes. The scene itself is typically the root node, while actual rendered objects often are leaves. The following nodes are planed to be implemented in the framework.
+The goal is to be able to selectively enable and disable all independent depth-cues\ref{Cues} by using container nodes with the desired properties.
 
 \begin{description}
 \item[Rectangle] A primitive geometry node, which has the shape of a parallelogram. The node can reference a texture, which gets mapped on it's surface.
@@ -64,9 +65,15 @@ The following nodes are problematic and might be hard to use, implement and unde
 \paragraph{}
 Nodes are the building blocks of a scene graph, but how they are put together is similarly important. Due to the requirements of some nodes to clear the depth buffer, and the DepthBuffer node, the order of objects in a group node has to be in the desired order of drawing, not insertion.
 
-Since most advanced functionality is designed to be in group nodes, objects have to be grouped based on their semantics. Those are drawn perspectively in the same camera node, all that have the be lit in a lighting node, and so on. For some nodes this is required for them to work, for others it is just a matter of performance.
+Since most advanced functionality is designed to be in group nodes, objects have to be grouped based on their semantics.
+Objects that are projected perspectively or parallel are in a camera node,
+all that have the be lit are in a lighting node, and so on.
 
-To increase performance in complex scenes it might be desirable to use a spatially organized tree. Instead of grouping by state (such as camera, lighting), grouping would be done by proximity. This allows for faster culling. To get both functionalities, parallel trees have to be built. An object would reside in both trees. But so far, scene complexity is intended to be very low, so this optimisation is unlikely to be needed.
+To increase performance in complex scenes it might be desirable to use a spatially organized tree. Instead of grouping by state (such as camera, lighting), grouping would be done by proximity.
+This allows for faster culling.
+To get both functionalities, parallel trees have to be built.
+An object would reside in both trees, culling would be done in a pre-pass on the spatial tree and drawing would be done as normal on the state tree.
+But so far, scene complexity is intended to be very low, so this optimisation is unlikely to be needed.
 
 
 \subsection{Mechanics of a Scene\label{sceneMech}}
@@ -78,7 +85,7 @@ Having a scene with the desired visualisation is not enough. To conduct a test, 
 The solution to all those problems is to use a programming language to define the scene mechanics. Anything that can be computed is assumed to be computable with a language that is \textit{turing complete}\cite{turing}. Using such a language would not limit the possibilities of the user, while making designing the scene much easier, faster and less error prone than writing a dedicated tool.
 
 \subsubsection{Procedual API}
-\paragraph{}
+ \paragraph{}
 \textit{Procedural languages} are turing complete, so embedding a language would give all the computational flexibility needed. The same methods to build a scene graph and change object properties within \textit{C++} code can also be used in the scene mechanics. Proxy objects can mediate between the embedded language and the \textit{C++} API.
 
 Creating scenes this way follows standard programming paradigmas, and someone who can program in a procedural language should have little problems adapting to what ever syntax the embedded language uses. The drawback of this approach is, that someone who does not have programming experience will find creating a scene rather unintuitive.

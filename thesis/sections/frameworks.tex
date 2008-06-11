@@ -1,15 +1,56 @@
 \subsection{Used Frameworks\label{frameworks}}
 \paragraph{}
+When developing an application, it is impossible to write everything from scratch.
+Frameworks and libraries help developers not spending time on reinventing wheels,
+but on finding solutions to the specific problems of their program.
+
+\ER\ uses several libraries for window management, memory management, scripting and rendering.
 
 
-\subsubsection{QT}
+\subsubsection{Qt}
 \paragraph{}
-\todo{Compare to other windowing toolkits/framewors}
+A big part of the functionality comes from the operating system and associated platform APIs.
+This includes basic necessities like reading data from a file, drawing data to screen or specialized functionality like drawing a tree view, scaling images or managing tool windows.
+
+\paragraph{}
+All operating systems offer their own API to do some of those things.
+\textit{POSIX} is supported on Linux, Mac OS X and Windows, but it only covers basic file IO, and nothing graphical.
+Specific APIs like \textit{Mac OS X'}s \textit{Cocoa} or Windows' \textit{.Net} have a much richer feature set, but limit the application to that platform.
+This might be acceptable for widely distributed end user applications where a fraction of potential users can be ignored,
+but in a research environment the software has to be able to use existing hardware optimally.
+A solution is \textit{Qt}\cite{qt}:
+
+\begin{quotation}
+Qt is a cross-platform application framework for desktop and embedded development. It includes an intuitive API and a rich C++ class library, integrated tools for GUI development and internationalization, and support for Java™ and C++ development.
+\end{quotation}
+
+\paragraph{}
+An alternative would be to use \textit{Java} with it's associated APIs, but it's support for hardware accelerated drawing is lacking.
+
 
 \subsubsection{Boost}
 \paragraph{}
-\todo{Write about \texttt{shared\_ptr}}
-\todo{Write about functionals}
+\textit{C++} is an old language, and has it's root on the language \textit{C}.
+Neither has advanced memory management tools, be it a garbage collector like \textit{LUA} or \textit{Java}, or a reference counting system like used in \textit{Objective-C}.
+Managing memory manually is a challenge, doing it wrong can cause crashes that are hard to debug.
+
+A solution to this problem is offered by \textit{TR1}, an extension to the C++ standard library.
+Boost\cite{boost} is a provider of a \textit{TR1} implementation.
+
+\paragraph{}
+\textit{TR1} contains among others a robust and flexible implementation of a set of shared-ownership smart pointers.
+As long as a smart pointer to a memory location exists, it can be used like a normal pointer thanks to \textit{C++}'s operator overloading,
+but as soon as all pointers to it go out of scope, the memory will be automatically deallocated.
+
+\paragraph{}
+An other useful feature in boost are function binders.
+while standard \textit{C} functions and static functions can be pointed at by a simple pointer,
+\textit{C++} class member functions require more data.
+Together with the strict type checking of \textit{C++}, this makes storing pointers to member functions complicated and inflexible.
+
+With \textit{TR1}'s functional library, binding any kind of method or function and storing it is easily possible, while still retaining strict type checking.
+This is used to implement callbacks.
+
 
 \subsubsection{OpenGL}
 \paragraph{}
@@ -18,4 +59,6 @@
 \subsubsection{LUA}
 \paragraph{}
 \todo{Compare to other scripting}
+
+\paragraph{LuaBridge}
 
