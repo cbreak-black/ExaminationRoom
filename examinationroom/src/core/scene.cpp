@@ -78,9 +78,6 @@ std::string Scene::className() const
 	return "Scene";
 }
 
-/**
-\todo	Add Camera export
-*/
 std::string Scene::toLua(std::ostream & outStream) const
 {
 	// Localy scoped variable c points to camera

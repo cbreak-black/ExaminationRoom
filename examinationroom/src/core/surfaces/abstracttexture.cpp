@@ -51,6 +51,14 @@ void AbstractTexture::setZoom(const Tool::Vec2f & z)
 	setZoom(z.x, z.y);
 }
 
+std::string AbstractTexture::toLua(std::ostream & outStream) const
+{
+	std::string name = toLuaCreate(outStream);
+	Tool::Vec2f z = zoom();
+	outStream << name << ":" << "setZoom(" << z.x << ", " << z.y << ");\n";
+	return name;
+}
+
 // Parameter Dialog
 std::tr1::shared_ptr<Parameterdialog> AbstractTexture::dialog()
 {

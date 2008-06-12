@@ -238,9 +238,6 @@ std::string RandomdotStereogram::toLua(std::ostream & outStream) const
 	return name;
 }
 
-/**
- \todo	Remove evil global variable name usage once the program/namemanager are implemented
-*/
 std::string RandomdotStereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";

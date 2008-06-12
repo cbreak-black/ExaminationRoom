@@ -225,11 +225,9 @@ std::string Stereogram::className() const
 
 std::string Stereogram::toLua(std::ostream & outStream) const
 {
-	// Create an instance
-	std::string name = toLuaCreate(outStream);
+	// Let parent create an instance
+	std::string name = AbstractTexture::toLua(outStream);
 	// Set parameters
-	Tool::Vec2f z = zoom();
-	outStream << name << ":" << "setZoom(" << z.x << ", " << z.y << ");\n";
 	outStream << name << ":" << "setOffset(" << offset() << ");\n";
 	outStream << name << ":" << "setStyle(\"";
 	switch (style())
@@ -245,9 +243,6 @@ std::string Stereogram::toLua(std::ostream & outStream) const
 	return name;
 }
 
-/**
- \todo	Remove evil global variable name usage once the program/namemanager are implemented
-*/
 std::string Stereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";

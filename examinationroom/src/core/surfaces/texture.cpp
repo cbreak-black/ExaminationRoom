@@ -283,15 +283,6 @@ std::string Texture::className() const
 	return "Texture";
 }
 
-std::string Texture::toLua(std::ostream & outStream) const
-{
-	std::string name = toLuaCreate(outStream);
-	return name;
-}
-
-/**
- \todo	Remove evil global variable name usage once the program/namemanager are implemented
-*/
 std::string Texture::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";

@@ -80,7 +80,6 @@ public:
 	Resizes the pixel plane to have the correct size according to the current position
 	and projection matrix. This might not work well when called on an object in a
 	CameraNode, since the it uses the projection and modelview matrix of the scene.
-	 \todo Use camera of parent if needed
 	*/
 	void resizeToCurrent() const;
 

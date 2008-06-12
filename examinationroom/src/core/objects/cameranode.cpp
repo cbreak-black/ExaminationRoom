@@ -61,9 +61,6 @@ std::string CameraNode::className() const
 	return CameraNode::className_;
 }
 
-/**
-\todo	Add support for camera export
-*/
 std::string CameraNode::toLua(std::ostream & outStream) const
 {
 	Container::toLua(outStream);

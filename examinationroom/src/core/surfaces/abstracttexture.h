@@ -169,7 +169,7 @@ public: // Serialisation
 	Writes the LUA commands to set parameters of this texture to the output stream.
 	 \param outStream	A stream that accepts writing
 	*/
-	virtual std::string toLua(std::ostream & outStream) const = 0;
+	virtual std::string toLua(std::ostream & outStream) const;
 
 	/**
 	Writes the LUA creation command of this texture to the output stream.

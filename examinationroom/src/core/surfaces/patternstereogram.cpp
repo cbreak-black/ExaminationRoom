@@ -168,9 +168,6 @@ std::string PatternStereogram::toLua(std::ostream & outStream) const
 	return name;
 }
 
-/**
- \todo	Remove evil global variable name usage once the program/namemanager are implemented
-*/
 std::string PatternStereogram::toLuaCreate(std::ostream & outStream) const
 {
 	std::string name = "tex";

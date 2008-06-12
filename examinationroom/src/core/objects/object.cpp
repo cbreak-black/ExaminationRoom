@@ -247,8 +247,11 @@ std::string Object::toLua(std::ostream & outStream) const
 	outStream << name() << ":" << "setDrawPriority(" << drawPriority() << ");\n";
 	if (texture())
 	{
+		// Use a local scope for the texture
+		outStream << "do -- texture\nlocal ";
 		std::string texName = texture()->toLua(outStream);
 		outStream << name() << ":" << "setTexture(" << texName << ");\n";
+		outStream << "end -- texture\n";
 	}
 	return name();
 }

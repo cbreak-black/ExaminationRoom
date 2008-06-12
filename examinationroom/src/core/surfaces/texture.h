@@ -118,7 +118,7 @@ public: // Parameter Dialog
 
 public: // Serialisation
 	virtual std::string className() const;
-	virtual std::string toLua(std::ostream & outStream) const;
+//	virtual std::string toLua(std::ostream & outStream) const;
 	virtual std::string toLuaCreate(std::ostream & outStream) const;
 
 private:
