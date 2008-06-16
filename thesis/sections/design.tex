@@ -2,6 +2,13 @@
 \paragraph{}
 Implementing a flexible and powerful framework for user testing of stereoscopic problems requires a design that accounts for some special requirements. To find out what those requirements are, several tests where designed and executed. The design of the application was adapted to be fit for use in those and many other imaginable tests.
 
+\begin{figure*}[htb]
+\begin{center}
+\includegraphics[width=15cm]{media/workflow.pdf}
+\caption{A diagram of possible steps to create and conduct a test.\label{imgWorkflow}}
+\end{center}
+\end{figure*}
+
 \paragraph{Creation}
 The framework is split into three parts: The test design part aids with the construction of the test scene. A scene is a description of stimuli, possible inputs, and reactions to them. Traditional tests in this area show a series of pictures, requiring user feedback for each, while measuring the response time and the correctness. Stimuli are often precomputed and only consist of a single pixel image.
 
@@ -12,6 +19,14 @@ An important part during the creation of a scene is immediate feedback on the lo
 By seeing how the scene appears under test conditions, how hard it is to see, and to modify parameters with direct response,
 designing a test that can be conducted by a wide range of people, and deliver reliable results is simplified.
 
+After playing around with possible stimuli, the test has to be designed.
+Now the decision which independent and dependent variables are used is made.
+An other decision is the counterbalancing, the test duration, block length and many other factors.
+
+Once the design stands, the code for the test is written.
+Depending on the test, this involves counter balancing, randomisation and input validation.
+
+
 \paragraph{Testing}
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
 
@@ -19,10 +34,20 @@ An other complication with stereoscopic tests is, that they have to be viewed st
 Many methods to see stereoscopic materials exist, starting with simple color based encoding (anaglyph), over polarisation encoded frames to direct viewing of the left and right frames with special hardware.
 A software for stereoscopic testing should support a wide range of output devices and methods.
 
+Pilot tests are made to analyze if the test delivers usable results.
+The main test is conducted with more subjects and possibly an improved version of the test.
+
 \paragraph{Analysis}
 Analysing the gathered data is the third part. This is usually done in a combinataion of \textit{Microsoft Excel} and highly specialized data analysation methods such as Anova. Both are sophisticated and well known by the users.
 
-The easiest way to achieve compatibility with the known procedures is to produce data in a format, that is evaluatable in those tools. A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
+The first validation can be done with easy tools like \texttt{grep} to count the error rate or similar.
+This can even be done while the test is still running.
+During a pilot study, it is not needed to run the full test in all cases, when severe problems are detected during validation, the test can be aborted.
+In a main study, validation is used to reject subjects that were not able to conduct the test properly, and are found to be guessing, or otherwise not scientifically relevant.
+
+Further analysis is performed on the data in special tools.
+The easiest way to achieve compatibility with those is to produce data in a known format.
+A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
 For more flexible data access, it can be imported into a database, where standard \textit{SQL} queries can be used to select subsets of the data, sorted and filtered in many ways.
 
 Some tests might not follow this pattern, and the data has to be analysed in a different way.
