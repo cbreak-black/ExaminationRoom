@@ -1,2 +1,5 @@
 thesis.pdf
 *.svg.pdf
+slides.pdf
+*.snm
+*.nav
