@@ -60,7 +60,7 @@ Many scene graph libraries exist, but they are usually focused on a specific fie
 
 To be able to control inconsistencies such as individual depth cues, it is required that the scene graph can represent these. Nodes could add or remove cues for their children, giving a maximum of control to the users. Scene graph libraries do not support those requirements. Designing a simple scene graph is required.
 
-\subsubsection{Node types}
+\subsubsection{Node types\label{nodeTypes}}
 \paragraph{}
 Scene graphs are tree structures consisting of nodes with zero or more child nodes. The scene itself is typically the root node, while actual rendered objects often are leaves. The following nodes are planed to be implemented in the framework.
 The goal is to be able to selectively enable and disable all independent depth-cues\ref{Cues} by using container nodes with the desired properties.
