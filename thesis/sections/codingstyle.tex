@@ -1,26 +1,109 @@
 \section{Coding Style}
 \paragraph{}
-\todo{Overview}
+How to structure programs, layout code or comment influences it's readability and maintainability.
+The exact style does not influence this that much, but having a consistent style over a whole project is necessary.
+
+When ever possible in \ER, the style described here is used.
+Foreign components don't follow all the guidelines.
 
 \subsection{Code file layout}
 \paragraph{}
-\todo{FS Overview}
+The source code of \ER\ is organized in a folder structure due to the big number of files.
+It is advisable to follow the structure when adding new files.
+
+\begin{description}
+\item[{core}] contains the mechanic part of the program, with all object subclasses in \texttt{objects} and all texture subclasses in \texttt{surfaces}.
+\item[{lua}] contains the lua library code and the luabridge library code.
+\item[{parser}] contains the \textit{.obj} object file format parser library.
+Additional formats should be added here.
+\item[{proxy}] contains the custom binding code between the core and lua.
+\item[{tools}] contains utility code that is of use in other parts of the program, among others platform abstraction code, a vector type and lua helpers.
+\end{description}
 
 \subsection{Naming Convention}
 \paragraph{}
-\todo{Underscore, cap}
+The general guideline to chose names is as follows, compound names can be created with \texttt{CamelCase}.
+
+\begin{itemize}
+\item Classes should be nouns and begin with a uppercase letter.
+\item Methods should begin with a verb and a lowercase letter.
+\item Method parameters should begin with a lowercase letter.
+\item Local variables should begin with a lowercase letter.
+\item Member variables and static member variables should begin with a lowercase letter and end with an underscore ("\texttt{\_}").
+\item A getter should have the same name as the variable it sets, without the underscore.
+\item A setter should have the verb \texttt{set} followed by the name of the variable it sets in camel case style.
+\end{itemize}
+
+\begin{lstlisting}[caption={Naming example}]
+class ExampleClass
+{
+public:
+	// method
+	void updateStatus(float delta);
+	// getter
+	int memberVariable() const;
+	// setter
+	void setMemberVariable(int newMemberVariable);
+private:
+	int memberVariable_;
+}
+\end{lstlisting}
 
 
 \subsection{Source formating}
-\paragraph{}
-\todo{...}
-
 
 \paragraph{Indenting}
+Indenting code makes the flow and structure of functions and method apparent.
+The style used in \ER\ is based on the \href{http://en.wikipedia.org/wiki/Indent_style}{Allman style}.
+Curly brackets should always be on their own line, code inside them is indented with tabs.
+
+\begin{lstlisting}[caption={Indenting example}]
+//for (int i=0; i < x; i++)
+//while (x == y)
+if (x == y)
+{
+    something();
+    somethingelse();
+}
+\end{lstlisting}
+
+The advantage of this style is the clear separation between blocks.
+Matching braces are in the same column, making it easy to find pairs.
+All this helps with refactoring and understanding the concept of the code.
 
 
 \paragraph{Commenting}
+\ER\ uses \textit{Doxygen} style comments for all public methods in the header file of a class.
+In complex methods, the code should be commented with C++ style comments ("\texttt{//}").
+
+Doxygen comments are automatically extracted to generate API documentation.
+It should be written keeping this in mind:
+Code should not be referred to since the comments are often read without it, and context should be referred to by name and not location.
+
+Comments should be written with the user in mind:
+Point to similar functions, write what the method does, state it's side effects and describe the intended use.
 
 
-\paragraph{Includes}
+\paragraph{Headers}
+When ever possible, no external files should be included from a header file.
+This benefits compile time, since changing a header file causes recompilation of all files that include it.
+
+Ideally, only parents of classes and value members are included in a header file.
+All other classes and types should be forward declared when ever possible and only included in code files if it is needed.
+It is acceptable to include API header files, since they are not expected to change often.
+\textit{C++}'s \texttt{using} statement should not be used in a header file.
+
+\subsection{Other guidelines}
+\paragraph{}
+Those tips focus on the actual implementation and not only the look of the code.
+It is advised to follow them to get a homogenous look-and-feel in \ER's source code.
+
+\begin{itemize}
+\item When ever possible, mark methods that don't change a class as constant.
+\item When ever possible, use \lstinline{std::tr1::shared_ptr<Type>} instead of raw pointers.
+\item When possible, pass data with a smart pointer or as const reference and not by value to reduce copy overhead.
+\item Do not hardcode constants that make sense to be changeable, use static class members instead.
+\item Comment out unused parameters so no unneeded warnings are emitted.
+\item When committing code, add meaningful commit messages, describe what was changed.
+\end{itemize}
 

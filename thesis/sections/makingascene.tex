@@ -86,22 +86,47 @@ Scenes can be creates either in pure lua, or with the help of the \ER\ user inte
 
 \subsubsection{Pure Lua}
 \paragraph{}
-\todo{set up variables}
-\todo{set up scene graph}
-\todo{set up data structures for scene description}
-\todo{set up event handlers and progression functions}
-\todo{log reply correctness and progress in input handler}
+Pure lua tests can be structured without any additional restrictions.
+It is however advised to follow some guidelines to make the code easier readable
+and maintainable.
+
+Important parameters, especially those that are used in several places, should be stored in variables.
+Everything relevant should be commented.
+
+The next thing to do in a pure lua scene is to set up the scene graph.
+All objects should be created and added to the scene graph.
+Make sure to keep pointers to those objects you want to change later.
+Next, the data structures for the test is set up.
+Tables of possible positions that can be randomly permuted have shown to be useful.
+It would also be possible to dynamically generate new positions, depending on the design of the test.
+
+\paragraph{Interaction}
+The scene interaction is done in event handlers.
+Usually, the \texttt{keyDown} or \texttt{keyUp} handler is registered to handle user input.
+The handler method checks if the user input is correct, logging the result of the check.
+Then it changes the scene graph to represent the next stimulus, usually by moving objects, or changing their texture or other parameters.
+The next stimulus is written to the log to start the timer for the next test.
+
+The \texttt{update} handler can be used to animate the scene,
+or to do other time based activities, such as waiting.
+
 
 \subsubsection{UI assisted}
 \paragraph{}
-\todo{similar than pure lua}
-\todo{scene graph created in UI}
-\todo{other things done in separate files}
+At the heart, ui assisted test creation is similar to the pure lua method.
+The only difference is that the scene graph is created in the user interface.
+During the design and play phase, such a scene graph is usually already created and can be reused.
+
+The interaction is defined exactly as in the pure lua method.
+An additional code file can be added in the user interface, and should be used to store the code.
+Files managed by the user interface get rewritten every time they are saved, overwriting any custom code they contain.
 
 
 \subsection{Log Format}
 \paragraph{}
-\todo{In query-response tests: log query and response}
+What to log and how to log it is decided by the scene design.
+In most tests it is advised to log all changing parameters, as well as all user input.
+The common form of query-response test has at least one special log entry that identifies the start of a new query, and one that identifies it's end.
+The time stamps of those events are used to calculate response time.
 
-\todo{Describe how}
 
