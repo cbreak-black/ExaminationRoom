@@ -1,0 +1,20 @@
+\subsection{Program}
+\paragraph{}
+The class \lstinline{Program} encapsulates a test scene.
+It contains the scene graph (see \ref{SceneGraph}) and the scene mechanics (see \ref{Mechanic}).
+
+The program mediates user input and relays it to the engine
+and handles loading and storing of a scene.
+
+The scene also manages names.
+Names are important especially for serialisation, since lua variables are referred to by name.
+Uniqueness and validity is ensured, and reserved lua keywords are protected.
+
+\paragraph{Internal interaction}
+In the current implementation, the scene mechanic code accesses the scene graph directly,
+and has references to the actual objects.
+This makes modularisation more difficult, and makes it impossible to replace a whole scene graph with a duplicate.
+An improvement would be to only refer to objects by name or with some sort of \textit{URI}.
+Implementing such a scheme would require a huge effort especially due to the nature of the binding to \textit{lua}.
+\textit{LuaBridge} does not support polymorphism.
+
