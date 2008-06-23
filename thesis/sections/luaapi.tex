@@ -13,60 +13,72 @@ This chapter gives an introduction on the ideas behind the API, and then details
 The lua language is simple, but to understand it's details, reading the manual\cite{lua} is recommended.
 Here the basic constructs:
 
-\paragraph{Expression with assignments}
-\begin{verbatim}
-x,y = math.cos(a)*r, math.sin(a)*r
-\end{verbatim}
+\subsubsection{Expression with assignments}
 
-\paragraph{Method call}
-\begin{verbatim}
+\begin{lstlisting}[language=lua]
+x,y = math.cos(a)*r, math.sin(a)*r
+\end{lstlisting}
+
+\subsubsection{Method call}
+\begin{lstlisting}[language=lua]
 Scene:addObject(Sphere())
-\end{verbatim}
+\end{lstlisting}
+
+\paragraph{}
 On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Sphere()}, which is the constructor for spheres.
 
-\paragraph{table construction and access}
-\begin{verbatim}
+\subsubsection{table construction and access}
+\begin{lstlisting}[language=lua]
 local t = {
     [1] = "First item";
     [2] = 2;
     ["three"] = x;
 }
 t.three = 3;
-\end{verbatim}
+\end{lstlisting}
+
+\paragraph{}
 LUA tables support number indexes like a sparse array, and key based lookup like a map.
 With string indexes tables can be treated like accessing structs in C.
 The convention is to use 1 based arrays.
 Tables are used in place of Vec vector objects when passing values to the API.
 
-\paragraph{for loop}
-\begin{verbatim}
+\subsubsection{for loop}
+\begin{lstlisting}[language=lua]
 for i = 1,10,2 do
     Scene:log("Number :"..i);
 end
-for idx,obj in ipairs(objectArray) do
+for idx,obj in
+    ipairs(objectArray) do
     Scene:log(obj:name());
 end
-\end{verbatim}
+\end{lstlisting}
+
+\paragraph{}
 For loops can iterate over a number sequence or over the content of a table.
 
 \paragraph{function declaration}
-\begin{verbatim}
+\begin{lstlisting}[language=lua]
 isPrime = function (num, div)
     if num%div == 0 then
         return false, div;
     else
-        if divisor > math.sqrt(num) then
+        if divisor >
+            math.sqrt(num) then
             return true;
         else
             return isPrime(num,
                 div+1);
         end
 end;
-\end{verbatim}
+\end{lstlisting}
+
+\paragraph{}
 Neither type, nor amount of parameters or return values is declared.
-A function is flexible in what can deliver, but has to be flexible with what it gets.
+A function is flexible in what can deliver, but it has to be flexible to deal with what it gets.
+For example some parameters could be nil or of a different type than expected.
 Unused parameters are nil.
-Functions are first class objects, they can be referenced with variables, but also passed around.
+Functions are first class objects. They can be referenced with variables, but also passed around.
 
 
 \subsection{General Ideas}
@@ -84,8 +96,9 @@ but on the modifiers that should be applied to them.
 
 Scenes are built by instantiating objects, setting their parameters, and adding them to a scene hierarchy.
 Objects can later be removed or moved inside the hierarchy.
-Textures and Cameras are helper classes that can not be directly added to a scene,
-but instead are added to objects that support them.
+Textures and Cameras are not subclasses of \lstinline{Object} and can not be directly added to a scene.
+Instead they are added to objects that support them:
+Textures can be added to most objects, cameras only to the scene and camera nodes.
 
 \subsubsection{Animating and Controlling}
 \paragraph{}

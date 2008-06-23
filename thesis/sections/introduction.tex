@@ -1,6 +1,8 @@
 \section{Introduction\label{Introduction}}
 \paragraph{}
-Researching the effect of the viewing of stereoscopic stimuli requires a different tool than usual user testing. The stimuli have to be more complex, and more dynamic. While traditional tests only require simple input and don't need to react on it, changing the stimuli based on what happened is often a requirement for the tests planed in stereoscopic vision research.
+Researching the effect of the viewing of stereoscopic stimuli requires a different tool than usual user testing.
+While traditional tests only require simple input and don't need to react on it, changing the stimuli based on what happened is often a requirement for the tests planned in stereoscopic vision research.
+The stimuli have to be more complex than simple bitmap images as those in standard user tests.
 
 The following sections will introduce several examples of use cases, tests in which the framework should enhance the procedures and lessen the work done in test design and execution.
 In the features section, some important abilities needed in those tests are detailed.
@@ -16,9 +18,9 @@ This is important in many other tests, where focus and binocular fusion has to b
 
 \item[Fusion limit]
 This test is used to ``test out'' the limits of fusion of a subject.
-Knowing the limits, an experiment can be changed, or subjects can be classified or rejected.
+Knowing the limits, an experiment can be changed or subjects can be classified or rejected.
 
-\item[Fatigue and Continuous depth]
+\item[Fatigue \& Continuous depth]
 In this test two targets are shown resting on a ground plane, at three depth locations.
 The targets show information that can only be decoded under fusion.
 Measured is the reaction time of the test subject.
@@ -53,7 +55,7 @@ The test subject and what it does is the main interest of studies.
 As such, the possibilities of interactions should not be arbitrarily constrained, but instead be as wide and flexible as possible.
 The most basic interaction is by using the keyboard and the mouse.
 In this group also fall devices that emulate them, such as joysticks track balls or touch sensitive screens.
-More input vectors are imaginable, ranging from voice input over body movement to sensory data of the test subject.
+More input vectors are imaginable, ranging from voice input and body movement to sensory data of the test subject.
 
 \item[Logging]
 Logging is the core of a test, it represents the data that the scientist is after.
@@ -75,18 +77,18 @@ See section \ref{Stereogram} for a detailed description of stereograms, and how 
 \item[Arbitrary object support]
 Displaying a wide range of objects is required in many tests, simple planes, cubes and pictures are rarely enough.
 But implementing all possible shapes is not possible, so loading already created shapes offers all the desired flexibility.
-Texturing and introspection of imported objects are important features.
+Texturing of imported objects is therefore an important feature.
 
 \item[Camera and Object motion]
 The camera and all objects have to be movable, both instantaneous and smooth.
 Movement should be definable in many ways, for example as function, as path, or as interactive code that reacts on user input.
 
 \item[Depth Cues]
-Viewing stereo is not only rely on binocular stereopsis, there is a wide range of cues that help seeing depth.
+Viewing depth relies not only on binocular stereopsis but also on a wide range of cues present in monocular images.
 Those might be beneficial for a test, or influence the outcome in an undesired way.
 Being able to enable and disable individual cues would be extremely useful.
 
-\item[Randomisation]
+\item[Randomisation \& Balancing]
 Many parameters of a test have to be randomised, position of objects, color or shape of an image or the expected answer of a test.
 But just randomising is not enough, often it is required to randomly permute a set of possibilities to create a balanced test.
 In some cases even this is not enough, random orders have to be computed based on complex rules.

@@ -17,7 +17,7 @@ On \textit{Linux}, GCC was tested.
 
 Qt from Trolltech can be downloaded for free in the GPL version\cite{qt}.
 It is available for all three platforms either as source or precompiled.
-Both the source and the binary versions were tested in version 4.3.4, but never versions are expected to work as well.
+Both the source and the binary versions were tested in version 4.4, but newer versions are expected to work as well.
 
 Boost is a C++ source library intending to be compatible with the standard library, trying to eventually become part of the standard\cite{boost}.
 As source library, it does not need to be compiled, just placed at a location where it is found by the compiler and build system.
@@ -43,7 +43,7 @@ git log
 \end{verbatim}
 
 \paragraph{Project Page}
-An archived version of pre-compiled binaries for Mac OS X and Windows is available on \cite{project}.
+An archived version of pre-compiled binaries for Mac OS X and Windows is available on the project page\cite{project} (see screenshot \ref{ssProject}).
 The binaries include all needed libraries, some demo files and lua libraries.
 The project page also contains a link to the public read-only git repository, and the complete source code as zipped archive.
 
@@ -77,14 +77,14 @@ A makefile is generated with \texttt{qmake}, and compiled with \texttt{make}.
 Preparing a compiled ExaminationRoom binary for distribution requires some care.
 The Qt library has to be bundled in a way the application can find it.
 The following sections describe the approach to package a compiled executable for distribution.
-For details and further reading, see \cite{deployment}.
+For details and further reading, see the Qt deployment guide\cite{deployment}.
 
 \subsubsection{Mac OS X}
 \paragraph{}
 On Mac OS X the recommended method for distribution is with the Qt Frameworks as private embedded framework.
 All remaining frameworks are compiled into the application.
 The following steps describe how to create such a binary.
-For detailed commands and examples see the mac page on \cite{deployment}.
+For detailed commands and examples see the mac page on the Qt Deployment guide\cite{deployment}.
 
 \begin{enumerate}
 \item Make sure the installed Qt Framework is compiled as \textit{Universal Binary}, a code file that contains both PowerPC and x86 bytecode. This is the case in the pre-compiled distribution.
@@ -100,7 +100,8 @@ This is not needed with the binary distribution, since it does not contain an ab
 The script changeFrameworkRef.sh can do this for the libraries installed into \texttt{/Library/Frameworks}, the location used by the binary distribution.
 If the framework paths differ, use \texttt{install\_name\_tool -change} directly.
 \texttt{otool -L} can list the paths to libraries referred to by code.
-\item Do the same to the Frameworks. The GUI and OpenGL framework refer to Core, and OpenGL also to GUI.
+\item Do the same to the Frameworks.
+The QtGUI and QtOpenGL framework refer to Core, and the QtOpenGL framework also links to QtGUI.
 \item Copy the desired image format plugins into \texttt{Contents/plugins/}.
 Make sure to preserve the folder structure.
 \item Change the framework paths of the plugins as before, either with the script or manually.

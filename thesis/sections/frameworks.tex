@@ -43,8 +43,8 @@ As long as a smart pointer to a memory location exists, it can be used like a no
 but as soon as all pointers to it go out of scope, the memory will be automatically deallocated.
 
 \paragraph{}
-An other useful feature in boost are function binders.
-while standard \textit{C} functions and static functions can be pointed at by a simple pointer,
+Another useful feature in boost are function binders.
+While standard \textit{C} functions and static functions can be pointed at by a simple pointer,
 \textit{C++} class member functions require more data
 (Method Pointers vary in size depending on compiler and platform, and can be 12 bytes or more).
 Together with the strict type checking of \textit{C++}, this makes storing pointers to member functions complicated and inflexible.
@@ -61,8 +61,8 @@ In the beginning of graphical computers, programs drew everything on their own, 
 In modern systems, drawing is highly abstracted and often hardware accelerated.
 
 \ER\ requires the ability to draw 3D scenes and reproduce many effects such as lighting, cameras, atmospheric effects and other depth cues.
-The goal is to be able to test both abstract scenes consisting only of few shapes and a limited amount of cues,
-as well as scenes that contain many cues, and more closely approximate real visuals.
+The goal is to be able to test both abstract scenes consisting of only a few shapes and a limited amount of cues,
+as well as scenes that contain many cues and more closely approximate real visuals.
 This is similar to what computer games use.
 
 \paragraph{}
@@ -72,7 +72,7 @@ Many features of \textit{OpenGL} are accelerated by modern graphic cards, and al
 
 The \ER\ renderer uses \textit{OpenGL} for the scene output.
 Objects paint them-selfs with OpenGL commands.
-The offerings of the framework are not perfect, but it allowed to realize almost all desired features.
+The offerings of the framework are not perfect, but it enables the realisation of almost all desired features.
 A more advanced anaglyph renderer would likely be possible to do with frame buffer objects and pixel shader, but that would exclude a wide range of older installations and hardware.
 
 
@@ -93,7 +93,7 @@ The chosen language is \textit{LUA}\cite{lua}, a small library designed to be us
 It provides all basic features, comes with garbage collection, flexible syntax and powerful binding API.
 It's syntax is easy to understand, but still offers enough sugar to use not only procedural, but also modular, object oriented or functional programming.
 It's license is very liberal, which made it popular even in the comercial game industry.
-The official project description emphasizes those points.
+The official project description emphasizes those points:
 
 \begin{quotation}
 Lua is an extension programming language designed to support general procedural programming with data description facilities. It also offers good support for object-oriented programming, functional programming, and data-driven programming. Lua is intended to be used as a powerful, light-weight scripting language for any program that needs one. Lua is implemented as a library, written in clean C (that is, in the common subset of ANSI C and C++).

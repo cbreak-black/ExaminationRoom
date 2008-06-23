@@ -7,7 +7,7 @@ The implementation is closely tied to the abilities requested from the tool, man
 In addition, the scene does not only have to be rendered once but often twice.
 Binocular vision infers depth relationships from slight differences in images taken from two separate viewpoints.
 
-Section \ref{FrameworkOpenGL} discusses the choice of drawing framework.
+Section \ref{FrameworkOpenGL} discusses the choice of rendering framework.
 Section \ref{RendCamera} discusses how a 3D scene gets mapped into a 2D image.
 Section \ref{RendStereo} discusses stereo rendering methods.
 Section \ref{ImplContainer} discusses the implementation of other effects.
@@ -70,7 +70,7 @@ If the used graphic hardware supports it, \textit{OpenGL}'s QuadBuffering can be
 \paragraph{Anaglyph}
 For a quick and easy preview on any screen, anaglyph is the simplest method.
 Many different variations of anaglyph are used, the most popular of which are red-blue and red-green coding.
-A simple implementation based could draw only the red channel of the image intended for the left eye, and the green and blue channel of the right eye.
+A simple implementation could draw only the red channel of the image intended for the left eye, and the green and blue channel of the right eye.
 Unfortunately this leads to rivalry when rendering scenes that contain objects that consist mostly of those colors.
 
 The correct way is to mix all colors of one side into it's channel.

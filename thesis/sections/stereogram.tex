@@ -4,7 +4,7 @@ A stereogram is an image that contains separate data for the left and right eye.
 
 \subsubsection{Random dot stereogram\label{RDS}}
 \paragraph{}
-Random dot stereograms are a topic that has interested scientists since over a century\cite{AntRDS}. In the early 1960s they where introduced as stimuli into the modern neuroscience by Julesz\cite{BellRDS}. Unlike a normal stereogram, a RDS contains no monocular clues of the depth, or any clue about the stereoscopic image at all. This makes them the perfect tool to study binocular vision.
+Random dot stereograms are a topic that has interested scientists since over a century\cite{AntRDS}. In the early 1960s they were introduced as stimuli into the modern neuroscience by Julesz\cite{BellRDS}. Unlike a normal stereogram, a RDS contains no monocular clues of the depth, or any clue about the stereoscopic image at all. This makes them the perfect tool to study binocular vision.
 
 The two images of an RDS consist of a random pattern, usually dots. Since either image on it's own is purely random, no information can be derived of it. When seen with binocular vision, depth can be seen. There are several different methods to create a random dot stereograms, but their principle is the same:
 Based on depth information, parts of the pattern in one or both eyes are shifted on the horizontal axis.
@@ -25,11 +25,14 @@ It's advantage is that it's fast and easy to both implement and execute. Memory 
 \end{figure*}
 
 \paragraph{}
-The second algorithm is split into two parts, which deal with convex concave stereograms seperately. Doing this allows to deal with subtile problems with partial occlusion (see figure \ref{ccRDS}). It also uses different patterns for fore- and background. This was inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
+The second algorithm is split into two parts, which deal with convex and concave stereograms separately.
+This deals with subtile problems with partial occlusion (see figure \ref{ccRDS}).
+It also uses different patterns for fore- and background.
+Using pre-calculated patterns was loosely inspired by a paper from Gonzalez and Krause\cite{GenRDS}, which allowed different densities for object and background.
 
-Using different colors for the foreground and the background makes the object defined in the depth map stand out. This helps visibility, but that way the shape of the object itself can not be used to validate fusion. Depending on the offset of fore- and background, and the size of the random dot stereogram, it is not easily monocularly visible if the shape is convex or concave.
+Using different colors for the foreground and the background makes the object defined in the depth map stand out. This helps visibility, but that way the shape of the object itself can not be used to validate fusion. Depending on the offset of fore- and background and the size of the random dot stereogram, it is not easily monocularly visible if the shape is convex or concave.
 
-Both methods are simplified, so that the eyes are always at the same relative position of the pixel that is considered, similar to a parallel projection.
+Both methods are simplified, the virtual cameras are always at the same relative position of the pixel in the depth map that is processed, similar to a parallel projection.
 
 \paragraph{Convex}
 The algorithm for convex shapes treats the depth map as a source to calculate the new position of pixel in a source pattern. The calculated offset is used to displace the surface into the destination image. The shape is shifted horizontally, and appears to come out of the surface. This is equivalent to tracking the surface of the object, and projecting the observed value onto the background. (figure \ref{ccRDS}, left.)
