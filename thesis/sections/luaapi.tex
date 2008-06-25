@@ -13,7 +13,7 @@ This chapter gives an introduction on the ideas behind the API, and then details
 The lua language is simple, but to understand it's details, reading the manual\cite{lua} is recommended.
 Here the basic constructs:
 
-\subsubsection{Expression with assignments}
+\subsubsection{Expressions}
 
 \begin{lstlisting}[language=lua]
 x,y = math.cos(a)*r, math.sin(a)*r
@@ -27,7 +27,7 @@ Scene:addObject(Sphere())
 \paragraph{}
 On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Sphere()}, which is the constructor for spheres.
 
-\subsubsection{table construction and access}
+\subsubsection{Table use}
 \begin{lstlisting}[language=lua]
 local t = {
     [1] = "First item";
@@ -100,7 +100,7 @@ Textures and Cameras are not subclasses of \lstinline{Object} and can not be dir
 Instead they are added to objects that support them:
 Textures can be added to most objects, cameras only to the scene and camera nodes.
 
-\subsubsection{Animating and Controlling}
+\subsubsection{Animating \& Reacting}
 \paragraph{}
 In LUA there is no continuous flow of control, no run loop. Instead the code only runs when it is loaded and after that to handle events.
 Four types of events are currently available: Key input can be received for both key-down and key-up. An update event is fired every time a new frame is about to be drawn. And finally, a quit event is fired when the application is about to be terminated.
