@@ -86,7 +86,7 @@
 
 \renewcommand{\baselinestretch}{1.2}
 
-\newcommand{\mytitle}{Tool support for user testing of stereoscopic fatigue}
+\newcommand{\mytitle}{Designing and implementing a flexible and extensible testing framework}
 
 \usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
 \pagestyle{fancy} % options: empty , plain , fancy
@@ -111,8 +111,9 @@
     pdfkeywords={master, fatigue testing software, stereo vision},       % Keywords
 }
 
-\title{Master Thesis: \mytitle\\
-{\large Designing and implementing a flexible and extensible testing framework}}
+\title{Master Thesis: \mytitle
+%\\{\large Designing and implementing a flexible and extensible testing framework}
+}
 \author{\normalsize Gerhard R\"othlin 
 {\texttt{\href{mailto:cbreak@the-color-black.net}{cbreak@the-color-black.net}}}}
 \date{2008.01.07 - 2008.07.07}
@@ -146,6 +147,7 @@
 
 \part{Program Design}
 \begin{multicols}{2}
+\input{sections/requirements.tex}
 \input{sections/design.tex}
 \input{sections/cues.tex}
 \end{multicols}

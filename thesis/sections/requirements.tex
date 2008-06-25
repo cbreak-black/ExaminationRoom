@@ -1,0 +1,99 @@
+\section{Program Requirements}
+
+\subsection{Existing Solutions}
+\paragraph{}
+\todo{compare to superlab}
+
+
+\subsection{Use Cases}
+\paragraph{}
+Before writing a program, one has to understand for what the program is to be used. The following examples illustrate the tests for which this framework has to be able to be used.
+
+\begin{description}
+\item[Focus]
+The most basic test is to validate if a participant can focus and fuse on a target at an arbitrary location in a stereoscopic scene.
+This is important in many other tests, where focus and binocular fusion has to be ensured.
+
+\item[Fusion limit]
+This test is used to ``test out'' the limits of fusion of a subject.
+Knowing the limits, an experiment can be changed or subjects can be classified or rejected.
+
+\item[Fatigue \& Continuous depth]
+In this test two targets are shown resting on a ground plane, at three depth locations.
+The targets show information that can only be decoded under fusion.
+Measured is the reaction time of the test subject.
+Before the test, after the test, and in the middle of the test a questionnaire is showed.
+Difficulties include the complicated randomisation rule and the questionnaire.
+For more details see section \ref{ExampleFatiguePilot}.
+
+\item[Pinning]
+Pinning is a border violation problem in stereoscopic images.
+Testing it requires displaying various shapes and objects at locations near the border, in front or behind the parallax plane.
+Texture can heavily influence how pinning is perceived.
+Moving and rotating the objects can further help understanding the problem.
+
+\item[Motion Sickness]
+Testing the effect of motion in stereoscopic movies is important for understanding the creation of a pleasant or exciting viewing experience.
+Simulating and testing requires the ability to interactively move both camera, and objects in a scene.
+Motion should also be pre-definable, possibly as formula or as smooth movement along a curve.
+
+\item[Testing Scenes]
+When designing an experiment, being able to interactively change details of the scene, and get immediate feedback how it looks is invaluable
+Scenes that are not used to test subjects, but to test the testing procedure do not require logging, instead they need interactivity and real time control.
+\end{description}
+
+
+\subsection{Features}
+\paragraph{}
+To implement the use cases in the previous sections, the framework has to contain high level functionality, some of which is listed here.
+
+\begin{description}
+\item[User interaction]
+The test subject and what it does is the main interest of studies.
+As such, the possibilities of interactions should not be arbitrarily constrained, but instead be as wide and flexible as possible.
+The most basic interaction is by using the keyboard and the mouse.
+In this group also fall devices that emulate them, such as joysticks track balls or touch sensitive screens.
+More input vectors are imaginable, ranging from voice input and body movement to sensory data of the test subject.
+
+\item[Logging]
+Logging is the core of a test, it represents the data that the scientist is after.
+As such, it has to be both exact and flexible.
+A core requirement is that everything that happens, can be logged.
+The log should be usable for any kind of test, and still be simple enough to understand and analyse.
+
+\item[Survey]
+While measurements of timing and correctness try to create an objective result, subjective feedback can not be neglected.
+Popular in research are questionnaires, simple questions with answers on a given scale or in a given set of possible answers.
+
+\item[Stereograms]
+Stereograms encode depth information in a pair of 2D images.
+So called auto-stereograms even manage to do this with one single image.
+The depth information in a stereogram can only be extracted under binocular fusion, which makes it the perfect tool to ensure fusion.
+Generating stereograms of various types and sizes is therefore a requirement in many tests.
+See section \ref{Stereogram} for a detailed description of stereograms, and how they are implemented.
+
+\item[Arbitrary object support]
+Displaying a wide range of objects is required in many tests, simple planes, cubes and pictures are rarely enough.
+But implementing all possible shapes is not possible, so loading already created shapes offers all the desired flexibility.
+Texturing of imported objects is therefore an important feature.
+
+\item[Camera and Object motion]
+The camera and all objects have to be movable, both instantaneous and smooth.
+Movement should be definable in many ways, for example as function, as path, or as interactive code that reacts on user input.
+
+\item[Depth Cues]
+Viewing depth relies not only on binocular stereopsis but also on a wide range of cues present in monocular images.
+Those might be beneficial for a test, or influence the outcome in an undesired way.
+Being able to enable and disable individual cues would be extremely useful.
+
+\item[Randomisation \& Balancing]
+Many parameters of a test have to be randomised, position of objects, color or shape of an image or the expected answer of a test.
+But just randomising is not enough, often it is required to randomly permute a set of possibilities to create a balanced test.
+In some cases even this is not enough, random orders have to be computed based on complex rules.
+
+\item[Ease of use]
+While not a singular feature, it is never the less very important that a product is easy to use.
+If a product is too complicated to be used, it is useless, no matter how powerful it is.
+The usability of a test is in the responsibility of the test designer, but making the creation of the test as simple and intuitive as possible is the job of the tool.
+Increasing the usability ranges from creating a simple consistent user interface that offers basic functionality over adding powerful and extensible scripting capabilities for power user, to writing good documentation.
+\end{description}
