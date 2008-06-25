@@ -1,41 +1,36 @@
 \section{Example Tests}
 \paragraph{}
-During the development of the Framework, many tests have been developed, to both test the capabilities of the framework, and to be used in real studies. Following some of those scenes are described.
+The best way to learn something is seeing how it's done and understanding why it is done.
+This section gives a few examples for test scenes.
+
+\subsection{A small scene}
+\paragraph{}
+The source code for this test is bundled with the \ER\ distribution.
+It can also be found in the appendix in listing \ref{example.small.lua}.
+\todo{Add the small scene description}
 
 
 \subsection[Influence of continuous depth]{Pilot Study: Influence of continuous depth on fatigue\label{ExampleFatiguePilot}}
 \paragraph{}
-Objective of the study is to quantify the effect of a continuous depth element on the time it takes participants to focus objects at various depths, and the change in refocus time with the progression of the experiment.
+This experiment is described in detail in section \ref{FatiguePilot}.
+Here, the implementation details are described, and parts of the source code is explained.
+Note that the code used here is not the one used in the experiment, it was cleaned up to be more beneficial as example.
+In addition to the techniques displayed in the last section, this test also uses the questionnaire library and the use of the GUI designer.
 
-\begin{center}
-\includegraphics[width=7.5cm]{media/pilotFatigue.png}
-\end{center}
+\subsubsection{Visual}
+Visually this test is simple, a textured floor plane and one or two pixel planes dominate the scene.
+The floor is textured with a checkerboard pattern, the pixel planes show a random dot encoded depth image.
+To emphasize the object of interest, a yellow rectangle outline is used.
+\todo{Explain how to design that in the GUI designer}
 
-\paragraph{Visual}
-The test stimulus consists of a grey background (50\% grey), a continuous depth element (plane, checkerboard pattern, averaging in 50\% grey) and two random dot targets (approximately 50\% grey).
-The targets show a shape which is either convex (coming out of the screen), or concave (going into the screen).
-For the encoding details see section \ref{RDS}. The random pattern consists of eight shades of grey, of which the dark seven are used for the background, and the light seven for the foreground.
+\subsubsection{Mechanics}
+\paragraph{}
+The core of the scene mechanic is a simple progression function.
+\todo{Explain how it works}
+\todo{Describe the connection of test, cycle, block}
+\todo{Explain why the cycles are randomized like they are}
 
-The random dot targets are resting on the plane, and border to either the left or the right border.
-Each target can be at  one of three depth locations, at a separation of \unit[6]{cm}, \unit[0]{cm} and \unit[-6]{cm} (\unit[-3.1]{°}, \unit[0]{°}, \unit[3.1]{°}).
-The targets itself are scaled up in the far position, and scaled down in the near position, to make their apparent size constant.
 
-The image is back-projected on a screen by two projectors through circular polarisation filters.
-The image height is \unit[0.79]{m}, it's width is \unit[1.3]{m} (\unit[36]{°} by \unit[22]{°} field of View).
-The participant's head is at \unit[2]{m} distance of the screen, and observes the screen with polarised filter goggles. The room is dark.
+\paragraph{Questionnaire}
+\todo{Write how they are used}
 
-\paragraph{Mechanics}
-To asses the the effect of the continuous depth element, response time is logged. The other variables are the depth location of the object, the change in depth measured in angular separation, the block number and the presence of the continuous depth element.
-
-The expected input is randomized, so concave and convex targets should be similarly common. The three depths and the two sides lead to 18 depth changes.
-
-A cycle is built so that every depth change appears exactly once. This is achieved by pre-computing three cycles and their inverses that visit each of the six positions three times, once from each of the three nodes on the other side. Such a cycle has 18 steps, and 19 targets.
-Cycles are picked at random out of the pre-computed cycles, randomly permuting the depth positions of right and left.
-This gives 36 different permutations per cycle, and 216 different permutations overall.
-
-Ten cycles form a block, either with or without continuous depth plane. The start state is chosen by the tester to counterbalance it, the presence of the depth element in later blocks is alternated.
-The whole test contains 12 blocks, 2280 targets.
-
-Before the start, after the end, and after the first six blocks, a questionnaire is presented.
-It starts with seven questions, with replies on a scale with six steps.
-An other 16 questions require answers on a four step scale.

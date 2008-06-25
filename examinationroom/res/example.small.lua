@@ -1,4 +1,4 @@
--- Load Libraries
+-- Small example scene without real purpose
 
 -- Distance to screen: 2 meter
 -- Screen height: 0.78 meter
@@ -188,3 +188,4 @@ end;
 -- Sets the function defined above as handler of update events
 -- It is executed before every frame redraw
 Scene:setEventListener("update", updateScene);
+
