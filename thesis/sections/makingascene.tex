@@ -16,12 +16,24 @@ In this phase, the look of the test is created.
 By placing objects in the scene, varying parameters and viewing it in 3D, it is easy to create a scene that will look good and can be seen easily in the test.
 
 What kind of object to place is an important decision.
-If binocular fusion has to be ensured, using random dot stereograms\ref{Stereogram} is a good choice.
+If binocular fusion has to be ensured, using random dot stereograms (see \ref{Stereogram}) is a good choice.
 Stereograms are created as textures on pixel planes, since they need to be reproduced pixel exact on screen.
+
+\paragraph{}
+All image formats supported by \textit{Qt} are also supported by \ER.
+To be portable, the dimension of all textures should be a power of two.
+While \ER\ supports other dimensions, the underlying \textit{OpenGL} hardware might not.
+Depth maps should be gray scale, where black represents the zero parallax plane and white the maximal offset.
+The border of a depth map should always be black or visual conflicts might appear.
 
 Easy geometric shapes like parallelepipeds, parallelograms or circles can be made directly in \ER,
 for more complicated shapes, meshes have to be made in a 3D modeling software.
+Currently, the only supported mesh format is \textit{Alias Wavefront}'s \textit{OBJ} format (see \ref{Meshes}).
+When exporting meshes, be aware that to see lighting, normals have to be available.
+\ER\ tries to compute normals should none be in the imported mesh, but the result might not be satisfying.
+To texture an object also export suitable texture coordinates.
 
+\paragraph{}
 Meta objects/container nodes play an important role in \ER's scene graph design.
 Objects that need to be seen with a different camera than the scene are placed as sub-object of a camera node.
 Similarly, lit objects are sub-objects of a light node, transformed objects are sub-objects of a transformation node and objects with non-standard depth ordering are sub-objects of a depth node.

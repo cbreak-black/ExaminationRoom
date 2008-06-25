@@ -195,48 +195,48 @@ Removing a shadow is hard, but not creating one is easy, so this is the recommen
 \begin{center}
 \small
 \begin{tabular}{p{2cm}|p{1.9cm}|p{5cm}|p{5cm}}
-Cue & Family & Created by & Removed by \\
+Cue & Family & Created by & Removed by \\[6pt]
 \hline
 Relative Size &
 Projection &
-Perspective Projection or non uniform scaling as a function of distance to camera &
-Parallel projection or non uniform scaling as a function of distance to camera \\
+Perspective Projection, non uniform scaling as a function of distance to camera &
+Parallel projection, non uniform scaling as a function of distance to camera \\[6pt]
 Relative Density &
 Projection &
 Perspective Projection, non uniform scaling of space and objects, or translation and scaling of objects as a function of distance to camera &
-Parallel Projection, non uniform scaling of space and objects, or translation and scaling of objects as a function of distance to camera \\
+Parallel Projection, non uniform scaling of space and objects, or translation and scaling of objects as a function of distance to camera \\[6pt]
 Motion Perspective &
 Projection &
 Perspective Projection, scaling of space, or adjusting velocity of objects as function of camera distance &
-Parallel Projection, scaling of space, or adjusting velocity of objects as function of camera distance \\
+Parallel Projection, scaling of space, or adjusting velocity of objects as function of camera distance \\[6pt]
 Height of visual field &
 Projection &
 Perspective Projection, an angled projection, angled camera, translating/shearing as function of distance to camera &
-Parallel projection with camera parallel to ground plane, vertical translation/shearing as function of camera distance \\
+Parallel projection with camera parallel to ground plane, vertical translation/shearing as function of camera distance \\[6pt]
 Convergence &
 Projection &
-Two cameras with separation, either converged, perspective, or both. Or horizontal translation/shearing as function of distance to camera and camera direction &
-Only one camera, parallel projection, horizontal translation/shearing as function of distance to camera and camera direction \\
+Two cameras with separation and suitable projection matrix, horizontal translation/shearing as function of camera distance and direction &
+One camera, parallel projection, horizontal translation/shearing as function of camera distance and direction \\[6pt]
 Binocular stereopsis &
 Projection &
-Two cameras with separation, either converged, perspective, or both. Or horizontal translation/shearing as function of distance to camera and camera direction &
-Only one camera, parallel projection, horizontal translation/shearing as function of distance to camera and camera direction \\
+Two cameras with separation and suitable projection matrix, horizontal translation/shearing as function of camera distance and direction &
+One camera, parallel projection, horizontal translation/shearing as function of camera distance and direction \\[6pt]
 Occlusion &
 Physical &
-Depth ordering, Depth buffering &
-Depth ordering, Blending \\
+Depth ordering, depth buffer &
+Depth ordering, blending \\[6pt]
 Aerial perspective &
 Physical &
 Fog Equation &
-Not using Fog Equation \\
+Not using Fog Equation \\[6pt]
 Accom\-modation &
 Optical &
-Adaptive optics, placing objects/screen at varying distances from viewer &
-Default behaviour, whole screen requires at approximately the same accommodation \\
+Adaptive optics, vary screen distances &
+Default, whole screen requires approx. same accommodation \\[6pt]
 Light \& Shading &
 Physical &
 Light Equation, Shadow projection, shadow maps &
-Not using Light Equation, Shadow projection or shadow maps
+No Light Equation, Shadow projection or shadow maps
 \end{tabular}
 \end{center}
 \caption{List of cues with a short summary on how to create and remove them}
