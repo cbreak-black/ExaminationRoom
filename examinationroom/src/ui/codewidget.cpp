@@ -130,10 +130,13 @@ void CodeWidget::addFile()
 
 void CodeWidget::removeFile()
 {
-	QListWidgetItem * lwi = fileListView_->takeItem(fileListView_->currentRow());
-	fileListView_->setCurrentRow(-1);
-	program()->removeLua(lwi->text().toStdString());
-	delete lwi;
+	QListWidgetItem * lwi = fileListView_->currentItem();
+	if (program()->removeLua(lwi->text().toStdString()))
+	{
+		fileListView_->takeItem(fileListView_->currentRow());
+		fileListView_->setCurrentRow(-1);
+		delete lwi;
+	}
 }
 
 void CodeWidget::editFile(QListWidgetItem * file)
