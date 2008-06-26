@@ -25,16 +25,151 @@ To emphasize the object of interest, a yellow rectangle outline is used.
 This scene is created in the GUI.
 Start a new project, and add two pixel planes with name \texttt{pp0} and \texttt{pp1}.
 The texture of the targets will get created dynamically, so it doesn't have to be assigned.
-\todo{Explain how to design that in the GUI designer}
+The same is true for their position.
+Disable automatic rescaling for the pixel planes, the test targets should keep their size independently from their camera distance.
+
+Create a yellow wireframe rectangle as marker for the active target.
+Just as the target planes, it's position and size is dynamically calculated.
+Reduce the number of subdivisions to 0, so only the outline is shown.
+
+Finally, add a rectangle as floor plane.
+Give it a simple checkerboard texture and set it's vectors to point into the x and z directions.
+Depending on the chosen vector length, set the texture coordinates so that the texture is mapped correctly and with the desired number of repetitions.
+
+To add code, switch to the code pannel.
+Add the existing library files statistics.lua and questions.lua, which are used to calculate some statistics, and to conduct a questionnaire.
+Add a new file to contain your own code.
+Then save the scene to a new file.
 
 \subsubsection{Mechanics}
 \paragraph{}
-The core of the scene mechanic is a simple progression function.
-\todo{Explain how it works}
-\todo{Describe the connection of test, cycle, block}
-\todo{Explain why the cycles are randomized like they are}
+The source code to the algorithms described here can be found in \texttt{example.cycle.code.lua}.
+The core of the scene mechanic is a progression function.
+Many helper functions assist with the progression and the randomisation.
+
+The first part of the code file consists of constant declarations.
+Some are test settings, and define the look of the texture, the audio feedback or the length of the parts of the scene.
+Others describe the external factors of the test and are used for statistical calculations.
+
+The randomisation is balanced in a very special way:
+In a cycle with 18 tests, each depth change appears exactly twice, once from left to right, and once from right to left.
+A depth change is the change between the old and new target in depth.
+To easily get this type of random order, several six such random orders are hard-coded on line 35.
+The positions those random orders refer to are permuted, making from each random cycle 36 versions.
+An alternative implementation would brute force randomize cycles.
+
+The positions are defined as list of possible values per coordinate.
+In the final test, just one shape was used as depth map.
+Additional shapes could be added to the list \texttt{shapes} and would be randomly selected.
+
+From line 56 onwards, as in the previous example, a key code lookup table translates the char codes into strings.
+An input lookup table translates the key strings into meaningful strings for this test.
+
+The statistics library needs to be initialized to be used.
+This is done on line 70, followed by logging the scene parameters.
+Having the exact properties of the test in the log file helps with analyzing.
+
+The objects created in the GUI can be accessed with their name.
+For us it would however be more comfortable to store them in a list, so we just do that.
+
+\begin{lstlisting}[language=lua,firstnumber=83]
+-- Make targets easier accessible
+targets = {
+	pp0,
+	pp1
+};
+\end{lstlisting}
+
+Next, the state is set up, it defines the current test status and the immediate future tests.
+\texttt{cycleNum} and \texttt{blockNum}  define the current position within the test.
+\texttt{currentBlockType} defines the type of the block (if the floor is shown or not).
+\texttt{currentCycle} point to the currently selected random cycle described above.
+\texttt{currentSide} states on which side the current target lies, \texttt{currentTest} keeps the number of the current test stimulus.
+Finally, \texttt{labelToIndex} stores the translation tables between the random cycle and the position in depth.
+
+\begin{lstlisting}[language=lua,firstnumber=89]
+-- State for progression function
+cycleNum = 0;
+blockNum = 0;
+currentBlockType = 1; -- 1 = continuous depth, 2 = no continuous depth
+currentCycle = math.random(1, #perfectCycles);
+currentSide = math.random(1, 2); -- 1 = left, 2 = right, as defined in targetX
+currentTest = 0;
+labelToIndex = {
+	{ 1, 2, 3}; -- first side (even)
+	{ 1, 2, 3}; -- second side (odd)
+}
+replies = {};
+\end{lstlisting}
+
+On line 103 the test is prepared.
+To balance the replies, so that both possible replies (convex and concave) are approximately equal in number, a table is filled with the same number of both replies.
+This replies table is later permuted randomly to get the expected replies for a cycle.
+
+Lookup functions help with getting the position for a given test stimulus in the current cycle.
+Those methods take the random permutation of depth into account.
+
+\paragraph{Progression}
+The \texttt{nextBlock}, \texttt{nextCycle} and \texttt{nextTarget} methods are responsible to set up the next test.
+\texttt{nextTarget()} (line 161) is called after every valid reply.
+If the current cycle has ended, that is the next test would be outside the pre-computed cycle, the next cycle is started by calling \texttt{nextCycle()} (line 147).
+If the current block has ended, this function also goes to the next block by calling \texttt{nextBlock()} (line 137).
+The new test stimulus is then logged and displayed.
+
+An easier test with less dependencies does not require that much state, but the need for non overlapping stimuli requires some book-keeping.
+It is beneficial to separate the progression functions for different levels of the test, generally blocks and stimuli.
+
+\paragraph{Displaying}
+To displaying the newly calculated test stimulus, the parameter of objects created in the GUI are changed.
+First the parameters for the current test are found from the state.
+Then the new texture is generated using the parameters defined at the beginning of the file:
+
+\begin{lstlisting}[language=lua,firstnumber=202]
+local texture = RandomDot(shape);
+texture:setMaxColor(maxColor);
+texture:setExclusiveColor(exclusiveColor);
+texture:setStyle(replies[currentTest]); -- Here the concave/convex status is set
+\end{lstlisting}
+
+To keep the target at a constant size, it is moved to the center, resized to the size it should have there, and then moved to the new position.
+This is pixelplane specific code which is not needed by default, since auto-resize usually takes care of the correct size.
+
+The marker is a rectangle, and therefore unlike pixel-planes gets projected by the camera transformation.
+To make it appear to be of the same size as the target, it is scaled with the camera scale factor between the center and the target point.
+The position of the marker is slightly in front of the target.
+The floor is shown or hidden depending on the current block type.
+As last step the parameters are logged.
+
+As in the previous test, the \texttt{parseInput} function handles key events.
+It tests if the given input is valid (an allowed key in the lookup table), and then if the input is correct.
+Correctness is validated with the current state and of course logged.
+Audio feedback is played in some cases, depending on settings.
+Voice output only works on \textit{Mac OS X}, a shell is opened to execute the command line utility \texttt{say}.
+
+\begin{lstlisting}[language=lua,firstnumber=202]
+Scene:log("Input Correct: "..d);
+if (audioCorrect) then
+	Scene:beep();
+end
+if (voiceCorrect) then
+	os.execute("say -v "..voice.." correct &");
+end
+\end{lstlisting}
 
 
 \paragraph{Questionnaire}
-\todo{Write how they are used}
+The questionnaire library handles questionnaires.
+Two types are supported:
+Graded questions demand input in a range of specified granularity.
+Multiple-choice questions demand as input one of the offered choices.
+
+Beginning on line 301 the questionnaire is set up.
+A table with all questions is built by using the function \lstinline[language=lua]{questions:createQuestion()}.
+In it's first form it takes as argument a question, the minimal and maximal grade label and the number of grades.
+In it's second form it takes a question as first argument, followed by a list of possible answers.
+
+The function \lstinline[language=lua]{startQuestions()} starts the questionnaire with the passed callback.
+Callbacks are very important, they allow the question library to return control to the invoking code once all questions are asked.
+Three callbacks are used, one for the first questionnaire to set up initial conditions and start the test, one for the center tests to restore conditions and continue the test, and one for the last questionnaire to exit the scene.
+It is important to remember that the questionnaire registers it's own event handlers, so all handlers have to be installed after the library returned.
 

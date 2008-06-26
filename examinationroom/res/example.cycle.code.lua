@@ -278,7 +278,6 @@ startTest = function ()
 	-- For constant luminance during testing
 	Scene:setBackgroundColor(127,127,127,255);
 	Scene:setEventListener("keyDown", parseInput);
-	Scene:setEventListener("quit", function (k) Scene:log("Exiting..."); end);
 	nextBlock();
 	nextCycle();
 	nextTarget();
