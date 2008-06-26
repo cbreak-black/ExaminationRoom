@@ -72,9 +72,39 @@ For a quick and easy preview on any screen, anaglyph is the simplest method.
 Many different variations of anaglyph are used, the most popular of which are red-blue and red-green coding.
 A simple implementation could draw only the red channel of the image intended for the left eye, and the green and blue channel of the right eye.
 Unfortunately this leads to rivalry when rendering scenes that contain objects that consist mostly of those colors.
+This method is the one implemented in \ER\ by using \lstinline{glColorMask()} to lock writing to certain color buffers when drawing the left and right camera's view.
 
-The correct way is to mix all colors of one side into it's channel.
+A better way is to mix all colors of one side into it's channel.
 The loss of color contrast is made up with the better fuseability and the reduction in rivalry.
+Other anaglyph methods such as Mayan\cite{Mayan} have a more sophisticated mixing algorithm.
+Implementing them in \textit{OpenGL} requires storing image data of one side in a buffer, and merge it with the other.
+Reading data from the rendering buffer is slow, since auxiliary buffers are often not in the GPU memory.
+It might be possible to implement anaglyph with fragment shaders, pbuffers or the color matrix pixel transfer operation.
 
-\todo{Write about rendering for stereoscopic vision, such as Anaglyph/SidebySide}
+\paragraph{Two-Side}
+To drive projectors or similar systems that require two full frames, the two-side rendering method can be used.
+The first implementation used two one-side render windows, but synchronizing update time was not feasible.
+The time lag created artefacts with animation.
+
+The new implementation changes the viewport of the rendering and draws both cameras side-by-side.
+On a Two-Screen setup in full-screen, the window gets spread on both sides, giving each cameras one screen.
+During most tests, this setup is used to drive two projectors with polarisation filters.
+
+\paragraph{Line Interlace}
+The 3D screen \textit{Trimon ZM-M220W} from \textit{Zalman} is a LCD screen that can display stereoscopic images with polarisation encoding.
+The lines on the display are polarized with alternating directions.
+With suitable polarizing glasses and proper head positioning, stereo images can be seen.
+
+The encoding of the output image is a simple interlacing of alternating viewpoints.
+The technique used to combine the left and right view uses the stencil buffer.
+This is very fast, and requires no additional copying or other slow buffer operations.
+It's drawback is the incompatibility with \textit{Qt}'s text rendering, that also uses the stencil buffer.
+
+\paragraph{QuadBuffer}
+\textit{OpenGL} itself supports a 3D technology called quad-buffering.
+It offers not only a front- and a back-buffer as in traditional double-buffering,
+but front- and back-buffers for both left and right eyed view.
+
+Hardware support for this technology is expensive due to driver limitations implemented by the hardware vendors.
+The Quad-Buffer output mode was not tested.
 
