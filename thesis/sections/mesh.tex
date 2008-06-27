@@ -20,6 +20,7 @@ Mesh importer libraries make it easier to parse models into a custom data format
 \subsubsection{Mesh Libraries}
 \paragraph{}
 Mesh libraries provide an API for loading, manipulating and rendering meshes.
+The final choice was \textit{libObj}, but several alternatives were considered.
 
 \paragraph{OpenMesh}
 \textit{OpenMesh} is a very powerful library with a half-edge data structure.
@@ -46,5 +47,13 @@ To speed up rendering, the mesh is also stored in an \textit{OpenGL} display lis
 
 \subsubsection{Mesh Creation}
 \paragraph{}
-\todo{Write about Maya and others}
+While the file format is in text form, creating meshes by hand in a text editor is not the recommended path.
+Specialized tools for modeling make the task of creating good meshes easier.
+Popular tools are \textit{Maya}, \textit{3D Studio Max} and \textit{Cinema 4D}.
+A free and open source alternative is \textit{Blender}.
+
+Independently of which tool is used, the exchange format between it and \ER\ is \textit{Alias Wavefront}'s \textit{OBJ} file format.
+Normals and texture coordinates should be exported along with the mesh.
+Currently only one texture per mesh can be assigned in \ER.
+
 

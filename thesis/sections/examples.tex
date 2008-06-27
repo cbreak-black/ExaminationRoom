@@ -7,7 +7,61 @@ This section gives a few examples for test scenes.
 \paragraph{}
 The source code for this test is bundled with the \ER\ distribution.
 It can also be found in the appendix in listing \ref{example.small.lua}.
-\todo{Add the small scene description}
+
+This example shows how to create the skeleton of a test, including animation and key input.
+
+\subsubsection{Data}
+\paragraph{}
+At the start of the scene come the settings.
+Camera position, viewing properties and other settings are declared here so they can easily be changed.
+
+Tables containing texture paths are declared after line 28.
+Note that the use of tables allows randomisation by permuting the table, an easy procedure.
+Similarly the possible answers are stored in a table.
+
+Starting on line 45, the key mappings are declared.
+Key event handlers receive a char representing the pressed key, creating a table that maps expected input chars to strings makes the code much more readable.
+
+\subsubsection{Visual}
+\paragraph{}
+The visual properties of the scene are set up from line 55 onwards.
+First the external aspects are written to the log.
+This is good practice and helps keeping the log files sorted.
+
+Then the camera parameters are set to the values previously declared.
+The values are logged as well.
+
+The objects seen in the scene are created and assigned to variables.
+It is not needed to keep references to objects that aren't intended to be changed again.
+The first object in this scene is a rectangle, so the two direction vectors, the position and the texture is set and the rectangle is added to the scene.
+
+Next the targets are created.
+For a variable number of targets, using a list to store them simplifies access.
+The pixel-planes for the target get created and added to the list and scene.
+
+\subsubsection{Mechanic}
+\paragraph{}
+The animation and reaction part of the test can be seen from line 106.
+A common helper function is \lstinline[language=lua]{permuteTable()}, which permutes a table randomly.
+In many tests random permutations are used.
+
+Most tests follow the same pattern: A stimulus is displayed, then user input is received.
+To display the next stimulus, the method \lstinline[language=lua]{displayTarget()} is used.
+It randomly selects a shape from the shape table, a direction from the direction table and the position.
+The new texture for the target pixel-plane is created and added to the texture.
+The commented-out code shows alternative texture types.
+In a real test, this function would also log the new parameters to the log file, and possibly modify other parameters of the scene graph.
+
+\paragraph{}
+To handle user input, a keyDown event handler is registered.
+In this example the function \lstinline[language=lua]{parseInput()} is this event handler.
+The general structure of key event handler is the same in most cases, first the key is checked against the table defined earlier.
+If it's not contained in the table a warning is logged and the key is ignored.
+Keys that are recognized are acted on by checking against the expected reply and progressing the scene, or as in this example by directly changing the scene.
+
+Animations are implemented by registering an update handler.
+The update event is sent between each frame, the interval from the last call is passed as parameter.
+This example has a simple formula-based animation path for the second target, the update handler calculates the new position and directly changes it.
 
 
 \subsection[Influence of continuous depth]{Pilot Study: Influence of continuous depth on fatigue\label{ExampleFatiguePilot}}

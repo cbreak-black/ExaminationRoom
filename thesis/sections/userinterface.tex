@@ -1,4 +1,62 @@
 \subsection{User Interface\label{ImplementationUI}}
 \paragraph{}
+The User Interface is implemented with \textit{Qt}'s extensive widget classes.
+\textit{Qt GUI} aims to provide native looking controls on all platform.
+An experienced user can tell the difference between native applications and one written with \textit{Qt}, but having only one interface for three platforms makes this drawback worth having.
 
-\todo{Write about the look of the UI, the features that are accessible}
+
+\subsubsection{Main Window}
+\paragraph{}
+The main window contains the \textit{OpenGL} scene view, the menu bar (on Mac OS X the menu bar is at the top of the screen) and a number of detachable widgets.
+The scene view shows the look of the currently executing scene.
+The widgets allow changing the scene or give more information.
+
+\subsubsection{Design}
+\paragraph{}
+The design widget shows the scene graph as tree view.
+A tree view is a standard widget, a list with items that can be expanded into sub-objects.
+It is bound to the scene graph by a helper class that translates the calls from the widget to the backend scene graph.
+
+The tree view item model uses placeholder items for each item.
+Those place-holder items contain pointers to the represented object, it is one of the few places where raw pointers are used.
+As a consequence it is also the place where most of the crashes during development happened.
+For a detailed description of the api read the documentation on \lstinline{QAbstractItemModel} and \lstinline{QTreeView}.
+
+To keep the tree-view in sync with the scene graph, the notification system of objects is used.
+Every object notifies it's containing scene before and after external parameters change.
+Container objects have special events for changes of the hierarchy such as adding or removing objects.
+The scene in turn notifies listeners of changes in the layout of the scene.
+
+\paragraph{}
+The lower part of the design widget is filled by the settings pannel of the currently selected object.
+Settings panels are instantiated by the object they belong to and get updated by the object when the object changes.
+This is done by registering the settings pannel to receive change notifications form the object, similar to the method used to keep the tree view in sync.
+
+Every object subclass has it's own corresponding parameter window subclass.
+Those subclasses extend the parent's parameter window and add their own controls.
+
+A screenshot containing the tree view and the parameter dialog of a mesh object can be seen in the appendix as figure \ref{ssTree}.
+
+
+\subsubsection{Code}
+\paragraph{}
+Changing the code of a scene is not possible in the \ER\ user interface.
+While adding a text editor would not be hard, offering the comfort of a full featured text editor is unfeasible.
+The code widget is used instead to manage the additional files loaded by the current scene.
+
+A list widget shows the loaded files, new or existing files can be added, and loaded files can be removed.
+Removing files does not change the state of the running lua interpreter.
+Since lua code is executed in a global address space, it would be impossible to find out which part of the memory is written from which file.
+
+A preview of the currently selected file is shown in the lower area of the widget.
+Double clicking on an item opens it in an external editor, if the operating system supports it.
+
+
+\subsubsection{Log}
+\paragraph{}
+The log widget is fairly simple, it consists of a single \lstinline{QTextEdit} instance that displays the log.
+The events are received from the program, which allows the registering of a callback for log output notifications.
+A screenshot of the log in action can be seen as figure \ref{ssLog} in the appendix.
+
+A more advanced implementation could allow filtering or date parsing, but at the current stage of the project such additional features do not seem needed.
+
