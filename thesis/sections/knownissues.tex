@@ -1,14 +1,45 @@
 \section{Known Issues \& possible improvements}
 \paragraph{}
-\todo{Usability}
+While a great amount of time was spent on building and improving \ER, it is by no means complete.
+Some features are still lacking, and creating a scene also requires understanding of programming in the language \textit{lua}.
+This section contains a few selected possible improvements.
 
-\begin{itemize}
-\item Usability
-\item Scene mechanic design is very low level
-\item Anaglyph rendering is fairly primitive
-\item Selection of objects can only be done in tree view, not in the scene
-\item Selection is not visible in the scene
-\item Container subclassing could be made easier with preDraw and postDraw.
-\item Access to objects from lua only through references, not by name. By-name (or any other indirect) access would allow replacement and undo handling.
-\end{itemize}
+\paragraph{Usability}
+The usability of \ER\ could be improved in several ways.
+Creating the visual component of a scene is not as intuitive as it could be.
+Clicking on objects to select them, or visual feedback for the selected object might be helpful.
+Completely separating creation and execution of tests would allow this.
+
+\paragraph{Programming}
+Planing and designing a successful test is learnt over years in experimental psychology.
+Writing programs is not.
+And while the only way to achieve the power to conduct interactive experiments is a full programming language, most experiments do not require this power.
+
+A big improvement in terms of usability would be to add a subclass of \lstinline{Program}, that does not rely on \textit{lua} but a simpler, easier to understand machine.
+It could be implemented as a state machine(see section \ref{stateAPI}), or similar to \textit{Super Lab}\cite{superlab}.
+
+\paragraph{Anaglyph}
+During development, anaglyph rendering was only used for checking the output on a simple screen.
+The current algorithm is sufficient for this.
+The tests are conducted with projectors or a special screen.
+
+In the future, testing anaglyph algorithms could be a possible task.
+For this, a more flexible color mixing is needed.
+The most promising approach was using \lstinline{GL_COLOR_MATRIX} with aux buffers.
+It's drawback is the lack of speed and the problem with mixing.
+Using \lstinline{pbuffer} objects or vertex shaders might be also worth a thought if backwards compatibility is not an issue.
+
+\paragraph{Refactoring}
+The design of \ER\ was always in flux, as new features were requested or problems encountered, it had to be changed to accomodate the new situation.
+Simplifying this structure could lead to easier extensibility.
+
+One candidate could be the container class.
+Almost all containers only execute custom code before and after their contained objects are drawn.
+Refactoring that out in virtual methods would make subclassing easier and lead to less duplicate code.
+
+\paragraph{Object Access}
+Currently, access to objects from lua is done through references, not by name.
+Changing access to be by-name or to an other kind of indirect access would allow seamless replacement of the scene graph and undo handling.
+
+This could for example be done by changing the \textit{lua} engine, or by adding new api calls to get volatile pointers by name, instead of storing persistent pointers in variables.
 
