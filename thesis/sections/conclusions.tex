@@ -45,7 +45,28 @@ Before the start, after the end, and after the first six blocks, a questionnaire
 It starts with seven questions, with replies on a scale with six steps.
 An other 16 questions require answers on a four step scale.
 
-\todo{Add an other, bisect or something}
+
+\subsection{Bisect test}
+\paragraph{}
+This is a helper test for the study on the influence of continuous depth on fatigue.
+It's purpose is to find out the limits for stereo vision a person can reach.
+During the first pilot study it became obvious that this depends heavily on the individual and it's experience in stereo viewing.
+
+The test is visually very simple, it only shows one pixel plane with a stereogram.
+The complexity is in the code.
+(The name comes from the originally proposed algorithm.)
+
+\paragraph{Mechanics}
+Unlike usual tests it is not divided in blocks, and it is not limited by number of trials.
+The tests are not balanced and pre-randomized either.
+
+Instead the target moves it's position on screen and in depth dependent on the previous answers and the current position.
+The target is moved to a near and far point in alternating order.
+Five correct replies in a row allow the target point to move further away from the zero parallax plane,
+a wrong answer makes it move closer.
+
+The test is stopped when a predetermined maximal limit is reached or a limit is repeatedly failed to be reached.
+During the test, voice output announces the current limit.
 
 
 \section{Future Experiments}
@@ -59,4 +80,9 @@ An other 16 questions require answers on a four step scale.
 \subsection{Thanks}
 \paragraph{}
 \todo{Add people who to thank}
+\begin{itemize}
+\item Steven Poulakos
+\item Cary Kornfeld
+\item Thomas Gross
+\end{itemize}
 

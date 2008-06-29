@@ -1,31 +1,74 @@
 \section{Log Parser}
 \paragraph{}
+\ER\ generates  a log file of all tests containing time-stamped events.
+For most tests this format is not easily usable.
+The log parser application \textit{Statisticsroom} transforms those log files into a format that can easily be analyzed.
+A screenshot can be seen as figure \ref{ssTransform} in the appendix.
 
+The parser works by recognizing individual test stimuli and responses.
+When the stimulus start entry in the log is recognized, all following recognized log lines are used to atribute data to this stimulus.
+When the stimulus end log entry is found, the time between start and end is calculated and written together with the attributed data fields.
 
 \subsection{Log format}
 \paragraph{}
-\todo{Time Stamp}
+The log format of \ER\ is very simple.
+The time stamp format is \lstinline{"yyyy.MM.dd hh:mm:ss.zzz"} following the ISO date standard.
+The year is written with four numbers, month and day are printed with two numbers including leading zeros, all separated by dots.
+The time follows separated by a space, with hour, minute and seconds in 24 hour format, separated by colons, milliseconds by a point.
+
+The log message is not constrained.
+A good log message however contains strings that make it identifiable, and values that cary data.
+This is important to be able to write regular expressions that recognize special types of log lines.
 
 
 \subsection{Output Format}
 \paragraph{}
-\todo{Tab Separated Values}
-
+The product of the transformation is a list of values grouped by stimulus.
+The values include the stimulus number and the stimulus duration, as well as all associated values.
+This is written to the output file as tab separated values (CSV, comma separated values).
 
 \paragraph{Excel}
-\todo{TabSeparated csv}
-
+\textit{Microsoft}'s \textit{Excel} can import tab separated values.
+It was the most used tool for data analysis during the conduction of the fatigue test\ref{FatiguePilot}.
+The pivot table function makes selecting, grouping and analyzing data fast and precise.
+It easily groups lines with the same values, the same stimulus query, response type, correctness or similar together.
 
 \paragraph{OpenOffice.org}
-\todo{TabSeparated csv}
-
+\textit{OpenOffice.org}, the open source spreadsheet application, can import CSV as well.
+It is not used as much as the competition, but it's power is comparable with that of \textit{Excel}'s level.
 
 \paragraph{MySQL}
-\todo{MySQLImport?}
+CSV data can easily be read into \textit{MySQL} with the \texttt{LOAD DATA INFILE} command or the \texttt{mysqlimport} command line tool.
+The filtering and access capabilities of SQL is superior with big data volumes than that of spreadsheet applications.
 
 
 \subsection{Regular Expressions}
 \paragraph{}
-\todo{Mention the need of using \^ and \$}
-\todo{Captures}
+The transformation process identifies log lines of interest and extracts data from them.
+The most flexible to do this is with regular expressions.
+\textit{Qt} has support for regular expressions built in which simplifies the implementation.
+
+A regular expression is a string that can be matched against other strings, it describes a class of strings.
+The special character \texttt{\^} represents the start of the string, \texttt{\$} represents it's end.
+The dot \texttt{.} matches every character, \texttt{\textbackslash d} a digit, \texttt{\textbackslash s} a white-space and \texttt{\textbackslash w} a word-character.
+
+Quantifiers match a repetition of the previous item.
+They are greedy, and try to match as many occurrences as possible.
+The star \texttt{*} matches zero or more repetitions.
+The plus sign \texttt{+} matches one or more repetitions.
+The question mark \texttt{?} matches zero or one repetition.
+
+More information on this topic can be found on \textit{Qt}'s documentation page on \lstinline{QRegExp}\cite{regexp}.
+
+\paragraph{Captures}
+A capture is a special part of a regular expression that gets extracted if the expression matches.
+Captures can be used internally in an expression, but it's primary use is to get data out of the log file.
+Expressions without capture just count the number of matches, but expressions with capture return the capture in those matches.
+
+\verb|^\((-?\d+\.\d+), (-?\d+\.\d+)\)$| for example matches \texttt{(1.2, -3.4)} and returns the numbers $1.2$ and $-3.4$ as text.
+
+\paragraph{Output Formating}
+For every regular expression, one or more titles can be added separated by semicolons.
+For every title, one capture is printed and one column is built.
+An exception are the start and end capture, which together form a single column with the duration of the stimulus as content.
 
