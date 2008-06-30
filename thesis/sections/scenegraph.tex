@@ -19,9 +19,26 @@ This hierarchy heavily relies on polymorphism, so there are several virtual memb
 
 An object offers visibility through drawing itself in \textit{OpenGL} and persistence by writing itself to a stream as lua code.
 An objects can also return a smart pointer to itself.
+To make this possible, objects should always be wrapped in a \lstinline{shared_ptr}, raw pointers should not be used.
 The method \lstinline{clone()} creates an exact deep copy of the object.
 For the UI, it can return a dialog that directly changes the parameters of the object.
 Other classes can install handlers into an object to be notified when it is modified.
+
+The use and subclassing is described in section \ref{DocObject}.
+
+\paragraph{Primitive Objects}
+The sphere, rectangle and parallelepiped object nodes are simple polygon node objects.
+They generate parametrized representations with custom subdivision strength.
+This is important for lighting, since \textit{OpenGL} only calculates lighting on a vertex basis.
+
+Spheres are generated with the \lstinline{gluQuadric*} functionality.
+Rectangles and parallelepipeds are drawn with custom code.
+
+\paragraph{Pixelplane}
+Pixel planes are special texture objects.
+They have no visual on their own, but draw the associated texture directly into the buffer.
+Textures have the ability to draw them self, so the pixel plane just sets the raster position.
+Clipping is done on this position, which will lead to problems when pixel planes are drawn partially off screen.
 
 \paragraph{Mesh}
 The mesh node is the most flexible shape node.

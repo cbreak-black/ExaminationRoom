@@ -6,40 +6,93 @@ Important parts are exposed to LUA, where they can be used by a scene designer, 
 It is documented in detail in the source code with Doxygen comments (see example header in the appendix).
 From those comments, documentation in various formats can easily be created.
 
-\subsection{Object}
+\subsection{Object\label{DocObject}}
 \paragraph{}
+The class \lstinline{Object} is the base object for everything in the scene graph.
+It is described in section \ref{ImplObject}.
+
+This class should always be used wrapped in a \lstinline{shared_ptr}, or some functions might not work, such as \lstinline{sharedPtr()}, which relies on \lstinline{enable_shared_from_this}.
+It should never be used by-value or with raw pointers.
 
 
 \subsubsection{Extending Object}
 \paragraph{}
-\todo{On extending object and container}
+When subclassing, several methods have to be overwritten to provide a consistent user experience.
+Setting a reasonable default name in the constructor is good practice.
 
+The \lstinline{draw()} method is called every time the object is drawn.
+The passed widget can be used to query a limited amount of information or to perform specific tasks.
+Drawing is done with \textit{OpenGL} calls.
+
+The method \lstinline{clone()} creates a clone of the called object.
+This happens in two steps:
+The copy constructor \lstinline{Object(const Object&)} creates a new object from a reference to an object.
+It should be overwritten if reference parameters are used.
+The \lstinline{clone()} method uses this copy constructor to create a new instance of a subclass, wraps it into an \lstinline{ObjectPtr} and returns it.
+
+The method \lstinline{className()} and the static variable \lstinline{className_} should both be changed to reflect the new class name.
+
+When new parameters are added, make sure to also create corresponding accessors.
+In setter accessors, notify observers of the change.
+Getter accessors should be marked as const when possible.
+
+\paragraph{Persistence}
+The method \lstinline{toLua()} can be changed to write additional commands for added state.
+Subclasses should always call the parent's \lstinline{toLua()} method before writing their own commands.
+
+This method is expected to write lua code that, when executed, will recreate an object that is exactly like the called.
+It is used when an object is dragged out of \ER\ and to store scenes.
 
 \paragraph{Registering LUA API}
-\todo{On luabridge}
+The static method \lstinline{Object::registerLuaApi()} is called by the Program in \lstinline{Program::registerComponents()} when adding new objects.
+Subclasses of Object are required to overwrite this static method and register their own methods with LUA.
+Even when not adding new methods, the creator and the parent must still be registered if the class should be usable from lua.
+The class has to be added in \lstinline{registerComponents()} to execute the registration code.
 
+Methods are registered with the help of \textit{luaBridge}.
+It can bind most common parameters, but for exotic parameters such as enumerators, lua bridge has to be extended.
+
+Examples can be found in the implementation of the \lstinline{Atmosphere} class with it's custom \lstinline{tdstack} for the \lstinline{ enum FogMode}
+and in \texttt{vec.h} for all \lstinline{Vec*} helper types.
+A custom lua function can be written by using the signature \lstinline{int f(lua_State *L)} and getting the parameters from the state.
 
 \paragraph{Creating a parameter dialog}
-\todo{On Qt's stuff}
+The method \lstinline{dialog()} returns a class specific instance of a \lstinline{ParameterDialog} subclass.
+Subclasses can overwrite \lstinline{createDialog()} to return their own instance.
+This instance is then cached until the object is destroyed.
+
+Custom dialogs are needed if the object is intended to be changed from the graphical UI.
+Subclassing the parent's \lstinline{ParameterDialog} is the easiest way to get a consistent experience.
+In the subclass, just add the new controls and handlers.
+Make sure to call the parent implementations for overwritten virtual functions when needed.
+
+
+\subsection{Extending Containers}
+\paragraph{}
+\lstinline{Container} is a subclass of \lstinline{Object} and is extended like it.
+Some additional points have to be considered.
+The draw method has to check if the container is enabled before drawing custom modifications.
+If it is disabled, only draw the sub objects.
+If it is not shown, draw nothing.
 
 
 \subsection{Scene \& Program}
 \paragraph{}
-\todo{How the visual and the program are bound together}
+The core object of \ER\ is the program object.
+It contains the scene graph, the lua engine and a name manager instance.
+It manages loading and storing of a scene, as well as interaction between the various parts of the application.
 
 
 \subsection{Renderer}
 \paragraph{}
-\paragraph{What renderers do}
+Renderers are used to change the drawing of the scene globally.
+The standard renderers include a single side output, anaglyph and double-wide rendering, and line-interlacing.
 
+The purpose of a renderer is to accomodate new output formats and should not be changed by the test.
+A possible exception to that might be a test testing output formats, such as new anaglyph algorithms.
 
-\subsubsection{Extending Renderers}
-\paragraph{}
-\todo{Write about how renderers can be extended}
+\paragraph{Extending Renderers}
+Renderers can be extended by subclassing \lstinline{AbstractRenderer}, overwriting it's \lstinline{renderScene()} method and adding it to \lstinline{GLWidget::setStyle(DrawStyle s)} and \lstinline{enum GLWidget:DrawStyle}.
+If it should be user accessible, a menu entry for it can be added in the main window creator.
 
-
-
-\subsection{Other important Classes}
-\paragraph{}
-\todo{Which?}
 

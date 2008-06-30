@@ -39,6 +39,10 @@ Next the targets are created.
 For a variable number of targets, using a list to store them simplifies access.
 The pixel-planes for the target get created and added to the list and scene.
 
+There are no rules how to build a scene graph, but it is important to remember that objects are reference types.
+An object can only be in one place at a time.
+It is removed from it's previous place when it is inserted somewhere else.
+
 \subsubsection{Mechanic}
 \paragraph{}
 The animation and reaction part of the test can be seen from line 106.
@@ -94,6 +98,7 @@ To add code, switch to the code pannel.
 Add the existing library files statistics.lua and questions.lua, which are used to calculate some statistics, and to conduct a questionnaire.
 Add a new file to contain your own code.
 Then save the scene to a new file.
+This is the root file referring all media and code files, It should not be edited manually.
 
 \subsubsection{Mechanics}
 \paragraph{}

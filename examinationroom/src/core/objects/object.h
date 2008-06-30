@@ -67,15 +67,15 @@ or to perform specific tasks. Drawing is done with OpenGL calls.
 The method clone() creates a clone of the called object. This happens in two steps:
 The copy constructor Object(const Object&) creates a new object from a reference to an
 object. It should be overwritten if reference parameters are used.
-The clone() method uses this copy constructor to create a new instance of a subclass
-with the copy constructor, wrapps it into an ObjectPtr and returns it.
+The clone() method uses this copy constructor to create a new instance of a subclass,
+wrapps it into an ObjectPtr and returns it.
 
 The method className() and the static variable className_ should both be changed
 to reflect the new class name.
 
-The methods toLua() can be changed to write additional commands for added state.
-Subclasses should always call the parent's toLua() method, or toLuaCreate() before
-writing their own commands.
+The method toLua() can be changed to write additional commands for added state.
+Subclasses should always call the parent's toLua() method before writing their own
+commands.
 
 The method dialog() returns a class specific instance of a ParameterDialog subclass.
 Subclasses can overwrite createDialog() to return their own instance. This instance
