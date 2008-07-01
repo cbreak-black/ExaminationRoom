@@ -14,13 +14,69 @@ In the features section, some important abilities needed in those tests are deta
 
 \subsection{Program Design}
 \paragraph{}
-\todo{Give overview over program design part}
+The first part of the thesis describes the design and planing aspects of \ER.
+
+In the first section (\ref{Requirements}) the requirements are stated in terms of existing solutions, potential use cases and derived feature wishes.
+
+Then the current design of the \ER\ code is explained (\ref{Design}).
+An overview over scene construction is given, followed by an overview of the visual building blocks of a test.
+Methods for defining the active parts of a test are detailed in section.
+The user interface design concludes this section.
+
+A central topic in stereoscopic vision are the depth cues, so section \ref{Cues} gives a detailed classification of cues, and describes how they could be reproduced or eliminated from the visuals of a test.
+
 
 \subsection{Implementation}
 \paragraph{}
-\todo{Give overview over implementation part}
+The second part of the thesis shows the implementation of \ER\ in terms of code.
+
+Before starting with the code, the coding style is explained in the first section (\ref{Style}).
+This is very important especially for developers who intend to extend the software.
+
+Then the main section (\ref{Implementation}) gives an overview over the used frameworks and the inner structure of \ER.
+Of special interest are the scene graph and the rendering.
+Stereograms are used in many tests, their generation is described as well.
+
+Building and installing the software from source code is described in section \ref{Setup}.
+Due to the dependencies of \ER, some requirements have to be fulfilled to be able to create easily deployable bundles.
+
+In the final section of this part some known problems with the current implementation and potential improvements are detailed (\ref{Issues}).
+
 
 \subsection{Documentation}
 \paragraph{}
-\todo{Give overview over documentation part}
+In the third part the use of \ER\ is documented for both developers who want to extend the software, as well as researchers who want to use it in experiments.
+
+The first section gives an overview of the \textit{C++} API (\ref{CPPAPI}).
+A detailed description of the tasks involved in extending various aspects of the tool is given.
+
+The second section illustrates the use of the language \textit{lua} and the api \ER\ offers to scripts (\ref{LUAAPI}).
+It is mainly of interest to users of the software who wish to design a test.
+
+The scene format is documented in section \ref{Format}.
+
+Designing a successful test requires some guidance.
+Section \ref{Making} contains some guidelines on the processes involved and describes the different aspects involved in detail.
+
+Examples of test scenes are given in the following section (\ref{Example}).
+Since it is only intended for learning, the first example does not contain many aspects of a real test.
+The second example on the other hand is heavily based on the code used to perform the fatigue study mentioned in the next part.
+
+The documentation is concluded by section \ref{Log}, which describes the use of the log parser tool.
+The output files of a test often needs preprocessing to of use in further analysis.
+
+
+\subsection{Practical Use}
+\paragraph{}
+The final part describes the use of \ER\ in research.
+
+In the first section past experiments are described.
+The second section gives a short overview of possible future studies.
+Finally, the author's personal conclusion fo the master thesis is given.
+
+\subsection{Appendix}
+\paragraph{}
+The appendix contains a list of references and links used during this study.
+Screenshots of the created tool can be found there as well.
+Selected source code is given in the last section.
 
