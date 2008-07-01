@@ -125,6 +125,11 @@ pre
 	padding: 10px;
 }
 
+img
+{
+	width: 100%;
+}
+
 h1
 {
 	font-weight: normal;
