@@ -46,6 +46,7 @@ public: // Constructors and Destructor
 
 	/**
 	Creates a texture with an internal copy of a passed QImage as texture.
+	Note that the QImage should already be in RGBA right format and mirroring.
 	 \param image	A QImage object containing texture data
 	*/
 	Texture(QImage image);

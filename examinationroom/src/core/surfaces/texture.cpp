@@ -173,12 +173,11 @@ void Texture::glBindTex(GLWidget * /* w */)
 		}
 		else
 		{
-			QImage tx = transformColorSpace(image_);
 #ifdef DEBUG
 			er = glGetError(); // Clean errors
 #endif
-			GLubyte * t =  tx.bits();
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tx.width(), tx.height(), 0, GL_RGBA,
+			GLubyte * t =  image_.bits();
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_.width(), image_.height(), 0, GL_RGBA,
 						 GL_UNSIGNED_BYTE, t);
 #ifdef DEBUG
 			er = glGetError();
@@ -214,11 +213,10 @@ void Texture::draw(GLWidget * /* w */)
 	}
 	else
 	{
-		QImage tx = transformColorSpace(image_);
-		t =  tx.bits();
+		t =  image_.bits();
 		z = zoom();
 		glPixelZoom(z.x,z.y);
-		glDrawPixels(tx.width(), tx.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
+		glDrawPixels(image_.width(), image_.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
 	}
 }
@@ -242,6 +240,16 @@ void Texture::setPath(const std::string & path)
 {
 	glDeleteTextures(1, &imageGLID_); // Delete old image
 	image_ = QImage(QString::fromStdString(path));
+	// When loading from path, change color
+	// and mirror image verticaly
+	if (image_.format() == QImage::Format_Indexed8)
+	{
+		image_ = image_.mirrored(false, true);
+	}
+	else
+	{
+		image_ = transformColorSpace(image_);
+	}
 	imagePath_ = path;
 	original_ = image_;
 
