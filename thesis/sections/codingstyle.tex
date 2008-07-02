@@ -1,6 +1,6 @@
 \section{Coding Style\label{Style}}
 \paragraph{}
-How to structure programs, layout code or comment influences it's readability and maintainability.
+How to structure programs, layout code or comment influences its readability and maintainability.
 The exact style does not influence this that much, but having a consistent style over a whole project is necessary.
 
 When ever possible in \ER, the style described here is used.
@@ -84,7 +84,7 @@ It should be written keeping this in mind:
 Code should not be referred to since the comments are often read without it, and context should be referred to by name and not location.
 
 Comments should be written with the user in mind:
-Point to similar functions, write what the method does, state it's side effects and describe the intended use.
+Point to similar functions, write what the method does, state its side effects and describe the intended use.
 
 
 \paragraph{Headers}
@@ -98,12 +98,13 @@ It is acceptable to include API header files, since they are not expected to cha
 
 \subsection{Other guidelines}
 \paragraph{}
-Those tips focus on the actual implementation and not only the look of the code.
+The following tips focus on the actual implementation and not only the look of the code.
 It is advised to follow them to get a homogenous look-and-feel in \ER's source code.
 
 \begin{itemize}
 \item When ever possible, mark methods that don't change a class as constant.
-\item When ever possible, use \lstinline{std::tr1::shared_ptr<Type>} instead of raw pointers.
+\item When ever possible, use the smart pointer \lstinline{std::tr1::shared_ptr<Type>} instead of raw pointers.
+It enables reference counted memory management and prevents most memory leaks.
 \item When possible, pass data with a smart pointer or as const reference and not by value to reduce copy overhead.
 \item Do not hardcode constants that make sense to be changeable, use static class members instead.
 \item Comment out unused parameters so no unneeded warnings are emitted.

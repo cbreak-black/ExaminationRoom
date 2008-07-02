@@ -3,7 +3,7 @@
 An important requirement for the tool is that it has to be able to display a wide range of stimuli.
 Not only the depth cues (see section \ref{Cues}) should be individually controllable, but also the possible shapes of objects have to span a wide range.
 
-The tool supports only few basic object types, such as Pixel Planes (raster image data), parallelograms, and parallelepipeds. Implementing every desired type in code is neither feasible nor desirable.
+The tool supports only a few basic object types, such as Pixel Planes (raster image data), parallelograms, and parallelepipeds. Implementing every desired type in code is neither feasible nor desirable.
 Instead, the same approach as with textures is taken: An external tool that is familiar to the user is used to create a shape, and this shape is then loaded and displayed by the tool.
 The most common and basic method to store models is as \textit{Polygon-Mesh} (see \cite{MeshPop} for an overview of common techniques).
 
@@ -27,12 +27,12 @@ The final choice was \textit{libObj}, but several alternatives were considered.
 It offers a wide array of possibilities to customize storage, access and manipulation,
 but it does not handle rendering.
 The half-edge data structure is tuned for computations and easy traversal.
-Most of it's features are not useful in \ER.
+Most of its features are not useful in \ER.
 
 \paragraph{libMesh}
 The \textit{libMesh} library is also more than just a mesh loader and data storage.
-It is specially tuned to run numerical simulations of partial differential equations
-It's data formats are focused on mathematical analysis which makes it of little use in \ER.
+It is specially tuned to run numerical simulations of partial differential equations.
+Its data formats are focused on mathematical analysis which makes it of little use in \ER.
 
 \paragraph{libObj}
 The library \textit{libObj}\cite{libobj} is a simple parser library for \textit{Alias Wavefront}'s \textit{OBJ} file format.

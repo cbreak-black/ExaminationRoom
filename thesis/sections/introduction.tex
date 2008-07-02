@@ -6,21 +6,22 @@ The stimuli have to be more complex than simple bitmap images as those in standa
 
 Which features would simplify the creation and conduction of such tests?
 How can a tool be flexible enough to support every imaginable type of test, while still be user friendly?
-What is the right tradeoff between power and usability?
+And when both is not possible, what is the right tradeoff between power and usability?
 
-The following sections will introduce several examples of use cases, tests in which the framework should enhance the procedures and lessen the work done in test design and execution.
-In the features section, some important abilities needed in those tests are detailed.
+The tool \ER\ is part of this thesis.
+It was developed to answer those questions and to help with stereoscopic vision studies.
+Compiled binaries and the source code can be found on the project page\cite{project}.
 
 
 \subsection{Program Design}
 \paragraph{}
-The first part of the thesis describes the design and planing aspects of \ER.
+The first part of the thesis describes the design and planning aspects of \ER.
 
-In the first section (\ref{Requirements}) the requirements are stated in terms of existing solutions, potential use cases and derived feature wishes.
+In section \ref{Requirements} the requirements are stated in terms of existing solutions, potential use cases and derived feature wishes.
 
-Then the current design of the \ER\ code is explained (\ref{Design}).
+Then the current design of the \ER\ code is explained in section \ref{Design}.
 An overview over scene construction is given, followed by an overview of the visual building blocks of a test.
-Methods for defining the active parts of a test are detailed in section.
+Methods for defining the active parts of a test are detailed in this section as well.
 The user interface design concludes this section.
 
 A central topic in stereoscopic vision are the depth cues, so section \ref{Cues} gives a detailed classification of cues, and describes how they could be reproduced or eliminated from the visuals of a test.
@@ -30,40 +31,43 @@ A central topic in stereoscopic vision are the depth cues, so section \ref{Cues}
 \paragraph{}
 The second part of the thesis shows the implementation of \ER\ in terms of code.
 
-Before starting with the code, the coding style is explained in the first section (\ref{Style}).
+Before starting with the code, the coding style is explained in section \ref{Style}.
 This is very important especially for developers who intend to extend the software.
 
-Then the main section (\ref{Implementation}) gives an overview over the used frameworks and the inner structure of \ER.
+Then section \ref{Implementation} gives an overview over the used frameworks and the inner structure of \ER.
 Of special interest are the scene graph and the rendering.
 Stereograms are used in many tests, their generation is described as well.
 
 Building and installing the software from source code is described in section \ref{Setup}.
 Due to the dependencies of \ER, some requirements have to be fulfilled to be able to create easily deployable bundles.
 
-In the final section of this part some known problems with the current implementation and potential improvements are detailed (\ref{Issues}).
+In section \ref{Issues} some known problems with the current implementation and potential improvements are detailed.
 
 
 \subsection{Documentation}
 \paragraph{}
 In the third part the use of \ER\ is documented for both developers who want to extend the software, as well as researchers who want to use it in experiments.
 
-The first section gives an overview of the \textit{C++} API (\ref{CPPAPI}).
+Section \ref{CPPAPI} gives an overview of the \textit{C++} API.
 A detailed description of the tasks involved in extending various aspects of the tool is given.
+A doxygen documentation containing a detailed description of the whole code can be found on the project homepage\cite{project} or generated from the source code.
 
-The second section illustrates the use of the language \textit{lua} and the api \ER\ offers to scripts (\ref{LUAAPI}).
+Section \ref{LUAAPI} illustrates the use of the language \textit{lua} and the api \ER\ offers to scripts.
 It is mainly of interest to users of the software who wish to design a test.
+For a better understanding of the language, please also refer to the documentation on lua's project page\cite{lua}.
 
 The scene format is documented in section \ref{Format}.
+While the scene can consist of free-form lua script code, managed main files and external files add more constraints.
 
 Designing a successful test requires some guidance.
 Section \ref{Making} contains some guidelines on the processes involved and describes the different aspects involved in detail.
 
-Examples of test scenes are given in the following section (\ref{Example}).
+Examples of test scenes are given in section \ref{Example}.
 Since it is only intended for learning, the first example does not contain many aspects of a real test.
 The second example on the other hand is heavily based on the code used to perform the fatigue study mentioned in the next part.
 
 The documentation is concluded by section \ref{Log}, which describes the use of the log parser tool.
-The output files of a test often needs preprocessing to of use in further analysis.
+The output files of a test often needs preprocessing to be of use in further analysis.
 
 
 \subsection{Practical Use}

@@ -29,7 +29,7 @@ To transform a 3D scene into a 2D picture on screen it is projected with a linea
 The solution \textit{OpenGL} has is described below.
 Real cameras often have non-linearities which can not be simulated with such a simplification.
 
-To reproduce stereoscopically viewable content, two cameras are uses, representing the left and right eye.
+To reproduce stereoscopically viewable content, two cameras are used, representing the left and right eye.
 There are several ways to place the camera and parametrize the camera, two of which are implemented in \ER\ and described below.
 
 \paragraph{OpenGL}
@@ -38,12 +38,14 @@ This is the \textit{OpenGL} equivalent of a camera.
 The projection matrix depends exclusively on the type of the camera.
 The position and the direction of the camera is part of the modelview matrix.
 
-Defining such a matrix is done with convenience functions for commonly used projections or by setting up the view frustum manually.
+Those matrixes are calculated by \textit{OpenGL}'s convenience function \lstinline{glOrtho()} or by calling \lstinline{glFrustum()} to directly set the matrix parameters depending on the camera type.
+
 
 \paragraph{Perspective Cameras}
-When working with physical cameras to create stereoscopic content, the main choice is wether to place the cameras parallel or converge them.
+When working with physical cameras to create stereoscopic content, the main choice is whether to place the cameras parallel or converge them.
 
 Converging helps with establishing the zero parallax plane, but causes problems with the separation of objects behind and in front of it.
+Already at close range, the resulting images are strongly diverging, making the image unviewable.
 
 Parallel cameras limit the divergence to the camera separation at the center of the image.
 \ER\ uses parallel cameras.
@@ -72,12 +74,12 @@ For a quick and easy preview on any screen, anaglyph is the simplest method.
 Many different variations of anaglyph are used, the most popular of which are red-blue and red-green coding.
 A simple implementation could draw only the red channel of the image intended for the left eye, and the green and blue channel of the right eye.
 Unfortunately this leads to rivalry when rendering scenes that contain objects that consist mostly of those colors.
-This method is the one implemented in \ER\ by using \lstinline{glColorMask()} to lock writing to certain color buffers when drawing the left and right camera's view.
+This method is the one implemented in \ER\ by using \lstinline{glColorMask()} to lock writing to certain color buffers when drawing the left and right camera views.
 
-A better way is to mix all colors of one side into it's channel.
+A better way is to mix all colors of one side into its channel.
 The loss of color contrast is made up with the better fuseability and the reduction in rivalry.
 Other anaglyph methods such as Mayan\cite{Mayan} have a more sophisticated mixing algorithm.
-Implementing them in \textit{OpenGL} requires storing image data of one side in a buffer, and merge it with the other.
+Implementing them in \textit{OpenGL} requires storing image data of one side in a buffer and merge it with the other.
 Reading data from the rendering buffer is slow, since auxiliary buffers are often not in the GPU memory.
 It might be possible to implement anaglyph with fragment shaders, pbuffers or the color matrix pixel transfer operation.
 
@@ -98,7 +100,7 @@ With suitable polarizing glasses and proper head positioning, stereo images can 
 The encoding of the output image is a simple interlacing of alternating viewpoints.
 The technique used to combine the left and right view uses the stencil buffer.
 This is very fast, and requires no additional copying or other slow buffer operations.
-It's drawback is the incompatibility with \textit{Qt}'s text rendering, that also uses the stencil buffer.
+Its drawback is the incompatibility with \textit{Qt}'s text rendering, that also uses the stencil buffer.
 
 \paragraph{QuadBuffer}
 \textit{OpenGL} itself supports a 3D technology called quad-buffering.
@@ -106,5 +108,7 @@ It offers not only a front- and a back-buffer as in traditional double-buffering
 but front- and back-buffers for both left and right eyed view.
 
 Hardware support for this technology is expensive due to driver limitations implemented by the hardware vendors.
-The Quad-Buffer output mode was not tested.
+To use this output mode, a supported graphics card and driver is required.
+The Quad-Buffer output mode was not tested with proper hardware and enabling quad-buffering on not supported hardware caused massive side effects with buffering.
+This output mode should nevertheless work with a slight change in MainWindow's \textit{QGLFormat} creation.
 

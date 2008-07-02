@@ -23,16 +23,16 @@ As a consequence it is also the place where most of the crashes during developme
 For a detailed description of the api read the documentation on \lstinline{QAbstractItemModel} and \lstinline{QTreeView}.
 
 To keep the tree-view in sync with the scene graph, the notification system of objects is used.
-Every object notifies it's containing scene before and after external parameters change.
+Every object notifies its containing scene before and after external parameters change.
 Container objects have special events for changes of the hierarchy such as adding or removing objects.
 The scene in turn notifies listeners of changes in the layout of the scene.
 
 \paragraph{}
-The lower part of the design widget is filled by the settings pannel of the currently selected object.
+The lower part of the design widget is filled by the settings panel of the currently selected object.
 Settings panels are instantiated by the object they belong to and get updated by the object when the object changes.
-This is done by registering the settings pannel to receive change notifications form the object, similar to the method used to keep the tree view in sync.
+This is done by registering the settings panel to receive change notifications from the object, similar to the method used to keep the tree view in sync.
 
-Every object subclass has it's own corresponding parameter window subclass.
+Every object subclass has its own corresponding parameter window subclass.
 Those subclasses extend the parent's parameter window and add their own controls.
 
 A screenshot containing the tree view and the parameter dialog of a mesh object can be seen in the appendix as figure \ref{ssTree}.

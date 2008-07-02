@@ -25,12 +25,12 @@ Qt is a cross-platform application framework for desktop and embedded developmen
 \end{quotation}
 
 \paragraph{}
-An alternative would be to use \textit{Java} with it's associated APIs, but it's support for hardware accelerated drawing is lacking.
+An alternative would be to use \textit{Java} with its associated APIs, but its support for hardware accelerated drawing is lacking.
 
 
 \subsubsection{Boost\label{FrameworkBoost}}
 \paragraph{}
-\textit{C++} is an old language, and has it's root in the language \textit{C}.
+\textit{C++} is an old language, and has its root in the language \textit{C}.
 Neither has advanced memory management tools, be it a garbage collector like \textit{LUA} or \textit{Java}, or a reference counting system like used in \textit{Objective-C}.
 Managing memory manually is a challenge, doing it wrong can cause crashes that are hard to debug.
 
@@ -67,11 +67,11 @@ This is similar to what computer games use.
 
 \paragraph{}
 The only cross platform 3D drawing toolkit is \textit{OpenGL}\cite{opengl}, a standard developed by \textit{Silicon Graphics} in 1992.
-It's a state-driven procedural C API that was extended with many additions to the standard since it's inception.
+It's a state-driven procedural C API that was extended with many additions to the standard since its inception.
 Many features of \textit{OpenGL} are accelerated by modern graphic cards, and allow real time animation rendering.
 
 The \ER\ renderer uses \textit{OpenGL} for the scene output.
-Objects paint them-selfs with OpenGL commands.
+Objects paint themselves with OpenGL commands.
 The offerings of the framework are not perfect, but it enables the realisation of almost all desired features.
 A more advanced anaglyph renderer would likely be possible to do with frame buffer objects and pixel shader, but that would exclude a wide range of older installations and hardware.
 
@@ -84,15 +84,15 @@ The chosen solution was to use a programming language to specify interaction and
 The design of a language is complex, and many scripting languages are already established, so it was decided to reuse an existing language.
 
 Most scripting languages are either intended to be used in stand-alone scripts such as \textit{Perl} or various shell scripting languages.
-\textit{Python} can be used as  embedded language, and offers a very rich API on it's own.
+\textit{Python} can be used as  embedded language, and offers a very rich API on its own.
 The downside is that it is huge and comes with many features that are not needed, which complicate
 the integration into custom applications.
 
 \paragraph{}
 The chosen language is \textit{LUA}\cite{lua}, a small library designed to be used as embedded language.
 It provides all basic features, comes with garbage collection, flexible syntax and powerful binding API.
-It's syntax is easy to understand, but still offers enough sugar to use not only procedural, but also modular, object oriented or functional programming.
-It's license is very liberal, which made it popular even in the comercial game industry.
+Its syntax is easy to understand, but still offers enough sugar to use not only procedural, but also modular, object oriented or functional programming.
+Its license is very liberal, which made it popular even in the comercial game industry.
 The official project description emphasizes those points:
 
 \begin{quotation}

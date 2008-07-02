@@ -41,7 +41,7 @@ The pixel-planes for the target get created and added to the list and scene.
 
 There are no rules how to build a scene graph, but it is important to remember that objects are reference types.
 An object can only be in one place at a time.
-It is removed from it's previous place when it is inserted somewhere else.
+It is removed from its previous place when it is inserted somewhere else.
 
 \subsubsection{Mechanic}
 \paragraph{}
@@ -87,11 +87,11 @@ The same is true for their position.
 Disable automatic rescaling for the pixel planes, the test targets should keep their size independently from their camera distance.
 
 Create a yellow wireframe rectangle as marker for the active target.
-Just as the target planes, it's position and size is dynamically calculated.
+Just as the target planes, its position and size is dynamically calculated.
 Reduce the number of subdivisions to 0, so only the outline is shown.
 
 Finally, add a rectangle as floor plane.
-Give it a simple checkerboard texture and set it's vectors to point into the x and z directions.
+Give it a simple checkerboard texture and set its vectors to point into the x and z directions.
 Depending on the chosen vector length, set the texture coordinates so that the texture is mapped correctly and with the desired number of repetitions.
 
 To add code, switch to the code pannel.
@@ -224,11 +224,11 @@ Multiple-choice questions demand as input one of the offered choices.
 
 Beginning on line 301 the questionnaire is set up.
 A table with all questions is built by using the function \lstinline[language=lua]{questions:createQuestion()}.
-In it's first form it takes as argument a question, the minimal and maximal grade label and the number of grades.
-In it's second form it takes a question as first argument, followed by a list of possible answers.
+In its first form it takes as argument a question, the minimal and maximal grade label and the number of grades.
+In its second form it takes a question as first argument, followed by a list of possible answers.
 
 The function \lstinline[language=lua]{startQuestions()} starts the questionnaire with the passed callback.
 Callbacks are very important, they allow the question library to return control to the invoking code once all questions are asked.
 Three callbacks are used, one for the first questionnaire to set up initial conditions and start the test, one for the center tests to restore conditions and continue the test, and one for the last questionnaire to exit the scene.
-It is important to remember that the questionnaire registers it's own event handlers, so all handlers have to be installed after the library returned.
+It is important to remember that the questionnaire registers its own event handlers, so all handlers have to be installed after the library returned.
 

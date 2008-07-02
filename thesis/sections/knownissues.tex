@@ -7,16 +7,16 @@ This section contains a few selected possible improvements.
 \paragraph{Usability}
 The usability of \ER\ could be improved in several ways.
 Creating the visual component of a scene is not as intuitive as it could be.
-Clicking on objects to select them, or visual feedback for the selected object might be helpful.
+Clicking on objects to select them or visual feedback for the selected object might be helpful.
 Completely separating creation and execution of tests would allow this.
 
 \paragraph{Programming}
-Planing and designing a successful test is learnt over years in experimental psychology.
+Planning and designing a successful test is learnt over years in experimental psychology.
 Writing programs is not.
 And while the only way to achieve the power to conduct interactive experiments is a full programming language, most experiments do not require this power.
 
 A big improvement in terms of usability would be to add a subclass of \lstinline{Program}, that does not rely on \textit{lua} but a simpler, easier to understand machine.
-It could be implemented as a state machine(see section \ref{stateAPI}), or similar to \textit{Super Lab}\cite{superlab}.
+It could be implemented as a state machine(see section \ref{StateAPI}), or similar to \textit{Super Lab}\cite{superlab}.
 
 \paragraph{Anaglyph}
 During development, anaglyph rendering was only used for checking the output on a simple screen.
@@ -39,7 +39,7 @@ Refactoring that out in virtual methods would make subclassing easier and lead t
 
 \paragraph{Object Access}
 Currently, access to objects from lua is done through references, not by name.
-Changing access to be by-name or to an other kind of indirect access would allow seamless replacement of the scene graph and undo handling.
+Changing access to be by-name or to another kind of indirect access would allow seamless replacement of the scene graph and undo handling.
 
 This could for example be done by changing the \textit{lua} engine, or by adding new api calls to get volatile pointers by name, instead of storing persistent pointers in variables.
 

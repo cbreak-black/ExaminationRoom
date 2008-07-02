@@ -12,18 +12,19 @@ Finally some requested features are listed.
 Testing human subjects is a common practice in applied psychology.
 One of the applications used for conducting tests is \textit{Super Lab}\cite{superlab}, a specialized stimulus presentation software.
 
-It's main focus is ease-of-use for test creation.
+Its main focus is ease-of-use for test creation.
 It displays still-images, text and movies in a predefined or random order.
 The detail control with the macro system is quite high for experienced users.
-\textit{Super Lab} is specifically made for standard psychological user tests, so it's integration of of the notion of blocks and tests is strong.
-The creation of tests is not simplified, the designer has to prepare complete pictures of each stimulus.
+\textit{Super Lab} is specifically made for standard psychological user tests, so its integration of of the notion of blocks and trials is strong.
+The creation of tests is not simplified, the designer has to prepare pre-rendered pictures, text or movies of each stimulus.
 
 For tests in stereo vision, \textit{Super Lab} lacks some important features:
 Output to projectors or in anaglyph is hard to achieve, animations and interactivity is limited and the creation of stimuli requires a lot of external work.
-It's focus on some test types makes in unusable for others.
+Its focus on the main test types makes in unusable for others.
+A test with high interactivity like the bisect test presented in section \ref{Bisect} or motion as needed in pinning experiments would be hard or impossible to realize.
 
-It's user-friendliness is high due to the limitation on only a small number of test types and the well known user interface.
-The range input methods supported by \textit{Super Lab} is big, it ranges from keyboard and mouse input over specialized keyboards to voice input and eye trackers.
+Its user-friendliness is high due to the limitation on only a small number of test types and the well known user interface.
+The range of input methods supported by \textit{Super Lab} is big, it ranges from keyboard and mouse input over specialized keyboards to voice input and eye trackers.
 
 
 \subsection{Use Cases}
@@ -31,7 +32,7 @@ The range input methods supported by \textit{Super Lab} is big, it ranges from k
 Before writing a program, one has to understand for what the program is to be used. The following examples illustrate the tests for which this framework has to be able to be used.
 
 \begin{description}
-\item[Focus]
+\item[Forced Focus]
 The most basic test is to validate if a participant can focus and fuse on a target at an arbitrary location in a stereoscopic scene.
 This is important in many other tests, where focus and binocular fusion has to be ensured.
 
@@ -43,8 +44,8 @@ Knowing the limits, an experiment can be changed or subjects can be classified o
 In this test two targets are shown resting on a ground plane, at three depth locations.
 The targets show information that can only be decoded under fusion.
 Measured is the reaction time of the test subject.
-Before the test, after the test, and in the middle of the test a questionnaire is showed.
-Difficulties include the complicated randomisation rule and the questionnaire.
+Before the test, after the test, and in the middle of the test a questionnaire is shown.
+Difficulties include the restrictions in the target position randomisation and the questionnaire.
 For more details see section \ref{ExampleFatiguePilot}.
 
 \item[Pinning]
@@ -55,12 +56,13 @@ Moving and rotating the objects can further help understanding the problem.
 
 \item[Motion Sickness]
 Testing the effect of motion in stereoscopic movies is important for understanding the creation of a pleasant or exciting viewing experience.
-Simulating and testing requires the ability to interactively move both camera, and objects in a scene.
+Simulating and testing requires the ability to interactively move both camera and objects in a scene.
 Motion should also be pre-definable, possibly as formula or as smooth movement along a curve.
 
 \item[Testing Scenes]
-When designing an experiment, being able to interactively change details of the scene, and get immediate feedback how it looks is invaluable
-Scenes that are not used to test subjects, but to test the testing procedure do not require logging, instead they need interactivity and real time control.
+When designing an experiment, being able to interactively change details of the scene, and get immediate feedback about how it looks is invaluable.
+Scenes like that are not used to test subjects, but to test the testing procedure do not require logging, instead they need interactivity and real time control.
+
 \end{description}
 
 
@@ -80,7 +82,7 @@ More input vectors are imaginable, ranging from voice input and body movement to
 Logging is the core of a test, it represents the data that the scientist is after.
 As such, it has to be both exact and flexible.
 A core requirement is that everything that happens, can be logged.
-The log should be usable for any kind of test, and still be simple enough to understand and analyse.
+The same logging facility should be usable for any kind of test but the format should still be simple enough to understand and analyse.
 
 \item[Survey]
 While measurements of timing and correctness try to create an objective result, subjective feedback can not be neglected.
@@ -116,5 +118,9 @@ In some cases even this is not enough, random orders have to be computed based o
 While not a singular feature, it is never the less very important that a product is easy to use.
 If a product is too complicated to be used, it is useless, no matter how powerful it is.
 The usability of a test is in the responsibility of the test designer, but making the creation of the test as simple and intuitive as possible is the job of the tool.
-Increasing the usability ranges from creating a simple consistent user interface that offers basic functionality over adding powerful and extensible scripting capabilities for power user, to writing good documentation.
+
+Usability can be increased by creating a simple consistent user interface that offers basic functionality.
+For power users, adding powerful and extensible scripting capabilities are of high value.
+And lastly, writing good documentation is necessary for everyone.
+
 \end{description}

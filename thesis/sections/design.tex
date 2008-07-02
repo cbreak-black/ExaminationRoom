@@ -1,7 +1,10 @@
 \section{Design\label{Design}}
 \paragraph{}
 Implementing a flexible and powerful framework for user testing of stereoscopic problems requires a design that accounts for some special requirements. To find out what those requirements are, several tests were designed and executed. The design of the application was adapted to be fit for use in those and many other imaginable tests.
+
 The framework is split into three parts: Creation, testing and analysis.
+Figure \ref{imgWorkflow} shows a possible workflow used in test creation.
+The following paragraphs give a short description of each step.
 
 \begin{figure*}[htb]
 \begin{center}
@@ -23,7 +26,7 @@ designing a test that can be conducted by a wide range of people, and deliver re
 
 After playing around with possible stimuli, the test has to be designed.
 Now the decision which independent and dependent variables are used is made.
-An other decision is the counterbalancing, the test duration, number of tests in a block, number of blocks in the test and many other factors.
+An other decision is the counterbalancing, the test duration, number of trials in a block, number of blocks in the test and many other factors.
 
 Once the design stands, the code for the test is written.
 Depending on the test, this involves counter balancing, randomisation and input validation.
@@ -32,17 +35,19 @@ Depending on the test, this involves counter balancing, randomisation and input 
 \paragraph{Testing}
 The testing part is the most important. It displays stimuli and logs the user replies, reacting in a way that is defined by the designer of the test. While traditional tests only follow the question-response pattern, stereoscopic user tests often require more: Trials often have to be randomized with several constraints, simply randomizing might lead to overlaps, or imbalances in dependent properties. All parameters of the stimulus have to be directly or indirectly controllable based on user input such as movement of stimuli, movement of the camera, or visibility of objects.
 
-Another complication with stereoscopic tests is, that they have to be viewed stereoscopically.
-Many methods to see stereoscopic materials exist, starting with simple color based encoding (anaglyph), over polarisation encoded frames to direct viewing of the left and right frames with special hardware.
+Another complication with stereoscopic tests is that they have to be viewed stereoscopically.
+Many methods to see stereoscopic materials exist, from simple color based encoding (anaglyph) and polarisation encoded frames to direct viewing of the left and right frames with special hardware.
 Software for stereoscopic testing should support a wide range of output devices and methods.
 
 Pilot tests are made to analyze if the test delivers usable results.
 The main test is conducted with more subjects and possibly an improved version of the test.
 
 \paragraph{Analysis}
-Analysing the gathered data is the third part. This is usually done in a combinataion of \textit{Microsoft Excel} and highly specialized data analysation methods such as ANOVA using SPSS. Both are sophisticated and well known by the users.
+Analysing the gathered data is the third part.
+This is usually done in a combinataion of \textit{Microsoft Excel} and highly specialized data analysation methods such as analysis of variance (ANOVA) using SPSS.
+Both are sophisticated and well known by the users.
 
-The first validation can be done with easy tools like \texttt{grep} to count the error rate or similar.
+A preliminary validation can be done with easy tools like \texttt{grep} to count the error rate or similar.
 This can even be done while the test is still running.
 During a pilot study, it is not needed to run the full test in all cases, when severe problems are detected during validation, the test can be aborted.
 In a main study, validation is used to reject subjects that were not able to conduct the test properly, and are found to be guessing, or otherwise not scientifically relevant.
@@ -52,7 +57,7 @@ The easiest way to achieve compatibility with those is to produce data in a know
 A log transformation program can take care of this in most tests: The time stamp based logs get parsed, and challenge-response times get measured and written in a format importable by spread sheet applications.
 For more flexible data access, it can be imported into a database, where standard \textit{SQL} queries can be used to select subsets of the data, sorted and filtered in many ways.
 
-Some tests might not follow this pattern, and the data has to be analysed in a different way.
+Some tests might not follow the standard query-response pattern so the data has to be analysed in a different way.
 
 
 \subsection{Representation of a Scene\label{sceneRep}}
@@ -64,20 +69,25 @@ To be able to control inconsistencies such as individual depth cues, it is requi
 
 \subsubsection{Node types\label{nodeTypes}}
 \paragraph{}
-Scene graphs are tree structures consisting of nodes with zero or more child nodes. The scene itself is typically the root node, while actual rendered objects often are leaves. The following nodes are planned to be implemented in the framework.
+Scene graphs are tree structures consisting of nodes with zero or more child nodes.
+The scene itself is typically the root node, while actual rendered objects often are leaves.
+The following nodes are were planed to be implemented in the framework.
+For a description of the actual implementation see section \ref{ImplObject}.
 The goal is to be able to selectively enable and disable all independent depth-cues (see section \ref{Cues}) by using container nodes with the desired properties.
 
 \begin{description}
-\item[Rectangle] A primitive geometry node, which has the shape of a parallelogram. The node can reference a texture, which gets mapped on it's surface.
-\item[Parallelepiped] A primitive geometry node, which has the shape of a parallelepiped (parallelogram prism). As it's parent it can be textured.
+\item[Rectangle] A primitive geometry node, which has the shape of a parallelogram. The node can reference a texture, which gets mapped on its surface.
+\item[Parallelepiped] A primitive geometry node, which has the shape of a parallelepiped (parallelogram prism). As its parent it can be textured.
 \item[Pixelplane] A primitive geometry node. It is used to draw pixel exact images at any position in space. It requires a texture to be visible. Pixelplanes are point shaped, and therefore are not influenced by scaling and rotation.
 \item[Text] A primitive geometry node. It draws text at any position in space, similar to Pixelplanes.
-\item[Mesh] A primitive geometry node who's geometry is defined by a mesh. The mesh can contain vertex normals and vertex texture coordinates. A texture can be mapped on the object. It might be desirable to also include vertex color.
+\item[Mesh] A primitive geometry node whose geometry is defined by a mesh.
+The mesh can contain vertex normals and vertex texture coordinates. A texture can be mapped on the object. It might be desirable to also include vertex color.
 \item[AffineTransformation] A group  node. It contains other nodes, which it can affine transform by directly manipulating the matrix stack.
 \item[Camera] A group node. It contains other nodes, which are rendered by this camera instead of the global camera. This is used to control projection cues in a consistent way.
 Since each camera uses the depth buffer differently, it has to reset it to prevent artefacts.
 \item[DepthBuffer] A group node. Disables or enables the use of the depth buffer for all contained elements. This is used to disable occlusion clues.
 This node also has to reset the depth buffer to allow arbitrary depth ordering of objects while maintaining internal object depth.
+A sphere would only show its front side, but it could still occlude an object it is physically behind.
 \item[Lighting] A group node. Enables lighting and a light source with controllable parameters for all sub nodes. This is used to enable lighting depth cues.
 \item[Atmosphere] A group node. Enables the fog equation and controls its parameters. This is used to enable aerial depth cues.
 \end{description}
@@ -88,8 +98,8 @@ They potentially create images that can not be fused.
 
 \begin{description}
 \item[XSize] A group node that scales objects to add or remove depth cues caused by perspective projection. It can be implemented on object (scale object individually, without considering intra object depth) or space level (scale  as function of depth, which is similar to a camera projection).
-Either way has it's own drawbacks.
-\item[XOffset] A group node that moves objects it contains as function of their camera distance.
+Either way has its own drawbacks and causes different artefacts.
+\item[XOffset] A group node that moves objects it contains perpendicularly to the camera direction as function of their camera distance.
 Can be used to add or remove height-of-field, convergence or motion parallax cues.
 \end{description}
 
@@ -125,7 +135,7 @@ Creating scenes this way follows standard programming paradigms, and someone who
 It is currently the only supported way of automatisation.
 A possible alternative is discussed in the next section, but was not implemented.
 
-\subsubsection{State API\label{stateAPI}}
+\subsubsection{State API\label{StateAPI}}
 \paragraph{}
 A more user friendly approach is \textit{Visual Programming}, a class of languages that are based on a visual instead of a textual representation of programs. Visual languages are used in data acquisition tools such as \textit{National Instruments}' \textit{LabVIEW}, music studio software such as \textit{Cycling '74}'s \textit{Max/MSP} or scripting tools like \textit{Apple}'s \textit{Automator}.
 The pattern used in those languages is that of \textit{Dataflow-Programming}\cite{dataflow}. Unfortunately, it does not fit into the requirements of the testing tool.
@@ -212,6 +222,10 @@ Possible implementations include balanced random nodes, that only chose each pat
 
 \end{description}
 
+\paragraph{}
+This design was never implemented, and a working implementation might look very different.
+It is not sure if the work on a state machine would pay off in making programming more approachable for novice users, since it is very similar to the textual programming used in \ER.
+
 
 \subsection{User Interface}
 \paragraph{}
@@ -235,7 +249,7 @@ Tree like structures are widely used in many areas.
 Most graphical file browser offer a tree view and all common 3D modeling programs visualize their object tree in a similar way.
 
 Together with the hierarchy of the scene, the type and parameters of objects should also be easily visible and changeable.
-Again, widely used applications offer a solution: The parameters of the active entity is shown in detail in it's own widget area, and parameters can be changed there too.
+Again, widely used applications offer a solution: The parameters of the active entity is shown in detail in its own widget area, and parameters can be changed there too.
 
 The hierarchy of the objects in the scene-graph is controlled with drag\&drop.
 Parent / child relationships can easily be changed this way, and the paradigm of moving around items with the mouse is widely used in graphical user interfaces.
@@ -247,7 +261,7 @@ Due to time constraints, this could not be implemented.
 \subsubsection{Mechanics}
 \paragraph{}
 More challenging than a scene design UI is one for animating/programming the mechanics of the scene.
-Since the graphical programming language was not realized due to time constraints, only the UI for the procedural API was designed.
+Since the graphical programming language was not realized due to time constraints (see section \ref{StateAPI}), only the UI for the procedural API was designed.
 
 A scene file consists of LUA code and media files.
 The code describes the scene building blocks, parameters and behaviour, and it loads additional files.
@@ -263,7 +277,7 @@ Referenced files can be previewed, added and removed.
 \subsubsection{Other}
 \paragraph{Menu}
 The menu bar offers general commands grouped by topic.
-It is a standard widget in all major operating systems, and it's roots predate graphical user interfaces.
+It is a standard widget in all major operating systems, and its roots predate graphical user interfaces.
 This tool offers the usual commands to open, close or save a file.
 A second menu allows changing the output between rendering modes, and to switch between edit and full-screen mode.
 The third menu allows creating new objects.
