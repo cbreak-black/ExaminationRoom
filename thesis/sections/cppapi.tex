@@ -52,7 +52,7 @@ The class has to be added in \lstinline{registerComponents()} to execute the reg
 Methods are registered with the help of \textit{luaBridge}.
 It can bind most common parameters, but for exotic parameters such as enumerators, lua bridge has to be extended.
 
-Examples can be found in the implementation of the \lstinline{Atmosphere} class with it's custom \lstinline{tdstack} for the \lstinline{ enum FogMode}
+Examples can be found in the implementation of the \lstinline{Atmosphere} class with its custom \lstinline{tdstack} for the \lstinline{ enum FogMode}
 and in \texttt{vec.h} for all \lstinline{Vec*} helper types.
 A custom lua function can be written by using the signature \lstinline{int f(lua_State *L)} and getting the parameters from the state.
 
@@ -92,7 +92,7 @@ The purpose of a renderer is to accomodate new output formats and should not be 
 A possible exception to that might be a test testing output formats, such as new anaglyph algorithms.
 
 \paragraph{Extending Renderers}
-Renderers can be extended by subclassing \lstinline{AbstractRenderer}, overwriting it's \lstinline{renderScene()} method and adding it to \lstinline{GLWidget::setStyle(DrawStyle s)} and \lstinline{enum GLWidget:DrawStyle}.
+Renderers can be extended by subclassing \lstinline{AbstractRenderer}, overwriting its \lstinline{renderScene()} method and adding it to \lstinline{GLWidget::setStyle(DrawStyle s)} and \lstinline{enum GLWidget:DrawStyle}.
 If it should be user accessible, a menu entry for it can be added in the main window creator.
 
 
