@@ -5,7 +5,8 @@ LUA is the embedded scripting language used in the Tool.
 
 The API of the framework is strongly based on the C++ API, almost all methods correspond directly to it.
 The lua manual\cite{lua} describes the language and its constructs and standard libraries.
-This chapter gives an introduction on the ideas behind the API, and then details some of the most important classes and methods. For more details, refer to the C++ Doxygen documentation.
+This chapter gives an introduction to the ideas behind the API, and then details some of the most important classes and methods.
+For more details, refer to the C++ Doxygen documentation.
 
 
 \subsection{LUA Crash Course}
@@ -13,21 +14,24 @@ This chapter gives an introduction on the ideas behind the API, and then details
 The lua language is simple, but to understand its details, reading the manual\cite{lua} is recommended.
 Here the basic constructs:
 
-\subsubsection{Expressions}
+\subsubsection*{Expressions}
 
 \begin{lstlisting}[language=lua]
 x,y = math.cos(a)*r, math.sin(a)*r
 \end{lstlisting}
 
-\subsubsection{Method call}
+\subsubsection*{Method call}
 \begin{lstlisting}[language=lua]
 Scene:addObject(Sphere())
 \end{lstlisting}
 
 \paragraph{}
-On the object  \texttt{Scene}, a method is called. It's arguments are the return values of the function call \texttt{Sphere()}, which is the constructor for spheres.
+The method \lstinline[language=lua]{addObject()} is called on the object \lstinline[language=lua]{Scene}.
+Its arguments are the return values of the function call \lstinline[language=lua]{Sphere()}, which is the constructor for spheres.
+This line of code creates a new sphere and adds it to the scene.
+The sphere can not be moved or otherwise changed from lua anymore since the reference was not stored.
 
-\subsubsection{Table use}
+\subsubsection*{Table use}
 \begin{lstlisting}[language=lua]
 local t = {
     [1] = "First item";
@@ -43,7 +47,7 @@ With string indexes tables can be treated like accessing structs in C.
 The convention is to use 1 based arrays.
 Tables are used in place of Vec vector objects when passing values to the API.
 
-\subsubsection{for loop}
+\subsubsection*{for loop}
 \begin{lstlisting}[language=lua]
 for i = 1,10,2 do
     Scene:log("Number :"..i);
@@ -57,7 +61,7 @@ end
 \paragraph{}
 For loops can iterate over a number sequence or over the content of a table.
 
-\paragraph{function declaration}
+\subsubsection*{function declaration}
 \begin{lstlisting}[language=lua]
 isPrime = function (num, div)
     if num%div == 0 then
@@ -76,9 +80,10 @@ end;
 \paragraph{}
 Neither type, nor amount of parameters or return values is declared.
 A function is flexible in what can deliver, but it has to be flexible to deal with what it gets.
-For example some parameters could be nil or of a different type than expected.
-Unused parameters are nil.
-Functions are first class objects. They can be referenced with variables, but also passed around.
+For example some parameters could be \lstinline[language=lua]{nil} or of a different type than expected.
+Unused parameters are treated as \lstinline[language=lua]{nil}.
+Functions are first class objects.
+They can be referenced with variables, but also passed around.
 
 
 \subsection{General Ideas}
@@ -120,30 +125,30 @@ Enumerators do not exist in LUA, string constants are used instead.
 
 \subsection{The Scene}
 \paragraph{}
-The scene object exists once in every LUA context, accessible by the global variable \texttt{Scene}. It should not be overwritten.
+The scene object exists once in every LUA context, accessible by the global variable \lstinline[language=lua]{Scene}. It should not be overwritten.
 The main function of this class is to serve as representation of the current Scene Object instance.
 It also offers some global camera control and most importantly event triggers.
-It's C++ proxy class is \texttt{LuaProxy}.
+It's C++ proxy class is \lstinline{LuaProxy}.
 
 \subsubsection{Adding and removing}
 \paragraph{}
-Like all containers, the scene has the methods \texttt{addObject(<Object>)} and \texttt{removeObject(<Object>)} to add or remove objects respectively.
-\texttt{clearScene()} removes all objects from the scene.
+Like all containers, the scene has the methods \lstinline[language=lua]{addObject(<Object>)} and \lstinline[language=lua]{removeObject(<Object>)} to add or remove objects respectively.
+\lstinline[language=lua]{clearScene()} removes all objects from the scene.
 
 \subsubsection{Camera Control}
 \paragraph{}
-The camera of a scene can be accessed directly with \texttt{camera()}, and replaced with other camera instances through \texttt{setCamera(<Camera>)}.
+The camera of a scene can be accessed directly with \lstinline[language=lua]{camera()}, and replaced with other camera instances through \lstinline[language=lua]{setCamera(<Camera>)}.
 For legacy reasons, there also exist direct camera modifiers.
 
 \subsubsection{Logging}
 \paragraph{}
 Logging is important in many tests. To give easy access to a log file, combined with high accuracy timestamps, this is done in C++.
-The scene provides functions to write those messages to the log file with \texttt{log(<String>)} or the standard output with \texttt{debugLog(<String>)}.
+The scene provides functions to write those messages to the log file with \lstinline[language=lua]{log(<String>)} or the standard output with \lstinline[language=lua]{debugLog(<String>)}.
 
 \subsubsection{Events}
 \paragraph{}
-To be register event handler, the method \texttt{setEventListener(<String>, <Function>)} is used.
-The strings \texttt{"update"}, \texttt{"keyDown"}, \texttt{"keyUp"} and \texttt{"quit"} are valid, and correspond with the associated events.
+To register event handlers, the method \lstinline[language=lua]{setEventListener(<String>, <Function>)} is used.
+The strings \lstinline[language=lua]{"update"}, \lstinline[language=lua]{"keyDown"} and \lstinline[language=lua]{"keyUp"} are valid, and correspond with the associated events.
 
 The update event function gets the time in seconds that passed since the last invocation of the update event as argument.
 The key down and key up functions get the pressed or released key as string as argument.
@@ -153,32 +158,32 @@ The quit function gets zero as argument.
 \paragraph{}
 The LUA bindings are implemented with the template based library \textit{luabridge}\cite{lb}.
 It can automatically generate api wrapper code for most basic types of functions with up to 8 parameters.
-Objects are registered in the method \texttt{Program::registerComponents()},
-by calling each object's \texttt{registerLuaApi()} method.
+Objects are registered in the method \lstinline{Program::registerComponents()},
+by calling each object's \lstinline{registerLuaApi()} method.
 Subclasses can overwrite this method and register their own methods.
 
 \subsubsection{Creation}
 \paragraph{}
 The object constructors are global functions with the same name as the class.
 The following classes are provided with the program:
-\texttt{Sphere()}, \texttt{Rectangle()}, \texttt{Parallelepiped()}, \texttt{Pixelplane()}, \texttt{Text()}, \texttt{Mesh()}, \texttt{AffineTransformation()}, \texttt{CameraNode()}, \texttt{LightNode()}, \texttt{Atmosphere()}, \texttt{DepthBuffer()}, each corresponding with the class with the same name.
+\lstinline[language=lua]{Sphere()}, \lstinline[language=lua]{Rectangle()}, \lstinline[language=lua]{Parallelepiped()}, \lstinline[language=lua]{Pixelplane()}, \lstinline[language=lua]{Text()}, \lstinline[language=lua]{Mesh()}, \lstinline[language=lua]{AffineTransformation()}, \lstinline[language=lua]{CameraNode()}, \lstinline[language=lua]{LightNode()}, \lstinline[language=lua]{Atmosphere()}, \lstinline[language=lua]{DepthBuffer()}, each corresponding with the class with the same name.
 
 \subsubsection{Base}
 \paragraph{}
 Every object has a position, a color, a draw priority, visibility and a few other attributes.
-Attributes can be queried like \texttt{<attribute>()} and changed like \texttt{set<Attribute>(<newValue>)}.
+Attributes can be queried like \lstinline[language=lua]{<attribute>()} and changed like \lstinline[language=lua]{set<Attribute>(<newValue>)}.
 
 \subsubsection{Container}
 \paragraph{}
 Containers have the purpose of applying something to everything they contain.
-Like the scene object, they support adding and removing objects with \texttt{addObject(<Object>)} and \texttt{removeObject(<Object>)}.
-The functionality of containers can be enabled independently of the visibility of their sub objects with \texttt{setEnabled(<bool>)}
+Like the scene object, they support adding and removing objects with \lstinline[language=lua]{addObject(<Object>)} and \lstinline[language=lua]{removeObject(<Object>)}.
+The functionality of containers can be enabled independently of the visibility of their sub objects with \lstinline[language=lua]{setEnabled(<bool>)}
 
 \subsection{The Rest}
 \subsubsection{Camera}
 \paragraph{}
 Cameras represent a transformation from 3D to 2D space.
-They can use perspective projection, parallel projection and screen space projection, which is chosen with \texttt{setType(<String>)}, valid strings are \texttt{"Perspective"}, \texttt{"Parallel"} and \texttt{"Screen"}.
+They can use perspective projection, parallel projection and screen space projection, which is chosen with \lstinline[language=lua]{setType(<String>)}, valid strings are \lstinline[language=lua]{"Perspective"}, \lstinline[language=lua]{"Parallel"} and \lstinline[language=lua]{"Screen"}.
 
 The other camera properties can also be changed with accessors.
 
@@ -187,7 +192,7 @@ The other camera properties can also be changed with accessors.
 Textures are created by loading image data from a file.
 Like objects, they are bound by \textit{luabridge}, and follow the same rules.
 The constructors are global functions with the name of the class, one of the following:
-\texttt{Texture()}, \texttt{Stereogram()}, \texttt{RandomDot()}, \texttt{Pattern()}.
+\lstinline[language=lua]{Texture()}, \lstinline[language=lua]{Stereogram()}, \lstinline[language=lua]{RandomDot()} or \lstinline[language=lua]{Pattern()}.
 
 Simple textures take one argument, the string to an image file.
 Stereogram textures take two image paths as argument, and load the left and right eye view directly.

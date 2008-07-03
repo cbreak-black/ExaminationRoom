@@ -43,6 +43,17 @@ Semester Thesis, 2007.
 % Might only work in KOMA script (scrarticle)
 \renewcommand*\refname{Links}
 
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+	\begin{oldthebibliography}{#1}%
+	\setlength{\parskip}{0.5\parskip}%
+	\setlength{\itemsep}{0.5\itemsep}%
+}%
+{%
+	\end{oldthebibliography}%
+}
+
 \begin{thebibliography}{12}
 \bibitem[a]{proj} \url{http://en.wikipedia.org/wiki/Graphical_projection}
 \bibitem[b]{parallel} \url{http://en.wikipedia.org/wiki/Parallel_projection}

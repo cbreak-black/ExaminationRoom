@@ -35,7 +35,7 @@ It easily groups lines with the same values, the same stimulus query, response t
 
 \paragraph{OpenOffice.org}
 \textit{OpenOffice.org}, the open source spreadsheet application, can import CSV as well.
-It is not used as much as the competition, but its power is comparable with that of \textit{Excel}'s level.
+It is not used as much as the competition, but its power is comparable with that of \textit{Excel}.
 
 \paragraph{MySQL}
 CSV data can easily be read into \textit{MySQL} with the \texttt{LOAD DATA INFILE} command or the \texttt{mysqlimport} command line tool.
@@ -53,7 +53,7 @@ The special character \texttt{\^} represents the start of the string, \texttt{\$
 The dot \texttt{.} matches every character, \texttt{\textbackslash d} a digit, \texttt{\textbackslash s} a white-space and \texttt{\textbackslash w} a word-character.
 
 Quantifiers match a repetition of the previous item.
-They are greedy, and try to match as many occurrences as possible.
+They are greedy and try to match as many occurrences as possible.
 The star \texttt{*} matches zero or more repetitions.
 The plus sign \texttt{+} matches one or more repetitions.
 The question mark \texttt{?} matches zero or one repetition.
@@ -71,4 +71,16 @@ Expressions without capture just count the number of matches, but expressions wi
 For every regular expression, one or more titles can be added separated by semicolons.
 For every title, one capture is printed and one column is built.
 An exception are the start and end capture, which together form a single column with the duration of the stimulus as content.
+
+
+\subsection{Defining a log transformation}
+\paragraph{}
+A log transformation is defined by a list of regular expressions and associated titles.
+New regular expressions can be added and removed with the \texttt{+} and \texttt{-} buttons.
+The start and end expression are the first and last in the list and can not be removed.
+
+The purpose of the first and last expression is defining the duration of the trial.
+The purpose of all other expressions is data extraction.
+For every capture in the expression a title should be set.
+To set several titles for one expression, separate them with a semicolon.
 

@@ -94,11 +94,11 @@ Finally, add a rectangle as floor plane.
 Give it a simple checkerboard texture and set its vectors to point into the x and z directions.
 Depending on the chosen vector length, set the texture coordinates so that the texture is mapped correctly and with the desired number of repetitions.
 
-To add code, switch to the code pannel.
+To add code, switch to the code panel.
 Add the existing library files statistics.lua and questions.lua, which are used to calculate some statistics, and to conduct a questionnaire.
 Add a new file to contain your own code.
 Then save the scene to a new file.
-This is the root file referring all media and code files, It should not be edited manually.
+This is the root file referring all media and code files, It should not be edited manually since it gets rewritten every time the scene is exported.
 
 \subsubsection{Mechanics}
 \paragraph{}
@@ -113,13 +113,13 @@ Others describe the external factors of the test and are used for statistical ca
 The randomisation is balanced in a very special way:
 In a cycle with 18 tests, each depth change appears exactly twice, once from left to right, and once from right to left.
 A depth change is the change between the old and new target in depth.
-To easily get this type of random order, several six such random orders are hard-coded on line 35.
+To easily get this type of random order, six such random orders are hard-coded on line 35.
 The positions those random orders refer to are permuted, making from each random cycle 36 versions.
 An alternative implementation would brute force randomize cycles.
 
 The positions are defined as list of possible values per coordinate.
 In the final test, just one shape was used as depth map.
-Additional shapes could be added to the list \texttt{shapes} and would be randomly selected.
+Additional shapes could be added to the list \lstinline[language=lua]{shapes} and would be randomly selected.
 
 From line 56 onwards, as in the previous example, a key code lookup table translates the char codes into strings.
 An input lookup table translates the key strings into meaningful strings for this test.
