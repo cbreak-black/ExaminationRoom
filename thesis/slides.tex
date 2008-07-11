@@ -36,20 +36,35 @@
 
 \lstset{
 	language=C++,
-	basicstyle=\scriptsize, % print whole listing small
+	basicstyle=\ttfamily\small, % print whole listing small
 	keywordstyle=\color{blue},%\bfseries,
-	% underlined bold black keywords
 	identifierstyle=, % nothing happens
 	commentstyle=\color{green}, % white comments
-	%stringstyle=\ttfamily, % typewriter type for strings
+	stringstyle=\color{red}\ttfamily, % typewriter type for strings
 	showstringspaces=false,
-	%numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,
+	numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,
 	columns=flexible,% fixed
-	breaklines=true
+	breaklines=true,
+	tabsize=4,
+	xleftmargin=1em
+}
+
+\lstdefinelanguage{lua}
+{
+	morecomment = [l]{--},
+	morecomment = [s]{--[[}{]]}, % lua supports more
+	morestring=[b]",
+	morestring=[b]',
+	sensitive = true,
+	morekeywords = {
+	and, break, do, else, elseif,
+	end, false, for, function, if,
+	in, local, nil, not, or, repeat,
+	return, then, true, until, while }
 }
 
 \hypersetup{
-    pdftitle={Tool support for user testing of stereoscopic fatigue},
+    pdftitle={Designing and implementing a flexible and extensible testing framework},
 %    pdfsubject={Subject of the document}, % Subject
     pdfauthor={Gerhard Roethlin},              % Author
     pdfkeywords={master, fatigue testing software, stereo vision},       % Keywords
@@ -59,7 +74,7 @@
 
 \setcounter{tocdepth}{2}
 
-\setbeamercovered{transparent}
+\setbeamercovered{transparent=25}
 \setbeamersize{description width=0.5cm}
 \newlength{\columnleft}
 \newlength{\columnright}
@@ -68,8 +83,8 @@
 
 %\titlegraphic{\includegraphics[width=7.5cm,clip,trim=0cm 6cm 0cm 2cm]{media/title.png}}
 \title{ExaminationRoom}
-\subtitle{Tool support for user testing of stereoscopic fatigue}
-\author[gerhardr]{Gerhard R\"othlin {\tt\normalsize <gerhardr@student.ethz.ch>}}
+\subtitle{Designing and implementing a flexible and extensible testing framework}
+\author[gerhardr]{Gerhard R\"othlin {\tt\normalsize <cbreak@the-color-black.net>}}
 \date{2008.07.07}
 
 \begin{document}
@@ -98,6 +113,7 @@
 \section{Introduction}
 
 \subsection{Outline}
+
 \begin{frame}{Outline}
 \begin{multicols}{2}
 \tableofcontents
@@ -111,29 +127,331 @@
 \begin{columns}
 
 \column{\columnleft}
-%\includegraphics[width=4cm]{media/dollySurfaceTheory.jpg}
+\includegraphics[width=\columnleft]{media/title.png}
 
 \column{\columnright}
 \begin{itemize}%[<+-| alert@+>]%[<+->]
-\item Todo
-\item Todo
+\item Understanding how humans see stereo stimuli could improve stereo film making
+\item Psychological tests are widely used to study human perception
+\item The tools used for such tests are very restrictive in terms of stimuli and test design
 \end{itemize}
 
 \end{columns}
 \end{frame}
 
+
+\begin{frame}{Questions}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=\columnleft]{media/title.png}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Which features would simplify the creation and conduction of such tests?
+\item How can a tool be flexible enough to support every imaginable test, while still be user friendly?
+\item What is the right tradeoff between power and usability?
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
 \section{Design}
 
-\section{Implementation}
+\begin{frame}{Design}
+\begin{columns}
+
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Design is
+\item Requirement: Cues
+\item Requirement: Usability (GUI)
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\subsection{Cues}
+
+\begin{frame}{Cues}
+\begin{columns}
+
+\column{5.5cm}
+\begin{itemize}
+\item<uncover@0> Projection
+\begin{itemize}
+\item Relative Size/Density
+\item Motion Perspective
+\item Convergence (proprioception)
+\item Binocular Stereopsis
+\end{itemize}
+
+\item<uncover@0> Physical
+\begin{itemize}
+\item Occlusion
+\item Aerial Perspective
+\item Light \& Shading
+\item Accommodation
+\end{itemize}
+
+\end{itemize}
+
+\column{5.5cm}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Depth Cues help perceiving depth
+\item They differ in their cause and the way they are perceived
+\item For testing it would be nice to be able to turn them on and off at will
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Projection Cues}
+\begin{columns}
+
+\column{5.5cm}
+\begin{itemize}
+\item Projection
+\begin{itemize}
+\item Relative Size/Density
+\item Motion Perspective
+\item Convergence (proprioception)
+\item Binocular Stereopsis
+\end{itemize}
+
+\item<uncover@0> Physical
+\begin{itemize}
+\item Occlusion
+\item Aerial Perspective
+\item Light \& Shading
+\item Accommodation
+\end{itemize}
+
+\end{itemize}
+
+\column{5.5cm}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Projection is transformation of 3D to 2D space
+\item Humans perform this projection physically with the eye
+\item Projection cues are closely related, they can not easily be eliminated selectively
+\item Camera nodes allow mixing of different projection
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Physical Cues}
+\begin{columns}
+
+\column{5.5cm}
+\begin{itemize}
+\item<uncover@0> Projection
+\begin{itemize}
+\item Relative Size/Density
+\item Motion Perspective
+\item Convergence (proprioception)
+\item Binocular Stereopsis
+\end{itemize}
+
+\item Physical
+\begin{itemize}
+\item Occlusion
+\item Aerial Perspective
+\item Light \& Shading
+\item Accommodation
+\end{itemize}
+
+\end{itemize}
+
+\column{5.5cm}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Physical cues are created by the properties of the world
+\item They can often be added or removed by changing drawing code
+\item Accommodation changes require physical modification
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
 
 \subsection{Scene graph}
 
-\subsection{Mechanics}
+\begin{frame}{Scene Graph}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=\columnleft]{media/scene.pdf}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item A scene-graph organizes objects in a scene
+\item The graph in this app is state sorted, state applies to all children
+\item An alternative would be spatial sorting
+\item State sorting speeds up drawing and simplifies implementation of many special effects
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
 
 \subsection{User Interface}
 
+\begin{frame}{Creation}
+\begin{columns}
 
-\section{Demo}
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Explain how scenes are created in the UI
+\item State how it simplifies creation
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\section{Implementation}
+
+
+\subsection{Frameworks}
+
+\begin{frame}{Frameworks}
+\begin{columns}
+
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: List foreign code
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\subsection{Interesting Code}
+
+\begin{frame}{Object}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=4.5cm]{media/object.pdf}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Describe Object
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Container Nodes}
+\begin{columns}
+
+\column{\columnleft}
+\begin{itemize}
+\item AffineTransformation
+\item Atmosphere
+\item CameraNode
+\item DepthBuffer
+\item LightNode
+\item ...
+\end{itemize}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Describe Container Nodes
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}{Camera}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=4.5cm]{media/camera-perspective.pdf}\\
+\includegraphics[width=4.5cm]{media/camera-parallel.pdf}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Stereograms}
+\begin{columns}
+
+\column{\columnleft}
+\begin{center}
+\includegraphics[scale=0.25]{screenshots/rds_example.png}\\
+\includegraphics[scale=0.25]{media/rds.pdf}\\
+\end{center}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Random dot stereogram encodes information so that it is mathematically impossible to see monoscopically
+\item Custom algorithm creates random dot patterns with different colors for fg/bg
+\item Slightly different algorithm for convex and concave
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\subsection{Mechanics}
+
+\begin{frame}{Lua}
+\begin{columns}
+
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Explain what lua is
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Scene Format}
+\begin{columns}
+
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO: Describe scene format
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Example}
+\begin{columns}
+
+\column{\columnleft}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item TODO
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+
+\section{Conclusion}
+
+\subsection{Demo}
 
 \begin{frame}{Creation Demo}
 A short demo of the test creation
@@ -141,6 +459,47 @@ A short demo of the test creation
 
 \begin{frame}{Test Demo}
 A short demo of the testing
+\end{frame}
+
+
+\subsection{Final thoughts}
+
+\begin{frame}{Final thoughts}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=\columnleft]{media/title.png}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Many of the features help with creation of the stimuli
+\begin{itemize}
+\item GUI for scene graph manipulation
+\item Immediate feedback
+\end{itemize}
+\item Creating the mechanics of a test is hard
+\begin{itemize}
+\item Simplified by sacrificing flexibility.
+\item Limit tests to a standard pattern with trials, blocks
+\end{itemize}
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Future}
+\begin{columns}
+
+\column{\columnleft}
+\includegraphics[width=\columnleft]{media/title.png}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Architectural changes for easier extensibility
+\item User Interface changes for easier programmability
+\end{itemize}
+
+\end{columns}
 \end{frame}
 
 
