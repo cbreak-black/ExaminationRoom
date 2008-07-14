@@ -341,7 +341,12 @@
 
 \column{\columnright}
 \begin{itemize}%[<+-| alert@+>]%[<+->]
-\item TODO: List foreign code
+\item Qt: Cross platform UI and Core API from \textit{Trolltech}
+\item Boost: Header library that extends \textit{C++}'s \lstinline{std::}
+\item Lua: Embedded scripting language
+\item LuaBridge: Binding library
+\item OpenGL: 3D drawing library
+\item libobj: obj mesh loader library
 \end{itemize}
 
 \end{columns}
@@ -354,11 +359,42 @@
 \begin{columns}
 
 \column{\columnleft}
-\includegraphics[width=4.5cm]{media/object.pdf}
+
+\begin{center}
+\includegraphics[width= \columnleft]{media/object.pdf}
+\end{center}
 
 \column{\columnright}
 \begin{itemize}%[<+-| alert@+>]%[<+->]
-\item TODO: Describe Object
+\item Object is the parent class of everything in the scene-graph
+\item An object is usually something that is drawable
+\item An object can have an associated texture, color, position and other parameters
+\item A dialog box can be used to change those parameters
+\item An object can serialize itself
+\end{itemize}
+
+\end{columns}
+\end{frame}
+
+\begin{frame}{Objects}
+\begin{columns}
+
+\column{\columnleft}
+
+\includegraphics[width=\columnleft]{media/title.png}
+
+\column{\columnright}
+\begin{itemize}%[<+-| alert@+>]%[<+->]
+\item Primitive objects
+\begin{itemize}
+\item Rectangle
+\item Parallelepiped
+\item Sphere
+\end{itemize}
+\item Pixelplane
+\item Mesh
+\item Text
+\item Container
 \end{itemize}
 
 \end{columns}
@@ -449,6 +485,10 @@
 \begin{columns}
 
 \column{\columnleft}
+
+\begin{center}
+\includegraphics[width=5cm]{media/document.pdf}
+\end{center}
 
 \column{\columnright}
 \begin{itemize}%[<+-| alert@+>]%[<+->]
