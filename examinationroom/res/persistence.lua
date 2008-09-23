@@ -71,13 +71,27 @@ persistence =
 				f:write("}");
 			end;
 		["function"] = function (f, item, level)
-				f:write("--function\n");
+				-- Does only work for "normal" functions, not those
+				-- with upvalues or c functions
+				local dInfo = debug.getinfo(item, "uS");
+				if dInfo.nups > 0 then
+					f:write("nil -- functions with upvalue not supported\n");
+				elseif dInfo.what ~= "Lua" then
+					f:write("nil -- function is not a lua function\n");
+				else
+					local r, s = pcall(string.dump,item);
+					if r then
+						f:write(string.format("loadstring(%q)", s));
+					else
+						f:write("nil -- function could not be dumped\n");
+					end
+				end
 			end;
 		["thread"] = function (f, item, level)
-				f:write("--thread\n");
+				f:write("nil --thread\n");
 			end;
 		["userdata"] = function (f, item, level)
-				f:write("--userdata\n");
+				f:write("nil --userdata\n");
 			end;
 	}
 }
