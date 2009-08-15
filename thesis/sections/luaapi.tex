@@ -148,7 +148,7 @@ The scene provides functions to write those messages to the log file with \lstin
 \subsubsection{Events}
 \paragraph{}
 To register event handlers, the method \lstinline[language=lua]{setEventListener(<String>, <Function>)} is used.
-The strings \lstinline[language=lua]{"update"}, \lstinline[language=lua]{"keyDown"} and \lstinline[language=lua]{"keyUp"} are valid, and correspond with the associated events.
+The strings \lstinline[language=lua]{update}, \lstinline[language=lua]{keyDown} and \lstinline[language=lua]{keyUp} are valid, and correspond with the associated events.
 
 The update event function gets the time in seconds that passed since the last invocation of the update event as argument.
 The key down and key up functions get the pressed or released key as string as argument.
@@ -183,7 +183,7 @@ The functionality of containers can be enabled independently of the visibility o
 \subsubsection{Camera}
 \paragraph{}
 Cameras represent a transformation from 3D to 2D space.
-They can use perspective projection, parallel projection and screen space projection, which is chosen with \lstinline[language=lua]{setType(<String>)}, valid strings are \lstinline[language=lua]{"Perspective"}, \lstinline[language=lua]{"Parallel"} and \lstinline[language=lua]{"Screen"}.
+They can use perspective projection, parallel projection and screen space projection, which is chosen with \lstinline[language=lua]{setType(<String>)}, valid strings are \lstinline[language=lua]{Perspective}, \lstinline[language=lua]{Parallel} and \lstinline[language=lua]{Screen}.
 
 The other camera properties can also be changed with accessors.
 

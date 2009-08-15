@@ -1,32 +1,26 @@
-\documentclass[12pt,twoside,bibtotoc]{scrartcl}
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[12pt,twoside,bibliography=totoc]{scrartcl}
 %\documentclass[12pt, a4paper]{article}
 
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-\pdffalse % we are not running PDFLaTeX
-\else
-\pdfoutput=1 % we are running PDFLaTeX
-\pdftrue
-\fi
+\usepackage{ifpdf}
 
 \ifpdf
 \usepackage[pdftex]{graphicx}
+\usepackage[pdftex,pageanchor,colorlinks,pdfborder=0,breaklinks,urlcolor=blue]{hyperref}
 \else
-\usepackage{graphicx}
+\usepackage[dvipdfm]{graphicx}
+\usepackage[dvipdfm,pageanchor,colorlinks,pdfborder=0,breaklinks,urlcolor=blue]{hyperref}
 \fi
 
-\usepackage{ucs}
-\usepackage[utf8x]{inputenc}
-%\usepackage[T1]{fontenc}
 \usepackage[english]{babel}
+\usepackage{xunicode}% provides unicode character macros
+\usepackage{xltxtra} % provides some fixes/extras
 %\usepackage{german}
 %\usepackage{longtable}
 %\usepackage{tocbibind}
 %\usepackage{makeidx}
-\usepackage[pdftex,pageanchor,colorlinks,pdfborder=0,breaklinks,urlcolor=blue]{hyperref}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
 \usepackage{units}
 %\usepackage{pdfsync}  % enable tex source and pdf output syncronicity
 %\usepackage[all]{xy}
@@ -37,6 +31,17 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{eso-pic}
+
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text} % Scale=MatchLowercase,
+% http://scripts.sil.org/FontDownloadsGentium
+\setmainfont[]{Gentium Book Basic}
+%\setmainfont[]{Hoefler Text}
+%\setmainfont[]{Baskerville}
+%\setmainfont[]{Optima}
+%\setmainfont[]{Palatino}
+\setsansfont[]{Helvetica Neue}
+\setmonofont{Courier}
 
 \lstset{
 	language=C++,
