@@ -88,9 +88,9 @@ private:
 	static bool loadShaderFromFile(GLuint shader, const QString & path);
 
 private:
-	GLuint _program; /**< Handle of the GLSL Program */
-	GLuint _frag; /**< Handle of the GLSL Fragment shader */
-	GLuint _vert; /**< Handle of the GLSL Vertex shader */
+	GLuint program_; /**< Handle of the GLSL Program */
+	GLuint frag_; /**< Handle of the GLSL Fragment shader */
+	GLuint vert_; /**< Handle of the GLSL Vertex shader */
 };
 
 }

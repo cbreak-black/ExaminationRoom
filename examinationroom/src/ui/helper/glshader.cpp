@@ -19,23 +19,23 @@ namespace Examination
 GLShader::GLShader()
 {
 	// Create the Program
-	_program = glCreateProgram();
+	program_ = glCreateProgram();
 
-	_frag = 0;
-	_vert = 0;
+	frag_ = 0;
+	vert_ = 0;
 }
 
 GLShader::~GLShader()
 {
-	glDeleteProgram(_program);
-	glDeleteShader(_frag);
-	glDeleteShader(_vert);
+	glDeleteProgram(program_);
+	glDeleteShader(frag_);
+	glDeleteShader(vert_);
 }
 
 // Using
 void GLShader::use()
 {
-	glUseProgram(_program);
+	glUseProgram(program_);
 }
 
 void GLShader::disable()
@@ -49,17 +49,17 @@ bool GLShader::loadFragmentShader(const QString & path)
 	unloadFragmentShader();
 
 	// Create the shader
-	_frag = glCreateShader(GL_FRAGMENT_SHADER);
+	frag_ = glCreateShader(GL_FRAGMENT_SHADER);
 
 	// Load the code
-	if (loadShaderFromFile(_frag, path))
+	if (loadShaderFromFile(frag_, path))
 	{
 		// Link the program
-		glAttachShader(_program, _frag);
-		glLinkProgram(_program);
+		glAttachShader(program_, frag_);
+		glLinkProgram(program_);
 
 		GLint state;
-		glGetProgramiv(_program, GL_LINK_STATUS, &state);
+		glGetProgramiv(program_, GL_LINK_STATUS, &state);
 		return state == GL_TRUE;
 	}
 	else
@@ -74,17 +74,17 @@ bool GLShader::loadVertexShader(const QString & path)
 	unloadVertexShader();
 
 	// Load the code
-	loadShaderFromFile(_vert, path);
+	loadShaderFromFile(vert_, path);
 
 	// Link the program
-	if (loadShaderFromFile(_vert, path))
+	if (loadShaderFromFile(vert_, path))
 	{
 		// Link the program
-		glAttachShader(_program, _vert);
-		glLinkProgram(_program);
+		glAttachShader(program_, vert_);
+		glLinkProgram(program_);
 
 		GLint state;
-		glGetProgramiv(_program, GL_LINK_STATUS, &state);
+		glGetProgramiv(program_, GL_LINK_STATUS, &state);
 		return state == GL_TRUE;
 	}
 	else
@@ -95,23 +95,23 @@ bool GLShader::loadVertexShader(const QString & path)
 
 void GLShader::unloadFragmentShader()
 {
-	if (_frag != 0)
+	if (frag_ != 0)
 	{
-		glDetachShader(_program, _frag);
-		glDeleteShader(_vert);
-		glLinkProgram(_program);
-		_frag = 0;
+		glDetachShader(program_, frag_);
+		glDeleteShader(vert_);
+		glLinkProgram(program_);
+		frag_ = 0;
 	}
 }
 
 void GLShader::unloadVertexShader()
 {
-	if (_vert != 0)
+	if (vert_ != 0)
 	{
-		glDetachShader(_program, _vert);
-		glDeleteShader(_vert);
-		glLinkProgram(_program);
-		_vert = 0;
+		glDetachShader(program_, vert_);
+		glDeleteShader(vert_);
+		glLinkProgram(program_);
+		vert_ = 0;
 	}
 }
 
@@ -146,7 +146,7 @@ bool GLShader::loadShaderFromFile(GLuint shader, const QString & path)
 
 GLint GLShader::getUniformLocation(const char * name)
 {
-	return glGetUniformLocation(_program, name);
+	return glGetUniformLocation(program_, name);
 }
 
 void GLShader::setUniform1f(GLint location, GLfloat v1)
