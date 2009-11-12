@@ -13,7 +13,9 @@ INCLUDEPATH += \
 
 QT           += opengl
 
-QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.4u.sdk
+RESOURCES = src/shaders/shaders.qrc
+
+QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
 CONFIG+=x86 ppc
 
 # Core

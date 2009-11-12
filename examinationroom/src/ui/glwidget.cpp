@@ -26,6 +26,7 @@
 #include "renderer/quadbufferrenderer.h"
 #include "renderer/sidebysiderenderer.h"
 #include "renderer/singlerenderer.h"
+#include "renderer/fragshaderrenderer.h"
 
 namespace Examination
 {
@@ -120,6 +121,9 @@ void GLWidget::setStyle(DrawStyle s)
 			break;
 		case line:
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new LineInterlaceRenderer(scene_));
+			break;
+		case shader:
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_));
 			break;
 	}
 }
