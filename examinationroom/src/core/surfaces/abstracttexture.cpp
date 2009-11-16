@@ -26,12 +26,28 @@ AbstractTexture::~AbstractTexture()
 
 AbstractTexturePtr AbstractTexture::sharedPtr()
 {
-	return _internal_weak_this.lock();
+	try
+	{
+		return shared_from_this();
+	}
+	catch (std::tr1::bad_weak_ptr const & e)
+	{
+		// No pointer exists yet, return an empty one
+		return AbstractTexturePtr();
+	}
 }
 
 ConstAbstractTexturePtr AbstractTexture::sharedPtr() const
 {
-	return _internal_weak_this.lock();
+	try
+	{
+		return shared_from_this();
+	}
+	catch (std::tr1::bad_weak_ptr const & e)
+	{
+		// No pointer exists yet, return an empty one
+		return ConstAbstractTexturePtr();
+	}
 }
 
 Tool::Vec2f AbstractTexture::zoom() const
