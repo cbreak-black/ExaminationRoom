@@ -23,9 +23,10 @@ LineInterlaceRenderer::LineInterlaceRenderer(std::tr1::shared_ptr<Scene> scene)
 
 void LineInterlaceRenderer::renderScene(GLWidget * w)
 {
+	lineStencil();
+
 	glEnable(GL_STENCIL_TEST);
 	glStencilFunc(GL_NOTEQUAL, 0x01, 0x01);
-	lineStencil();
 
 	w->setSide(GLWidget::left);
 	scene()->camera()->loadMatrix(w);
