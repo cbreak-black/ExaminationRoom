@@ -9,7 +9,7 @@
 
 #include "abstractrenderer.h"
 
-#include "glshader.h"
+#include "helper/glshader.h"
 
 namespace Examination
 {
