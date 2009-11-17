@@ -40,6 +40,7 @@ MainWindow::MainWindow()
 	QGLFormat glFormat = QGLFormat::defaultFormat();
 	// Stereo Buffering seems to disable other things, like double buffering
 	//glFormat.setStereo(true);
+	glFormat.setSwapInterval(1); // Enable VSync on platforms that support it
 	QGLFormat::setDefaultFormat(glFormat);
 
 	mainGlWidget_ = new GLWidget(this);
