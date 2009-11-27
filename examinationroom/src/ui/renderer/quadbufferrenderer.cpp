@@ -23,6 +23,8 @@ QuadbufferRenderer::QuadbufferRenderer(std::tr1::shared_ptr<Scene> scene)
 
 void QuadbufferRenderer::renderScene(GLWidget * w)
 {
+	// This requires stereo buffering to be enabled in the OpenGL context
+
 	w->setSide(GLWidget::left);
 	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
