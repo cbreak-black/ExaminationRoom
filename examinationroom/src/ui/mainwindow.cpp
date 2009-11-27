@@ -38,7 +38,9 @@ MainWindow::MainWindow()
 
 	// Create GL Widgets
 	QGLFormat glFormat = QGLFormat::defaultFormat();
-	// Stereo Buffering seems to disable other things, like double buffering
+	// Stereo Buffering seems to work in SnowLeopard...
+	// but is incompatible with other renderers and might cause problems.
+	// enable at your own risk
 	//glFormat.setStereo(true);
 	glFormat.setSwapInterval(1); // Enable VSync on platforms that support it
 	QGLFormat::setDefaultFormat(glFormat);
@@ -156,7 +158,7 @@ MainWindow::MainWindow()
 	// Set up redraw timer
 	timer_ = new QTimer(this);
 	connect(timer_, SIGNAL(timeout()), this, SLOT(onTimeout()));
-	timer_->start(33); // 30 fps
+	timer_->start(15); // ~60 fps
 }
 
 
