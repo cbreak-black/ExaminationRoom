@@ -11,6 +11,8 @@
 
 #include "helper/glshader.h"
 
+class QGLFramebufferObject;
+
 namespace Examination
 {
 
@@ -29,12 +31,21 @@ public:
 	 */
 	FragShaderRenderer(std::tr1::shared_ptr<Scene> scene, QString shaderPath = defaultShader);
 
+	~FragShaderRenderer();
+
 public:
 	virtual void renderScene(GLWidget * w);
 
 private:
+	void drawFB(QGLFramebufferObject * tex);
+
+private:
 	GLShader shader_;
 	GLint uniform_;
+
+	QSize texSize_;
+	QGLFramebufferObject * texL_;
+	QGLFramebufferObject * texR_;
 
 private:
 	static const QString defaultShader;
