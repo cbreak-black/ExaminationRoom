@@ -24,7 +24,10 @@ FragShaderRenderer::FragShaderRenderer(std::tr1::shared_ptr<Scene> scene, QStrin
 	: AbstractRenderer(scene)
 {
 	shader_.loadFragmentShader(shaderPath);
-	uniform_ = shader_.getUniformLocation("side");
+	uniformSide_ = shader_.getUniformLocation("side");
+
+	// For Mayan shader, hardcoded for now (ignored if shader has no lambda uniform)
+	shader_.setUniform1f(shader_.getUniformLocation("lambda"), 0.6f);
 
 	texSize_ = QSize(0,0);
 
@@ -95,11 +98,11 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 	// Since the shaders have no lighting or anything, no need to disable it
 	shader_.use();
 
-	shader_.setUniform1f(uniform_, 0.0f);
+	shader_.setUniform1f(uniformSide_, 0.0f);
 	// Draw Left FB
 	drawFB(texL_);
 
-	shader_.setUniform1f(uniform_, 1.0f);
+	shader_.setUniform1f(uniformSide_, 1.0f);
 	// Draw Right FB
 	drawFB(texR_);
 

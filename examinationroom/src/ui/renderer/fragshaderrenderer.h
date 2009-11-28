@@ -41,7 +41,7 @@ private:
 
 private:
 	GLShader shader_;
-	GLint uniform_;
+	GLint uniformSide_;
 
 	QSize texSize_;
 	QGLFramebufferObject * texL_;
