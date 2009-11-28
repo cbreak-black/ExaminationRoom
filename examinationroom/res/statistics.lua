@@ -36,7 +36,7 @@ statistics =
 			Scene:log(string.format("Warning: Separation %0.4fm > 0.065m", dpp*sep));
 		end;
 		-- Asumes object is in camera focus and directly looked at
-		return fpp * sep;
+		return fpp * sep, dpp*sep, sep;
 	end;
 
 };
