@@ -28,7 +28,7 @@ which is drawn into the view.
 class GLWidget : public QGLWidget
 {
 public: // Enums
-	typedef enum {single, anaglyph, matrix, sidebyside, quad, line, shader } DrawStyle;
+	typedef enum {single, anaglyph, matrix, sidebyside, quad, line, shaderLine, shaderMayan } DrawStyle;
 	typedef enum {left = 1, right = 2} Side;
 
 public:

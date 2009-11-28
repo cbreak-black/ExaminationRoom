@@ -2,5 +2,6 @@
 <RCC version="1.0">
 <qresource>
 	<file>interlace.fs</file>
+	<file>mayan.fs</file>
 </qresource>
 </RCC>

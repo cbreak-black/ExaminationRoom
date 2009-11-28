@@ -122,8 +122,11 @@ void GLWidget::setStyle(DrawStyle s)
 		case line:
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new LineInterlaceRenderer(scene_));
 			break;
-		case shader:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_));
+		case shaderLine:
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_, ":/interlace.fs"));
+			break;
+		case shaderMayan:
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_, ":/mayan.fs"));
 			break;
 	}
 }

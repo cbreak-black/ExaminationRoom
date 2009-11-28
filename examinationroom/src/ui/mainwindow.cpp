@@ -115,10 +115,18 @@ MainWindow::MainWindow()
 	signalMapper_->setMapping(action, GLWidget::matrix);
 	fsGlWidget_->addAction(action);
 
-	action = menu->addAction(tr("&Shader (Line interlacing) (Experimental)"));
+	menu->addSeparator();
+
+	action = menu->addAction(tr("&Shader (Line interlacing)"));
 	action->setShortcut(QKeySequence(Qt::Key_6 | Qt::CTRL));
 	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
-	signalMapper_->setMapping(action, GLWidget::shader);
+	signalMapper_->setMapping(action, GLWidget::shaderLine);
+	fsGlWidget_->addAction(action);
+
+	action = menu->addAction(tr("&Shader (Mayan)"));
+	action->setShortcut(QKeySequence(Qt::Key_7 | Qt::CTRL));
+	connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
+	signalMapper_->setMapping(action, GLWidget::shaderMayan);
 	fsGlWidget_->addAction(action);
 
 	menu->addSeparator();

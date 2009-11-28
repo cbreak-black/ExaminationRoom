@@ -74,6 +74,10 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 		texR_->release();
 	}
 
+	// Shaders just add the two textures onto each other
+	glBlendFunc(GL_ONE, GL_ONE);
+	glDisable(GL_DEPTH_TEST);
+
 	// Prepare for drawing textures
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -83,6 +87,10 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 	glLoadIdentity();
 	// Set up camera
 	glOrtho(0,1, 0,1, -1,1);
+
+	// Clear to black not to custom BG
+	glClearColor(0,0,0,0);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Since the shaders have no lighting or anything, no need to disable it
 	shader_.use();
@@ -102,6 +110,10 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+
+	// Restore blend func
+	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void FragShaderRenderer::drawFB(QGLFramebufferObject * tex)
