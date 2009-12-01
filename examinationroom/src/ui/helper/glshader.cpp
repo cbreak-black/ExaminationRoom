@@ -151,21 +151,37 @@ GLint GLShader::getUniformLocation(const char * name)
 
 void GLShader::setUniform1f(GLint location, GLfloat v1)
 {
+	GLint currentProgram;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	glUseProgram(program_);
 	glUniform1f(location, v1);
+	glUseProgram(currentProgram);
 }
 void GLShader::setUniform2f(GLint location, GLfloat v1, GLfloat v2)
 {
+	GLint currentProgram;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	glUseProgram(program_);
 	glUniform2f(location, v1, v2);
+	glUseProgram(currentProgram);
 }
 
 void GLShader::setUniform3f(GLint location, GLfloat v1, GLfloat v2, GLfloat v3)
 {
+	GLint currentProgram;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	glUseProgram(program_);
 	glUniform3f(location, v1, v2, v3);
+	glUseProgram(currentProgram);
 }
 
 void GLShader::setUniform4f(GLint location, GLfloat v1, GLfloat v2, GLfloat v3, GLfloat v4)
 {
+	GLint currentProgram;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &currentProgram);
+	glUseProgram(program_);
 	glUniform4f(location, v1, v2, v3, v4);
+	glUseProgram(currentProgram);
 }
 
 
