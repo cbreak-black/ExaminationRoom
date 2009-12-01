@@ -13,6 +13,8 @@
 #include "platform_math.h"
 #include "float.h"
 
+#include "errortool.h"
+
 using namespace Tool;
 
 namespace Examination
@@ -26,14 +28,15 @@ Camera::Camera()
 	spL_ = new ScreenProject();
 	spR_ = new ScreenProject();
 
-	setPosition(Tool::Point(0, 0, 20));
-	setDirection(Tool::Vector(0,0,-1));
-	setUp(Tool::Vector(0,1,0));
+	pos_ = Tool::Point(0, 0, 20);
+	dir_ = Tool::Vector(0,0,-1);
+	up_ = Tool::Vector(0,1,0);
 
-	setSeparation(0.2f);
-	setFieldOfView(25);
-	setParalaxPlane(20);
-	setType(Perspective);
+	sep_ = 0.2f;
+	fov_ = 25;
+	ppd_ = 20;
+	type_ = Perspective;
+	preLoadMatrix();
 }
 
 Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
@@ -41,14 +44,15 @@ Camera::Camera(Tool::Point pos, Tool::Vector dir, Tool::Vector up)
 	spL_ = new ScreenProject();
 	spR_ = new ScreenProject();
 
-	setPosition(pos);
-	setDirection(dir);
-	setUp(up);
-	
-	setSeparation(0.2f);
-	setFieldOfView(50);
-	setParalaxPlane(10);
-	setType(Perspective);
+	pos_ = pos;
+	dir_ = dir;
+	up_ = up;
+
+	sep_ = 0.2f;
+	fov_ = 25;
+	ppd_ = 20;
+	type_ = Perspective;
+	preLoadMatrix();
 }
 
 Camera::Camera(const Camera & c)
@@ -56,14 +60,15 @@ Camera::Camera(const Camera & c)
 	spL_ = new ScreenProject();
 	spR_ = new ScreenProject();
 
-	setPosition(c.position());
-	setDirection(c.direction());
-	setUp(c.up());
+	pos_ = c.position();
+	dir_ = c.direction();
+	up_ = c.up();
 
-	setSeparation(c.separation());
-	setFieldOfView(c.fieldOfView());
-	setParalaxPlane(c.paralaxPlane());
-	setType(c.type());
+	sep_ = c.separation();
+	fov_ = c.fieldOfView();
+	ppd_ = c.paralaxPlane();
+	type_ = c.type();
+	preLoadMatrix();
 }
 
 Camera::~Camera()
@@ -86,6 +91,7 @@ void Camera::loadMatrix(GLWidget * dest)
 
 void Camera::loadMatrix(float offsetCamera)
 {
+	ErrorTool::getErrors("Camera::loadMatrix:1");
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	float aspect = (float)viewport[2]/viewport[3];
@@ -119,6 +125,7 @@ void Camera::loadMatrix(float offsetCamera)
 		gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
 				  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
 				  up_.x, up_.y, up_.z);
+		ErrorTool::getErrors("Camera::loadMatrix:2");
 	}
 	else if (type() == Camera::Parallel)
 	{
@@ -159,6 +166,7 @@ void Camera::loadMatrix(float offsetCamera)
 		gluLookAt(pos_.x, pos_.y, pos_.z,
 				  pos_.x + dir_.x, pos_.y + dir_.y, pos_.z + dir_.z,
 				  up_.x, up_.y, up_.z);
+		ErrorTool::getErrors("Camera::loadMatrix:3");
 	}
 	else if (type() == Camera::Screen)
 	{
@@ -172,11 +180,13 @@ void Camera::loadMatrix(float offsetCamera)
 		const float fTop = viewport[3]/2;
 		const float fBottom = -fTop;
 		glOrtho(fLeft,fRight,fBottom,fTop, fTop, fBottom);
+		ErrorTool::getErrors("Camera::loadMatrix:4");
 	}
 }
 
 void Camera::preLoadMatrix()
 {
+	ErrorTool::getErrors("Camera::preLoadMatrix:1");
 	// Hopefully an old context is still active
 	// (Since contexts are never deactivated without making an other active,
 	// it should work)
@@ -192,6 +202,7 @@ void Camera::preLoadMatrix()
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+	ErrorTool::getErrors("Camera::preLoadMatrix:2");
 }
 
 ScreenProject * Camera::screenProject(GLWidget::Side s) const
@@ -335,6 +346,7 @@ Camera::Type Camera::type() const
 void Camera::setType(Camera::Type t)
 {
 	type_ = t;
+	preLoadMatrix();
 }
 
 std::string Camera::toLua(std::ostream & outStream, const std::string & name) const

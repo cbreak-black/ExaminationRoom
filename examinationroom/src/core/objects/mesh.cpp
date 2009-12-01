@@ -19,6 +19,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -200,6 +202,7 @@ void Mesh::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
+		ErrorTool::getErrors("Mesh::draw:1", name());
 		// Bind the texture if it exists
 		if (texture())
 		{
@@ -229,6 +232,7 @@ void Mesh::draw(GLWidget * dest) const
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		ErrorTool::getErrors("Mesh::draw:2", name());
 	}
 }
 

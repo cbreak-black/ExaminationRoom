@@ -13,6 +13,8 @@
 
 #include "glwidget.h"
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -60,10 +62,12 @@ void Text::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
+		ErrorTool::getErrors("Text::draw:1", name());
 		Point p = position();
 		// Load the correct color
 		glColor4fv(color().vec);
 		dest->renderText(p.x, p.y, p.z, QString::fromStdString(text_), font_);
+		ErrorTool::getErrors("Text::draw:2", name());
 	}
 }
 

@@ -15,6 +15,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -116,6 +118,7 @@ void Rectangle::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
+		ErrorTool::getErrors("Rectangle::draw:1", name());
 		// Set the texture binding
 		if (texture())
 		{
@@ -138,6 +141,7 @@ void Rectangle::draw(GLWidget * dest) const
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
+		ErrorTool::getErrors("Rectangle::draw:2", name());
 	}
 }
 

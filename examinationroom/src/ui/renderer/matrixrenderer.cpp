@@ -9,6 +9,12 @@
 
 #include "matrixrenderer.h"
 
+#include "scene.h"
+#include "camera.h"
+#include "glwidget.h"
+
+#include "errortool.h"
+
 namespace Examination
 {
 
@@ -73,6 +79,8 @@ void MatrixRenderer::renderScene(GLWidget * w)
 	glMatrixMode(GL_COLOR);
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
+
+	ErrorTool::getErrors("MatrixRenderer::renderScene");
 }
 
 }

@@ -10,7 +10,6 @@
 #include "patternstereogram.h"
 
 #include "texture.h"
-#include "glwidget.h"
 
 #include <QImage>
 

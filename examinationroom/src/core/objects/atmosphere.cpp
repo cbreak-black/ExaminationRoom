@@ -13,13 +13,15 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
 namespace luabridge
 {
 
-char * fogModes[] =
+const char * fogModes[] =
 {
 	"Exp",
 	"Exp2",
@@ -193,9 +195,11 @@ void Atmosphere::draw(GLWidget * dest) const
 			}
 			glFogfv(GL_FOG_COLOR, color().vec);
 			// Draw the contents of this node
+			ErrorTool::getErrors("Atmosphere::draw:1", name());
 			Container::draw(dest);
 			// Disable fog again
 			glDisable(GL_FOG);
+			ErrorTool::getErrors("Atmosphere::draw:2", name());
 		}
 	}
 }
