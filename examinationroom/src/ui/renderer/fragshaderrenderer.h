@@ -37,6 +37,8 @@ public:
 	virtual void renderScene(GLWidget * w);
 
 private:
+	void createFBO(QSize s); /**< Creates new FBOs when needed */
+	void renderFBO(GLWidget * w, QGLFramebufferObject * tex); /**< Renders into the FBO */
 	void drawFB(QGLFramebufferObject * tex);
 
 private:

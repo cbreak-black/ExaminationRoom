@@ -41,9 +41,8 @@ FragShaderRenderer::~FragShaderRenderer()
 	if (texR_) delete texR_;
 }
 
-void FragShaderRenderer::renderScene(GLWidget * w)
+void FragShaderRenderer::createFBO(QSize s)
 {
-	QSize s = w->size();
 	if (s != texSize_)
 	{
 		if (texL_) delete texL_;
@@ -56,26 +55,29 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 		texR_ = new QGLFramebufferObject(s, QGLFramebufferObject::CombinedDepthStencil);
 		texSize_ = s;
 	}
+}
 
+void FragShaderRenderer::renderFBO(GLWidget * w, QGLFramebufferObject * tex)
+{
+	if (tex->bind())
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		scene()->camera()->loadMatrix(w);
+		scene()->draw(w);
+		tex->release();
+	}
+	ErrorTool::getErrors("FragShaderRenderer::renderFBO");
+}
+
+void FragShaderRenderer::renderScene(GLWidget * w)
+{
+	createFBO(w->size());
 	// Prepare left FB
-	if (texL_->bind())
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		w->setSide(GLWidget::left);
-		scene()->camera()->loadMatrix(w);
-		scene()->draw(w);
-		texL_->release();
-	}
-
-	// Prepare right FB
-	if (texR_->bind())
-	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		w->setSide(GLWidget::right);
-		scene()->camera()->loadMatrix(w);
-		scene()->draw(w);
-		texR_->release();
-	}
+	w->setSide(GLWidget::left);
+	renderFBO(w, texL_);
+	// Prepare right FBO
+	w->setSide(GLWidget::right);
+	renderFBO(w, texR_);
 
 	// Shaders just add the two textures onto each other
 	glBlendFunc(GL_ONE, GL_ONE);
