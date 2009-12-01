@@ -9,10 +9,6 @@
 
 #include "abstractrenderer.h"
 
-#include "scene.h"
-#include "camera.h"
-#include "glwidget.h"
-
 namespace Examination
 {
 

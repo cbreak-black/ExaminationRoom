@@ -11,6 +11,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "platform_math.h"
 
 #include "parameter/parametertexture.h"
@@ -52,6 +54,7 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &imageGLID_);
 	// Delete associated GL Textures
+	ErrorTool::getErrors("Texture::~Texture");
 }
 
 std::tr1::shared_ptr<AbstractTexture> Texture::clone() const
@@ -61,6 +64,7 @@ std::tr1::shared_ptr<AbstractTexture> Texture::clone() const
 
 void Texture::loadPixelMap(QImage image)
 {
+	ErrorTool::getErrors("Texture::loadPixelMap:1");
 	int nc = image.numColors();
 	if (nc > 0)
 	{
@@ -93,6 +97,7 @@ void Texture::loadPixelMap(QImage image)
 		delete [] mapB;
 		delete [] mapA;
 	}
+	ErrorTool::getErrors("Texture::loadPixelMap:2");
 }
 
 QImage Texture::transformColorSpace(QImage image)
@@ -143,6 +148,7 @@ If it is already loaded into memory, just bind the texture.
 */
 void Texture::glBindTex(GLWidget * /* w */)
 {
+	ErrorTool::getErrors("Texture::glBindTex:1");
 	if (imageGLID_ == 0)
 	{
 		glGenTextures(1, &imageGLID_);
@@ -154,52 +160,33 @@ void Texture::glBindTex(GLWidget * /* w */)
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
-#ifdef DEBUG
-		int er = 0;
-#endif
-		
+		ErrorTool::getErrors("Texture::glBindTex:2");
 		if (image_.format() == QImage::Format_Indexed8)
 		{
-#ifdef DEBUG
-			er = glGetError(); // Clean errors
-#endif
 			loadPixelMap(image_);
 			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
 						 GL_UNSIGNED_BYTE, t);
-#ifdef DEBUG
-			er = glGetError();
-#endif
+			ErrorTool::getErrors("Texture::glBindTex:3");
 		}
 		else
 		{
-#ifdef DEBUG
-			er = glGetError(); // Clean errors
-#endif
 			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_.width(), image_.height(), 0, GL_RGBA,
 						 GL_UNSIGNED_BYTE, t);
-#ifdef DEBUG
-			er = glGetError();
-#endif
+			ErrorTool::getErrors("Texture::glBindTex:4");
 		}
-
-#ifdef DEBUG
-		if (er == GL_INVALID_VALUE)
-		{
-			// Only Power of Two textures
-			std::cerr << "On this system, only power of two textures are supported\n";
-		}
-#endif
 	}
 	else
 	{
 		glBindTexture(GL_TEXTURE_2D,imageGLID_);
 	}
+	ErrorTool::getErrors("Texture::glBindTex:5");
 }
 
 void Texture::draw(GLWidget * /* w */)
 {
+	ErrorTool::getErrors("Texture::draw:1");
 	GLubyte * t;
 	Tool::Vec2f z;
 	if (image_.format() == QImage::Format_Indexed8)
@@ -210,6 +197,7 @@ void Texture::draw(GLWidget * /* w */)
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
+		ErrorTool::getErrors("Texture::draw:2");
 	}
 	else
 	{
@@ -218,6 +206,7 @@ void Texture::draw(GLWidget * /* w */)
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
+		ErrorTool::getErrors("Texture::draw:3");
 	}
 }
 

@@ -15,6 +15,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -39,6 +41,7 @@ void Sphere::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
+		ErrorTool::getErrors("Sphere::draw:1", name());
 		GLUquadricObj * quad = gluNewQuadric();
 		if (texture())
 		{
@@ -64,6 +67,7 @@ void Sphere::draw(GLWidget * dest) const
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		gluDeleteQuadric(quad);
+		ErrorTool::getErrors("Sphere::draw:2", name());
 	}
 }
 

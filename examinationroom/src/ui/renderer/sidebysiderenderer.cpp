@@ -13,6 +13,8 @@
 #include "camera.h"
 #include "glwidget.h"
 
+#include "errortool.h"
+
 namespace Examination
 {
 
@@ -36,6 +38,8 @@ void SideBySideRenderer::renderScene(GLWidget * w)
 	scene()->draw(w);
 
 	glViewport(0,0, s.width(), s.height());
+
+	ErrorTool::getErrors("SideBySideRenderer::renderScene");
 }
 
 }

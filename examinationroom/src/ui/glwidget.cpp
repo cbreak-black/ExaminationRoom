@@ -10,8 +10,6 @@
 #include <QtGui>
 #include <QtOpenGL>
 
-#include <iostream>
-
 #include "platform_math.h"
 
 #include "glwidget.h"
@@ -28,6 +26,8 @@
 #include "renderer/singlerenderer.h"
 #include "renderer/fragshaderrenderer.h"
 
+#include "errortool.h"
+
 namespace Examination
 {
 
@@ -39,6 +39,7 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::CrossCursor);
+	ErrorTool::getErrors("GLWidget::GLWidget");
 }
 
 GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWidget)
@@ -47,10 +48,12 @@ GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWi
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::BlankCursor);
+	ErrorTool::getErrors("GLWidget::GLWidget");
 }
 
 GLWidget::~GLWidget()
 {
+	ErrorTool::getErrors("GLWidget::~GLWidget");
 }
 
 QSize GLWidget::minimumSizeHint() const
@@ -70,8 +73,10 @@ std::tr1::shared_ptr<Scene> GLWidget::scene()
 
 void GLWidget::setScene(std::tr1::shared_ptr<Scene> s)
 {
+	ErrorTool::getErrors("GLWidget::setScene:1");
 	scene_ = s;
 	renderer_->setScene(s);
+	ErrorTool::getErrors("GLWidget::setScene:2");
 }
 
 GLWidget::Side GLWidget::side()
@@ -91,7 +96,6 @@ GLWidget::DrawStyle GLWidget::style()
 
 void GLWidget::setStyle(DrawStyle s)
 {
-	style_ = s;
 	switch (s)
 	{
 		case single:
@@ -105,7 +109,9 @@ void GLWidget::setStyle(DrawStyle s)
 			glGetIntegerv(GL_AUX_BUFFERS, &auxNum);
 			if (auxNum < 2)
 			{
-				std::cerr << "Not enough aux buffers support found. Matrix stereo will not work." << std::endl;
+				ErrorTool::logError("GLWidget::setStyle",
+									"Not enough aux buffers support found. Matrix stereo not enabled");
+				return;
 			}
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new MatrixRenderer(scene_));
 			break;
@@ -115,7 +121,9 @@ void GLWidget::setStyle(DrawStyle s)
 		case quad:
 			if (!format().stereo())
 			{
-				std::cerr << "No Stereo support found. Quad Buffer mode will not work" << std::endl;
+				ErrorTool::logError("GLWidget::setStyle",
+									"No Stereo support found. Quad Buffer not enabled");
+				return;
 			}
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new QuadbufferRenderer(scene_));
 			break;
@@ -129,6 +137,8 @@ void GLWidget::setStyle(DrawStyle s)
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_, ":/mayan.fs"));
 			break;
 	}
+	style_ = s;
+	ErrorTool::getErrors("GLWidget::setStyle");
 }
 
 void GLWidget::initializeGL()
@@ -153,6 +163,8 @@ void GLWidget::initializeGL()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black.vec);
 	// and color material settings
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
+	ErrorTool::getErrors("GLWidget::initializeGL");
 }
 
 void GLWidget::paintGL()
@@ -166,11 +178,13 @@ void GLWidget::paintGL()
 
 		renderer_->renderScene(this);
 	}
+	ErrorTool::getErrors("GLWidget::paintGL");
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
 	glViewport(0, 0, width, height);
+	ErrorTool::getErrors("GLWidget::resizeGL");
 }
 
 }

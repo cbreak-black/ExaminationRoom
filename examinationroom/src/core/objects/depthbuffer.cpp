@@ -13,6 +13,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -55,6 +57,7 @@ void DepthBuffer::draw(GLWidget * dest) const
 			{
 				glDisable(GL_DEPTH_TEST);
 			}
+			ErrorTool::getErrors("DepthBuffer::draw:1", name());
 			// Draw the contents of this node
 			//Container::draw(dest);
 			const Container::ObjectList & ol = Container::objects();
@@ -75,6 +78,7 @@ void DepthBuffer::draw(GLWidget * dest) const
 			{
 				glDisable(GL_DEPTH_TEST);
 			}
+			ErrorTool::getErrors("DepthBuffer::draw:2", name());
 		}
 	}
 }

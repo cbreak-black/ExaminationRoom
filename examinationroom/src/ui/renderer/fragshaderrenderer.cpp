@@ -13,6 +13,8 @@
 #include "camera.h"
 #include "glwidget.h"
 
+#include "errortool.h"
+
 #include <QGLFramebufferObject>
 
 namespace Examination
@@ -33,6 +35,7 @@ FragShaderRenderer::FragShaderRenderer(std::tr1::shared_ptr<Scene> scene, QStrin
 
 	texL_ = NULL;
 	texR_ = NULL;
+	ErrorTool::getErrors("FragShaderRenderer::FragShaderRenderer");
 }
 
 FragShaderRenderer::~FragShaderRenderer()
@@ -55,6 +58,7 @@ void FragShaderRenderer::createFBO(QSize s)
 		texR_ = new QGLFramebufferObject(s, QGLFramebufferObject::CombinedDepthStencil);
 		texSize_ = s;
 	}
+	ErrorTool::getErrors("FragShaderRenderer::createFBO");
 }
 
 void FragShaderRenderer::renderFBO(GLWidget * w, QGLFramebufferObject * tex)
@@ -119,6 +123,8 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 	// Restore blend func
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	ErrorTool::getErrors("FragShaderRenderer::renderScene");
 }
 
 void FragShaderRenderer::drawFB(QGLFramebufferObject * tex)
@@ -138,6 +144,7 @@ void FragShaderRenderer::drawFB(QGLFramebufferObject * tex)
 	glVertex2f(0.0f, 1.0f);
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	ErrorTool::getErrors("FragShaderRenderer::drawFB");
 }
 
 

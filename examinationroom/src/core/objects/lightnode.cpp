@@ -13,6 +13,8 @@
 
 #include <qgl.h>
 
+#include "errortool.h"
+
 #include "luabridge.hpp"
 #include "luahelper.h"
 
@@ -116,6 +118,7 @@ void LightNode::draw(GLWidget * dest) const
 			// GL_POSITION expects homogenous coordinates (4 floats)
 			glLightfv(glID, GL_POSITION, toHomogenous(position()).vec);
 			// Draw the contents of this node
+			ErrorTool::getErrors("LightNode::draw:1", name());
 			Container::draw(dest);
 			// Disable lighting and misc stuff (if it was not already enabled)
 			if (!isEnabled[3])
@@ -128,6 +131,7 @@ void LightNode::draw(GLWidget * dest) const
 				glDisable(GL_NORMALIZE);
 			// Free the light id that was used.
 			freeLight(id);
+			ErrorTool::getErrors("LightNode::draw:2", name());
 		}
 	}
 }
