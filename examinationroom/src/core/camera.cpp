@@ -170,16 +170,26 @@ void Camera::loadMatrix(float offsetCamera)
 	}
 	else if (type() == Camera::Screen)
 	{
-		// Ignore separation
 		// Ignore camera directin
-		// Ignore everything else too
 		// Projection: Screen space coordinate system, 0 in center, width/height as
 		// specified by viewport
+		// Separation: One time camera separation per unit in z
 		const float fRight = viewport[2]/2;
 		const float fLeft = -fRight;
 		const float fTop = viewport[3]/2;
 		const float fBottom = -fTop;
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		const float shearMatrix[] = {
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			-offsetCamera, 0, 1, 0,
+			0, 0, 0, 1
+		};
+		glMultMatrixf(shearMatrix);
 		glOrtho(fLeft,fRight,fBottom,fTop, fTop, fBottom);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		ErrorTool::getErrors("Camera::loadMatrix:4");
 	}
 }
