@@ -36,7 +36,7 @@ public: // Enums
 	{
 		Perspective,	/**< Perspective projection, parallel cameras */
 		Parallel,		/**< Parallel projection, converged cameras */
-		Screen			/**< Screen space, no separation */
+		Screen			/**< Screen space, separation: camera separation per unit in z, like parallel */
 	}	Type;
 
 public:
