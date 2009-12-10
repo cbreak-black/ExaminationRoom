@@ -155,10 +155,8 @@ void Texture::glBindTex(GLWidget * /* w */)
 		glBindTexture(GL_TEXTURE_2D,imageGLID_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterTypeGL());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterTypeGL());
 
 		ErrorTool::getErrors("Texture::glBindTex:2");
 		if (image_.format() == QImage::Format_Indexed8)
@@ -180,6 +178,8 @@ void Texture::glBindTex(GLWidget * /* w */)
 	else
 	{
 		glBindTexture(GL_TEXTURE_2D,imageGLID_);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterTypeGL());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterTypeGL());
 	}
 	ErrorTool::getErrors("Texture::glBindTex:5");
 }

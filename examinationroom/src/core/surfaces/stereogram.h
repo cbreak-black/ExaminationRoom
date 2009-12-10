@@ -91,6 +91,7 @@ public: // Resizing (Implemented from parent)
 	virtual int width() const;
 	virtual int height() const;
 	virtual void setZoom(float zx, float zy);
+	virtual void setFilterType(AbstractTexture::FilterType f);
 
 public:
 	/**

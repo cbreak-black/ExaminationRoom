@@ -37,8 +37,8 @@
 namespace Examination
 {
 
-static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
-static char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
+static const char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
+static const char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
 
 Program::Program()
 {

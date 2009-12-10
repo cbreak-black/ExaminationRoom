@@ -11,6 +11,8 @@
 
 #include "parameter/parameterabstracttexture.h"
 
+#include "qgl.h" // For constants
+
 namespace Examination
 {
 
@@ -18,6 +20,7 @@ AbstractTexture::AbstractTexture()
 {
 	zoomFactorX_ = 1.0f;
 	zoomFactorY_ = 1.0f;
+	filterType_ = AbstractTexture::linear;
 }
 
 AbstractTexture::~AbstractTexture()
@@ -67,11 +70,58 @@ void AbstractTexture::setZoom(const Tool::Vec2f & z)
 	setZoom(z.x, z.y);
 }
 
+AbstractTexture::FilterType AbstractTexture::filterType() const
+{
+	return filterType_;
+}
+
+unsigned int AbstractTexture::filterTypeGL() const
+{
+	// Might work more elegant with filterType_+GL_NEAREST, but this is safer
+	switch (filterType_)
+	{
+		case AbstractTexture::nearest:
+			return GL_NEAREST;
+		case AbstractTexture::linear:
+			return GL_LINEAR;
+	}
+	// Error
+	return 0;
+}
+
+void AbstractTexture::setFilterType(FilterType f)
+{
+	switch (f)
+	{
+		case AbstractTexture::nearest:
+		case GL_NEAREST:
+			filterType_ = AbstractTexture::nearest;
+			break;
+		case AbstractTexture::linear:
+		case GL_LINEAR:
+			filterType_ = AbstractTexture::linear;
+			break;
+		default:
+			break;
+	}
+}
+
 std::string AbstractTexture::toLua(std::ostream & outStream) const
 {
 	std::string name = toLuaCreate(outStream);
 	Tool::Vec2f z = zoom();
 	outStream << name << ":" << "setZoom(" << z.x << ", " << z.y << ");\n";
+	outStream << name << ":" << "setFilterType(\"";
+	switch (filterType())
+	{
+		case nearest:
+			outStream << "nearest";
+			break;
+		case linear:
+			outStream << "linear";
+			break;
+	}
+	outStream << "\");\n";
 	return name;
 }
 
