@@ -33,6 +33,24 @@
 
 namespace luabridge
 {
+	const char * filterType[] =
+	{
+		"nearest",
+		"linear",
+		0
+	};
+	template <>
+	struct tdstack <Examination::AbstractTexture::FilterType>
+	{
+		static void push (lua_State *L, Examination::AbstractTexture::FilterType data)
+		{
+			lua_pushstring(L, filterType[data]);
+		}
+		static Examination::AbstractTexture::FilterType get (lua_State *L, int index)
+		{
+			return static_cast<Examination::AbstractTexture::FilterType>(luaL_checkoption(L, index, 0, filterType));
+		}
+	};
 	const char * textureStyles[] =
 	{
 		"convex",
@@ -118,7 +136,9 @@ LuaProxy::LuaProxy()
 	.method("resizeTo", &AbstractTexture::resizeTo)
 	.method("resizeToOriginal", &AbstractTexture::resizeToOriginal)
 	.method("zoom", &AbstractTexture::zoom)
-	.method<void (AbstractTexture::*)(float, float)>("setZoom", &AbstractTexture::setZoom);
+	.method<void (AbstractTexture::*)(float, float)>("setZoom", &AbstractTexture::setZoom)
+	.method("filterType", &AbstractTexture::filterType)
+	.method("setFilterType", &AbstractTexture::setFilterType);
 
 	m.subclass<Texture,AbstractTexture>("Texture")
 	.constructor<void (*)(const char *)>()

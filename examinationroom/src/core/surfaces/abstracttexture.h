@@ -43,6 +43,15 @@ Always wrap it into shared_ptr, never use it with direct pointers or by-value.
 */
 class AbstractTexture : public std::tr1::enable_shared_from_this<AbstractTexture>
 {
+public: // Enums
+	/**
+	 Enum for the supported interpolation types
+	 */
+	typedef enum {
+		nearest = 0, /**< No filtering with GL_NEAREST */
+		linear = 1 /**< Linear filtering with GL_LINEAR */
+	} FilterType;
+
 public:
 	AbstractTexture();
 	virtual ~AbstractTexture();
@@ -140,6 +149,28 @@ public: // Resizing
 	*/
 	void setZoom(const Tool::Vec2f & z);
 
+	/**
+	Returns the filter type. Filtering is performed by OpenGL on textures to find a suitable
+	color value for each pixel on the screen from the texture.
+	 \return the filter type
+	*/
+	AbstractTexture::FilterType filterType() const;
+
+	/**
+	Sets the filter type. Filtering is performed by OpenGL on textures to find a suitable
+	color value for each pixel on the screen from the texture. This method accepts OpenGL
+	constants as well as this class' enum. Anything else does not change the filter type.
+	 \param f	Filter type
+	*/
+	virtual void setFilterType(FilterType f);
+
+protected:
+	/**
+	Returns the filter type as OpenGL Constant, either GL_NEAREST or GL_LINEAR at the moment
+	 \return the filter type as OpenGL Constant.
+	*/
+	unsigned int filterTypeGL() const;
+
 public: // Parameter Dialog
 	/**
 	Returns a ParameterDialog subclass instance associated with this object.
@@ -180,6 +211,7 @@ public: // Serialisation
 private:
 	float zoomFactorX_;
 	float zoomFactorY_;
+	FilterType filterType_;
 
 	std::tr1::shared_ptr<Parameterdialog> dialog_;
 };

@@ -126,6 +126,16 @@ void Stereogram::setZoom(float zx, float zy)
 		texRight_->setZoom(zx, zy);
 }
 
+void Stereogram::setFilterType(AbstractTexture::FilterType f)
+{
+	AbstractTexture::setFilterType(f);
+	// Only visible textures get their filter type changed
+	if (texLeft_)
+		texLeft_->setFilterType(f);
+	if (texRight_)
+		texRight_->setFilterType(f);
+}
+
 int Stereogram::offset() const
 {
 	return offset_;
