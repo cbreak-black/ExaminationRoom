@@ -36,19 +36,21 @@ const Tool::Color4 black(0,0,0,1);
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 {
+	ErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::CrossCursor);
-	ErrorTool::getErrors("GLWidget::GLWidget");
+	ErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
 GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWidget)
 	: QGLWidget(format, parent, shareWidget)
 {
+	ErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::BlankCursor);
-	ErrorTool::getErrors("GLWidget::GLWidget");
+	ErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
 GLWidget::~GLWidget()
@@ -96,6 +98,7 @@ GLWidget::DrawStyle GLWidget::style()
 
 void GLWidget::setStyle(DrawStyle s)
 {
+	ErrorTool::getErrors("GLWidget::setStyle:1");
 	switch (s)
 	{
 		case single:
@@ -138,7 +141,7 @@ void GLWidget::setStyle(DrawStyle s)
 			break;
 	}
 	style_ = s;
-	ErrorTool::getErrors("GLWidget::setStyle");
+	ErrorTool::getErrors("GLWidget::setStyle:2");
 }
 
 void GLWidget::initializeGL()

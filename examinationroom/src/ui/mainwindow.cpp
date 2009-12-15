@@ -22,6 +22,8 @@
 
 #include "objects/object.h"
 
+#include "errortool.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -45,10 +47,14 @@ MainWindow::MainWindow()
 	glFormat.setSwapInterval(1); // Enable VSync on platforms that support it
 	QGLFormat::setDefaultFormat(glFormat);
 
+	// Checking for errors here leads to a crash on OS X
+	// Probably because OpenGL was not initialized yet?
+	//ErrorTool::getErrors("MainWindow::MainWindow:1");
 	mainGlWidget_ = new GLWidget(this);
 	fsGlWidget_ = new GLWidget(0, mainGlWidget_);
 	mainGlWidget_->setStyle(GLWidget::single);
 	fsGlWidget_->setStyle(GLWidget::single);
+	ErrorTool::getErrors("MainWindow::MainWindow:2");
 
 	aboutWindow_ = 0;
 
