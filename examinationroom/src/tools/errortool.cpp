@@ -21,16 +21,23 @@ unsigned int ErrorTool::getErrors(std::string fName, std::string oName)
 {
 	unsigned int n = 0;
 	GLenum err = glGetError();
+	GLenum errLast = 0;
 	while (err != GL_NO_ERROR)
 	{
 		n++;
 		const GLubyte * str = gluErrorString(err);
 		std::cerr << "OpenGL Error: [" << fName << ", " << oName << "] ";
+		std::cerr << "0x" << std::setfill('0') << std::setw(sizeof(GLubyte)) << std::hex
+			<< err << std::setfill(' ');
 		if (str)
-			std::cerr << str << std::endl;
-		else
-			std::cerr << " 0x" << std::setfill('0') << std::setw(sizeof(GLubyte)) << std::hex
-			<< err << std::setfill(' ') << std::endl;
+			std::cerr << " " << str;
+		if (errLast == err)
+		{
+			std::cerr << " (repeated)" << std::endl;
+			return n;
+		}
+		std::cerr << std::endl;
+		errLast = err;
 		err = glGetError();
 	}
 	return n;
