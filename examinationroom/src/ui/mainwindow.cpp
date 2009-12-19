@@ -23,6 +23,7 @@
 #include "objects/object.h"
 
 #include "errortool.h"
+#include "logtool.h"
 
 #include <iostream>
 #include <fstream>
@@ -37,6 +38,23 @@ MainWindow::MainWindow()
 	// Set Title and window properties
 	setWindowTitle(tr("Examinationroom"));
 	QMainWindow::setDockOptions(AnimatedDocks | AllowNestedDocks | AllowTabbedDocks);
+
+	// Add Dock Widgets
+	dockDesign_ = new DesignWidget("Design", this);
+	dockCode_ = new CodeWidget("Code", this);
+	dockLog_ = new LogWidget("Log", this);
+	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockLog_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	addDockWidget(Qt::RightDockWidgetArea, dockDesign_);
+	addDockWidget(Qt::RightDockWidgetArea, dockCode_);
+	addDockWidget(Qt::RightDockWidgetArea, dockLog_);
+	tabifyDockWidget(dockDesign_, dockCode_);
+	tabifyDockWidget(dockDesign_, dockLog_);
+
+	// Set up logging early
+	LogTool::initLogFile();
+	LogTool::setLogWidget(dockLog_);
 
 	// Create GL Widgets
 	QGLFormat glFormat = QGLFormat::defaultFormat();
@@ -155,19 +173,6 @@ MainWindow::MainWindow()
 	menuBar()->setParent(0);
 #endif
 
-	// Add Dock Widgets
-	dockDesign_ = new DesignWidget("Design", this);
-	dockCode_ = new CodeWidget("Code", this);
-	dockLog_ = new LogWidget("Log", this);
-	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-	dockLog_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-	addDockWidget(Qt::RightDockWidgetArea, dockDesign_);
-	addDockWidget(Qt::RightDockWidgetArea, dockCode_);
-	addDockWidget(Qt::RightDockWidgetArea, dockLog_);
-	tabifyDockWidget(dockDesign_, dockCode_);
-	tabifyDockWidget(dockDesign_, dockLog_);
-
 	// Set up layout
 	setFocusPolicy(Qt::StrongFocus);
 	setCentralWidget(mainGlWidget_);
@@ -184,6 +189,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
+	LogTool::setLogWidget(NULL);
 	// All child widgets are deallocated by QT
 	delete fsGlWidget_;
 }
@@ -301,7 +307,6 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 	fsGlWidget_->setScene(program_->scene());
 	dockDesign_->setProgram(program);
 	dockCode_->setProgram(program);
-	dockLog_->setProgram(program);
 	// Recreate menu
 	objectMenu_->clear(); // Should also destroy all mappings
 	const std::vector<ObjectFactoryPtr> & factories = program->factories();

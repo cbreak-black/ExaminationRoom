@@ -25,6 +25,8 @@
 #include "luabridge.hpp"
 #include "luahelper.h"
 
+#include "logtool.h"
+
 #include <QApplication>
 
 #include "platform_string.h"
@@ -659,6 +661,7 @@ void LuaProxy::onEvent(const char * event, char * param)
 
 void LuaProxy::error(const char * s1, const char * s2)
 {
+	LogTool::logError(s1, "Lua", s2);
 	std::tr1::shared_ptr<Program> p = program();
 	if (p)
 		p->writeError(s1, s2);
@@ -666,6 +669,7 @@ void LuaProxy::error(const char * s1, const char * s2)
 
 void LuaProxy::log(const char * msg)
 {
+	LogTool::logMessage("Lua", msg);
 	std::tr1::shared_ptr<Program> p = program();
 	if (p)
 		p->writeLog(msg);
@@ -673,6 +677,7 @@ void LuaProxy::log(const char * msg)
 
 void LuaProxy::debugLog(const char * msg)
 {
+	LogTool::logError("DEBUG", "Lua", msg);
 	std::tr1::shared_ptr<Program> p = program();
 	if (p)
 		p->writeError("DEBUG", msg);
@@ -683,22 +688,22 @@ int LuaProxy::handleError(int err, const char * s)
 	switch (err)
 	{
 		case LUA_ERRRUN:
-			error("Runtime Error", s);
+			error("LUA_RUNTIME", s);
 			break;
 		case LUA_ERRMEM:
-			error("Memory Error", s);
+			error("LUA_MEMORY", s);
 			break;
 		case LUA_ERRERR:
-			error("Error Error", s);
+			error("LUA_ERROR", s);
 			break;
 		case LUA_ERRFILE:
-			error("File Error", s);
+			error("LUA_FILE", s);
 			break;
 		case LUA_ERRSYNTAX:
-			error("Syntax Error", s);
+			error("LUA_SYNTAX", s);
 			break;
 		default:
-			error("Unknown Error", s);
+			error("LUA_UNKNOWN", s);
 	}
 	return err;
 }

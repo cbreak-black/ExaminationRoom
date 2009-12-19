@@ -62,16 +62,6 @@ HEADERS += \
 SOURCES += src/lua/luabridge/src/luabridge.cpp
 
 # TOOLS
-HEADERS += \
-	src/tools/errortool.h \
-	src/tools/luahelper.h \
-	src/tools/platform.h \
-	src/tools/platform_math.h \
-	src/tools/platform_string.h \
-	src/tools/screenproject.h \
-	src/tools/vec.h
-SOURCES += \
-	src/tools/errortool.cpp \
-	src/tools/screenproject.cpp \
-	src/tools/luahelper.cpp
+HEADERS += src/tools/*.h
+SOURCES += src/tools/*.cpp
 

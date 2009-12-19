@@ -30,15 +30,12 @@
 #include "objects/depthbuffer.h"
 #include "objects/lightnode.h"
 
-#include <QDateTime>
 #include <iostream>
-#include <sstream>
+
+#include "logtool.h"
 
 namespace Examination
 {
-
-static const char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
-static const char * logFileFormatString = "yyyy.MM.dd-hh.mm.ss.zzz.'log.txt'";
 
 Program::Program()
 {
@@ -47,9 +44,6 @@ Program::Program()
 	nameManager_ = std::tr1::shared_ptr<NameManager>(new NameManager());
 	nameManager_->registerLuaKeywords();
 	registerComponents();
-
-	QDateTime t = QDateTime::currentDateTime();
-	logOutStream_.open(t.toString(logFileFormatString).toAscii());
 }
 
 Program::~Program()
@@ -79,6 +73,7 @@ std::tr1::shared_ptr<Program> Program::revert() const
 
 void Program::loadLua(const std::string & path, bool root)
 {
+	LogTool::logMessage("Program::loadLua", path);
 	if (path.empty()) return;
 	if (root && rootFile_.empty())
 	{
@@ -174,24 +169,14 @@ void Program::onKeyUp(char k)
 
 void Program::writeLog(const std::string & msg) const
 {
-	QDateTime t = QDateTime::currentDateTime();
-	std::stringstream ss(t.toString(dateTimeFormatString).toStdString(),
-						 std::ios_base::out | std::ios_base::app);
-	ss << ": " << msg << std::endl;
-	logOutStream_ << ss.str();
 	if (callbackLog_)
-		callbackLog_(ss.str());
+		callbackLog_(msg);
 }
 
 void Program::writeError(const std::string & type, const std::string & msg) const
 {
-	QDateTime t = QDateTime::currentDateTime();
-	std::stringstream ss(t.toString(dateTimeFormatString).toStdString(),
-						 std::ios_base::out | std::ios_base::app);
-	ss << ": " << type << ": " << msg << std::endl;
-	std::cout << ss.str();
 	if (callbackError_)
-		callbackError_(ss.str());
+		callbackError_(type + ": " + msg);
 }
 
 void Program::setCallbackLog(const SignalStringType & callback)

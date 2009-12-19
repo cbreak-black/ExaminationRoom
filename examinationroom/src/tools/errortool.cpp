@@ -10,14 +10,15 @@
 #include "errortool.h"
 
 #include <qgl.h>
-
-#include <iostream>
+#include <sstream>
 #include <iomanip>
+
+#include "logtool.h"
 
 namespace Examination
 {
 
-unsigned int ErrorTool::getErrors(std::string fName, std::string oName)
+unsigned int ErrorTool::getErrors(const std::string & fName, const std::string & oName)
 {
 	unsigned int n = 0;
 	GLenum err = glGetError();
@@ -26,26 +27,21 @@ unsigned int ErrorTool::getErrors(std::string fName, std::string oName)
 	{
 		n++;
 		const GLubyte * str = gluErrorString(err);
-		std::cerr << "OpenGL Error: [" << fName << ", " << oName << "] ";
-		std::cerr << "0x" << std::setfill('0') << std::setw(sizeof(GLubyte)) << std::hex
-			<< err << std::setfill(' ');
+		std::stringstream ss(std::ios_base::out | std::ios_base::app);
+		ss << "0x" << std::setfill('0') << std::setw(sizeof(GLubyte)*2) << std::hex << err;
 		if (str)
-			std::cerr << " " << str;
+			ss << " " << str;
 		if (errLast == err)
 		{
-			std::cerr << " (repeated)" << std::endl;
+			ss << " (repeated)";
+			LogTool::logError("OPENGL", fName+", "+oName, ss.str());
 			return n;
 		}
-		std::cerr << std::endl;
+		LogTool::logError("OPENGL", fName+", "+oName, ss.str());
 		errLast = err;
 		err = glGetError();
 	}
 	return n;
-}
-
-void ErrorTool::logError(std::string fName, std::string error)
-{
-	std::cerr << "General Error: [" << fName << "] " << error << std::endl;
 }
 
 }

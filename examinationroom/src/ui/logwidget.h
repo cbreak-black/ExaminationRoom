@@ -29,17 +29,11 @@ public:
 	LogWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0);
 	~LogWidget();
 
-public:
-	std::tr1::shared_ptr<Program> program() const;
-	void setProgram(std::tr1::shared_ptr<Program> program);
-
 public slots:
 	void writeLog(const std::string & msg);
 	void writeError(const std::string & msg);
 
 private:
-	std::tr1::weak_ptr<Program> program_;
-
 	QTextEdit * logView_;
 	QTextCharFormat * logFormat_;
 	QTextCharFormat * errorFormat_;
