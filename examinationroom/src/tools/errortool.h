@@ -27,14 +27,7 @@ public:
 	 \param oName	String containing a current object identifier
 	 \return		Number of errors reported
 	*/
-	static unsigned int getErrors(std::string fName, std::string oName = std::string());
-
-	/**
-	Writes the passed error to stderr
-	 \param fName	String containing the current function name/place
-	 \param error	Error string
-	*/
-	static void logError(std::string fName, std::string error);
+	static unsigned int getErrors(const std::string & fName, const std::string & oName = std::string());
 };
 
 }

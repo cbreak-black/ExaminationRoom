@@ -25,6 +25,7 @@
 #include "renderer/sidebysiderenderer.h"
 #include "renderer/singlerenderer.h"
 
+#include "logtool.h"
 #include "errortool.h"
 
 namespace Examination
@@ -111,8 +112,8 @@ void GLWidget::setStyle(DrawStyle s)
 			glGetIntegerv(GL_AUX_BUFFERS, &auxNum);
 			if (auxNum < 2)
 			{
-				ErrorTool::logError("GLWidget::setStyle",
-									"Not enough aux buffers support found. Matrix stereo not enabled");
+				LogTool::logError("HW", "GLWidget::setStyle",
+								  "Not enough aux buffers support found. Matrix stereo not enabled");
 				return;
 			}
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new MatrixRenderer(scene_));
@@ -123,8 +124,8 @@ void GLWidget::setStyle(DrawStyle s)
 		case quad:
 			if (!format().stereo())
 			{
-				ErrorTool::logError("GLWidget::setStyle",
-									"No Stereo support found. Quad Buffer not enabled");
+				LogTool::logError("HW", "GLWidget::setStyle",
+								  "No Stereo support found. Quad Buffer not enabled");
 				return;
 			}
 			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new QuadbufferRenderer(scene_));

@@ -194,7 +194,6 @@ private:
 	std::vector<std::tr1::shared_ptr<ObjectFactoryBase> > factories_;
 	std::vector<std::string> luaFiles_; /**< Stores paths of all loaded lua files */
 	std::string rootFile_; /**< Stores path of the root file */
-	mutable std::ofstream logOutStream_;
 
 	SignalStringType callbackLog_;
 	SignalStringType callbackError_;
