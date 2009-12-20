@@ -15,7 +15,7 @@
 
 #include <qgl.h>
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "luabridge.hpp"
 #include "luahelper.h"
@@ -40,7 +40,7 @@ void Parallelepiped::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		ErrorTool::getErrors("Parallelepiped::draw:1", name());
+		GlErrorTool::getErrors("Parallelepiped::draw:1", name());
 		if (texture())
 		{
 			texture()->glBindTex(dest);
@@ -69,7 +69,7 @@ void Parallelepiped::draw(GLWidget * dest) const
 		{
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-		ErrorTool::getErrors("Parallelepiped::draw:2", name());
+		GlErrorTool::getErrors("Parallelepiped::draw:2", name());
 	}
 }
 

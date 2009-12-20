@@ -22,7 +22,7 @@
 
 #include "objects/object.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 #include "logtool.h"
 
 #include <iostream>
@@ -72,7 +72,9 @@ MainWindow::MainWindow()
 	fsGlWidget_ = new GLWidget(0, mainGlWidget_);
 	mainGlWidget_->setStyle(GLWidget::single);
 	fsGlWidget_->setStyle(GLWidget::single);
-	ErrorTool::getErrors("MainWindow::MainWindow:2");
+	mainGlWidget_->makeCurrent();
+	GlErrorTool::getErrors("MainWindow::MainWindow:2");
+	GlErrorTool::logVersionStrings();
 
 	aboutWindow_ = 0;
 

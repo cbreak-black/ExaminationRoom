@@ -13,7 +13,7 @@
 #include "platform_math.h"
 #include "float.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 using namespace Tool;
 
@@ -91,7 +91,7 @@ void Camera::loadMatrix(GLWidget * dest)
 
 void Camera::loadMatrix(float offsetCamera)
 {
-	ErrorTool::getErrors("Camera::loadMatrix:1");
+	GlErrorTool::getErrors("Camera::loadMatrix:1");
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	float aspect = (float)viewport[2]/viewport[3];
@@ -125,7 +125,7 @@ void Camera::loadMatrix(float offsetCamera)
 		gluLookAt(pos_.x - sepVec.x, pos_.y - sepVec.y, pos_.z - sepVec.z,
 				  pos_.x - sepVec.x + dir_.x, pos_.y - sepVec.y + dir_.y, pos_.z - sepVec.z + dir_.z,
 				  up_.x, up_.y, up_.z);
-		ErrorTool::getErrors("Camera::loadMatrix:2");
+		GlErrorTool::getErrors("Camera::loadMatrix:2");
 	}
 	else if (type() == Camera::Parallel)
 	{
@@ -166,7 +166,7 @@ void Camera::loadMatrix(float offsetCamera)
 		gluLookAt(pos_.x, pos_.y, pos_.z,
 				  pos_.x + dir_.x, pos_.y + dir_.y, pos_.z + dir_.z,
 				  up_.x, up_.y, up_.z);
-		ErrorTool::getErrors("Camera::loadMatrix:3");
+		GlErrorTool::getErrors("Camera::loadMatrix:3");
 	}
 	else if (type() == Camera::Screen)
 	{
@@ -190,13 +190,13 @@ void Camera::loadMatrix(float offsetCamera)
 		glOrtho(fLeft,fRight,fBottom,fTop, fTop, fBottom);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		ErrorTool::getErrors("Camera::loadMatrix:4");
+		GlErrorTool::getErrors("Camera::loadMatrix:4");
 	}
 }
 
 void Camera::preLoadMatrix()
 {
-	ErrorTool::getErrors("Camera::preLoadMatrix:1");
+	GlErrorTool::getErrors("Camera::preLoadMatrix:1");
 	// Hopefully an old context is still active
 	// (Since contexts are never deactivated without making an other active,
 	// it should work)
@@ -212,7 +212,7 @@ void Camera::preLoadMatrix()
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
-	ErrorTool::getErrors("Camera::preLoadMatrix:2");
+	GlErrorTool::getErrors("Camera::preLoadMatrix:2");
 }
 
 ScreenProject * Camera::screenProject(GLWidget::Side s) const

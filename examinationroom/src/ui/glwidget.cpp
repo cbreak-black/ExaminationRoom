@@ -27,7 +27,7 @@
 #include "renderer/fragshaderrenderer.h"
 
 #include "logtool.h"
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -37,26 +37,26 @@ const Tool::Color4 black(0,0,0,1);
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget)
 {
-	ErrorTool::getErrors("GLWidget::GLWidget:1");
+	GlErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::CrossCursor);
-	ErrorTool::getErrors("GLWidget::GLWidget:2");
+	GlErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
 GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWidget)
 	: QGLWidget(format, parent, shareWidget)
 {
-	ErrorTool::getErrors("GLWidget::GLWidget:1");
+	GlErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
 	this->setCursor(Qt::BlankCursor);
-	ErrorTool::getErrors("GLWidget::GLWidget:2");
+	GlErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
 GLWidget::~GLWidget()
 {
-	ErrorTool::getErrors("GLWidget::~GLWidget");
+	GlErrorTool::getErrors("GLWidget::~GLWidget");
 }
 
 QSize GLWidget::minimumSizeHint() const
@@ -76,10 +76,10 @@ std::tr1::shared_ptr<Scene> GLWidget::scene()
 
 void GLWidget::setScene(std::tr1::shared_ptr<Scene> s)
 {
-	ErrorTool::getErrors("GLWidget::setScene:1");
+	GlErrorTool::getErrors("GLWidget::setScene:1");
 	scene_ = s;
 	renderer_->setScene(s);
-	ErrorTool::getErrors("GLWidget::setScene:2");
+	GlErrorTool::getErrors("GLWidget::setScene:2");
 }
 
 GLWidget::Side GLWidget::side()
@@ -99,7 +99,7 @@ GLWidget::DrawStyle GLWidget::style()
 
 void GLWidget::setStyle(DrawStyle s)
 {
-	ErrorTool::getErrors("GLWidget::setStyle:1");
+	GlErrorTool::getErrors("GLWidget::setStyle:1");
 	switch (s)
 	{
 		case single:
@@ -142,7 +142,7 @@ void GLWidget::setStyle(DrawStyle s)
 			break;
 	}
 	style_ = s;
-	ErrorTool::getErrors("GLWidget::setStyle:2");
+	GlErrorTool::getErrors("GLWidget::setStyle:2");
 }
 
 void GLWidget::initializeGL()
@@ -168,7 +168,7 @@ void GLWidget::initializeGL()
 	// and color material settings
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-	ErrorTool::getErrors("GLWidget::initializeGL");
+	GlErrorTool::getErrors("GLWidget::initializeGL");
 }
 
 void GLWidget::paintGL()
@@ -182,13 +182,13 @@ void GLWidget::paintGL()
 
 		renderer_->renderScene(this);
 	}
-	ErrorTool::getErrors("GLWidget::paintGL");
+	GlErrorTool::getErrors("GLWidget::paintGL");
 }
 
 void GLWidget::resizeGL(int width, int height)
 {
 	glViewport(0, 0, width, height);
-	ErrorTool::getErrors("GLWidget::resizeGL");
+	GlErrorTool::getErrors("GLWidget::resizeGL");
 }
 
 }

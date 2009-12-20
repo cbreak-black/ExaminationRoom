@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -27,7 +27,7 @@ void SingleRenderer::renderScene(GLWidget * w)
 {
 	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
-	ErrorTool::getErrors("SingleRenderer::renderScene");
+	GlErrorTool::getErrors("SingleRenderer::renderScene");
 }
 
 }
