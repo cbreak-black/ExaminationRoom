@@ -15,7 +15,7 @@
 
 #include <qgl.h>
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "luabridge.hpp"
 #include "luahelper.h"
@@ -112,14 +112,14 @@ void CameraNode::draw(GLWidget * dest) const
 			// Set up camera
 			camera()->loadMatrix(dest);
 			// Draw the contents of this node
-			ErrorTool::getErrors("CameraNode::draw:1", name());
+			GlErrorTool::getErrors("CameraNode::draw:1", name());
 			Container::draw(dest);
 			// And restore the matrix stack
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 			glPopMatrix();
-			ErrorTool::getErrors("CameraNode::draw:2", name());
+			GlErrorTool::getErrors("CameraNode::draw:2", name());
 		}
 	}
 }
