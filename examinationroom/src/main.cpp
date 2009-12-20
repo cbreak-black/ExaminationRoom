@@ -22,12 +22,16 @@ GNU General Public License for more details.
 
 #include <cstdlib>
 #include <ctime>
+#include <locale.h>
 
 int main (int argc, char** argv)
 {
 	srand (time(0));
 
     QApplication app(argc, argv);
+
+	// Set the locale back to "C", the creator of QApplication just changed it
+	setlocale(LC_NUMERIC, "C");
 	
 	Examination::MainWindow mw;
 	mw.show();
