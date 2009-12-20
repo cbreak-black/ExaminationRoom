@@ -16,7 +16,7 @@ using namespace std::tr1;
 namespace Statistics
 {
 
-static char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
+static const char * dateTimeFormatString = "yyyy.MM.dd hh:mm:ss.zzz";
 
 LogLine::LogLine(QDateTime timestamp, QString message)
 {
@@ -41,11 +41,15 @@ QString LogLine::message() const
 
 shared_ptr<LogLine> LogLine::logLineFromString(QString str)
 {
-	QDateTime dt = QDateTime::fromString(str.section(": ", 0, 0), dateTimeFormatString);
-	if (dt.isValid())
-		return shared_ptr<LogLine>(new LogLine(dt, str.section(": ", 1)));
-	else
-		return shared_ptr<LogLine>(new LogLine(dt, str));
+	QStringList sl = str.split(": [LOG][Lua] ");
+	if (sl.size() == 2)
+	{
+		QDateTime dt = QDateTime::fromString(sl.at(0), dateTimeFormatString);
+		if (dt.isValid())
+			return shared_ptr<LogLine>(new LogLine(dt, sl.at(1)));
+	}
+	// Invalid
+	return shared_ptr<LogLine>(new LogLine(QDateTime(), str));
 }
 
 }
