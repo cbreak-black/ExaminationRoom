@@ -11,7 +11,7 @@ nextFrame = function ()
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shapes[math.random(1, #shapes)]);
+	local texture = RandomDot(shapes[math.random(1, #shapes)]);
 	texture:setMaxColor(8);
 	texture:setExclusiveColor(1);
 --	// Uncomment the following for a Pattern version
@@ -23,10 +23,10 @@ nextFrame = function ()
 	local pos = mountPoints[testNum];
 	if (testNum % 2 == 0) then
 		stereogramB:setTexture(texture);
-		stereogramB:setPosition(pos[1], pos[2], pos[3]);
+		stereogramB:setPosition(pos);
 	else
 		stereogramA:setTexture(texture);
-		stereogramA:setPosition(pos[1], pos[2], pos[3]);
+		stereogramA:setPosition(pos);
 	end;
 	-- Separation at center
 	local sep = statistics:paralaxAtPoint(pos[1]+1, pos[2]+1, pos[3]);
