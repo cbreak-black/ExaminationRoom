@@ -32,19 +32,19 @@ PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> 
 	// Stereogram gets generated automatically
 }
 
-PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> p, shared_ptr<Texture> q)
+PatternStereogram::PatternStereogram(shared_ptr<Texture> d, shared_ptr<Texture> b, shared_ptr<Texture> f)
 {
-	bgPattern_ = p;
-	fgPattern_ = q;
+	bgPattern_ = b;
+	fgPattern_ = f;
 	setTexDepth(d);
 	// Stereogram gets generated automatically
 }
 
 PatternStereogram::PatternStereogram(const std::string & d, const std::string & b, const std::string & f)
 {
-	bgPattern_ = shared_ptr<Texture>(new Texture(d));
-	fgPattern_ = shared_ptr<Texture>(new Texture(b));
-	setTexDepth(shared_ptr<Texture>(new Texture(f)));
+	bgPattern_ = shared_ptr<Texture>(new Texture(b));
+	fgPattern_ = shared_ptr<Texture>(new Texture(f));
+	setTexDepth(shared_ptr<Texture>(new Texture(d)));
 	// Stereogram gets generated automatically
 }
 
