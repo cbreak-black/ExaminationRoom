@@ -20,6 +20,10 @@ Log::Log(QTextStream & input)
 {
 	while (!input.atEnd())
 	{
+		// This method parses lines with the pattern:
+		// "yyyy.MM.dd hh:mm:ss.zzz: : [LOG][Lua] <message>"
+		// If the line does not match this pattern (the date can not be extracted)
+		// the returned LogLine is invalid and not appended
 		std::tr1::shared_ptr<LogLine> l = LogLine::logLineFromString(input.readLine());
 		if (l->isValid())
 		{
