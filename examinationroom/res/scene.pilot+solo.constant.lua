@@ -16,7 +16,7 @@ nextFrame = function ()
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "l"),
 --		string.format(texbases[texIndexes[testNum]], replies[testNum], "r"));
 --	// Uncomment the following for a Random Dot version
-	local texture = Texture("RandomDot", shapes[math.random(1, #shapes)]);
+	local texture = RandomDot(shapes[math.random(1, #shapes)]);
 	local maxColor = 8;
 	texture:setMaxColor(maxColor);
 	texture:setExclusiveColor(1);
