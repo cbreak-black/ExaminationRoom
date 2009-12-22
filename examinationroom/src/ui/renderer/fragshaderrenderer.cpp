@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include <QGLFramebufferObject>
 
@@ -35,7 +35,7 @@ FragShaderRenderer::FragShaderRenderer(std::tr1::shared_ptr<Scene> scene, QStrin
 
 	texL_ = NULL;
 	texR_ = NULL;
-	ErrorTool::getErrors("FragShaderRenderer::FragShaderRenderer");
+	GlErrorTool::getErrors("FragShaderRenderer::FragShaderRenderer");
 }
 
 FragShaderRenderer::~FragShaderRenderer()
@@ -58,7 +58,7 @@ void FragShaderRenderer::createFBO(QSize s)
 		texR_ = new QGLFramebufferObject(s, QGLFramebufferObject::CombinedDepthStencil);
 		texSize_ = s;
 	}
-	ErrorTool::getErrors("FragShaderRenderer::createFBO");
+	GlErrorTool::getErrors("FragShaderRenderer::createFBO");
 }
 
 void FragShaderRenderer::renderFBO(GLWidget * w, QGLFramebufferObject * tex)
@@ -70,7 +70,7 @@ void FragShaderRenderer::renderFBO(GLWidget * w, QGLFramebufferObject * tex)
 		scene()->draw(w);
 		tex->release();
 	}
-	ErrorTool::getErrors("FragShaderRenderer::renderFBO");
+	GlErrorTool::getErrors("FragShaderRenderer::renderFBO");
 }
 
 void FragShaderRenderer::renderScene(GLWidget * w)
@@ -124,7 +124,7 @@ void FragShaderRenderer::renderScene(GLWidget * w)
 	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	ErrorTool::getErrors("FragShaderRenderer::renderScene");
+	GlErrorTool::getErrors("FragShaderRenderer::renderScene");
 }
 
 void FragShaderRenderer::drawFB(QGLFramebufferObject * tex)
@@ -144,7 +144,7 @@ void FragShaderRenderer::drawFB(QGLFramebufferObject * tex)
 	glVertex2f(0.0f, 1.0f);
 	glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	ErrorTool::getErrors("FragShaderRenderer::drawFB");
+	GlErrorTool::getErrors("FragShaderRenderer::drawFB");
 }
 
 

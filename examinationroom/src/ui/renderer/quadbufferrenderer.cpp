@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -39,7 +39,7 @@ void QuadbufferRenderer::renderScene(GLWidget * w)
 
 	glDrawBuffer(GL_BACK_LEFT);
 
-	ErrorTool::getErrors("QuadbufferRenderer::renderScene");
+	GlErrorTool::getErrors("QuadbufferRenderer::renderScene");
 }
 
 }

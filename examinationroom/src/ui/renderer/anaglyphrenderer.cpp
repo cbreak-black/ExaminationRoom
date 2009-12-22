@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -41,7 +41,7 @@ void AnaglyphRenderer::renderScene(GLWidget * w)
 
 	glColorMask(1, 1, 1, 1);
 
-	ErrorTool::getErrors("AnaglyphRenderer::renderScene");
+	GlErrorTool::getErrors("AnaglyphRenderer::renderScene");
 }
 
 }

@@ -12,7 +12,7 @@
 #include "scene.h"
 #include "objects/object.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "luabridge.hpp"
 #include "luahelper.h"
@@ -221,13 +221,13 @@ void Container::draw(GLWidget * dest) const
 {
 	if (shown())
 	{
-		ErrorTool::getErrors("Container::draw:1", name());
+		GlErrorTool::getErrors("Container::draw:1", name());
 		std::list<shared_ptr<Object> >::const_iterator i = objects_.begin();
 		for (; i != objects_.end(); i++)
 		{
 			(*i)->draw(dest);
 		}
-		ErrorTool::getErrors("Container::draw:2", name());
+		GlErrorTool::getErrors("Container::draw:2", name());
 	}
 }
 

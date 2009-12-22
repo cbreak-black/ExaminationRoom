@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -43,7 +43,7 @@ void LineInterlaceRenderer::renderScene(GLWidget * w)
 
 	glDisable(GL_STENCIL_TEST);
 
-	ErrorTool::getErrors("LineInterlaceRenderer::renderScene");
+	GlErrorTool::getErrors("LineInterlaceRenderer::renderScene");
 }
 
 static const GLubyte stipplePattern[] = {

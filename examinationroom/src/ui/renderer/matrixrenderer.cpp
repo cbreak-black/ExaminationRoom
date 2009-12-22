@@ -13,7 +13,7 @@
 #include "camera.h"
 #include "glwidget.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 namespace Examination
 {
@@ -80,7 +80,7 @@ void MatrixRenderer::renderScene(GLWidget * w)
 	glLoadIdentity();
 	glMatrixMode(GL_MODELVIEW);
 
-	ErrorTool::getErrors("MatrixRenderer::renderScene");
+	GlErrorTool::getErrors("MatrixRenderer::renderScene");
 }
 
 }

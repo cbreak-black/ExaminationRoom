@@ -18,7 +18,7 @@
 
 #include "parameter/parameterpixelplane.h"
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "luabridge.hpp"
 #include "luahelper.h"
@@ -45,7 +45,7 @@ void Pixelplane::draw(GLWidget * dest) const
 {
 	if (shown() && texture())
 	{
-		ErrorTool::getErrors("Pixelplane::draw:1", name());
+		GlErrorTool::getErrors("Pixelplane::draw:1", name());
 		if (autoResize())
 		{
 			resizeToCurrent();
@@ -53,7 +53,7 @@ void Pixelplane::draw(GLWidget * dest) const
 		Point p = position();
 		glRasterPos3f(p.x, p.y, p.z);
 		texture()->draw(dest);
-		ErrorTool::getErrors("Pixelplane::draw:2", name());
+		GlErrorTool::getErrors("Pixelplane::draw:2", name());
 	}
 }
 

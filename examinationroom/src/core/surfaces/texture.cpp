@@ -11,7 +11,7 @@
 
 #include <qgl.h>
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "platform_math.h"
 
@@ -54,7 +54,7 @@ Texture::~Texture()
 {
 	glDeleteTextures(1, &imageGLID_);
 	// Delete associated GL Textures
-	ErrorTool::getErrors("Texture::~Texture");
+	GlErrorTool::getErrors("Texture::~Texture");
 }
 
 std::tr1::shared_ptr<AbstractTexture> Texture::clone() const
@@ -64,7 +64,7 @@ std::tr1::shared_ptr<AbstractTexture> Texture::clone() const
 
 void Texture::loadPixelMap(QImage image)
 {
-	ErrorTool::getErrors("Texture::loadPixelMap:1");
+	GlErrorTool::getErrors("Texture::loadPixelMap:1");
 	int nc = image.numColors();
 	if (nc > 0)
 	{
@@ -97,7 +97,7 @@ void Texture::loadPixelMap(QImage image)
 		delete [] mapB;
 		delete [] mapA;
 	}
-	ErrorTool::getErrors("Texture::loadPixelMap:2");
+	GlErrorTool::getErrors("Texture::loadPixelMap:2");
 }
 
 QImage Texture::transformColorSpace(QImage image)
@@ -148,7 +148,7 @@ If it is already loaded into memory, just bind the texture.
 */
 void Texture::glBindTex(GLWidget * /* w */)
 {
-	ErrorTool::getErrors("Texture::glBindTex:1");
+	GlErrorTool::getErrors("Texture::glBindTex:1");
 	if (imageGLID_ == 0)
 	{
 		glGenTextures(1, &imageGLID_);
@@ -158,21 +158,21 @@ void Texture::glBindTex(GLWidget * /* w */)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterTypeGL());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterTypeGL());
 
-		ErrorTool::getErrors("Texture::glBindTex:2");
+		GlErrorTool::getErrors("Texture::glBindTex:2");
 		if (image_.format() == QImage::Format_Indexed8)
 		{
 			loadPixelMap(image_);
 			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, image_.width(), image_.height(), 0, GL_COLOR_INDEX,
 						 GL_UNSIGNED_BYTE, t);
-			ErrorTool::getErrors("Texture::glBindTex:3");
+			GlErrorTool::getErrors("Texture::glBindTex:3");
 		}
 		else
 		{
 			GLubyte * t =  image_.bits();
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image_.width(), image_.height(), 0, GL_RGBA,
 						 GL_UNSIGNED_BYTE, t);
-			ErrorTool::getErrors("Texture::glBindTex:4");
+			GlErrorTool::getErrors("Texture::glBindTex:4");
 		}
 	}
 	else
@@ -181,12 +181,12 @@ void Texture::glBindTex(GLWidget * /* w */)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterTypeGL());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterTypeGL());
 	}
-	ErrorTool::getErrors("Texture::glBindTex:5");
+	GlErrorTool::getErrors("Texture::glBindTex:5");
 }
 
 void Texture::draw(GLWidget * /* w */)
 {
-	ErrorTool::getErrors("Texture::draw:1");
+	GlErrorTool::getErrors("Texture::draw:1");
 	GLubyte * t;
 	Tool::Vec2f z;
 	if (image_.format() == QImage::Format_Indexed8)
@@ -197,7 +197,7 @@ void Texture::draw(GLWidget * /* w */)
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_COLOR_INDEX, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
-		ErrorTool::getErrors("Texture::draw:2");
+		GlErrorTool::getErrors("Texture::draw:2");
 	}
 	else
 	{
@@ -206,7 +206,7 @@ void Texture::draw(GLWidget * /* w */)
 		glPixelZoom(z.x,z.y);
 		glDrawPixels(image_.width(), image_.height(), GL_RGBA, GL_UNSIGNED_BYTE, t);
 		glPixelZoom(1.0f,1.0f);
-		ErrorTool::getErrors("Texture::draw:3");
+		GlErrorTool::getErrors("Texture::draw:3");
 	}
 }
 

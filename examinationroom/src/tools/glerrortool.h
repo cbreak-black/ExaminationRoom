@@ -1,5 +1,5 @@
 /*
- *  errortool.h
+ *  glerrortool.h
  *  ExaminationRoom
  *
  *  Created by cbreak on 01.12.09.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef ERRORTOOL_H
-#define ERRORTOOL_H
+#ifndef GLERRORTOOL_H
+#define GLERRORTOOL_H
 
 #include <string>
 
@@ -18,7 +18,7 @@ namespace Examination
 /**
 Static class that handles various error related activities
 */
-class ErrorTool
+class GlErrorTool
 {
 public:
 	/**
@@ -27,14 +27,12 @@ public:
 	 \param oName	String containing a current object identifier
 	 \return		Number of errors reported
 	*/
-	static unsigned int getErrors(std::string fName, std::string oName = std::string());
+	static unsigned int getErrors(const std::string & fName, const std::string & oName = std::string());
 
 	/**
-	Writes the passed error to stderr
-	 \param fName	String containing the current function name/place
-	 \param error	Error string
+	Gets the OpenGL Version data strings and writes them to the log
 	*/
-	static void logError(std::string fName, std::string error);
+	static void logVersionStrings();
 };
 
 }

@@ -13,7 +13,7 @@
 
 #include <qgl.h>
 
-#include "errortool.h"
+#include "glerrortool.h"
 
 #include "platform_math.h"
 
@@ -212,10 +212,10 @@ void AffineTransformation::draw(GLWidget * dest) const
 			glPushMatrix();
 			glTranslatef(p.x, p.y, p.z);
 			glMultMatrixd(trans_);
-			ErrorTool::getErrors("AffineTransformation::draw:1", name());
+			GlErrorTool::getErrors("AffineTransformation::draw:1", name());
 			Container::draw(dest);
 			glPopMatrix();
-			ErrorTool::getErrors("AffineTransformation::draw:2", name());
+			GlErrorTool::getErrors("AffineTransformation::draw:2", name());
 		}
 	}
 }

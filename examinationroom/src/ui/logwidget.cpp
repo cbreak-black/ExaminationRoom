@@ -44,18 +44,6 @@ LogWidget::~LogWidget()
 }
 
 // Accessors
-std::tr1::shared_ptr<Program> LogWidget::program() const
-{
-	return program_.lock();
-}
-
-void LogWidget::setProgram(std::tr1::shared_ptr<Program> program)
-{
-	program_ = program;
-	program->setCallbackLog(std::tr1::bind(&LogWidget::writeLog, this, _1));
-	program->setCallbackError(std::tr1::bind(&LogWidget::writeError, this, _1));
-}
-
 void LogWidget::writeLog(const std::string & msg)
 {
 	logView_->textCursor().insertText(QString::fromStdString(msg), *logFormat_);
