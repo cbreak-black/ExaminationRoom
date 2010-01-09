@@ -53,7 +53,7 @@ SOURCES += src/parser/obj/*.cpp
 
 # LUA
 HEADERS += src/lua/src/*.h src/lua/lua.hpp
-SOURCES += src/lua/src/*.c
+SOURCES += src/lua/src/*.cpp
 
 # LUABIND
 HEADERS += \
