@@ -84,6 +84,11 @@ void LogTool::initLogFile()
 	logOutStream_.open(t.toString(logFileFormatString).toAscii());
 }
 
+void LogTool::closeLogFile()
+{
+	logOutStream_.close();
+}
+
 LogWidget * LogTool::logWidget()
 {
 	return logWidget_;

@@ -181,6 +181,7 @@ void GLWidget::paintGL()
 void GLWidget::resizeGL(int width, int height)
 {
 	glViewport(0, 0, width, height);
+	LogTool::logMessage("GLWidget::resizeGL", (QString::number(width)+"x"+QString::number(height)).toStdString());
 	GlErrorTool::getErrors("GLWidget::resizeGL");
 }
 

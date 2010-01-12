@@ -58,6 +58,12 @@ public: // Setup
 	*/
 	static void initLogFile();
 
+	/**
+	Closes the log file, flushing all state. Logging will be done only to the log widget or
+	the standard output.
+	*/
+	static void closeLogFile();
+
 private:
 	static std::string formatStringFile(const std::string & tName, const std::string & fName, const std::string & message);
 	static std::string formatStringOut(const std::string & tName, const std::string & fName, const std::string & message);
