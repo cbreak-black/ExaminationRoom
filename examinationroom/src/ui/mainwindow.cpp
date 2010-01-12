@@ -192,6 +192,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
 	LogTool::setLogWidget(NULL);
+	LogTool::closeLogFile();
 	// All child widgets are deallocated by QT
 	delete fsGlWidget_;
 }
