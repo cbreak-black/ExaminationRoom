@@ -61,7 +61,7 @@ void Pattern::setFieldNames(const QString & fieldNames)
 
 bool Pattern::match(const QString & string)
 {
-	if (regExp_.exactMatch(string))
+	if (regExp_.indexIn(string) != -1)
 	{
 		matched_++;
 		fieldContents_.clear();
