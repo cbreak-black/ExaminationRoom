@@ -187,7 +187,7 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
 {
 	if (event->key() == Qt::Key_Escape)
 	{
-		QCoreApplication::quit();
+		toggleFullscreen();
 	}
 	else
 	{

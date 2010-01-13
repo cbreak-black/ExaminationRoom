@@ -39,7 +39,9 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 	GlErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
-	this->setCursor(Qt::CrossCursor);
+	// Maybe useful when MouseInput is available
+//	this->setCursor(Qt::CrossCursor);
+	this->setCursor(Qt::BlankCursor);
 	GlErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
