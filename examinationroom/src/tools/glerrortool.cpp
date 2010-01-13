@@ -57,9 +57,6 @@ void GlErrorTool::logVersionStrings()
 	s = reinterpret_cast<const char*>(glGetString(GL_VERSION));
 	if (s)
 		LogTool::logMessage("OpenGL", std::string("GL_VERSION: ")+s);
-	s = reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION));
-	if (s)
-		LogTool::logMessage("OpenGL", std::string("GL_SHADING_LANGUAGE_VERSION: ")+s);
 //	s = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 //	if (s)
 //		LogTool::logMessage("OpenGL", std::string("GL_EXTENSIONS: ")+s);
