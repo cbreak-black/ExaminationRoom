@@ -56,6 +56,27 @@ MainWindow::MainWindow()
 	LogTool::initLogFile();
 	LogTool::setLogWidget(dockLog_);
 
+	// File dialogs
+#ifdef Q_WS_MACX
+	Qt::WindowFlags dialogFlags = Qt::Sheet;
+	QString defaultPath = QString("res/");
+#else
+	Qt::WindowFlags dialogFlags = Qt::Dialog;
+	QString defaultPath = QString("res/");
+#endif
+	loadDialog_ = new QFileDialog(this, dialogFlags);
+	loadDialog_->setFilter("Lua Scene File (*.lua)");
+	loadDialog_->setWindowTitle("Open Lua Scene...");
+	loadDialog_->setDirectory(defaultPath);
+	storeDialog_ = new QFileDialog(this, dialogFlags);
+	storeDialog_->setAcceptMode(QFileDialog::AcceptSave);
+	storeDialog_->setFilter("Lua Scene File (*.lua)");
+	storeDialog_->setWindowTitle("Save Lua Scene...");
+	storeDialog_->setDirectory(defaultPath);
+	storeDialog_->setDefaultSuffix("lua");
+	connect(loadDialog_, SIGNAL(fileSelected(const QString &)), this, SLOT(loadLuaFile(const QString &)));
+	connect(storeDialog_, SIGNAL(fileSelected(const QString &)), this, SLOT(storeLuaFile(const QString &)));
+
 	// Create GL Widgets
 	QGLFormat glFormat = QGLFormat::defaultFormat();
 	// Stereo Buffering seems to work in SnowLeopard...
@@ -83,13 +104,13 @@ MainWindow::MainWindow()
 	menu->addAction(tr("&About Examinationroom..."),
 					this, SLOT(showAbout()));
 	menu->addAction(tr("&Open Scene..."),
-					this, SLOT(loadLuaFile()),
+					loadDialog_, SLOT(open()),
 					QKeySequence(QKeySequence::Open));
 	menu->addAction(tr("Close Scene"),
 					this, SLOT(newScene()),
 					QKeySequence(QKeySequence::Close));
 	menu->addAction(tr("&Save Copy As..."),
-					this, SLOT(storeLuaFile()),
+					storeDialog_, SLOT(open()),
 					QKeySequence(QKeySequence::Save));
 	menu->addAction(tr("&Revert Scene"),
 					this, SLOT(revert()));
@@ -217,12 +238,8 @@ void MainWindow::onUpdate()
 		mainGlWidget_->update(); // update() for deferred updates
 }
 
-void MainWindow::loadLuaFile()
+void MainWindow::loadLuaFile(const QString & fileName)
 {
-	// Set up lua engine and bindings
-	QString fileName = QFileDialog::getOpenFileName(this, "Open LUA File",
-													"res/scene.lua",
-													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
 		setProgram(Program::create());
@@ -230,11 +247,8 @@ void MainWindow::loadLuaFile()
 	}
 }
 
-void MainWindow::storeLuaFile()
+void MainWindow::storeLuaFile(const QString & fileName)
 {
-	QString fileName = QFileDialog::getSaveFileName(this, "Save LUA File",
-													"res/",
-													"Lua Scene File (*.lua)");
 	if (!fileName.isNull())
 	{
 		std::ofstream of;
