@@ -91,6 +91,7 @@ MainWindow::MainWindow()
 	//ErrorTool::getErrors("MainWindow::MainWindow:1");
 	mainGlWidget_ = new GLWidget(this);
 	fsGlWidget_ = new GLWidget(0, mainGlWidget_);
+	fsGlWidget_->setCursor(Qt::BlankCursor);
 	mainGlWidget_->setStyle(GLWidget::single);
 	fsGlWidget_->setStyle(GLWidget::single);
 	mainGlWidget_->makeCurrent();
@@ -204,26 +205,6 @@ MainWindow::~MainWindow()
 	delete fsGlWidget_;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent * event)
-{
-	if (event->key() == Qt::Key_Escape)
-	{
-		toggleFullscreen();
-	}
-	else
-	{
-		program_->onKeyDown(event->key());
-		mainGlWidget_->update(); // update() for deferred updates
-		fsGlWidget_->update();
-	}
-}
-
-void MainWindow::keyReleaseEvent(QKeyEvent * event)
-{
-	program_->onKeyUp(event->key());
-	onUpdate();
-}
-
 void MainWindow::onTimeout()
 {
 	program_->onUpdate();
@@ -277,8 +258,10 @@ void MainWindow::toggleFullscreen()
 	if (fullScreen_)
 	{
 		fullScreen_ = false;
+		fsGlWidget_->showNormal();
 		fsGlWidget_->hide();
 		releaseKeyboard();
+		mainGlWidget_->makeCurrent();
 //		mainGlWidget_->show();
 	}
 	else
@@ -286,6 +269,7 @@ void MainWindow::toggleFullscreen()
 		fullScreen_ = true;
 		grabKeyboard();
 //		mainGlWidget_->hide();
+		fsGlWidget_->makeCurrent();
 		fsGlWidget_->showFullScreen();
 		int numScreens = QApplication::desktop()->numScreens();
 		if (numScreens >= 2)
@@ -306,8 +290,8 @@ void MainWindow::newScene()
 void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 {
 	program_ = program;
-	mainGlWidget_->setScene(program_->scene());
-	fsGlWidget_->setScene(program_->scene());
+	mainGlWidget_->setProgram(program_);
+	fsGlWidget_->setProgram(program_);
 	dockDesign_->setProgram(program);
 	dockCode_->setProgram(program);
 	// Recreate menu
