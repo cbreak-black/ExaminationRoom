@@ -79,7 +79,7 @@ std::string NameManager::sanitizeName(const std::string & name)
 	{
 		return "EmptyString";
 	}
-	unsigned int pos = saneName.find_last_not_of(saneCharacters);
+	size_t pos = saneName.find_last_not_of(saneCharacters);
 	while (pos != std::string::npos)
 	{
 		saneName[pos] = '_';

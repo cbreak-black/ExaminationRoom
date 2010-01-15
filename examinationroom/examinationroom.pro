@@ -16,7 +16,7 @@ QT           += opengl
 RESOURCES = src/shaders/shaders.qrc
 
 QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
-CONFIG+=x86 ppc
+CONFIG+=x86_64
 
 # Core
 SOURCES += src/main.cpp
