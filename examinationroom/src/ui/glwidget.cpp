@@ -14,6 +14,7 @@
 
 #include "glwidget.h"
 
+#include "program.h"
 #include "scene.h"
 #include "camera.h"
 
@@ -40,9 +41,7 @@ GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
 	GlErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
-	// Maybe useful when MouseInput is available
-//	this->setCursor(Qt::CrossCursor);
-	this->setCursor(Qt::BlankCursor);
+	setFocusPolicy(Qt::StrongFocus);
 	GlErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
@@ -52,7 +51,7 @@ GLWidget::GLWidget(const QGLFormat & format, QWidget *parent, QGLWidget *shareWi
 	GlErrorTool::getErrors("GLWidget::GLWidget:1");
 	setSide(left);
 	setStyle(single);
-	this->setCursor(Qt::BlankCursor);
+	setFocusPolicy(Qt::StrongFocus);
 	GlErrorTool::getErrors("GLWidget::GLWidget:2");
 }
 
@@ -71,17 +70,17 @@ QSize GLWidget::sizeHint() const
     return QSize(800, 600);
 }
 
-std::tr1::shared_ptr<Scene> GLWidget::scene()
+std::tr1::shared_ptr<Program> GLWidget::program()
 {
-	return scene_;
+	return program_;
 }
 
-void GLWidget::setScene(std::tr1::shared_ptr<Scene> s)
+void GLWidget::setProgram(std::tr1::shared_ptr<Program> p)
 {
-	GlErrorTool::getErrors("GLWidget::setScene:1");
-	scene_ = s;
-	renderer_->setScene(s);
-	GlErrorTool::getErrors("GLWidget::setScene:2");
+	GlErrorTool::getErrors("GLWidget::setProgram:1");
+	program_ = p;
+	renderer_->setScene(program_->scene());
+	GlErrorTool::getErrors("GLWidget::setProgram:2");
 }
 
 GLWidget::Side GLWidget::side()
@@ -102,13 +101,19 @@ GLWidget::DrawStyle GLWidget::style()
 void GLWidget::setStyle(DrawStyle s)
 {
 	GlErrorTool::getErrors("GLWidget::setStyle:1");
+	std::tr1::shared_ptr<Scene> scene = std::tr1::shared_ptr<Scene>();
+	if (program_)
+	{
+		// If we have a program, take it's scene
+		scene = program_->scene();
+	}
 	switch (s)
 	{
 		case single:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new SingleRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new SingleRenderer(scene));
 			break;
 		case anaglyph:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new AnaglyphRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new AnaglyphRenderer(scene));
 			break;
 		case matrix:
 			GLint auxNum;
@@ -119,10 +124,10 @@ void GLWidget::setStyle(DrawStyle s)
 								  "Not enough aux buffers support found. Matrix stereo not enabled");
 				return;
 			}
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new MatrixRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new MatrixRenderer(scene));
 			break;
 		case sidebyside:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new SideBySideRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new SideBySideRenderer(scene));
 			break;
 		case quad:
 			if (!format().stereo())
@@ -131,16 +136,16 @@ void GLWidget::setStyle(DrawStyle s)
 								  "No Stereo support found. Quad Buffer not enabled");
 				return;
 			}
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new QuadbufferRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new QuadbufferRenderer(scene));
 			break;
 		case line:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new LineInterlaceRenderer(scene_));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new LineInterlaceRenderer(scene));
 			break;
 		case shaderLine:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_, ":/interlace.fs"));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene, ":/interlace.fs"));
 			break;
 		case shaderMayan:
-			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene_, ":/mayan.fs"));
+			renderer_ = std::tr1::shared_ptr<AbstractRenderer>(new FragShaderRenderer(scene, ":/mayan.fs"));
 			break;
 	}
 	style_ = s;
@@ -176,9 +181,9 @@ void GLWidget::initializeGL()
 void GLWidget::paintGL()
 {
 	// Scene
-	if (scene_)
+	if (program_)
 	{
-		Tool::Vec4f c = scene_->backgroundColor();
+		Tool::Vec4f c = program_->scene()->backgroundColor();
 		glClearColor(c.r, c.g, c.b, c.a);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -192,6 +197,24 @@ void GLWidget::resizeGL(int width, int height)
 	glViewport(0, 0, width, height);
 	LogTool::logMessage("GLWidget::resizeGL", (QString::number(width)+"x"+QString::number(height)).toStdString());
 	GlErrorTool::getErrors("GLWidget::resizeGL");
+}
+
+void GLWidget::keyPressEvent(QKeyEvent * event)
+{
+	if (program_)
+	{
+		program_->onKeyDown(event->key());
+		update();
+	}
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent * event)
+{
+	if (program_)
+	{
+		program_->onKeyUp(event->key());
+		update();
+	}
 }
 
 }
