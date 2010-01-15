@@ -18,6 +18,7 @@ class QMenu;
 class QSignalMapper;
 class QDockWidget;
 class QTimer;
+class QFileDialog;
 
 namespace Examination
 {
@@ -55,10 +56,9 @@ protected:
 
 public slots:
 	/**
-	Opens a file open dialog and loads the selected file as lua script with a new
-	environment.
+	Loads the passed file.
 	*/
-	void loadLuaFile();
+	void loadLuaFile(const QString & fileName);
 
 	/**
 	Closes the current scene and creates a new one in it's place
@@ -66,10 +66,9 @@ public slots:
 	void newScene();
 
 	/**
-	Opens a file save dialog and stores sthe current scene as the selected file
-	as lua script. If the original was loades from a file, information WILL be lost.
+	Stores the current scene in the file with the passed name.
 	*/
-	void storeLuaFile();
+	void storeLuaFile(const QString & fileName);
 
 	/**
 	Reverts the current scene to the last saved state.
@@ -110,6 +109,9 @@ private:
 	CodeWidget * dockCode_;
 	LogWidget * dockLog_;
 	AboutWindow * aboutWindow_;
+
+	QFileDialog * loadDialog_;
+	QFileDialog * storeDialog_;
 
 	std::tr1::shared_ptr<Program> program_;
 };
