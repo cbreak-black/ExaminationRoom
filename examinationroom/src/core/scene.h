@@ -80,6 +80,13 @@ public: // BG Color
 	*/
 	Tool::Color4 backgroundColor() const;
 
+public:
+	/**
+	Draws the contained objects in the scene
+	 \param dest	The destination widget
+	*/
+	virtual void draw(GLWidget * dest) const;
+
 public: // Serialisation
 	/**
 	Returns the name of the class of this object. This can be used in LUA

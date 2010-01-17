@@ -75,12 +75,18 @@ public:
 	Loads the camera with that offset into the OpenGL matrix stack.
 	 \param offsetCamera the distance by which the camera is offset
 	 */
-	void loadMatrix(float offsetCamera);
+	void loadMatrix(float offsetCamera = 0.0f);
 
 	/**
 	Loads the camera and prepares the screen projection objects for both sides.
 	*/
 	void preLoadMatrix();
+
+	/**
+	Unloads the projection and modelview matrix.
+	 \return	True if the matrix stack was restored, false otherwise
+	*/
+	bool unloadMatrix();
 
 public:
 	/**

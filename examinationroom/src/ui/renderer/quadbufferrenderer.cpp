@@ -28,13 +28,11 @@ void QuadbufferRenderer::renderScene(GLWidget * w)
 	// This requires stereo buffering to be enabled in the OpenGL context
 
 	w->setSide(GLWidget::left);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glDrawBuffer(GL_BACK_RIGHT);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	w->setSide(GLWidget::right);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glDrawBuffer(GL_BACK_LEFT);

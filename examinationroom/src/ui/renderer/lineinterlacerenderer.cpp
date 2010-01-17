@@ -31,14 +31,12 @@ void LineInterlaceRenderer::renderScene(GLWidget * w)
 	glStencilFunc(GL_NOTEQUAL, 0x01, 0x01);
 
 	w->setSide(GLWidget::left);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glStencilFunc(GL_EQUAL, 0x01, 0x01);
 
 	w->setSide(GLWidget::right);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glDisable(GL_STENCIL_TEST);
