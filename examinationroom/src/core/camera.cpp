@@ -23,6 +23,10 @@ namespace Examination
 const float nearFactor = 0.1f;
 const float farFactor = 5.0f;
 
+// TODO:
+// - Camera Stack that handles pushing and poping
+Camera * Camera::activeCamera_ = NULL;
+
 Camera::Camera()
 {
 	spL_ = new ScreenProject();
@@ -75,6 +79,11 @@ Camera::~Camera()
 {
 	delete spL_;
 	delete spR_;
+}
+
+Camera * Camera::activeCamera()
+{
+	return activeCamera_;
 }
 
 void Camera::loadMatrix(GLWidget * dest)
@@ -198,6 +207,7 @@ void Camera::loadMatrix(float offsetCamera)
 		glLoadIdentity();
 		GlErrorTool::getErrors("Camera::loadMatrix:4");
 	}
+	activeCamera_ = this;
 }
 
 bool Camera::unloadMatrix()
