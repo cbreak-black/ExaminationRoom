@@ -30,6 +30,12 @@ union Vec2
 		T y;
 	};
 
+	struct
+	{
+		T w;
+		T h;
+	};
+
 	T vec[dim];
 
 	Vec2() {x = y = 0; };

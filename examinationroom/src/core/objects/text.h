@@ -14,6 +14,8 @@
 
 #include <QFont>
 
+class QGLFramebufferObject;
+
 namespace Examination
 {
 
@@ -31,6 +33,18 @@ public: // Construction
 	 \see Object::Create()
 	*/
 	Text();
+
+	/**
+	Creates a clone of a text object.
+	 \param t	Text object to clone
+	 \warning Don't create instances of this class directly, use Object::Create()
+	*/
+	Text(const Text & t);
+
+	/**
+	Destructor.
+	*/
+	~Text();
 
 public: // Cloning
 	/**
@@ -68,6 +82,18 @@ public:
 	*/
 	void setText(const char * c);
 
+	/**
+	Returns the maximal dimension of this string on screen in pixel.
+	 \return the maximal size of this text in pixel
+	*/
+	Tool::Vec2f dimensions() const;
+
+	/**
+	Sets the maximal dimension of the string on screen in pixel.
+	 \param b	The Bounding box
+	*/
+	void setDimensions(const Tool::Vec2f & d);
+
 public: // Serialisation
 	/**
 	Returns the name of the class of this object. This can be used in LUA
@@ -88,9 +114,19 @@ public: // LUA API
 protected: // Parameter Dialog
 	virtual std::tr1::shared_ptr<ParameterObject> createDialog();
 
+private: // Caching
+	void updateRenderedString() const;
+	void drawRenderedString() const;
+
 private:
 	std::string text_;
 	QFont font_;
+	Tool::Vec2f dimensions_;
+
+	// Caching/Rendering
+	mutable Tool::Vec2f renderedDimensions_;
+	mutable bool renderedStringValid_;
+	mutable QGLFramebufferObject * renderedString_;
 
 public: // Meta
 	static const char * className_;

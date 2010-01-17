@@ -66,6 +66,12 @@ public:
 
 public:
 	/**
+	Returns the last camera who's matrix was loaded.
+	*/
+	static Camera * activeCamera();
+
+public:
+	/**
 	Loads the camera for the side of the view into the OpenGL matrix stack.
 	 \param dest	Destination view, used to determine left or right
 	*/
@@ -245,6 +251,8 @@ private:
 	Tool::ScreenProject *	spL_;
 	Tool::ScreenProject *	spR_;
 	Camera::Type	type_;
+
+	static Camera * activeCamera_;
 };
 
 typedef std::tr1::shared_ptr<Camera> CameraPtr;
