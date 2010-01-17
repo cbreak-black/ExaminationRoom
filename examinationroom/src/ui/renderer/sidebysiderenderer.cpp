@@ -29,12 +29,10 @@ void SideBySideRenderer::renderScene(GLWidget * w)
 
 	w->setSide(GLWidget::left);
 	glViewport(0,0, s.width()/2, s.height());
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	w->setSide(GLWidget::right);
 	glViewport(s.width()/2,0, s.width()/2, s.height());
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glViewport(0,0, s.width(), s.height());

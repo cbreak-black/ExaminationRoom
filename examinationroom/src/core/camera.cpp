@@ -114,9 +114,11 @@ void Camera::loadMatrix(float offsetCamera)
 		glMatrixMode(GL_PROJECTION);
 		// Projection matrix is a frustum, of which fLeft and fRight are not symetric
 		// to set the zero paralax plane. The cameras are parallel.
+		glPushMatrix();
 		glLoadIdentity();
 		glFrustum(fLeft+offsetCamera, fRight+offsetCamera, fBottom, fTop, fNear, fFar);
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		glLoadIdentity();
 		// Rotation of camera and adjusting eye position
 		Vector sepVec = cross(dir_, up_); // sepVec is normalized because dir and up are normalized
@@ -144,6 +146,7 @@ void Camera::loadMatrix(float offsetCamera)
 		fRight = fTop*aspect;
 
 		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
 		glLoadIdentity();
 		// http://wireframe.doublemv.com/2006/08/11/projections-and-opengl/
 		// Note: The code there is wrong, see below for correct code
@@ -158,6 +161,7 @@ void Camera::loadMatrix(float offsetCamera)
 		glMultMatrixf(shearMatrix);
 		glOrtho(fLeft, fRight, fBottom, fTop, fNear, fFar);
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		glLoadIdentity();
 		// Rotation of camera
 		// Note: The position of both left and right camera is at the same place
@@ -179,6 +183,7 @@ void Camera::loadMatrix(float offsetCamera)
 		const float fTop = viewport[3]/2;
 		const float fBottom = -fTop;
 		glMatrixMode(GL_PROJECTION);
+		glPushMatrix();
 		glLoadIdentity();
 		const float shearMatrix[] = {
 			1, 0, 0, 0,
@@ -189,9 +194,21 @@ void Camera::loadMatrix(float offsetCamera)
 		glMultMatrixf(shearMatrix);
 		glOrtho(fLeft,fRight,fBottom,fTop, fTop, fBottom);
 		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
 		glLoadIdentity();
 		GlErrorTool::getErrors("Camera::loadMatrix:4");
 	}
+}
+
+bool Camera::unloadMatrix()
+{
+	GlErrorTool::getErrors("Camera::unloadCamera:1");
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	GlErrorTool::getErrors("Camera::unloadCamera:2");
+	return true;
 }
 
 void Camera::preLoadMatrix()
@@ -200,18 +217,12 @@ void Camera::preLoadMatrix()
 	// Hopefully an old context is still active
 	// (Since contexts are never deactivated without making an other active,
 	// it should work)
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
 	loadMatrix(sep_/2);
 	spL_->calculateMVP();
+	unloadMatrix();
 	loadMatrix(-sep_/2);
 	spR_->calculateMVP();
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+	unloadMatrix();
 	GlErrorTool::getErrors("Camera::preLoadMatrix:2");
 }
 

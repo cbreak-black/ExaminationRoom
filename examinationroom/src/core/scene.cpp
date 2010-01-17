@@ -72,6 +72,14 @@ Tool::Color4 Scene::backgroundColor() const
 	return color();
 }
 
+// Drawing
+void Scene::draw(GLWidget * dest) const
+{
+	camera()->loadMatrix(dest);
+	Container::draw(dest);
+	camera()->unloadMatrix();
+}
+
 // Serialisation
 std::string Scene::className() const
 {

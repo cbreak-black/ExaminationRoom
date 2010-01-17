@@ -28,7 +28,6 @@ void AnaglyphRenderer::renderScene(GLWidget * w)
 	w->setSide(GLWidget::left);
 	//glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 	glColorMask(1, 0, 0, 1);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -36,7 +35,6 @@ void AnaglyphRenderer::renderScene(GLWidget * w)
 	w->setSide(GLWidget::right);
 	//glColor4f(0.0f, 1.0f, 1.0f, 0.5f);
 	glColorMask(0, 1, 1, 1);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	glColorMask(1, 1, 1, 1);

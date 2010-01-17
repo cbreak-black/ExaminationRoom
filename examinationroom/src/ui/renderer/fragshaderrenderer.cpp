@@ -66,7 +66,6 @@ void FragShaderRenderer::renderFBO(GLWidget * w, QGLFramebufferObject * tex)
 	if (tex->bind())
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		scene()->camera()->loadMatrix(w);
 		scene()->draw(w);
 		tex->release();
 	}

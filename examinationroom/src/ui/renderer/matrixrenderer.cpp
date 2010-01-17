@@ -46,14 +46,12 @@ void MatrixRenderer::renderScene(GLWidget * w)
 
 	// Draw left
 	w->setSide(GLWidget::left);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	// Prepare for drawing into the right aux buffer
 	glDrawBuffer(GL_AUX1);
 	// Draw right
 	w->setSide(GLWidget::right);
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 
 	// Write composite into the back buffer

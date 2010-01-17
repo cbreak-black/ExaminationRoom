@@ -25,7 +25,6 @@ SingleRenderer::SingleRenderer(std::tr1::shared_ptr<Scene> scene)
 
 void SingleRenderer::renderScene(GLWidget * w)
 {
-	scene()->camera()->loadMatrix(w);
 	scene()->draw(w);
 	GlErrorTool::getErrors("SingleRenderer::renderScene");
 }
