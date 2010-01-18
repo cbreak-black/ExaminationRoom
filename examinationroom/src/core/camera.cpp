@@ -13,6 +13,7 @@
 #include "platform_math.h"
 #include "float.h"
 
+#include "logtool.h"
 #include "glerrortool.h"
 
 using namespace Tool;
@@ -23,9 +24,8 @@ namespace Examination
 const float nearFactor = 0.1f;
 const float farFactor = 5.0f;
 
-// TODO:
-// - Camera Stack that handles pushing and poping
-Camera * Camera::activeCamera_ = NULL;
+// Camera Stack that handles pushing and poping
+std::stack<Camera *> Camera::activeCamera_;
 
 Camera::Camera()
 {
@@ -83,7 +83,7 @@ Camera::~Camera()
 
 Camera * Camera::activeCamera()
 {
-	return activeCamera_;
+	return activeCamera_.top();
 }
 
 void Camera::loadMatrix(GLWidget * dest)
@@ -207,12 +207,20 @@ void Camera::loadMatrix(float offsetCamera)
 		glLoadIdentity();
 		GlErrorTool::getErrors("Camera::loadMatrix:4");
 	}
-	activeCamera_ = this;
+	activeCamera_.push(this);
 }
 
 bool Camera::unloadMatrix()
 {
+	if (activeCamera_.empty() || activeCamera_.top() != this)
+	{
+		LogTool::logError("Stack", "Camera::unloadCamera", "Attempt to unload inactive camera");
+		return false;
+	}
 	GlErrorTool::getErrors("Camera::unloadCamera:1");
+	// Instead of using OpenGLs matrix stack, we could restore the camera
+	// this would break local transformations though, so maybe later
+	activeCamera_.pop();
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
