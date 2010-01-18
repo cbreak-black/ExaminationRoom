@@ -20,8 +20,6 @@
 #include "surfaces/randomdotstereogram.h"
 #include "surfaces/patternstereogram.h"
 
-#include "camera.h"
-
 #include "luabridge.hpp"
 #include "luahelper.h"
 
