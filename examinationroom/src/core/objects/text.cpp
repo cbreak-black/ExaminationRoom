@@ -73,7 +73,7 @@ std::string Text::toLua(std::ostream & outStream) const
 {
 	Object::toLua(outStream);
 	outStream << name() << ":" << "setText(\"" << text().c_str() << "\");\n";
-	outStream << name() << ":" << "setDimension({" << renderedDimensions_.w << ", " << renderedDimensions_.h << ");\n";
+	outStream << name() << ":" << "setDimension({" << dimensions_.w << ", " << dimensions_.h << ");\n";
 	return name();
 }
 
