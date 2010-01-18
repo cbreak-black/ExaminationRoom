@@ -143,8 +143,6 @@ void Text::draw(GLWidget *) const
 	if (shown())
 	{
 		GlErrorTool::getErrors("Text::draw:1", name());
-		if (!renderedStringValid_)
-			updateRenderedString();
 		switch(type())
 		{
 			case Text::Label:
@@ -246,6 +244,8 @@ void Text::drawRenderedStringPlane() const
 	}
 }
 
+// Callers must ensure that rect is a valid 4 element array of points
+// as well as the existence and validity of renderedString_
 void Text::drawRenderedString(Vec3f * rect) const
 {
 	glColor4fv(color().vec);
@@ -272,7 +272,7 @@ void Text::setText(std::string t)
 {
 	objectWillChange();
 	text_ = t;
-	renderedStringValid_ = false;
+	updateRenderedString();
 	objectDidChange();
 }
 
@@ -280,7 +280,7 @@ void Text::setText(const char * c)
 {
 	objectWillChange();
 	text_ = c;
-	renderedStringValid_ = false;
+	updateRenderedString();
 	objectDidChange();
 }
 
@@ -293,7 +293,7 @@ void Text::setDimensions(const Tool::Vec2f & d)
 {
 	objectWillChange();
 	dimensions_ = d;
-	renderedStringValid_ = false;
+	updateRenderedString();
 	objectDidChange();
 }
 
