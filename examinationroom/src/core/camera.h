@@ -13,6 +13,8 @@
 #include "vec.h"
 #include "glwidget.h"
 
+#include <stack>
+
 namespace Tool
 {
 	class ScreenProject;
@@ -252,7 +254,7 @@ private:
 	Tool::ScreenProject *	spR_;
 	Camera::Type	type_;
 
-	static Camera * activeCamera_;
+	static std::stack<Camera *> activeCamera_;
 };
 
 typedef std::tr1::shared_ptr<Camera> CameraPtr;
