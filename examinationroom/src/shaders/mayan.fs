@@ -10,12 +10,11 @@ void main()
 {
 	float facR = 1.0-side;
 	float facG = side;
-	float mixFactor = (1.0-lambda)*0.5;
 
 	vec4 c = texture2D(tex, gl_TexCoord[0].xy);
 	gl_FragColor = vec4(
-		facR*(c.r*lambda + (c.g+c.b)*mixFactor), // Red
-		facG*(c.g*lambda + (c.r+c.b)*mixFactor), // Green
+		facR*mix(c.r, (c.g+c.b)*0.5, lambda), // Red
+		facG*mix(c.g, (c.r+c.b)*0.5, lambda), // Green
 		c.b*0.5, // Blue
 		0.5); // Alpha
 }
