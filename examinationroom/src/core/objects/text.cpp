@@ -25,13 +25,18 @@
 namespace Examination
 {
 	using namespace Tool;
-	
+
+// The margin of the text boxes
+const int textMargin = 8;
+// The subsampling
+const float pixelScale = 2;
+
 Text::Text()
 {
 	renderedStringValid_ = false;
 	renderedString_ = 0;
 	renderedDimensions_ = Tool::Vec2f(0,0);
-	font_ = QFont("Helvetica", 20);
+	font_ = QFont("Helvetica", 24*pixelScale);
 	dimensions_ = Vec2f(256, 256);
 	setName("text");
 }
@@ -100,21 +105,44 @@ void Text::updateRenderedString() const
 {
 	GlErrorTool::getErrors("Text::updateRenderedString:1", name());
 	// Get bounding box size
+	Vec2f d = dimensions_*pixelScale;
 	QFontMetrics fm(font_);
-	QSize bbs = fm.boundingRect(0, 0, dimensions_.w, dimensions_.h,
-								Qt::TextWordWrap, QString::fromStdString(text_)).size();
+	QRect bb = fm.boundingRect(0, 0, d.w-textMargin*2, d.h-textMargin*2,
+							   Qt::TextWordWrap, QString::fromStdString(text_));
+	bb.adjust(-textMargin, -textMargin, textMargin, textMargin); // Add margin
+	QSize bbs = bb.size();
 	renderedDimensions_ = Vec2f(bbs.width(), bbs.height());
 	// Dispose old FBO and create a new one
 	if (renderedString_)
 		delete renderedString_;
 	renderedString_ = new QGLFramebufferObject(bbs, QGLFramebufferObject::CombinedDepthStencil);
+	// Prepare for drawing
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	// Draw into the FBO
 	renderedString_->bind();
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	QPainter p(renderedString_); // p.begin() implicit
-	p.drawText(0, 0, bbs.width(), bbs.height(), Qt::TextWordWrap, QString::fromStdString(text_));
+	p.setFont(font_);
+	p.setPen(QColor(Qt::white));
+	// TODO: Transparency support
+	p.setBackground(QColor(0,0,0,1));
+	p.drawText(textMargin, textMargin, bbs.width()-textMargin, bbs.height()-textMargin,
+			   Qt::TextWordWrap, QString::fromStdString(text_));
 	p.end();
 	renderedString_->release();
+	// Cleanup from drawing
+	glPopAttrib();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
 	// We're done
 	renderedStringValid_ = true;
 	GlErrorTool::getErrors("Text::updateRenderedString:2", name());
@@ -122,26 +150,31 @@ void Text::updateRenderedString() const
 
 void Text::drawRenderedString() const
 {
-	Point p = position();
-	float u = Camera::activeCamera()->unitScreenSize(p);
-	Vec2f s = renderedDimensions_/u;
-	// Load the correct color
-	glColor4fv(color().vec);
-	glBindTexture(GL_TEXTURE_2D, renderedString_->texture());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3fv(p.vec);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(p.x+s.w, p.y, p.z);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(p.x+s.w, p.y+s.h, p.z);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(p.x, p.y+s.h, p.z);
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	GlErrorTool::getErrors("Text::drawRenderedString");
+	if (renderedString_)
+	{
+		Point p = position();
+		// Does not consider local transformations
+		// Doubled to get original size
+		float u = Camera::activeCamera()->unitScreenSize(p)*2;
+		Vec2f s = renderedDimensions_/u;
+		// Load the correct color
+		glColor4fv(color().vec);
+		glBindTexture(GL_TEXTURE_2D, renderedString_->texture());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3fv(p.vec);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(p.x+s.w, p.y, p.z);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(p.x+s.w, p.y+s.h, p.z);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(p.x, p.y+s.h, p.z);
+		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		GlErrorTool::getErrors("Text::drawRenderedString");
+	}
 }
 
 std::string Text::text() const
@@ -153,6 +186,7 @@ void Text::setText(std::string t)
 {
 	objectWillChange();
 	text_ = t;
+	renderedStringValid_ = false;
 	objectDidChange();
 }
 
@@ -160,6 +194,7 @@ void Text::setText(const char * c)
 {
 	objectWillChange();
 	text_ = c;
+	renderedStringValid_ = false;
 	objectDidChange();
 }
 
@@ -172,6 +207,7 @@ void Text::setDimensions(const Tool::Vec2f & d)
 {
 	objectWillChange();
 	dimensions_ = d;
+	renderedStringValid_ = false;
 	objectDidChange();
 }
 
