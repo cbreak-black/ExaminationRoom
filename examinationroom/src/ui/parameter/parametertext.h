@@ -31,9 +31,12 @@ protected:
 
 public slots: // From the UI
 	void textEdited();
+	void dimEdited();
 
 private:
 	QLineEdit * lineText_;
+	QLineEdit * lineDimX_;
+	QLineEdit * lineDimY_;
 };
 
 }

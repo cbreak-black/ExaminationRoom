@@ -27,12 +27,21 @@ ParameterText::ParameterText(std::tr1::shared_ptr<Object> object) : ParameterObj
 	b->setLayout(g);
 	g->addWidget(new QLabel(tr("Text:")), 0, 0);
 	lineText_ = new QLineEdit();
-	g->addWidget(lineText_, 0, 2, 1, 3);
+	g->addWidget(lineText_, 0, 2, 1, 2);
+	g->addWidget(new QLabel(tr("Dimension:")), 1, 0);
+	lineDimX_ = new QLineEdit();
+	lineDimY_ = new QLineEdit();
+	g->addWidget(lineDimX_, 1, 2, 1, 1);
+	g->addWidget(lineDimY_, 1, 3, 1, 1);
 	g->setRowStretch(1, 1);
 	addWidget(b);
 
 	connect(lineText_, SIGNAL(editingFinished()),
 			this, SLOT(textEdited()));
+	connect(lineDimX_, SIGNAL(editingFinished()),
+			this, SLOT(dimEdited()));
+	connect(lineDimY_, SIGNAL(editingFinished()),
+			this, SLOT(dimEdited()));
 
 	if (object)
 	{
@@ -51,6 +60,10 @@ void ParameterText::reloadData()
 		{
 			// Text
 			lineText_->setText(QString::fromStdString(t->text()));
+			// Dimensions
+			Tool::Vec2f d = t->dimensions();
+			lineDimX_->setText(QString::number(d.w, 'g', 3));
+			lineDimY_->setText(QString::number(d.h, 'g', 3));
 		}
 	}
 }
@@ -64,6 +77,28 @@ void ParameterText::textEdited()
 		if (t)
 		{
 			t->setText(lineText_->text().toStdString());
+		}
+	}
+}
+
+void ParameterText::dimEdited()
+{
+	std::tr1::shared_ptr<Object> o = object();
+	if (o)
+	{
+		std::tr1::shared_ptr<Text> t = std::tr1::dynamic_pointer_cast<Text,Object>(o);
+		if (t)
+		{
+			Tool::Vec2f d = t->dimensions();
+			bool ok = false;
+			float f;
+			f = lineDimX_->text().toFloat(&ok);
+			if (ok)
+				d.w = f;
+			f = lineDimY_->text().toFloat(&ok);
+			if (ok)
+				d.h = f;
+			t->setDimensions(d);
 		}
 	}
 }
