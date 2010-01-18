@@ -19,8 +19,33 @@
 #include "luahelper.h"
 
 #include "camera.h"
+#include "screenproject.h"
 
+#include <QPainter>
 #include <QGLFrameBufferObject>
+
+// Marshaling
+namespace luabridge
+{
+	const char * textTypes[] =
+	{
+		"Label",
+		"Plane",
+		0
+	};
+	template <>
+	struct tdstack <Examination::Text::Type>
+	{
+		static void push (lua_State *L, Examination::Text::Type data)
+		{
+			lua_pushstring(L, textTypes[data]);
+		}
+		static Examination::Text::Type get (lua_State *L, int index)
+		{
+			return static_cast<Examination::Text::Type>(luaL_checkoption(L, index, 0, textTypes));
+		}
+	};
+}
 
 namespace Examination
 {
@@ -29,15 +54,24 @@ namespace Examination
 // The margin of the text boxes
 const int textMargin = 8;
 // The subsampling
-const float pixelScale = 2;
+const float pixelScale = 1;
+
+// Tex Coordinate array
+const Vec2f texCoords[] = {
+	Vec2f(0.0f,0.0f),
+	Vec2f(1.0f,0.0f),
+	Vec2f(1.0f,1.0f),
+	Vec2f(0.0f,1.0f)
+};
 
 Text::Text()
 {
 	renderedStringValid_ = false;
-	renderedString_ = 0;
+	renderedString_ = NULL;
 	renderedDimensions_ = Tool::Vec2f(0,0);
 	font_ = QFont("Helvetica", 24*pixelScale);
 	dimensions_ = Vec2f(256, 256);
+	type_ = Label;
 	setName("text");
 }
 
@@ -46,8 +80,10 @@ Text::Text(const Text & t)
 {
 	renderedStringValid_ = false;
 	renderedString_ = NULL;
+	renderedDimensions_ = Tool::Vec2f(0,0);
 	font_ = t.font_;
 	text_ = t.text_;
+	type_ = t.type_;
 	dimensions_ = t.dimensions_;
 }
 
@@ -73,6 +109,17 @@ std::string Text::toLua(std::ostream & outStream) const
 {
 	Object::toLua(outStream);
 	outStream << name() << ":" << "setText(\"" << text().c_str() << "\");\n";
+	outStream << name() << ":" << "setType(\"";
+	switch (type_)
+	{
+		case Text::Label:
+			outStream << "Label";
+			break;
+		case Text::Plane:
+			outStream << "Plane";
+			break;
+	}
+	outStream << "\");\n";
 	outStream << name() << ":" << "setDimension({" << dimensions_.w << ", " << dimensions_.h << ");\n";
 	return name();
 }
@@ -84,6 +131,8 @@ void Text::registerLuaApi(luabridge::module * m)
 	.constructor<void (*)()>()
 	.method("text", &Text::text)
 	.method<void (Text::*)(const char *)>("setText", &Text::setText)
+	.method("type", &Text::type)
+	.method("setType", &Text::setType)
 	.method("dimensions", &Text::dimensions)
 	.method("setDimensions", &Text::setDimensions);
 }
@@ -96,7 +145,15 @@ void Text::draw(GLWidget *) const
 		GlErrorTool::getErrors("Text::draw:1", name());
 		if (!renderedStringValid_)
 			updateRenderedString();
-		drawRenderedString();
+		switch(type())
+		{
+			case Text::Label:
+				drawRenderedStringLabel();
+				break;
+			case Text::Plane:
+				drawRenderedStringPlane();
+				break;
+		};
 		GlErrorTool::getErrors("Text::draw:2", name());
 	}
 }
@@ -148,33 +205,62 @@ void Text::updateRenderedString() const
 	GlErrorTool::getErrors("Text::updateRenderedString:2", name());
 }
 
-void Text::drawRenderedString() const
+void Text::drawRenderedStringLabel() const
 {
 	if (renderedString_)
 	{
-		Point p = position();
-		// Does not consider local transformations
-		// Doubled to get original size
-		float u = Camera::activeCamera()->unitScreenSize(p)*2;
-		Vec2f s = renderedDimensions_/u;
+		ScreenProject sp;
+		sp.calculateMVP();
+		Point rect[4], proj[4]; // Rectangle vertex, projected vertex
+		Vec2f s = renderedDimensions_/pixelScale;
+		// Transform origin to screen space, calculate other three corners
+		// then transform back to world space for drawing
+		rect[0] = position();
+		proj[0] = sp.transformToScreenSpace(rect[0]);
+		proj[1] = Point(proj[0].x+s.w, proj[0].y, proj[0].z);
+		proj[2] = Point(proj[0].x+s.w, proj[0].y+s.h, proj[0].z);
+		proj[3] = Point(proj[0].x, proj[0].y+s.h, proj[0].z);
+		rect[1] = sp.transformToWorldSpace(proj[1]);
+		rect[2] = sp.transformToWorldSpace(proj[2]);
+		rect[3] = sp.transformToWorldSpace(proj[3]);
 		// Load the correct color
-		glColor4fv(color().vec);
-		glBindTexture(GL_TEXTURE_2D, renderedString_->texture());
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3fv(p.vec);
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(p.x+s.w, p.y, p.z);
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(p.x+s.w, p.y+s.h, p.z);
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(p.x, p.y+s.h, p.z);
-		glEnd();
-		glBindTexture(GL_TEXTURE_2D, 0);
-		GlErrorTool::getErrors("Text::drawRenderedString");
+		drawRenderedString(rect);
+		GlErrorTool::getErrors("Text::drawRenderedStringLabel");
 	}
+}
+
+void Text::drawRenderedStringPlane() const
+{
+	if (renderedString_)
+	{
+		Point rect[4];
+		rect[0] = position();
+		float u = Camera::activeCamera()->unitScreenSize(rect[0])*pixelScale;
+		Vec2f s = renderedDimensions_/u;
+		rect[1] = Point(rect[0].x+s.w, rect[0].y, rect[0].z);
+		rect[2] = Point(rect[0].x+s.w, rect[0].y+s.h, rect[0].z);
+		rect[3] = Point(rect[0].x, rect[0].y+s.h, rect[0].z);
+		// Load the correct color
+		drawRenderedString(rect);
+		GlErrorTool::getErrors("Text::drawRenderedStringPlane");
+	}
+}
+
+void Text::drawRenderedString(Vec3f * rect) const
+{
+	glColor4fv(color().vec);
+	// Draw the rectangle
+	glBindTexture(GL_TEXTURE_2D, renderedString_->texture());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, rect);
+	glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+	glDrawArrays(GL_QUADS, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 std::string Text::text() const
@@ -208,6 +294,18 @@ void Text::setDimensions(const Tool::Vec2f & d)
 	objectWillChange();
 	dimensions_ = d;
 	renderedStringValid_ = false;
+	objectDidChange();
+}
+
+Text::Type Text::type() const
+{
+	return type_;
+}
+
+void Text::setType(Text::Type t)
+{
+	objectWillChange();
+	type_ = t;
 	objectDidChange();
 }
 

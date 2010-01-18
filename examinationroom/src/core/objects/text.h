@@ -25,6 +25,13 @@ This class represents a renderable piece of text.
 */
 class Text : public Object
 {
+public: // Types
+	typedef enum
+	{
+		Label,
+		Plane
+	}	Type;
+
 public: // Construction
 	/**
 	Creates an empty text at the origin.
@@ -83,6 +90,18 @@ public:
 	void setText(const char * c);
 
 	/**
+	 Returns the type of this Text object
+	 \return the type of this Text object
+	 */
+	Text::Type type() const;
+
+	/**
+	 Sets the type of this Text object
+	 \param t	Desired type of this text object
+	 */
+	void setType(Text::Type t);
+
+	/**
 	Returns the maximal dimension of this string on screen in pixel.
 	 \return the maximal size of this text in pixel
 	*/
@@ -116,12 +135,15 @@ protected: // Parameter Dialog
 
 private: // Caching
 	void updateRenderedString() const;
-	void drawRenderedString() const;
+	void drawRenderedStringLabel() const;
+	void drawRenderedStringPlane() const;
+	void drawRenderedString(Tool::Vec3f * rect) const;
 
 private:
 	std::string text_;
 	QFont font_;
 	Tool::Vec2f dimensions_;
+	Type type_;
 
 	// Caching/Rendering
 	mutable Tool::Vec2f renderedDimensions_;
