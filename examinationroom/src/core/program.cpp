@@ -112,6 +112,11 @@ bool Program::removeLua(const std::string & path)
 	return false;
 }
 
+bool Program::runString(const std::string & luaCode)
+{
+	return luaProxy_->runString(luaCode.c_str());
+}
+
 template <typename O>
 inline void registerObject(luabridge::module * m, std::tr1::shared_ptr<NameManager> nameManager)
 {

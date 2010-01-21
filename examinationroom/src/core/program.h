@@ -104,6 +104,14 @@ public: // LUA
 	*/
 	bool removeLua(const std::string & path);
 
+	/**
+	Executes the passed string as lua code.
+	The return value of the executed expression is written to the standard log.
+	 \param luaCode	Loa code
+	 \return	True if the execution succeeded, false on errors
+	*/
+	bool runString(const std::string & luaCode);
+
 private:
 	/**
 	This method is used by factories after program creation to register objects

@@ -294,6 +294,7 @@ void MainWindow::setProgram(std::tr1::shared_ptr<Program> program)
 	fsGlWidget_->setProgram(program_);
 	dockDesign_->setProgram(program);
 	dockCode_->setProgram(program);
+	dockConsole_->setProgram(program);
 	// Recreate menu
 	objectMenu_->clear(); // Should also destroy all mappings
 	const std::vector<ObjectFactoryPtr> & factories = program->factories();

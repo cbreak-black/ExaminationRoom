@@ -12,9 +12,11 @@
 #include "program.h"
 
 #include <QTextEdit>
-#include <QTextDocument>
 #include <QVBoxLayout>
 #include <QTextCharFormat>
+#include <QLineEdit>
+#include <QStringListModel>
+#include <QCompleter>
 
 namespace Examination
 {
@@ -22,11 +24,29 @@ namespace Examination
 ConsoleWidget::ConsoleWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags)
 	: QDockWidget(title, parent, flags)
 {
+	QWidget * mainWidget = new QWidget(this);
+	setWidget(mainWidget);
+	QVBoxLayout * mainLayout = new QVBoxLayout();
+	mainLayout->setSpacing(0);
+	mainLayout->setContentsMargins(0, 0, 0, 0);
+	mainWidget->setLayout(mainLayout);
+
 	logView_ = new QTextEdit(this);
 	logView_->setReadOnly(true);
 	logView_->setFontFamily("Courier");
 	logView_->document()->setMaximumBlockCount(128);
-	setWidget(logView_);
+	mainLayout->addWidget(logView_);
+
+	inputLine_ = new QLineEdit(this);
+	mainLayout->addWidget(inputLine_);
+
+	connect(inputLine_, SIGNAL(returnPressed()), this, SLOT(inputSubmit()));
+
+	inputHistory_ = new QStringListModel();
+	inputCompleter_ = new QCompleter();
+	inputCompleter_->setModel(inputHistory_);
+	inputCompleter_->setCompletionMode(QCompleter::InlineCompletion);
+	inputLine_->setCompleter(inputCompleter_);
 
 	logFormat_ = new QTextCharFormat();
 	errorFormat_ = new QTextCharFormat();
@@ -41,6 +61,34 @@ ConsoleWidget::~ConsoleWidget()
 {
 	delete logFormat_;
 	delete errorFormat_;
+	delete inputHistory_;
+	delete inputCompleter_;
+}
+
+// Accessors
+
+std::tr1::shared_ptr<Program> ConsoleWidget::program() const
+{
+	return program_;
+}
+
+void ConsoleWidget::setProgram(std::tr1::shared_ptr<Program> program)
+{
+	program_ = program;
+}
+
+// Console
+void ConsoleWidget::inputSubmit()
+{
+	QString s = inputLine_->text();
+	inputHistory_->insertRows(0, 1);
+	inputHistory_->setData(inputHistory_->index(0, 0), s);
+	inputHistory_->removeRows(16, 1);
+	inputLine_->clear();
+	if (program_)
+	{
+		program_->runString(s.toStdString());
+	}
 }
 
 // Accessors
