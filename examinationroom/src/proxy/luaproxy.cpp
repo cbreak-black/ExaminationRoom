@@ -239,6 +239,7 @@ int LuaProxy::runFile(const char * path)
 	}
 
 	const char *  s = lua_tostring(L_, -1);
+	lua_pop(L_, 1); // Clean up stack
 	return handleError(res, s);
 }
 
@@ -253,6 +254,7 @@ int LuaProxy::runString(const char * code)
 	}
 
 	const char *  s = lua_tostring(L_, -1);
+	lua_pop(L_, 1); // Clean up stack
 	return handleError(res, s);
 }
 
