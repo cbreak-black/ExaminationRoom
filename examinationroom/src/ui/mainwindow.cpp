@@ -14,7 +14,7 @@
 #include "glwidget.h"
 #include "designwidget.h"
 #include "codewidget.h"
-#include "logwidget.h"
+#include "consolewidget.h"
 #include "aboutwindow.h"
 
 #include "program.h"
@@ -42,19 +42,19 @@ MainWindow::MainWindow()
 	// Add Dock Widgets
 	dockDesign_ = new DesignWidget("Design", this);
 	dockCode_ = new CodeWidget("Code", this);
-	dockLog_ = new LogWidget("Log", this);
+	dockConsole_ = new ConsoleWidget("Console", this);
 	dockDesign_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	dockCode_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-	dockLog_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
+	dockConsole_->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
 	addDockWidget(Qt::RightDockWidgetArea, dockDesign_);
 	addDockWidget(Qt::RightDockWidgetArea, dockCode_);
-	addDockWidget(Qt::RightDockWidgetArea, dockLog_);
+	addDockWidget(Qt::RightDockWidgetArea, dockConsole_);
 	tabifyDockWidget(dockDesign_, dockCode_);
-	tabifyDockWidget(dockDesign_, dockLog_);
+	tabifyDockWidget(dockDesign_, dockConsole_);
 
 	// Set up logging early
 	LogTool::initLogFile();
-	LogTool::setLogWidget(dockLog_);
+	LogTool::setConsoleWidget(dockConsole_);
 
 	// File dialogs
 #ifdef Q_WS_MACX
@@ -199,7 +199,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-	LogTool::setLogWidget(NULL);
+	LogTool::setConsoleWidget(NULL);
 	LogTool::closeLogFile();
 	// All child widgets are deallocated by QT
 	delete fsGlWidget_;

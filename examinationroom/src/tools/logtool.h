@@ -16,7 +16,7 @@
 namespace Examination
 {
 
-class LogWidget;
+class ConsoleWidget;
 
 /**
 Static class that handles various log related activities
@@ -44,13 +44,13 @@ public: // Setup
 	Returns the LogWidget instance that this logger is bound to, if available.
 	 \return	shared_ptr to the currently set LogWidget if available
 	*/
-	static LogWidget * logWidget();
+	static ConsoleWidget * consoleWidget();
 
 	/**
 	Sets the log passed log widget to be used for logging. Make sure to remove a log widget
 	by setting the null pointer when a widget becomes invalid.
 	*/
-	static void setLogWidget(LogWidget * widget);
+	static void setConsoleWidget(ConsoleWidget * widget);
 
 	/**
 	Initializes the log file state. Logging will be done to that file in addition to the log widget
@@ -71,7 +71,7 @@ private:
 	static void logStdErr(const std::string & str);
 
 private:
-	static LogWidget * logWidget_;
+	static ConsoleWidget * consoleWidget_;
 	static std::ofstream logOutStream_;
 };
 

@@ -1,5 +1,5 @@
 /*
- *  logwidget.h
+ *  consolewidget.h
  *  ExaminationRoom
  *
  *  Created by cbreak on 28.05.08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef LOGWIDGET_H
-#define LOGWIDGET_H
+#ifndef CONSOLEWIDGET_H
+#define CONSOLEWIDGET_H
 
 #include <QDockWidget>
 
@@ -21,13 +21,13 @@ namespace Examination
 {
 	class Program;
 
-class LogWidget : public QDockWidget
+class ConsoleWidget : public QDockWidget
 {
 	Q_OBJECT
 
 public:
-	LogWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0);
-	~LogWidget();
+	ConsoleWidget(const QString &title, QWidget *parent = 0, Qt::WindowFlags flags = 0);
+	~ConsoleWidget();
 
 public slots:
 	void writeLog(const std::string & msg);
