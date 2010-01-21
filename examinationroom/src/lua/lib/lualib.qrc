@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+<qresource>
+	<file>event.lua</file>
+	<file>persistence.lua</file>
+	<file>print.lua</file>
+</qresource>
+</RCC>

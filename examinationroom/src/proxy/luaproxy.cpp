@@ -26,6 +26,7 @@
 #include "logtool.h"
 
 #include <QApplication>
+#include <QFile>
 
 #include "platform_string.h"
 
@@ -200,6 +201,11 @@ LuaProxy::LuaProxy()
 	luabridge::tdstack<std::tr1::shared_ptr<LuaProxy> >::push(L_, std::tr1::shared_ptr<LuaProxy>(this, null_deleter()));
 	lua_setglobal(L_, "Scene");
 
+	// Load ER Libraries
+	runResource(":/print.lua");
+	runResource(":/persistence.lua");
+	runResource(":/event.lua");
+
 	lastUpdate_.start();
 }
 
@@ -256,6 +262,32 @@ int LuaProxy::runString(const char * code)
 	const char *  s = lua_tostring(L_, -1);
 	lua_pop(L_, 1); // Clean up stack
 	return handleError(res, s);
+}
+
+int LuaProxy::runResource(const char * path)
+{
+	QFile qfile(path);
+	if (qfile.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		QString qstr = qfile.readAll();
+		if (!qstr.isNull())
+		{
+			QByteArray qba = qstr.toAscii();
+			const GLchar * src = qba.data();
+			int res = luaL_loadbuffer(L_, src, strlen(src), path);
+			if (res == 0)
+			{
+				res = lua_pcall(L_, 0, 0, 0);
+				if (res == 0)
+					return 0;
+			}
+			const char *  s = lua_tostring(L_, -1);
+			lua_pop(L_, 1); // Clean up stack
+			return handleError(res, s);
+		}
+		return -1; // nothing was read
+	}
+	return -2; // file could not be opened
 }
 
 lua_State * LuaProxy::luaState() const
