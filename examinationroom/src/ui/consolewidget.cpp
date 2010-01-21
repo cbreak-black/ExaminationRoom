@@ -1,5 +1,5 @@
 /*
- *  logwidget.cpp
+ *  consolewidget.cpp
  *  ExaminationRoom
  *
  *  Created by cbreak on 28.05.08.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "logwidget.h"
+#include "consolewidget.h"
 
 #include "program.h"
 
@@ -19,7 +19,7 @@
 namespace Examination
 {
 
-LogWidget::LogWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags)
+ConsoleWidget::ConsoleWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags)
 	: QDockWidget(title, parent, flags)
 {
 	logView_ = new QTextEdit(this);
@@ -37,20 +37,20 @@ LogWidget::LogWidget(const QString &title, QWidget *parent, Qt::WindowFlags flag
 	errorFormat_->setForeground(QBrush(QColor(255, 0, 0, 255)));
 }
 
-LogWidget::~LogWidget()
+ConsoleWidget::~ConsoleWidget()
 {
 	delete logFormat_;
 	delete errorFormat_;
 }
 
 // Accessors
-void LogWidget::writeLog(const std::string & msg)
+void ConsoleWidget::writeLog(const std::string & msg)
 {
 	logView_->textCursor().insertText(QString::fromStdString(msg), *logFormat_);
 	logView_->ensureCursorVisible();
 }
 
-void LogWidget::writeError(const std::string & msg)
+void ConsoleWidget::writeError(const std::string & msg)
 {
 	logView_->textCursor().insertText(QString::fromStdString(msg), *errorFormat_);
 	logView_->ensureCursorVisible();

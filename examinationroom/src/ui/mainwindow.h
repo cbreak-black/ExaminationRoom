@@ -26,7 +26,7 @@ namespace Examination
 	class GLWidget;
 	class DesignWidget;
 	class CodeWidget;
-	class LogWidget;
+	class ConsoleWidget;
 	class Program;
 
 /**
@@ -103,7 +103,7 @@ private:
 
 	DesignWidget * dockDesign_;
 	CodeWidget * dockCode_;
-	LogWidget * dockLog_;
+	ConsoleWidget * dockConsole_;
 	AboutWindow * aboutWindow_;
 
 	QFileDialog * loadDialog_;

@@ -14,7 +14,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "logwidget.h"
+#include "consolewidget.h"
 
 namespace Examination
 {
@@ -25,7 +25,7 @@ static const char * logFileFormatString = "'ExaminationRoom-'yyyy.MM.dd-hh.mm.ss
 
 static const char * errorTypeLog = "LOG";
 
-LogWidget * LogTool::logWidget_;
+ConsoleWidget * LogTool::consoleWidget_;
 std::ofstream LogTool::logOutStream_;
 
 std::string LogTool::formatStringOut(const std::string & tName, const std::string & fName, const std::string & message)
@@ -52,9 +52,9 @@ void LogTool::logMessage(const std::string & fName, const std::string & message)
 	{
 		logOutStream_ << formatStringFile(errorTypeLog, fName, message);
 	}
-	if (logWidget_)
+	if (consoleWidget_)
 	{
-		logWidget_->writeLog(formatStringOut(errorTypeLog, fName, message));
+		consoleWidget_->writeLog(formatStringOut(errorTypeLog, fName, message));
 	}
 	else
 	{
@@ -68,9 +68,9 @@ void LogTool::logError(const std::string & tName, const std::string & fName, con
 	{
 		logOutStream_ << formatStringFile(tName, fName, error);
 	}
-	if (logWidget_)
+	if (consoleWidget_)
 	{
-		logWidget_->writeError(formatStringOut(tName, fName, error));
+		consoleWidget_->writeError(formatStringOut(tName, fName, error));
 	}
 	else
 	{
@@ -89,14 +89,14 @@ void LogTool::closeLogFile()
 	logOutStream_.close();
 }
 
-LogWidget * LogTool::logWidget()
+ConsoleWidget * LogTool::consoleWidget()
 {
-	return logWidget_;
+	return consoleWidget_;
 }
 
-void LogTool::setLogWidget(LogWidget * widget)
+void LogTool::setConsoleWidget(ConsoleWidget * widget)
 {
-	logWidget_ = widget;
+	consoleWidget_ = widget;
 }
 
 void LogTool::logStdOut(const std::string & str)
