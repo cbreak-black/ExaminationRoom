@@ -13,6 +13,9 @@ INCLUDEPATH += \
 
 QT           += opengl
 
+RESOURCES = \
+	src/lua/lib/lualib.qrc
+
 QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.5.sdk
 CONFIG+=x86_64
 

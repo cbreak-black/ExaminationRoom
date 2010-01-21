@@ -89,6 +89,13 @@ public: // From C++
 	int runString(const char * code);
 
 	/**
+	 Loads lua from a Qt resource, and executes it's contents.
+	 \param path	Path to a lua resource
+	 \return 0 on success, error code on failure.
+	 */
+	int runResource(const char * path);
+
+	/**
 	Returns the associated lua state.
 	*/
 	lua_State * luaState() const;
