@@ -94,12 +94,14 @@ void ConsoleWidget::inputSubmit()
 // Accessors
 void ConsoleWidget::writeLog(const std::string & msg)
 {
+	logView_->moveCursor(QTextCursor::End);
 	logView_->textCursor().insertText(QString::fromStdString(msg), *logFormat_);
 	logView_->ensureCursorVisible();
 }
 
 void ConsoleWidget::writeError(const std::string & msg)
 {
+	logView_->moveCursor(QTextCursor::End);
 	logView_->textCursor().insertText(QString::fromStdString(msg), *errorFormat_);
 	logView_->ensureCursorVisible();
 }

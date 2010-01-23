@@ -221,7 +221,6 @@ void Text::drawRenderedStringLabel() const
 		rect[1] = sp.transformToWorldSpace(proj[1]);
 		rect[2] = sp.transformToWorldSpace(proj[2]);
 		rect[3] = sp.transformToWorldSpace(proj[3]);
-		// Load the correct color
 		drawRenderedString(rect);
 		GlErrorTool::getErrors("Text::drawRenderedStringLabel");
 	}
@@ -238,7 +237,6 @@ void Text::drawRenderedStringPlane() const
 		rect[1] = Point(rect[0].x+s.w, rect[0].y, rect[0].z);
 		rect[2] = Point(rect[0].x+s.w, rect[0].y+s.h, rect[0].z);
 		rect[3] = Point(rect[0].x, rect[0].y+s.h, rect[0].z);
-		// Load the correct color
 		drawRenderedString(rect);
 		GlErrorTool::getErrors("Text::drawRenderedStringPlane");
 	}
@@ -248,7 +246,12 @@ void Text::drawRenderedStringPlane() const
 // as well as the existence and validity of renderedString_
 void Text::drawRenderedString(Vec3f * rect) const
 {
+	// Color
 	glColor4fv(color().vec);
+	// Normal
+	Vector n = cross(rect[1]-rect[0], rect[2]-rect[0]);
+	n.normalize();
+	glNormal3fv(n.vec);
 	// Draw the rectangle
 	glBindTexture(GL_TEXTURE_2D, renderedString_->texture());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

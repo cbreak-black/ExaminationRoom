@@ -21,24 +21,23 @@ cam:setFieldOfView(cameraFoV);
 cam:setSeparation(cameraSep);
 cam:setParalaxPlane(cameraPP);
 
-floorPos = {-3, -2.5, -20};
-local rectFloor = Rectangle();
-rectFloor:setDirA({6,0,0});
+light = LightNode();
+light:setPosition({3, 4, 4});
+Scene:addObject(light);
+
+floorPos = {3, -2.5, -20};
+rectFloor = Rectangle();
+rectFloor:setDirA({-6,0,0});
 rectFloor:setDirB({0,0,26});
 rectFloor:setPosition(floorPos);
 rectFloor:setTexCoords(0,0, 0,26, 6,0, 6,26);
 rectFloor:setTexture(Texture("res/checkerboard.png"));
-Scene:addObject(rectFloor);
+light:addObject(rectFloor);
 
-local container1 = AffineTransformation();
-container1:setPosition({0, 1, 0});
-container1:scale({0.005, 0.005, 0.005});
-Scene:addObject(container1);
+container = AffineTransformation();
+light:addObject(container);
 
-local container = AffineTransformation();
-Scene:addObject(container);
-
-local pep2 = Parallelepiped();
+pep2 = Parallelepiped();
 pep2:setTexture(Texture("res/texMarbleGrey.jpg"));
 local d = 1;
 local l = 0.816*d;
@@ -50,28 +49,38 @@ pep2:setDirC({-s120*l, s, -0.5*l});
 pep2:setPosition({0, -math.sqrt(3*d*d)/2, 0});
 container:addObject(pep2);
 
-local snl = Text();
+snl = Text();
 snl:setText("Label Type Text\nAlways parallel to screen");
 snl:setPosition({-3.5,-1,0});
 snl:setType("Label");
 snl:setColor({0,1,1,1});
 container:addObject(snl);
 
-local snp = Text();
+snp = Text();
 snp:setText("Plane Type Text\nAffected by local transformations");
 snp:setPosition({1,-1,0});
 snp:setType("Plane");
 snp:setColor({1,0,1,1});
 container:addObject(snp);
 
-local snt = Text();
+container180 = AffineTransformation();
+container180:rotate({0,1,0}, math.pi);
+container:addObject(container180);
+snp2 = Text();
+snp2:setText("Plane Type Text\nBackside (different object)");
+snp2:setPosition({-3.5,-1,0.001});
+snp2:setType("Plane");
+snp2:setColor({1,0,1,1});
+container180:addObject(snp2);
+
+snt = Text();
 snt:setText("Time passed since start:");
 snt:setPosition({-1,1,0});
 snt:setType("Label");
 snt:setColor({1,1,0,1});
 Scene:addObject(snt);
 
-local snh = Text();
+snh = Text();
 snh:setText("Text objects are created to have a fixed size on screen, independent of their distance to the camera. Some are affected by local transformation, so they can be rotated and scaled anyway.\nTheir Anchor is to the bottom-left.");
 snh:setPosition({-2,2,-1});
 snh:setDimensions({512,512});
