@@ -324,6 +324,7 @@ public: // Parameter Dialog
 	*/
 	std::tr1::shared_ptr<ParameterObject> dialog();
 
+protected:
 	/**
 	Creates a parameter dialog and stores it internally.
 	Subclasses can overwrite this method to create their own instances.

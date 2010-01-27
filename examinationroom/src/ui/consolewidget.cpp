@@ -34,7 +34,7 @@ ConsoleWidget::ConsoleWidget(const QString &title, QWidget *parent, Qt::WindowFl
 	logView_ = new QTextEdit(this);
 	logView_->setReadOnly(true);
 	logView_->setFontFamily("Courier");
-	logView_->document()->setMaximumBlockCount(128);
+	logView_->document()->setMaximumBlockCount(512);
 	mainLayout->addWidget(logView_);
 
 	inputLine_ = new QLineEdit(this);
