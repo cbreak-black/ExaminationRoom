@@ -1,4 +1,4 @@
--- Internal Helpers
+-- StringWriter
 
 --[[ Provides ]]
 
@@ -13,9 +13,7 @@
 -- sw:setvbuf():	Does nothing
 -- sw:write(...):	Writes the value of it's arguments to a string. Arguments must be strings or numbers. Other values are converted with tostring().
 -- sw:get():	Returns the internal string (stored in sw.string_)
-
---[[ Math Extensions ]]
--- math.clamp(v, min, max): returns the value v clamped to the range min..max
+-- sw .. "str":	Returns a new string writer that has the concatenated string written to
 
 --[[ License: MIT (see bottom) ]]
 
@@ -128,17 +126,6 @@ StringWriter = function ()
 	setmetatable(sw, StringWriter_Meta);
 	return sw;
 end
-
--- math.clamp
-math.clamp = function (v, min, max)
-	if v > max then
-		return max;
-	elseif v < min then
-		return min;
-	else
-		return v;
-	end;
-end;
 
 --[[
  Copyright (c) 2010 Gerhard Roethlin

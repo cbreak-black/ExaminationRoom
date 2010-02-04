@@ -1,9 +1,10 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 <qresource>
-	<file>helpers.lua</file>
+	<file>stringwriter.lua</file>
 	<file>event.lua</file>
 	<file>persistence.lua</file>
 	<file>print.lua</file>
+	<file>misc.lua</file>
 </qresource>
 </RCC>
