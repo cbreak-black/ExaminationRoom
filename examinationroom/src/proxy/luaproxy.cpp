@@ -202,6 +202,7 @@ LuaProxy::LuaProxy()
 	lua_setglobal(L_, "Scene");
 
 	// Load ER Libraries
+	runResource(":/helpers.lua");
 	runResource(":/print.lua");
 	runResource(":/persistence.lua");
 	runResource(":/event.lua");

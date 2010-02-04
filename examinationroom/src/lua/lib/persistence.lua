@@ -16,9 +16,16 @@ local write, writeIndent, writers, refCount;
 persistence =
 {
 	store = function (path, ...)
-		local file, e = io.open(path, "w");
-		if not file then
-			return error(e);
+		local file, e;
+		if type(path) == "string" then
+			-- Path, open a file
+			file, e = io.open(path, "w");
+			if not file then
+				return error(e);
+			end
+		else
+			-- Just treat it as file
+			file = path;
 		end
 		local n = select("#", ...);
 		-- Count references
