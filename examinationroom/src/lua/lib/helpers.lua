@@ -29,7 +29,8 @@ local voidFunc = function () end;
 local StringWriter_Check = function (sw)
 	return
 		getmetatable(sw) == StringWriter_ID and
-		type(sw.string_) == "string" and
+		type(sw.string_) == "table" and
+		type(sw.len_) == "number" and
 		type(sw.pos_) == "number"
 end
 
@@ -52,11 +53,11 @@ local StringWriter_Methods = {
 			end
 			-- Set position and return it
 			if base == "set" then
-				this.pos_ = math.clamp(offset,0, #this.string_);
+				this.pos_ = math.clamp(offset,0, this.len_);
 			elseif base == "end" then
-				this.pos_ = math.clamp(#this.string_+offset,0, #this.string_);
+				this.pos_ = math.clamp(#this.string_+offset,0, this.len_);
 			else -- "cur"
-				this.pos_ = math.clamp(this.pos_+offset,0, #this.string_);
+				this.pos_ = math.clamp(this.pos_+offset,0, this.len_);
 			end
 			return this.pos_;
 		end;
@@ -67,22 +68,30 @@ local StringWriter_Methods = {
 			-- Concat all arguments (assuming they are valid)
 			local s = table.concat({...});
 			-- Concat argument string with current string
-			if this.pos_ == -1 or this.pos_ == #this.string_ then
-				this.string_ = this.string_ .. s;
+			if this.pos_ == -1 or this.pos_ == this.len_ then
+				-- Just append
+				table.insert(this.string_, s);
 			else
-				this.string_ = string.sub(this.string_, 1, this.pos_)
-					.. s .. string.sub(this.string_, this.pos_+1+#s, -1);
+				-- Insert, merge into a string
+				local sFull = table.concat(this.string_);
+				-- Split it up
+				local sLeft = string.sub(sFull, 1, this.pos_);
+				local sRight = string.sub(sFull, this.pos_+1+#s, -1)
+				-- And put it back in
+				this.string_ = {sLeft, s, sRight};
 			end
 			-- Update position
-			if this.pos_ >= 0 then
-				this.pos_ = this.pos_ + #s;
+			this.pos_ = this.pos_ + #s;
+			if this.pos_ > this.len_ then
+				this.len_ = this.pos_;
 			end;
 		end;
 	["get"] = function (this)
 			if not StringWriter_Check(this) then
 				return nil, "Invalid StringWriter";
 			else
-				return this.string_;
+				this.string_ = {table.concat(this.string_)};
+				return this.string_[1];
 			end;
 		end;
 }
@@ -95,12 +104,25 @@ local StringWriter_Meta = {
 		end;
 	["__metatable"] = StringWriter_ID;
 	["__tostring"] = StringWriter_Methods.get;
+	["__concat"] = function (this, str)
+			str = tostring(str);
+			local sw = StringWriter();
+			sw.string_ = {};
+			for _, v in ipairs(this.string_) do
+				table.insert(sw.string_, v);
+			end
+			table.insert(sw.string_, str);
+			sw.len_ = this.len_ + #str;
+			sw.pos_ = sw.len_;
+			return sw;
+		end;
 }
 
 -- StringWriter factory
 StringWriter = function ()
 	local sw = {
-		string_	= "";
+		string_	= {""};
+		len_	= 0;
 		pos_ 	= 0;
 	}
 	setmetatable(sw, StringWriter_Meta);
