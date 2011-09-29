@@ -10,6 +10,7 @@
 #include "logline.h"
 
 #include <QStringList>
+#include <QDebug>
 
 using namespace std::tr1;
 
@@ -41,13 +42,15 @@ QString LogLine::message() const
 
 shared_ptr<LogLine> LogLine::logLineFromString(QString str)
 {
-	QStringList sl = str.split(": [LOG][Lua] ");
-	if (sl.size() == 2)
-	{
-		QDateTime dt = QDateTime::fromString(sl.at(0), dateTimeFormatString);
-		if (dt.isValid())
-			return shared_ptr<LogLine>(new LogLine(dt, sl.at(1)));
-	}
+	QString strData = str.left(23);
+	QString strMsg;
+	if (str.contains(": [LOG][Lua] "))
+		strMsg = str.mid(23+13);
+	else
+		strMsg = str.mid(23+2);
+	QDateTime dt = QDateTime::fromString(strData, dateTimeFormatString);
+	if (dt.isValid())
+		return shared_ptr<LogLine>(new LogLine(dt, strMsg));
 	// Invalid
 	return shared_ptr<LogLine>(new LogLine(QDateTime(), str));
 }

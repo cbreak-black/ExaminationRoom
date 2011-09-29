@@ -31,8 +31,8 @@ std::ofstream LogTool::logOutStream_;
 std::string LogTool::formatStringOut(const std::string & tName, const std::string & fName, const std::string & message)
 {
 	QDateTime t = QDateTime::currentDateTime();
-	std::stringstream ss(t.toString(dateTimeFormatLogOut).toStdString(),
-						 std::ios_base::out | std::ios_base::app);
+	std::stringstream ss(std::ios_base::out | std::ios_base::app);
+	ss << t.toString(dateTimeFormatLogOut).toStdString();
 	ss << ": [" << tName << "][" << fName << "] " << message << std::endl;
 	return ss.str();
 }
@@ -40,8 +40,8 @@ std::string LogTool::formatStringOut(const std::string & tName, const std::strin
 std::string LogTool::formatStringFile(const std::string & tName, const std::string & fName, const std::string & message)
 {
 	QDateTime t = QDateTime::currentDateTime();
-	std::stringstream ss(t.toString(dateTimeFormatLogFile).toStdString(),
-						 std::ios_base::out | std::ios_base::app);
+	std::stringstream ss(std::ios_base::out | std::ios_base::app);
+	ss << t.toString(dateTimeFormatLogFile).toStdString();
 	ss << ": [" << tName << "][" << fName << "] " << message << std::endl;
 	return ss.str();
 }
