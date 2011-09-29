@@ -107,10 +107,8 @@ ParameterObject::ParameterObject(std::tr1::shared_ptr<Object> object)
 ParameterObject::~ParameterObject()
 {
 	std::tr1::shared_ptr<Object> o = object();
-	if (o)
-	{
-		o->removeCallbackParameterChanged(this);
-	}
+	// No need to remove handler since we are owned by object, so our life is
+	// controled by it.
 }
 
 void ParameterObject::objectDidChange()

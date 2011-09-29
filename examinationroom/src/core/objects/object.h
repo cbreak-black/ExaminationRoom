@@ -347,16 +347,6 @@ public: // Signals
 	*/
 	void addCallbackParameterChanged(const SignalCallbackType & cb);
 
-	/**
-	Removes all callbacks with the passed target.
-	 \param target	An object used as target of a callback
-	*/
-	template <typename T>
-	void removeCallbackParameterChanged(const T * target)
-	{
-		removeCallbacks(parameterChanged_, target);
-	}
-
 protected: // Signals: Internal data and methods
 	/**
 	Helper Method: Calls all contained functionals with the passed object as argument.
@@ -364,26 +354,6 @@ protected: // Signals: Internal data and methods
 	 \param obj		A pointer to an object to pass to the callbacks, traditionaly "this"
 	*/
 	static void callCallbacks(const std::list<SignalCallbackType> & list, const Object * obj);
-
-	/**
-	Helper Method: Removes all callbacks with the given target.
-	 \param list	A list of Signal callbacks
-	 \param target	A reference wrapper to the target of the callbacks to be removed
-	*/
-	template <typename T>
-	static void removeCallbacks(std::list<SignalCallbackType> & list,
-								const T * target)
-	{
-		std::list<SignalCallbackType>::iterator it = list.begin();
-		std::list<SignalCallbackType>::iterator end = list.end();
-		for (; it != end; it++)
-		{
-			if (target == *it)
-			{
-				list.erase(it);
-			}
-		}
-	}
 
 protected: // Notify scene/observers of changes
 	/**
