@@ -44,6 +44,7 @@ private:
 
 SceneModel::SceneModel(std::tr1::shared_ptr<Scene> scene)
 {
+	using namespace std::tr1::placeholders;
 	scene_ = scene;
 	scene_->addCallbackLayoutWillChange(std::tr1::bind(&SceneModel::layoutWillChange, this, _1));
 	scene_->addCallbackLayoutDidChange(std::tr1::bind(&SceneModel::layoutDidChange, this, _1));

@@ -13,6 +13,11 @@ INCLUDEPATH += \
 
 QT           += opengl
 
+win32 {
+	INCLUDEPATH += glew/include
+	LIBS += -Lglew/lib -lglew32
+}
+
 RESOURCES = \
 	src/shaders/shaders.qrc \
 	src/lua/lib/lualib.qrc

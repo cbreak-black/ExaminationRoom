@@ -275,7 +275,7 @@ int LuaProxy::runResource(const char * path)
 		if (!qstr.isNull())
 		{
 			QByteArray qba = qstr.toAscii();
-			const GLchar * src = qba.data();
+			const char * src = qba.data();
 			int res = luaL_loadbuffer(L_, src, strlen(src), path);
 			if (res == 0)
 			{

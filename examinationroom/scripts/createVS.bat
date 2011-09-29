@@ -1,1 +1,1 @@
-qmake -spec win32-msvc2005 -t vcapp
+qmake -spec win32-msvc2010 -tp vc

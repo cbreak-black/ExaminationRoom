@@ -90,6 +90,7 @@ std::tr1::shared_ptr<Program> CodeWidget::program() const
 
 void CodeWidget::setProgram(std::tr1::shared_ptr<Program> program)
 {
+	using namespace std::tr1::placeholders;
 	program_ = program;
 	program->setCallbackFileLoad(std::tr1::bind(&CodeWidget::fileLoaded, this, _1));
 	fileListView_->clear();

@@ -7,6 +7,8 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include "glshader.h"
 
 //#include <memory.h>
