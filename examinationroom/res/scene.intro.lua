@@ -10,8 +10,8 @@ convex = "convex";
 concave = "concave";
 
 -- Create two new Text Objects...
-textObject1 = Object("Text");
-textObject2 = Object("Text");
+textObject1 = Text();
+textObject2 = Text();
 
 -- Scene list tokens
 textToken = "text";		-- Changes text of an object
@@ -36,7 +36,7 @@ tokenEval = {
 	end;
 -- { rdsToken, <object>, <pathtodepthmap>, <convex|concave> }
 [rdsToken] = function (token)
-		local texture = Texture("RandomDot", token[3]);
+		local texture = RandomDot(token[3]);
 		texture:setMaxColor(maxColor);
 		texture:setExclusiveColor(excColor);
 		texture:setStyle(token[4]); -- Here the concave/convex status is set
@@ -48,7 +48,7 @@ tokenEval = {
 -- { posToken, <object>, {<x>, <y>, <z>} }
 [posToken] = function (token)
 		local pos = token[3];
-		token[2]:setPosition(pos[1], pos[2], pos[3]);
+		token[2]:setPosition(pos);
 		local sep = statistics:paralaxAtPoint(pos[1], pos[2], pos[3]);
 		local s = string.format("New Pos: (%0.2f, %0.2f, %0.2f), s=%0.4f deg",
 			pos[1], pos[2], pos[3], sep);
@@ -191,7 +191,7 @@ scenes = {
 	{textToken, textObject1, "Welcome!"};
 	{textToken, textObject2, "Press <the any key> to continue"};
 	{posToken, textObject1, {-2,1,0}};
-	{posToken, textObject2, {-2,0.5,0}};
+	{posToken, textObject2, {-2,0.25,0}};
 	{showToken, rectFloor};
 	{showToken, rectCeil};
 	{showToken, textObject1};

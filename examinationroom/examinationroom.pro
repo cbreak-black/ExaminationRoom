@@ -6,7 +6,7 @@ TEMPLATE = app
 TARGET = ExaminationRoom
 DEPENDPATH += . src/ui src/core src/lua src/tools src/proxy
 INCLUDEPATH += \
-	boost boost/tr1/tr1 \
+	boost/tr1/tr1 \
 	. src \
 	src/ui src/core src/tools src/proxy \
 	src/lua src/lua/src src/lua/luabridge/include src/parser
