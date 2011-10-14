@@ -7,6 +7,8 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include <QtGui>
 #include <QtOpenGL>
 
@@ -154,6 +156,9 @@ void GLWidget::setStyle(DrawStyle s)
 
 void GLWidget::initializeGL()
 {
+	// GLEW
+	glewInit();
+
 	// Enable z-buffering
 	glEnable(GL_DEPTH_TEST);
 

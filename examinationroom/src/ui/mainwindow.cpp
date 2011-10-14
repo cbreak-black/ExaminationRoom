@@ -82,7 +82,7 @@ MainWindow::MainWindow()
 	// Stereo Buffering seems to work in SnowLeopard...
 	// but is incompatible with other renderers and might cause problems.
 	// enable at your own risk
-	glFormat.setStereo(true);
+	glFormat.setStereo(false);
 	glFormat.setSwapInterval(1); // Enable VSync on platforms that support it
 	QGLFormat::setDefaultFormat(glFormat);
 
